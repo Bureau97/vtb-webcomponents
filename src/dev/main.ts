@@ -1,13 +1,16 @@
 import '../vtb-webcomponents';
+import '../components/media';
 import '../components/flightschedule';
+
 // import '../components/map';
 
 import {Vtb} from '../vtb-webcomponents';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import { VtbMapElement } from '../components/map';
+import { VtbMediaElement } from '../components/media';
 
-const travelplan_source_url = '/optionals.json';
-// const travelplan_source_url = '/travelplan.json';
+// const travelplan_source_url = '/optionals.json';
+const travelplan_source_url = '/travelplan.json';
 
 // // class SegmentTypes {
 // //   readonly ADDITIONEEL: Array<number> = [3];
@@ -99,12 +102,17 @@ function vtbDataLoaded(vtb: Vtb) {
   const flightschedule = document.getElementById(
     'flightschedule'
   ) as VtbFlightScheduleElement;
-  console.info(flightschedule);
   flightschedule.flightinfo = vtb.flightinfo;
 
   const map = document.getElementById('map') as VtbMapElement;
   console.info(map);
   // map.markergroups = vtb.markergroups;
+
+  console.info(vtb.covers);
+  const hero = document.getElementById('hero') as VtbMediaElement;
+  console.info(hero);
+  console.info(vtb.covers);
+  hero.src = vtb.covers[0].src;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

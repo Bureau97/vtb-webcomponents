@@ -1,0 +1,9 @@
+node_modules/
+lib/
+test/
+
+dist/main.js
+dist/dev/**
+dev/*.json
+*.sublime*
+*.code*

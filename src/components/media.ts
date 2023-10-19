@@ -1,23 +1,23 @@
-import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
+import {LitElement, css, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
+import {ifDefined} from 'lit/directives/if-defined.js';
 
 @customElement('vtb-media')
 export class VtbMediaElement extends LitElement {
-  @property({ type: String })
+  @property({type: String})
   src = '';
 
-  @property({ type: Number })
+  @property({type: Number})
   width = Number.NaN;
 
-  @property({ type: Number })
+  @property({type: Number})
   height = Number.NaN;
 
-  @property({ type: String })
+  @property({type: String})
   crop?: string = '';
 
-  @property({ type: String })
+  @property({type: String})
   alt?: string = '';
 
   static override styles = css`
@@ -48,7 +48,6 @@ export class VtbMediaElement extends LitElement {
 
   private _applyCrop(src: string, crop?: string): string {
     if (src && crop) {
-
       // a url can point to amazoneaws.com:
       // https://s3-eu-west-1.amazonaws.com/media.<customer>.domain/<crop/crop>/filename.jpeg
       // or
@@ -66,7 +65,9 @@ export class VtbMediaElement extends LitElement {
       old_crop.reverse();
 
       if (old_crop.join('/') == crop) {
-        console.log('Requested crop is the same as current crop, return original url. Remove crop (attribute) from vtb-media element for optimization.');
+        console.log(
+          'Requested crop is the same as current crop, return original url. Remove crop (attribute) from vtb-media element for optimization.'
+        );
         return src;
       }
 
@@ -103,7 +104,11 @@ export class VtbMediaElement extends LitElement {
       }
 
       return html`
-        <img src=${src} style=${styleMap(imgStyle)} alt=${ifDefined(this.alt)} />
+        <img
+          src=${src}
+          style=${styleMap(imgStyle)}
+          alt=${ifDefined(this.alt)}
+        />
       `;
     }
 

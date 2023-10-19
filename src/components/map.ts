@@ -1,26 +1,31 @@
 import {LitElement, css, html} from 'lit';
-import {
-  customElement,
-  property,
-  query,
-  queryAssignedElements,
-} from 'lit/decorators.js';
+import {customElement, property, query} from 'lit/decorators.js';
 import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
 
-// import {isEqual} from 'lodash';
 import * as _ from 'lodash';
 const {isEqual} = _;
 
 import * as GMaps from '@googlemaps/js-api-loader';
 const {Loader} = GMaps;
 
+import {VtbMapMarkerGroup, VtbMapMarker, VtbMapMarkerConnectMode} from './data';
+
+export interface VtbMapOptions {
+  connect_mode?: string;
+  connect_markers: boolean;
+  api_key: string;
+  height?: number;
+  width?: number;
+  zoom?: number;
+}
+
 @customElement('vtb-map-marker')
 export class VtbMapMarkerElement extends LitElement {
   @property({type: Number, reflect: true})
-  lat: number = Number.NaN;
+  lat: number = 0.0;
 
   @property({type: Number, reflect: true})
-  lng: number = Number.NaN;
+  lng: number = 0.0;
 
   @property({type: String})
   icon?: string;
@@ -38,26 +43,46 @@ export class VtbMapMarkerElement extends LitElement {
     // console.debug('VTB-MAP-MARKER::connectedCallback');
     super.connectedCallback();
   }
-
-  override render() {
-    // console.debug('VTB-MAP-MARKER::render');
-    return html` <div class="marker-content"></div> `;
-  }
 }
 
 @customElement('vtb-map-marker-group')
 export class VtbMapMarkerGroupElement extends LitElement {
   @property({type: Boolean, attribute: 'connect-markers'})
-  connectMarkers: Boolean = false;
+  connect_markers: boolean = false;
+
+  get connectMarkers(): boolean {
+    return this.connect_markers;
+  }
+
+  set connectMarkers(value: boolean) {
+    this.connect_markers = value;
+  }
 
   @property({type: String, attribute: 'connect-mode'})
-  connectMode?: string = 'flight';
+  connect_mode?: string = 'flight';
 
-  @property({type: Array, attribute: false})
-  markers?: Array<Node> = [];
+  get connectMode(): string | undefined {
+    return this.connect_mode;
+  }
 
-  @queryAssignedElements(<AssignedNodesOptions>{selector: 'vtb-map-marker'})
-  _markers?: Array<VtbMapMarkerElement>;
+  set connectMode(value: string) {
+    this.connect_mode = value;
+  }
+
+  @property({
+    type: Array,
+    hasChanged(newVal: Array<VtbMapMarker>, oldVal: Array<VtbMapMarker>) {
+      console.debug('VtbMapElement::markers::hasChanged');
+      return !isEqual(newVal, oldVal);
+    },
+  })
+  markers: Array<VtbMapMarker>;
+
+  static override styles = css`
+    :host {
+      display: none;
+    }
+  `;
 
   constructor() {
     super();
@@ -70,9 +95,9 @@ export class VtbMapMarkerGroupElement extends LitElement {
 
     if (this.children.length >= 1) {
       for (const child of this.children) {
-        if (child.tagName == 'VTB-MAP-MARKER') {
-          const marker = <VtbMapMarkerElement>child;
-          this.markers?.push(marker);
+        const marker = this.parseMarkerElement(child as HTMLElement);
+        if (marker) {
+          this.markers.push(marker);
         }
       }
     }
@@ -83,9 +108,11 @@ export class VtbMapMarkerGroupElement extends LitElement {
           // push all nodes to the childElements
           let _changed = false;
           for (const node of mutation.addedNodes) {
-            const _node = node as HTMLElement;
-            if (_node.tagName == 'VTB-MAP-MARKER') {
-              this.markers?.push(node);
+
+            const marker = this.parseMarkerElement(node as HTMLElement);
+
+            if (marker) {
+              this.markers.push(marker);
               _changed = true;
             }
           }
@@ -102,55 +129,92 @@ export class VtbMapMarkerGroupElement extends LitElement {
     });
   }
 
-  override render() {
-    // console.debug('VTB-MAP-MARKER-GROUP::render');
-    return html`
-      <div class="vtb-map-marker-group">
-        <slot></slot>
-      </div>
-    `;
+  public parseMarkerElement(element: HTMLElement): VtbMapMarker | null {
+    const re_marker = /^vtb-map-marker$/i;
+
+    if (re_marker.test(element.tagName)) {
+      const _marker_element = element as VtbMapMarkerElement;
+
+      const marker = new VtbMapMarker();
+      marker.title = element.title || element.innerHTML;
+      marker.lat =
+        parseFloat(_marker_element.getAttribute('lat') as string) || 0.0;
+      marker.lng =
+        parseFloat(_marker_element.getAttribute('lng') as string) || 0.0;
+
+      return marker;
+    }
+
+    return null;
   }
 }
 
 @customElement('vtb-map')
 export class VtbMapElement extends LitElement {
   @property({type: String, attribute: 'api-key'})
-  apiKey = '';
+  api_key = '';
+
+  set apiKey(value: string) {
+    this.api_key = value;
+  }
+
+  get apiKey(): string {
+    return this.api_key;
+  }
 
   @property({
     type: Array,
     hasChanged(
-      newVal: Array<VtbMapMarkerGroupElement>,
-      oldVal: Array<VtbMapMarkerGroupElement>
+      newVal: Array<VtbMapMarkerGroup>,
+      oldVal: Array<VtbMapMarkerGroup>
     ) {
+      console.debug('VtbMapElement::markergroups::hasChanged');
       return !isEqual(newVal, oldVal);
     },
   })
-  markergroups?: Array<VtbMapMarkerGroupElement>;
+  markergroups: Array<VtbMapMarkerGroup>;
 
   @property({type: Number})
-  height: number = 400;
+  height?: number = 400;
 
   @property({type: Number})
-  width: number = Number.NaN;
+  width?: number = Number.NaN;
 
   @property({type: Number})
-  zoom: number = Number.NaN;
-
-  @property({type: Number, attribute: 'center-lat'})
-  centerLat: number = Number.NaN;
-
-  @property({type: Number, attribute: 'center-lng'})
-  centerLng: number = Number.NaN;
-
-  @property({type: String})
-  center?: string;
+  zoom?: number = Number.NaN;
 
   @property({type: Boolean, attribute: 'connect-markers'})
-  connectMarkers = false;
+  connect_markers = false;
+
+  get connectMarkers(): boolean {
+    return this.connect_markers;
+  }
+
+  set connectMarkers(value: boolean) {
+    this.connect_markers = value;
+  }
+
+  @property({type: String, attribute: 'connect-mode'})
+  connect_mode?: string = 'flight';
+
+  get connectMode(): string | undefined {
+    return this.connect_mode;
+  }
+
+  set connectMode(value: string) {
+    this.connect_mode = value;
+  }
 
   @property({type: Boolean, attribute: 'infowindow-enabled'})
-  useInfoWindow = false;
+  use_info_window = false;
+
+  get useInfoWindow(): boolean {
+    return this.use_info_window;
+  }
+
+  set useInfoWindow(value: boolean) {
+    this.use_info_window = value;
+  }
 
   @property({
     type: Array,
@@ -164,17 +228,29 @@ export class VtbMapElement extends LitElement {
   @query('div#map')
   _container?: HTMLElement;
 
-  @queryAssignedElements(<AssignedNodesOptions>{
-    selector: 'vtb-map-marker-group',
-  })
-  _markergroups?: Array<VtbMapMarkerGroupElement>;
-
   private _loader?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   private _google?: typeof google.maps = undefined;
-  private _map?: google.maps.Map | null | undefined = null;
   private _directions_service?: google.maps.DirectionsService = undefined;
   private _directions_renderer?: google.maps.DirectionsRenderer = undefined;
-  private _bounds?: google.maps.LatLngBounds = undefined;
+  private marker_counter: number = 0;
+
+  private _map?: google.maps.Map | null | undefined = null;
+  set map(value: google.maps.Map | null | undefined) {
+    this._map = value;
+  }
+
+  get map(): google.maps.Map | null | undefined {
+    return this._map;
+  }
+
+  private _bounds?: google.maps.LatLngBounds | undefined = undefined;
+  set bounds(value: google.maps.LatLngBounds | undefined) {
+    this._bounds = value;
+  }
+
+  get bounds(): google.maps.LatLngBounds | undefined {
+    return this._bounds;
+  }
 
   static override styles = css`
     :host {
@@ -187,42 +263,44 @@ export class VtbMapElement extends LitElement {
   `;
 
   constructor() {
+    // console.debug('VtbMapElement::constructor');
     super();
     this.markergroups = [];
+    this.marker_counter = 0; // make sure to reset the counter on each initialization
   }
 
   override connectedCallback() {
+    // console.debug('VtbMapElement::connectedCallback');
     super.connectedCallback();
 
-    // console.info('loader: ', Loader);
+    if (this.children.length >= 1) {
+      for (const child of this.children) {
+        this.parseChildNode(child);
+      }
+    }
+
+    // setup google maps loader
     this._loader = new Loader({
       apiKey: this.apiKey,
       version: 'weekly',
     });
 
+    // setup mutation observer for changes to dom
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
           // push all nodes to the childElements
           let _changed: Boolean = false;
           for (const node of mutation.addedNodes) {
-            const _node: HTMLElement = node as HTMLElement;
-            if (_node.tagName == 'VTB-MAP-MARKER-GROUP') {
-              const _group = <VtbMapMarkerGroupElement>_node;
-              this.markergroups?.push(_group);
+            const rs = this.parseChildNode(node as Element);
+
+            if (rs && !_changed) {
               _changed = true;
             }
-            // if (_node.tagName == 'VTB-MAP-MARKER') {
-            //   let _markergroup = <VtbMapMarkerGroupElement> document.createElement('vtb-map-marker-group');
-            //   _markergroup.appendChild(_node);
-            // console.info(_markergroup);
-            //   that.markergroups.push(_markergroup);
-            //   _changed = true;
-            // }
           }
           // call requestUpdate to re-render the element
           if (_changed) {
-            // console.info('requesting an update');
+            // console.debug('requesting an update');
             this.requestUpdate();
           }
         }
@@ -234,15 +312,58 @@ export class VtbMapElement extends LitElement {
     });
   }
 
+  private parseChildNode(childNode: Element): boolean {
+    // console.debug('VTB-MAP::parseChildNode', childNode);
+    const re_group = /^vtb-map-marker-group$/i,
+      re_marker = /^vtb-map-marker$/i;
+
+    if (re_group.test(childNode.tagName)) {
+      const group = new VtbMapMarkerGroup();
+      const groupElement = childNode as VtbMapMarkerGroupElement;
+
+      group.connectMode = childNode.getAttribute(
+        'connect-mode'
+      ) as VtbMapMarkerConnectMode;
+      group.connectMarkers = childNode.hasAttribute('connect-markers') || false;
+      group.markers = groupElement.markers;
+
+      this.markergroups.push(group);
+
+      return true;
+    }
+    else if (re_marker.test(childNode.tagName)) {
+      // we got a marker without a group
+      const _marker_element = childNode as VtbMapMarkerElement;
+      const marker = new VtbMapMarkerGroupElement().parseMarkerElement(
+        _marker_element
+      );
+
+      if (this.markergroups.length <= 0) {
+        this.markergroups.push(new VtbMapMarkerGroup());
+        this.markergroups[0].connectMarkers = this.connect_markers;
+        this.markergroups[0].connectMode = this
+          .connect_mode as VtbMapMarkerConnectMode;
+      }
+
+      if (marker) {
+        this.markergroups[0].markers.push(marker);
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
   override render() {
     // console.debug('VTB-MAP::render');
 
     const containerStyles: StyleInfo = {};
-    if (this.height > 0) {
+    if (this.height && this.height > 0) {
       containerStyles.height = this.height.toString() + 'px';
     }
 
-    if (this.width > 0) {
+    if (this.width && this.width > 0) {
       containerStyles.width = this.width.toString() + 'px';
     }
 
@@ -250,21 +371,11 @@ export class VtbMapElement extends LitElement {
       <div id="map" style="${styleMap(containerStyles)}">
         Initializing map...
       </div>
-      <slot></slot>
     `;
   }
 
   override firstUpdated() {
     // console.debug('VTB-MAP::firstUpdated');
-
-    const markergroups: Array<VtbMapMarkerGroupElement> = [];
-    if (this._markergroups && this._markergroups.length >= 1) {
-      for (const markergroup of this._markergroups) {
-        markergroups.push(markergroup);
-      }
-    }
-    this.markergroups = markergroups;
-
     this._loader
       ?.load()
       .then(
@@ -284,40 +395,37 @@ export class VtbMapElement extends LitElement {
   protected initializeMap() {
     // console.debug('VTB-MAP::initializeMap');
     const mapoptions = {
-      center: {
-        lat: this.centerLat,
-        lng: this.centerLng,
-      },
       zoom: 1, // default zoom level, without it stops rendering
       mapTypeControl: false, // disable map control
       streetViewControl: false, // disable streetview
       fullscreenControl: false, // disable fullscreen
     } as google.maps.MapOptions;
-    // console.debug('mapoptions: ', mapoptions);
 
     if (this._container && this._google) {
       const map = new this._google.Map(this._container, mapoptions);
       this._map = map;
     }
 
+    this._map?.addListener('mapcapabilities_changed', () => {
+      const mapCapabilities = this._map?.getMapCapabilities();
+      console.debug('mapCapabilities: ', mapCapabilities);
+
+      // if (!mapCapabilities?.isAdvancedMarkersAvailable) {
+      //   // Advanced markers are *not* available, add a fallback.
+      //   console.warn('Advanced markers are not available');
+      // }
+    });
+
+
     this.setMapStyle();
-    this.renderMarkers();
+    this.addMarkers();
 
-    // if a zoom level is set on the element, dynamically set
-    // this level.
-    // if (this.zoom && this._map) {
-    //   // console.info('setting zoom: ', this.zoom, typeof this.zoom);
-    //   const zoom = Number(this.zoom);
-    //   this._map.setZoom(zoom);
-    // }
-
-    // if (this._bounds) {
-    //   console.info('fitting bounds: ', this._bounds);
-    //   this._map?.fitBounds(this._bounds);
-    //   console.info('setting center: ', this._bounds.getCenter());
-    //   this._map?.setCenter(this._bounds.getCenter());
-    //   // this._map?.setZoom(this._map?.getBoundsZoomLevel(this._bounds));
-    // }
+    if (this._bounds) {
+      // console.debug('fitting bounds: ', this._bounds);
+      this._map?.fitBounds(this._bounds);
+      // console.debug('setting center: ', this._bounds.getCenter());
+      this._map?.setCenter(this._bounds.getCenter());
+    }
   }
 
   protected setMapStyle() {
@@ -335,29 +443,23 @@ export class VtbMapElement extends LitElement {
     }
   }
 
-  protected renderMarkers() {
-    // console.debug('VTB-MAP::renderMarkers');
-    if (!this._google || !this._map) {
-      // console.debug('not render markers: ', [this._google, this._map]);
-      return;
-    }
+  protected addMarkers() {
+    // console.debug('VTB-MAP::addMarkers');
 
-    const map: google.maps.Map | null = this._map;
-    if (!this.markergroups) {
+    if (!this._google || !this._map) {
+      console.debug('not adding markers (yet): ', [this._google, this._map]);
       return;
     }
 
     for (const group of this.markergroups) {
-      // console.debug(group);
+      // console.debug('adding markers from group: ', group);
       const tripCoordinates: Array<google.maps.LatLng> = [];
+      const markers = group.markers;
 
-      if (group._markers) {
-        for (const marker of group._markers) {
-          // console.debug('adding marker: ', marker);
-          this.addMarker(marker);
-          const latlng = new this._google.LatLng(marker.lat, marker.lng);
-          tripCoordinates.push(latlng);
-        }
+      for (const marker of markers) {
+        this.addMarker(marker);
+        const latlng = new this._google.LatLng(marker.lat, marker.lng);
+        tripCoordinates.push(latlng);
       }
 
       const connectModeOptionsByAir = [
@@ -381,7 +483,7 @@ export class VtbMapElement extends LitElement {
           strokeWeight: 2,
         });
 
-        tripPath.setMap(map);
+        tripPath.setMap(this._map);
       }
 
       const connectModeOptionsByRoad = [
@@ -401,51 +503,35 @@ export class VtbMapElement extends LitElement {
     }
   }
 
-  protected addMarker(m: VtbMapMarkerElement) {
-    // console.debug('VTB-MAP::addMarker => ', m);
+  protected addMarker(marker: VtbMapMarker) {
+    // console.debug('VTB-MAP::addMarker => ', marker);
     const map: google.maps.Map | null | undefined = this._map;
 
-    // console.debug(this._map);
-
     const markerOptions: google.maps.MarkerOptions = {};
-    markerOptions.position = new google.maps.LatLng(m.lat, m.lng);
-    markerOptions.map = this._map;
+    markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
+    markerOptions.map = map;
+    markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
 
-    if (m.icon) {
-      markerOptions.icon = m.icon;
-    }
-
-    if (!this.useInfoWindow) {
-      markerOptions.title = m.innerText || m.title;
-    }
-
-    if (this.useInfoWindow && m.title) {
-      markerOptions.title = m.title;
-    }
-
-    if (m.label) {
-      markerOptions.label = m.label;
-    }
-
-    // console.debug('markeroptions', markerOptions);
-    const marker: google.maps.Marker = new google.maps.Marker(markerOptions);
-    // console.debug('google.maps.marker: ', marker);
-    if (this.useInfoWindow && m.innerText) {
-      // console.info('create rich marker markup');
+    const gmarker: google.maps.Marker = new google.maps.Marker(markerOptions);
+    if (marker.title) {
+      // console.debug('create rich marker markup');
       const infowindow = new google.maps.InfoWindow({
-        content: m.innerHTML || m.title,
-        ariaLabel: m.title ? m.title : '',
+        content: `<div class="vtb-map-marker-title">${marker.title}</div>`,
+        ariaLabel: marker.title ? marker.title : '',
       });
 
-      marker.addListener('click', () => {
+      gmarker.addListener('click', () => {
+        console.debug('click');
         infowindow.open({
-          anchor: marker,
+          anchor: gmarker,
           map,
         });
       });
     }
 
-    this._bounds?.extend(marker.getPosition() as google.maps.LatLng);
+    this._bounds?.extend(gmarker.getPosition() as google.maps.LatLng);
+
+    this.marker_counter++;
   }
 
   protected renderDirections(
@@ -463,7 +549,9 @@ export class VtbMapElement extends LitElement {
     }
 
     if (!this._directions_renderer) {
-      this._directions_renderer = new google.maps.DirectionsRenderer();
+      this._directions_renderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+      });
       this._directions_renderer.setMap(map);
     }
 
@@ -500,6 +588,9 @@ export class VtbMapElement extends LitElement {
     this._directions_service.route(directions_request, (result, status) => {
       if (status == 'OK' && result) {
         this._directions_renderer?.setDirections(result);
+      }
+      else {
+        console.error('Directions request failed due to ' + status);
       }
     });
   }

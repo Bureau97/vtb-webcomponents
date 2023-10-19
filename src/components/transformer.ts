@@ -19,7 +19,7 @@ import {
   VtbParticipant,
   VtbParticipantPrice,
   VtbParty,
-  VtbMapMarker
+  VtbMapMarker,
 } from './data';
 
 export class VtbDataTransformer {
@@ -89,34 +89,36 @@ export class VtbDataTransformer {
         }
 
         if (this._data.extra_fields[_field.name]) {
-          console.warn('Duplicate extra field', _field.name);
+          // console.warn('Duplicate extra field', _field.name);
         }
 
         this._data.extra_fields[_field.name] = _field;
       }
     }
 
-    for (const segment of vtbSrcData.segments) {
-      console.info(
-        'Segment',
-        segment.vtbObjectId,
-        segment.typeId,
-        segment.typeName,
-        segment
-      );
+    for (const segment_data of vtbSrcData.segments) {
+      // console.info(
+      //   'Segment',
+      //   segment_data.vtbObjectId,
+      //   segment_data.typeId,
+      //   segment_data.typeName,
+      //   segment_data
+      // );
 
-      if (!(segment.typeId in this._data.elements)) {
-        this._data.elements[segment.typeId] = new VtbElementGroup();
+      if (!(segment_data.typeId in this._data.element_groups)) {
+        this._data.element_groups[segment_data.typeId] = [];
       } else {
-        console.warn('Duplicate segment', segment.typeId);
+        console.warn('Duplicate segment', segment_data.typeId);
       }
 
       // parse flight info elements
-      if (segment.flightInfo && segment.flightInfo.length >= 1) {
-        for (const flight of segment.flightInfo) {
+      if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
+        for (const flight of segment_data.flightInfo) {
           const carrier = new VtbFlightCarrier();
-          carrier.name = flight.airlineObject.name || flight.airlineObject.carrier_name;
-          carrier.code = flight.airlineObject.code || flight.airlineObject.carrier_code;
+          carrier.name =
+            flight.airlineObject.name || flight.airlineObject.carrier_name;
+          carrier.code =
+            flight.airlineObject.code || flight.airlineObject.carrier_code;
 
           const departure = new VtbFlight();
           departure.date = dayjs.utc(
@@ -148,7 +150,7 @@ export class VtbDataTransformer {
           flightElement.arrival = arrival;
           flightElement.flightnumber = flight.flightNumber;
           flightElement.duration = flight.duration;
-          flightElement.day = segment.day;
+          flightElement.day = segment_data.day;
 
           this._data.flight_elements.push(flightElement);
         }
@@ -156,16 +158,16 @@ export class VtbDataTransformer {
 
       // parse car rental info
       if (
-        segment.car_rental_elements &&
-        segment.car_rental_elements.length >= 1
+        segment_data.car_rental_elements &&
+        segment_data.car_rental_elements.length >= 1
       ) {
-        console.info('has car_rental_elements');
+        // console.info('has car_rental_elements');
 
         let last_element: VtbElement | null = null;
-        for (const carElementData of segment.car_rental_elements) {
+        for (const carElementData of segment_data.car_rental_elements) {
           const car_element = this.parse_vtb_element(
             carElementData.element,
-            segment.title
+            segment_data.title
           );
 
           if (
@@ -195,7 +197,9 @@ export class VtbDataTransformer {
         }
       }
 
-      this.parse_vtb_segment(segment);
+      this._data.element_groups[segment_data.typeId].push(
+        this.parse_vtb_segment(segment_data)
+      );
     }
 
     return this._data;
@@ -210,7 +214,7 @@ export class VtbDataTransformer {
     element_group.subtitle = segment_data.subTitle;
     element_group.description = segment_data.content;
     element_group.nights = segment_data.nights;
-    element_group.day = segment_data.dau;
+    element_group.day = segment_data.day;
     element_group.type_id = segment_data.typeId;
 
     for (const media_data of segment_data.media) {
@@ -219,20 +223,20 @@ export class VtbDataTransformer {
       media.id = media_data.sourceId;
       media.tags = media_data.tags;
 
-      element_group.media?.push(media);
+      element_group.media.push(media);
     }
 
     let last_element: VtbElement | null = null;
-    for (const element of segment_data.elements) {
+    for (const element_data of segment_data.elements) {
       if (
         element_group.elements &&
-        !(element.unitId in element_group.elements)
+        !(element_data.unitId in element_group.elements)
       ) {
-        element_group.elements[element.unitId] = [];
+        element_group.elements[element_data.unitId] = [];
       }
 
       const price_element: VtbElement = this.parse_vtb_element(
-        element,
+        element_data,
         segment_data.title
       );
 
@@ -244,7 +248,7 @@ export class VtbDataTransformer {
         price_element.price_diff = price_element.price - last_element.price; // price difference between non-optional and optional elements
       }
 
-      element_group.elements[element.unitId].push(price_element);
+      element_group.elements[element_data.unitId].push(price_element);
 
       if (
         !price_element.optional ||
@@ -254,14 +258,15 @@ export class VtbDataTransformer {
       }
     }
 
-    if (segment_data.map && segment_data.map.enabled >= 1) {
+    if (segment_data.maps) {
+      console.info('segment_data.maps', segment_data);
       element_group.location = new VtbMapMarker();
-      element_group.location.lat = segment_data.map.latitude;
-      element_group.location.lng = segment_data.map.longitude;
-      element_group.location.zoom = segment_data.map.zoom;
+      element_group.location.lat = segment_data.maps.latitude;
+      element_group.location.lng = segment_data.maps.longitude;
+      element_group.location.zoom = segment_data.maps.zoom;
     }
 
-    this._data.elements[segment_data.typeId] = element_group;
+    return element_group;
   }
 
   protected parse_vtb_element(
@@ -269,8 +274,6 @@ export class VtbDataTransformer {
     grouptitle?: string
   ) {
     const vtb_element = new VtbElement();
-
-    console.info(element_data);
 
     vtb_element.id = element_data.id;
     vtb_element.title = element_data.title;
@@ -313,11 +316,20 @@ export class VtbDataTransformer {
       vtb_element.participants.push(participant_element);
     }
 
-    if (element_data.map && element_data.map.enabled >= 1) {
+    if (
+      element_data.maps &&
+      element_data.maps.enabled &&
+      element_data.maps.latitude != 0 &&
+      element_data.maps.longitude != 0
+    ) {
+      console.info('element_data.maps', element_data);
+
       vtb_element.location = new VtbMapMarker();
-      vtb_element.location.lat = element_data.map.latitude;
-      vtb_element.location.lng = element_data.map.longitude;
-      vtb_element.location.zoom = element_data.map.zoom;
+      vtb_element.location.lat = element_data.maps.latitude;
+      vtb_element.location.lng = element_data.maps.longitude;
+      vtb_element.location.zoom = element_data.maps.zoom || 16;
+      vtb_element.location.title = element_data.title;
+      vtb_element.location.content = element_data.additionalText;
     }
 
     return vtb_element;

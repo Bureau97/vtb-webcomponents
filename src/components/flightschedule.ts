@@ -86,10 +86,10 @@ export class VtbFlightElement extends LitElement {
   @property({type: String})
   carrier?: string;
 
-  @property({ type: String })
+  @property({type: String})
   carrier_code?: string;
 
-  @property({ type: String })
+  @property({type: String})
   duration?: string;
 
   static override styles = css`
@@ -109,8 +109,7 @@ export class VtbFlightElement extends LitElement {
     return html`
       <div class="flight">
         <slot></slot>
-        ${this.render_carrier()}
-        ${this.render_duration()}
+        ${this.render_carrier()} ${this.render_duration()}
         ${this.render_flightnumber()}
       </div>
     `;
@@ -132,7 +131,9 @@ export class VtbFlightElement extends LitElement {
 
   render_flightnumber() {
     if (this.flightnumber) {
-      return html`<div class="flightnumber">${this.carrier_code}${this.flightnumber}</div>`;
+      return html`<div class="flightnumber">
+        ${this.carrier_code}${this.flightnumber}
+      </div>`;
     }
     return '';
   }
@@ -144,8 +145,6 @@ export class VtbFlightScheduleElement extends LitElement {
     type: Array,
     attribute: false,
     hasChanged(newVal: Array<VtbFlightData>, oldVal: Array<VtbFlightData>) {
-      console.info('VtbFlightScheduleElement::hasChanged');
-      console.info([newVal, oldVal]);
       return !isEqual(newVal, oldVal);
     },
   })
@@ -188,8 +187,7 @@ export class VtbFlightScheduleElement extends LitElement {
         typeof _schedule.departure?.date == 'string'
       ) {
         departure_date = dayjs(_schedule.departure?.date);
-      }
-      else {
+      } else {
         departure_date = _schedule.departure?.date;
       }
 
@@ -198,8 +196,7 @@ export class VtbFlightScheduleElement extends LitElement {
         typeof _schedule.arrival?.date == 'string'
       ) {
         arrival_date = dayjs(_schedule.arrival?.date);
-      }
-      else {
+      } else {
         arrival_date = _schedule.arrival?.date;
       }
 

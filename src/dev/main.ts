@@ -1,30 +1,30 @@
 import '../vtb-webcomponents';
 import '../components/media';
 import '../components/flightschedule';
+import '../components/map';
 
-// import '../components/map';
-
-import {Vtb} from '../vtb-webcomponents';
+import {Vtb, VtbFilterConfig} from '../vtb-webcomponents';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
-import { VtbMapElement } from '../components/map';
-import { VtbMediaElement } from '../components/media';
+import {VtbMediaElement} from '../components/media';
+import { VtbMapElement, VtbMapOptions } from '../components/map';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
 
-// // class SegmentTypes {
-// //   readonly ADDITIONEEL: Array<number> = [3];
-// //   readonly ARRANGEMENT: Array<number> = [1];
-// //   readonly CARRENTAL: Array<number> = [7];
-// //   readonly HIDE: Array<number> = [8];
-// //   readonly FLIGHT: Array<number> = [4];
-// //   readonly FLIGHT_ADDITIONAL: Array<number> = [6];
+class SegmentTypes {
+  readonly ADDITIONEEL: Array<number> = [3];
+  readonly ARRANGEMENT: Array<number> = [1];
+  readonly CARRENTAL: Array<number> = [7];
+  readonly HIDE: Array<number> = [8];
+  readonly FLIGHT: Array<number> = [2];
+  readonly FLIGHT_ADDITIONAL: Array<number> = [6];
 
-// //   readonly INTRO: Array<number> = [12];
-// //   readonly PRAKTISCH: Array<number> = [13];
-// //   readonly REISBESCHEIDEN: Array<number> = [19];
-// //   readonly AANVULLINGEN: Array<number> = [14];
-// // }
+  readonly INTRO: Array<number> = [12];
+  readonly PRAKTISCH: Array<number> = [13];
+  readonly REISBESCHEIDEN: Array<number> = [19];
+  readonly AANVULLINGEN: Array<number> = [14];
+}
+const segment_types = new SegmentTypes();
 
 // class SegmentTypesOptional {
 //   readonly ADDITIONEEL: Array<number> = [3];
@@ -42,18 +42,18 @@ const travelplan_source_url = '/travelplan.json';
 //   readonly REISBESCHEIDEN: Array<number> = [19];
 //   readonly AANVULLINGEN: Array<number> = [14, 16];
 // }
+// const segment_types = new SegmentTypesOptional();
 
-// const segmentTypes = new SegmentTypesOptional();
-
-// // class UnitTypes {
-// //   readonly FLIGHT: Array<number> = [6, 18];
-// //   readonly CARRENTAL: Array<number> = [5];
-// //   readonly MAAL: Array<number> = [3];
-// //   readonly NACHTEN: Array<number> = [2];
-// //   readonly INTRO_TEXT: Array<number> = [19];
-// //   readonly TEXT: Array<number> = [13];
-// //   readonly VRIJE_DAGEN_TEXT: Array<number> = [11];
-// // }
+class UnitTypes {
+  readonly FLIGHT: Array<number> = [6, 18];
+  readonly CARRENTAL: Array<number> = [5];
+  readonly MAAL: Array<number> = [3];
+  readonly NACHTEN: Array<number> = [2];
+  readonly INTRO_TEXT: Array<number> = [19];
+  readonly TEXT: Array<number> = [13];
+  readonly VRIJE_DAGEN_TEXT: Array<number> = [11];
+}
+const unit_types = new UnitTypes();
 
 // class UnitTypesOptional {
 //   readonly FLIGHT: Array<number> = [12];
@@ -66,11 +66,21 @@ const travelplan_source_url = '/travelplan.json';
 //   readonly TEXT: Array<number> = [7];
 //   readonly VRIJE_DAGEN_TEXT: Array<number> = [11];
 // }
-
-// const unitTypes = new UnitTypesOptional();
+// const unit_types = new UnitTypesOptional();
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
+
+  const h1 = document.createElement('h1');
+  h1.innerHTML = vtb.title;
+  const h2 = document.createElement('h2');
+  h2.innerHTML = vtb.subtitle;
+
+  const heroContentContainer = document.getElementsByClassName('hero-content')[0] as HTMLElement;
+
+  heroContentContainer.innerHTML = '';
+  heroContentContainer.appendChild(h1);
+  heroContentContainer.appendChild(h2);
 
   console.info(vtb.title + ' ' + vtb.subtitle);
   console.info(vtb.startdate?.format('D MMM'));
@@ -79,40 +89,58 @@ function vtbDataLoaded(vtb: Vtb) {
   console.info(vtb.participants);
   console.info(vtb.parties);
 
-  // console.info(vtb.extra_fields);
-  // console.info(vtb.carRentalElements);
-  // for (const element of vtb.car_rental_elements) {
-  //   console.info(
-  //     element.day,
-  //     element.title,
-  //     element.subtitle,
-  //     element.price_diff
-  //   );
-  // }
+  // render hero using the first cover
+  const hero = document.getElementById('hero') as VtbMediaElement;
+  hero.src = vtb.covers[0].src;
 
-  // console.info(segmentTypes);
-
-  // const flights_search = new VtbFilterConfig();
-  // flights_search.segments = [segmentTypes.FLIGHT];
-
-  // const flight_elements = vtb.filter(flights_search);
-
-  console.info(vtb.flightinfo);
-
+  // add flightschedule
   const flightschedule = document.getElementById(
     'flightschedule'
   ) as VtbFlightScheduleElement;
   flightschedule.flightinfo = vtb.flightinfo;
 
-  const map = document.getElementById('map') as VtbMapElement;
-  console.info(map);
-  // map.markergroups = vtb.markergroups;
+  // accos on map
+  const acco_search: VtbFilterConfig = {
+    segments: [segment_types.ARRANGEMENT],
+    units: [unit_types.NACHTEN],
+  };
 
-  console.info(vtb.covers);
-  const hero = document.getElementById('hero') as VtbMediaElement;
-  console.info(hero);
-  console.info(vtb.covers);
-  hero.src = vtb.covers[0].src;
+  const marker_group_accos = vtb.filter_mapmarkers(acco_search);
+  marker_group_accos.connectMarkers = true;
+  marker_group_accos.connectMode = 'drive';
+  console.info('acco group: ', marker_group_accos);
+
+  const map = document.getElementById('dynamic-map') as VtbMapElement;
+  console.info(map);
+  if (map) {
+    map.markergroups = [marker_group_accos];
+  }
+
+  const map_options: VtbMapOptions = {
+    connect_markers: true,
+    connect_mode: 'drive',
+    api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ'
+  };
+
+  console.info(map_options);
+
+  // vtb.map('complete-map', acco_search, map_options);
+
+
+  // // flight on map
+  // const flight_search = new VtbFilterConfig();
+  // flight_search.segments = [segment_types.FLIGHT];
+  // flight_search.units = [unit_types.MAAL];
+
+  // const marker_group_flights = vtb.filter_mapmarkers(flight_search);
+  // marker_group_flights.connectMarkers = true;
+  // marker_group_flights.connectMode = 'flight';
+  // console.info('flight group: ', marker_group_flights);
+
+  // // add map
+  // const map2 = document.getElementById('dynamic-map-flight1') as VtbMapElement;
+  // console.info(map2);
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {

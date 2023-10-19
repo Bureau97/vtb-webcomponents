@@ -105,18 +105,40 @@ export class VtbGeoLocation {
   lng = 0.0;
 }
 
-export class VtbMapMarker extends VtbGeoLocation{
+export class VtbMapMarker extends VtbGeoLocation {
   label?: string;
   icon?: string;
   zoom?: number;
+  title?: string;
+  content ?: string;
 }
 
-export type MapMarkerConnectMode = "flight" | "drive";
+export type VtbMapMarkerConnectMode = 'flight' | 'drive';
 
 export class VtbMapMarkerGroup {
   connect_markers: boolean = false;
   markers: Array<VtbMapMarker> = [];
-  connect_mode?: MapMarkerConnectMode = 'flight';
+  connect_mode?: VtbMapMarkerConnectMode = 'flight';
+
+  get connectMode(): string {
+    return <string>this.connect_mode;
+  }
+
+  set connectMode(connect_mode: VtbMapMarkerConnectMode) {
+    this.connect_mode = connect_mode;
+  }
+
+  get connectMarkers(): boolean {
+    return this.connect_markers;
+  }
+
+  set connectMarkers(connect_markers: boolean) {
+    this.connect_markers = connect_markers;
+  }
+
+  get _markers(): Array<VtbMapMarker> {
+    return this.markers;
+  }
 }
 
 export class VtbData {
@@ -137,7 +159,7 @@ export class VtbData {
   extra_fields: Dictionary<VtbExtraField> = {};
   days: Array<VtbElement> = [];
 
-  elements: Dictionary<VtbElementGroup> = {};
+  element_groups: Dictionary<Array<VtbElementGroup>> = {};
 
   // markergroups: Dictionary<Array<VtbMapMarkerGroup>> = [];
 }

@@ -1,6 +1,11 @@
 import {VtbDataTransformer} from './components/transformer';
-import { VtbData, VtbElement, VtbMapMarkerGroup, VtbMapMarkerConnectMode } from './components/data';
-import { VtbMapElement, VtbMapOptions } from './components/map';
+import {
+  VtbData,
+  VtbElement,
+  VtbMapMarkerGroup,
+  VtbMapMarkerConnectMode,
+} from './components/data';
+import {VtbMapElement, VtbMapOptions} from './components/map';
 
 export interface VtbFilterConfig {
   segments?: Array<Array<number | string>>;
@@ -203,10 +208,15 @@ export class Vtb {
     return total;
   }
 
-  map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions) {
+  map(
+    container_id: string,
+    filter_config: VtbFilterConfig,
+    map_options: VtbMapOptions
+  ) {
     const marker_group = this.filter_mapmarkers(filter_config);
     marker_group.connectMarkers = map_options.connect_markers;
-    marker_group.connectMode = map_options.connect_mode as VtbMapMarkerConnectMode;
+    marker_group.connectMode =
+      map_options.connect_mode as VtbMapMarkerConnectMode;
     console.info('marker group: ', marker_group);
 
     const map = new VtbMapElement();

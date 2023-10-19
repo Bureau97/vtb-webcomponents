@@ -110,7 +110,7 @@ export class VtbMapMarker extends VtbGeoLocation {
   icon?: string;
   zoom?: number;
   title?: string;
-  content ?: string;
+  content?: string;
 }
 
 export type VtbMapMarkerConnectMode = 'flight' | 'drive';

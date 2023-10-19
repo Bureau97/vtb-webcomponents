@@ -108,7 +108,6 @@ export class VtbMapMarkerGroupElement extends LitElement {
           // push all nodes to the childElements
           let _changed = false;
           for (const node of mutation.addedNodes) {
-
             const marker = this.parseMarkerElement(node as HTMLElement);
 
             if (marker) {
@@ -330,8 +329,7 @@ export class VtbMapElement extends LitElement {
       this.markergroups.push(group);
 
       return true;
-    }
-    else if (re_marker.test(childNode.tagName)) {
+    } else if (re_marker.test(childNode.tagName)) {
       // we got a marker without a group
       const _marker_element = childNode as VtbMapMarkerElement;
       const marker = new VtbMapMarkerGroupElement().parseMarkerElement(
@@ -415,7 +413,6 @@ export class VtbMapElement extends LitElement {
       //   console.warn('Advanced markers are not available');
       // }
     });
-
 
     this.setMapStyle();
     this.addMarkers();
@@ -588,8 +585,7 @@ export class VtbMapElement extends LitElement {
     this._directions_service.route(directions_request, (result, status) => {
       if (status == 'OK' && result) {
         this._directions_renderer?.setDirections(result);
-      }
-      else {
+      } else {
         console.error('Directions request failed due to ' + status);
       }
     });

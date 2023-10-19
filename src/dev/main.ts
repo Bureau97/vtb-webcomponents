@@ -6,7 +6,7 @@ import '../components/map';
 import {Vtb, VtbFilterConfig} from '../vtb-webcomponents';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
-import { VtbMapElement, VtbMapOptions } from '../components/map';
+import {VtbMapElement, VtbMapOptions} from '../components/map';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
@@ -76,7 +76,9 @@ function vtbDataLoaded(vtb: Vtb) {
   const h2 = document.createElement('h2');
   h2.innerHTML = vtb.subtitle;
 
-  const heroContentContainer = document.getElementsByClassName('hero-content')[0] as HTMLElement;
+  const heroContentContainer = document.getElementsByClassName(
+    'hero-content'
+  )[0] as HTMLElement;
 
   heroContentContainer.innerHTML = '';
   heroContentContainer.appendChild(h1);
@@ -119,13 +121,12 @@ function vtbDataLoaded(vtb: Vtb) {
   const map_options: VtbMapOptions = {
     connect_markers: true,
     connect_mode: 'drive',
-    api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ'
+    api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ',
   };
 
   console.info(map_options);
 
   // vtb.map('complete-map', acco_search, map_options);
-
 
   // // flight on map
   // const flight_search = new VtbFilterConfig();
@@ -140,7 +141,6 @@ function vtbDataLoaded(vtb: Vtb) {
   // // add map
   // const map2 = document.getElementById('dynamic-map-flight1') as VtbMapElement;
   // console.info(map2);
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {

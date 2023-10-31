@@ -1,24 +1,22 @@
-import {VtbDataTransformer} from './components/transformer';
+import {VtbFilterConfig} from './utils/interfaces';
+
 import {
-  VtbData,
+  VtbTravelPlanData,
   VtbElement,
   VtbMapMarkerGroup,
   VtbMapMarkerConnectMode,
-} from './components/data';
+} from './models';
+import {VtbDataTransformer} from './utils/transformer';
 import {VtbMapElement, VtbMapOptions} from './components/map';
-
-export interface VtbFilterConfig {
-  segments?: Array<Array<number | string>>;
-  units?: Array<Array<number | string>>;
-  participants?: Array<number | string>;
-  days?: Array<number | string>;
-  optional?: boolean;
-}
+import {
+  VtbFlightScheduleElement,
+  VtbFlightScheduleOptions,
+} from './components/flightschedule';
 
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  constructor(vtb_parsed_data?: VtbData) {
+  constructor(vtb_parsed_data?: VtbTravelPlanData) {
     if (vtb_parsed_data) {
       this._data = vtb_parsed_data;
     }
@@ -126,7 +124,7 @@ export class Vtb {
     for (const segment_id of segment_ids) {
       const segments = this._data.element_groups[Number(segment_id)];
 
-      if (!segments.length) {
+      if (!segments || !segments.length) {
         continue;
       }
 
@@ -212,12 +210,11 @@ export class Vtb {
     container_id: string,
     filter_config: VtbFilterConfig,
     map_options: VtbMapOptions
-  ) {
+  ): VtbMapElement {
     const marker_group = this.filter_mapmarkers(filter_config);
     marker_group.connectMarkers = map_options.connect_markers;
     marker_group.connectMode =
       map_options.connect_mode as VtbMapMarkerConnectMode;
-    console.info('marker group: ', marker_group);
 
     const map = new VtbMapElement();
     map.apiKey = map_options.api_key;
@@ -230,5 +227,30 @@ export class Vtb {
     container?.appendChild(map);
 
     return map;
+  }
+
+  flightschedule(
+    container_id: string,
+    filter_config?: VtbFilterConfig,
+    flightschedule_options?: VtbFlightScheduleOptions
+  ) {
+    // to do
+    console.debug(
+      'flightschedule',
+      container_id,
+      filter_config,
+      flightschedule_options
+    );
+
+    const flightschedule = new VtbFlightScheduleElement();
+    flightschedule.flightinfo = this.flightinfo;
+    if (flightschedule_options?.dateformat) {
+      flightschedule.dateformat = flightschedule_options.dateformat;
+    }
+
+    const container = document.getElementById(container_id);
+    container?.appendChild(flightschedule);
+
+    return flightschedule;
   }
 }

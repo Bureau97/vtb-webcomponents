@@ -7,7 +7,7 @@ dayjs.extend(utc);
 dayjs.extend(duration);
 
 import {
-  VtbData,
+  VtbTravelPlanData,
   VtbElement,
   VtbElementGroup,
   VtbExtraField,
@@ -20,10 +20,10 @@ import {
   VtbParticipantPrice,
   VtbParty,
   VtbMapMarker,
-} from './data';
+} from '../models';
 
 export class VtbDataTransformer {
-  private _data = new VtbData();
+  private _data = new VtbTravelPlanData();
 
   parse_vtb_data(
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -245,6 +245,14 @@ export class VtbDataTransformer {
         price_element.optional &&
         last_element.unit_id == price_element.unit_id
       ) {
+        console.debug(
+          'Optional element: ',
+          price_element.title,
+          price_element.subtitle,
+          price_element.price,
+          last_element.price,
+          last_element.price - price_element.price
+        );
         price_element.price_diff = price_element.price - last_element.price; // price difference between non-optional and optional elements
       }
 
@@ -254,12 +262,18 @@ export class VtbDataTransformer {
         !price_element.optional ||
         (last_element && price_element.unit_id != last_element.unit_id)
       ) {
+        console.debug(
+          'set last element: ',
+          price_element.title,
+          price_element.subtitle,
+          price_element.price
+        );
         last_element = price_element; // act as default element
       }
     }
 
     if (segment_data.maps) {
-      console.info('segment_data.maps', segment_data);
+      console.debug('segment_data.maps', segment_data);
       element_group.location = new VtbMapMarker();
       element_group.location.lat = segment_data.maps.latitude;
       element_group.location.lng = segment_data.maps.longitude;
@@ -274,7 +288,7 @@ export class VtbDataTransformer {
     grouptitle?: string
   ) {
     const vtb_element = new VtbElement();
-
+    console.debug('element_data: ', element_data);
     vtb_element.id = element_data.id;
     vtb_element.title = element_data.title;
     vtb_element.subtitle = element_data.subTitle;
@@ -289,6 +303,13 @@ export class VtbDataTransformer {
     vtb_element.unit_id = element_data.unitId;
     vtb_element.grouptitle = grouptitle;
     vtb_element.object_id = element_data.vtbObjectId;
+
+    if (element_data.date) {
+      vtb_element.startdate = dayjs(element_data.date);
+    }
+    if (element_data.endDate) {
+      vtb_element.enddate = dayjs(element_data.endDate);
+    }
 
     if (element_data.media && element_data.media.length >= 1) {
       for (const media_data of element_data.media) {
@@ -322,7 +343,7 @@ export class VtbDataTransformer {
       element_data.maps.latitude != 0 &&
       element_data.maps.longitude != 0
     ) {
-      console.info('element_data.maps', element_data);
+      console.debug('element_data.maps', element_data);
 
       vtb_element.location = new VtbMapMarker();
       vtb_element.location.lat = element_data.maps.latitude;

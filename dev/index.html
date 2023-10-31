@@ -23,12 +23,12 @@
         padding: 0;
       }
 
-      vtb-pricecalculator {
+      vtb-calculator {
         max-width: 768px;
         margin: 0 auto;
       }
 
-      vtb-pricecalculator-element {
+      vtb-calculator-element {
         border-bottom: 1px solid #ccc;
       }
 
@@ -54,102 +54,6 @@
     <section class="hero" height="500">
       <vtb-media id="hero" crop="wordpress/large"></vtb-media>
       <div class="hero-content"></div>
-    </section>
-
-    <section>
-      <h2>Calculator Static</h2>
-      <vtb-pricecalculator
-        id="calculator-static"
-        display-totals
-        total-price="1134.23"
-        currency="EUR"
-      >
-        <vtb-pricecalculator-list title="Prijzen zijn inclusief">
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype=""
-            >Intercontinentale vluchten met American
-            Airlines</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype=""
-            >Intercontinentale vluchten met United
-            Airlines</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype=""
-            >Intercontinentale vluchten met British
-            Airways</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="330,00"
-            pricetype="pp"
-            >Inclusief taxen/toeslagen (op dit
-            moment)</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype=""
-            >Vermelde transfers</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype=""
-            >Alle hotelovernachtingen</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element currency="EUR" price="" pricetype="">
-            Camper: (TYPE) van dag 6 t/m dag 23
-            <ul>
-              <li>2 bestuurders</li>
-              <li>3500 KM (200KM per dag)</li>
-              <li>Klaarmaakkosten Camper</li>
-              <li>Persoonlijke inventaris</li>
-              <li>CDW Verzekering (dekking schade camper)</li>
-              <li>Verzekering afkoop eigen risico</li>
-              <li>Roadbook voor uw route met campingovernachtingen</li>
-            </ul>
-          </vtb-pricecalculator-element>
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="9.99"
-            pricetype="pp"
-            >Volledige CO2 compensatie van uw reis</vtb-pricecalculator-element
-          >
-        </vtb-pricecalculator-list>
-        <vtb-pricecalculator-list title="Bijkomende kosten">
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="35.00"
-            pricetype="unit"
-            display-price="true"
-            >Administratiekosten Special Traffic</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="29.00"
-            pricetype="unit"
-            display-price="true"
-            >Boekingskosten</vtb-pricecalculator-element
-          >
-        </vtb-pricecalculator-list>
-        <vtb-pricecalculator-list title="Upgrades">
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="115.67"
-            pricetype="pp"
-            display-price="true"
-            >Millennium Hotel Times Square in New York
-            City</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="30.00"
-            pricetype="pppn"
-            display-price="true"
-            >Embassy Row Hotel in Washington DC</vtb-pricecalculator-element
-          >
-          <vtb-pricecalculator-element
-            currency="EUR"
-            price="24.00"
-            pricetype="pppn"
-            display-price="true"
-            >Grafton on Sunset in Los Angeles</vtb-pricecalculator-element
-          >
-        </vtb-pricecalculator-list>
-      </vtb-pricecalculator>
     </section>
 
     <section class="flightschedule">
@@ -216,50 +120,174 @@
       <div id="complete-map"></div>
     </section>
 
+    <section class="calculator">
+      <h2>Calculator Static</h2>
+      <vtb-calculator
+        id="calculator-static"
+        display-totals
+        total-price="1134.23"
+        currency="EUR"
+      >
+        <vtb-calculator-list title="Prijzen zijn inclusief">
+          <vtb-calculator-element currency="EUR" price="" pricetype=""
+            >Intercontinentale vluchten met American
+            Airlines</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="" pricetype=""
+            >Intercontinentale vluchten met United
+            Airlines</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="" pricetype=""
+            >Intercontinentale vluchten met British
+            Airways</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="330,00" pricetype="pp"
+            >Inclusief taxen/toeslagen (op dit moment)</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="" pricetype=""
+            >Vermelde transfers</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="" pricetype=""
+            >Alle hotelovernachtingen</vtb-calculator-element
+          >
+          <vtb-calculator-element currency="EUR" price="" pricetype="">
+            Camper: (TYPE) van dag 6 t/m dag 23
+            <ul>
+              <li>2 bestuurders</li>
+              <li>3500 KM (200KM per dag)</li>
+              <li>Klaarmaakkosten Camper</li>
+              <li>Persoonlijke inventaris</li>
+              <li>CDW Verzekering (dekking schade camper)</li>
+              <li>Verzekering afkoop eigen risico</li>
+              <li>Roadbook voor uw route met campingovernachtingen</li>
+            </ul>
+          </vtb-calculator-element>
+          <vtb-calculator-element currency="EUR" price="9.99" pricetype="pp"
+            >Volledige CO2 compensatie van uw reis</vtb-calculator-element
+          >
+        </vtb-calculator-list>
+        <vtb-calculator-list title="Bijkomende kosten">
+          <vtb-calculator-element
+            currency="EUR"
+            price="35.00"
+            pricetype="unit"
+            display-price="true"
+            >Administratiekosten Special Traffic</vtb-calculator-element
+          >
+          <vtb-calculator-element
+            currency="EUR"
+            price="29.00"
+            pricetype="unit"
+            display-price="true"
+            >Boekingskosten</vtb-calculator-element
+          >
+        </vtb-calculator-list>
+        <vtb-calculator-list title="Upgrades">
+          <vtb-calculator-element
+            currency="EUR"
+            price="115.67"
+            pricetype="pp"
+            display-price="true"
+            >Millennium Hotel Times Square in New York
+            City</vtb-calculator-element
+          >
+          <vtb-calculator-element
+            currency="EUR"
+            price="30.00"
+            pricetype="pppn"
+            display-price="true"
+            >Embassy Row Hotel in Washington DC</vtb-calculator-element
+          >
+          <vtb-calculator-element
+            currency="EUR"
+            price="24.00"
+            pricetype="pppn"
+            display-price="true"
+            >Grafton on Sunset in Los Angeles</vtb-calculator-element
+          >
+        </vtb-calculator-list>
+      </vtb-calculator>
+    </section>
+
     <section>
       <h2>Dynamic calculators</h2>
 
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-accos"
         display-totals
         title="Accommodaties"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
 
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-carrental"
         display-totals
         title="Autohuur"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
 
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-flight"
         display-totals
         title="Vluchten"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
 
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-flightadditional"
         display-totals
         title="Vluchten bijkomende kosten"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
 
-      <!-- <vtb-pricecalculator
+      <!-- <vtb-calculator
         id="calc-dynamic-flighttotal"
         display-totals
         title="Vluchten"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
  -->
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-additions"
         display-totals
         title="Toeslagen"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
 
-      <vtb-pricecalculator
+      <vtb-calculator
         id="calc-dynamic-test"
         display-totals
         title="Pakket"
-      ></vtb-pricecalculator>
+      ></vtb-calculator>
+    </section>
+
+    <section class="travelplan-info">
+      <h2>Travelplan</h2>
+        <vtb-text editable>
+          <p>
+            When could weathermen predict the weather, let alone the future. Yeah,
+            alright, bye-bye. What? Perfect, just perfect. Can I go now, Mr.
+            Strickland? Over there, on my hope chest. I've never seen purple
+            underwear before, Calvin.
+          </p>
+          <p>
+            I over slept, look I need your help. I have to ask Lorraine out but I
+            don't know how to do it. I have to ask Lorraine out but I don't know how
+            to do it. George. George. Weight has nothing to do with it. I know, and
+            all I could say is I'm sorry. I can't believe you loaned me a car,
+            without telling me it had a blindspot. I could've been killed.
+          </p>
+          <p>
+            Oh, then I wanna give her a call, I don't want her to worry about you.
+            You okay, is everything alright? Can't be. This is nuts. Aw, c'mon. I'm
+            too loud. I can't believe it. I'm never gonna get a chance to play in
+            front of anybody. Great Scott. Let me see that photograph again of your
+            brother. Just as I thought, this proves my theory, look at your brother.
+          </p>
+          <p>
+            Pretty Mediocre photographic fakery, they cut off your brother's hair.
+            Save the clock tower, save the clock tower. Mayor Wilson is sponsoring
+            an initiative to replace that clock. Thirty years ago, lightning struck
+            that clock tower and the clock hasn't run since. We at the Hill Valley
+            Preservation Society think it should be preserved exactly the way it is
+            as part of our history and heritage. Biff. I will. Oh.
+          </p>
+        </vtb-text>
+
     </section>
   </body>
 </html>

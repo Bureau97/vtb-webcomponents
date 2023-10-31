@@ -6,7 +6,7 @@ dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
 
-import {Dictionary} from '../utils/interfaces';
+import {Dictionary} from './utils/interfaces';
 
 export class VtbParticipant {
   id?: number;
@@ -79,6 +79,8 @@ export class VtbElement {
   nights = 0;
   hidden = false;
   day?: number;
+  startdate?: Dayjs;
+  enddate?: Dayjs;
   unit_id?: number;
   participants: Array<VtbParticipantPrice> = [];
   grouptitle?: string;
@@ -141,7 +143,7 @@ export class VtbMapMarkerGroup {
   }
 }
 
-export class VtbData {
+export class VtbTravelPlanData {
   title: string = '';
   subtitle: string = '';
 

@@ -10,7 +10,11 @@ dayjs.locale('nl');
 import * as _ from 'lodash';
 const {isEqual} = _;
 
-import {VtbFlightData} from './data';
+import {VtbFlightData} from '../models';
+
+export interface VtbFlightScheduleOptions {
+  dateformat?: string;
+}
 
 class VtbBaseFlightElement extends LitElement {
   @property({type: String})

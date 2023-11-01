@@ -11,6 +11,7 @@ import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapElement, VtbMapOptions} from '../components/map';
 import {VtbCalculatorElement} from '../components/calculator';
+import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
@@ -148,7 +149,7 @@ function vtbDataLoaded(vtb: Vtb) {
   // const map2 = document.getElementById('dynamic-map-flight1') as VtbMapElement;
   // console.info(map2);
 
-  const additions_elements = vtb.filter({
+  const additions_elements = vtb.filter_elements({
     segments: [segment_types.ADDITIONEEL],
     // units: [unit_types.additions],
     // optional: false,
@@ -168,13 +169,13 @@ function vtbDataLoaded(vtb: Vtb) {
 
   // accommodations
 
-  const all_acco_elements = vtb.filter({
+  const all_acco_elements = vtb.filter_elements({
     segments: [segment_types.ARRANGEMENT],
     units: [unit_types.NACHTEN],
     // optional: false,
   });
 
-  const acco_elements = vtb.filter({
+  const acco_elements = vtb.filter_elements({
     segments: [segment_types.ARRANGEMENT],
     units: [unit_types.NACHTEN],
     optional: false,
@@ -204,13 +205,13 @@ function vtbDataLoaded(vtb: Vtb) {
 
   // autohuur
 
-  const all_carrental_elements = vtb.filter({
+  const all_carrental_elements = vtb.filter_elements({
     segments: [segment_types.CARRENTAL],
     // units: [unit_types.NACHTEN],
     optional: true,
   });
 
-  const carrental_elements = vtb.filter({
+  const carrental_elements = vtb.filter_elements({
     segments: [segment_types.CARRENTAL],
     // units: [unit_types.NACHTEN],
     optional: false,
@@ -231,7 +232,7 @@ function vtbDataLoaded(vtb: Vtb) {
   carrentalTable.priceData = all_carrental_elements;
   carrentalTable.totalPrice = carrental_total;
 
-  const flight_elements = vtb.filter({
+  const flight_elements = vtb.filter_elements({
     segments: [segment_types.FLIGHT],
     // units: [unit_types.NACHTEN]
   });
@@ -250,7 +251,7 @@ function vtbDataLoaded(vtb: Vtb) {
   flightTable.priceData = flight_elements;
   flightTable.totalPrice = flight_total;
 
-  const flightAdditional_elements = vtb.filter({
+  const flightAdditional_elements = vtb.filter_elements({
     segments: [segment_types.FLIGHT_ADDITIONAL],
     // units: [unit_types.NACHTEN]
   });
@@ -285,14 +286,14 @@ function vtbDataLoaded(vtb: Vtb) {
   // flightTotalTable.priceData = [];
   // flightTotalTable.totalPrice = flightTotal_total;
 
-  const test_elements = vtb.filter({
+  const test_elements = vtb.filter_elements({
     segments: [segment_types.ARRANGEMENT],
     units: [unit_types.MAAL],
     participants: ['1211769'],
   });
 
   const test_total = vtb.calculate_price(
-    vtb.filter({
+    vtb.filter_elements({
       optional: false,
     })
   );
@@ -310,6 +311,50 @@ function vtbDataLoaded(vtb: Vtb) {
   testTable.displayTotals = true;
   testTable.priceData = test_elements;
   testTable.totalPrice = test_total;
+
+  const vtbTextTravelplan = document.querySelector('vtb-text#travelplan');
+  if (vtbTextTravelplan) {
+    console.info(vtbTextTravelplan);
+    const _p = document.createElement('p');
+    _p.innerText = 'hello';
+    vtbTextTravelplan.appendChild(_p);
+  }
+
+  const itenerary_elements = vtb.filter_groups({
+    segments: [1, 2],
+    units: [null], // explicitly set null!
+  });
+  console.info(itenerary_elements);
+
+  const itenerary = document.getElementById('itenerary');
+  if (itenerary) {
+    console.info(itenerary);
+
+    for (const itenerary_element of itenerary_elements) {
+      const _h = document.createElement('h3');
+      _h.innerHTML =
+        'Dag ' + itenerary_element.day + ': ' + itenerary_element.title ||
+        'not set';
+      itenerary.appendChild(_h);
+
+      if (itenerary_element.subtitle) {
+        const _h2 = document.createElement('h4');
+        _h2.innerHTML = itenerary_element.subtitle;
+        itenerary.appendChild(_h2);
+      }
+
+      const _t = new VtbTextElement();
+
+      _t.addEventListener('vtbTextChanged', (e?: Event) => {
+        console.info('vtbTextChanged: ', e);
+      });
+
+      // _t.editable = true;
+      _t.innerHTML = itenerary_element.description || 'not set';
+      _t.id = String(itenerary_element.id);
+      itenerary.appendChild(_t);
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

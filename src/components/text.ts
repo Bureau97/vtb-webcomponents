@@ -1,10 +1,6 @@
 import {LitElement, css, html} from 'lit';
-import {
-  customElement,
-  property,
-  query,
-  queryAssignedElements,
-} from 'lit/decorators.js';
+import {customElement, property} from 'lit/decorators.js';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 // import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
 
 import Editor from '@ckeditor/ckeditor5-core/src/editor/editor';
@@ -26,20 +22,62 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-
-// import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave';
+import Command from '@ckeditor/ckeditor5-core/src/command';
+// import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import { ButtonView } from 'ckeditor5/src/ui';
 
 import '@ckeditor/ckeditor5-theme-lark';
 
-import editor_manager from '../utils/editor-manager';
 
-import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
-const _proxy: any = Rect['excludeScrollbarsAndBorders'];
-console.info(_proxy);
-// delete(Rect['excludeScrollbarsAndBorders']);
-// Rect['excludeScrollbarsAndBorders'] = function () {
-//   _proxy(...arguments);
+class VtbTextSaveCommand extends Command {
+  override execute() {
+    console.info('VtbTextSaveCommand:execute');
+    console.info(this.editor);
+  }
+}
+
+// class VtbTextCommandsPlugin extends Plugin {
+//   init() {
+//     const editor = this.editor;
+//     editor.commands.add('save', new VtbTextSaveCommand(editor));
+//   }
 // }
+
+// class VtbTextCommandUI extends Plugin {
+//   init () {
+//     const editor = this.editor;
+//     editor.ui.componentFactory.add('save', locale => {
+//       return {
+
+//       })
+//   }
+// }
+
+function VtbTextSave(editor: Editor) {
+  console.info('VtbTextSave registerd');
+  editor.commands.add('save', new VtbTextSaveCommand(editor));
+  editor.ui.componentFactory.add('save', (locale) => {
+    const button = new ButtonView(locale);
+    // const command = editor.commands.get('save');
+    const t = editor.t;
+
+    button.set({
+      label: t('Save'),
+      withText: true,
+      tooltip: true,
+      isToggleable: true
+    });
+
+    button.on('execute', () => {
+      editor.execute('save');
+      editor.editing.view.focus();
+    });
+
+    // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
+
+    return button;
+  });
+}
 
 @customElement('vtb-text')
 export class VtbTextElement extends LitElement {
@@ -63,85 +101,89 @@ export class VtbTextElement extends LitElement {
       return Boolean(newVal !== oldVal);
     },
   })
-  public contents = '';
+  contents: string | null = '';
 
-  @query('div#editor')
-  _editor!: HTMLElement;
-
-  @query('div#contents')
-  _contents!: HTMLElement;
-
-  @queryAssignedElements()
-  _content!: Array<HTMLElement>;
+  private get _editor(): HTMLElement | null {
+    return this.querySelector('div#editor-' + this.id);
+  }
 
   static override styles = css`
     :host {
       display: block;
     }
-
-    // div#editor {
-    //   display: block;
-    //   width: 100%;
-    //   height: 400px;
-    //   border: 1px solid #000;
-    //   background-color: #fff;
-    // }
   `;
 
   constructor() {
     super();
-    editor_manager.registerEditorType('inline', InlineEditor);
+    console.debug('vtbtext:constructor');
+    // create an id for the editor when no id is defined
+    // this makes sure no conflicts can occur when
+    // having multiple editors active at the same time
+    if (!this.id) {
+      this.id =
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
+    }
+  }
+
+  override createRenderRoot() {
+    // ckEditor does not work in the shadow dom
+    // it'll throw an error as soon as you try to
+    // type anything in the editor.
+    // the main error is coming from @ckeditor/ckeditor5-utils/src/dom/getborderwidths
+    console.debug('vtbtext:createRenderRoot');
+    return this;
   }
 
   override connectedCallback() {
     console.debug('vtbtext:connectedCallback');
     super.connectedCallback();
-    // copy innerHTML to the content property
-    this.contents = this.innerHTML;
-    console.info(this);
+
+    // copy innerHTML to the contents property
+    this.contents = this.innerHTML.trim();
+
+    // remove all childNodes and add them
+    // to the editor container
+    let childToDelete = this.lastChild;
+    while (childToDelete) {
+      this.removeChild(childToDelete);
+      childToDelete = this.lastChild;
+    }
   }
 
   override render() {
     console.debug('vtbtext:render');
-    // check if innerHTML and content are the same,
-    // if not copy contents to innerHTML
-    console.info('check innerHTML and content: ', {
-      'innerHTML': this.innerHTML,
-      'contents': this.contents,
-      'same?': Boolean(this.innerHTML == this.contents)
-    });
 
-    if (this.innerHTML != this.contents) {
-      console.info('copy contents to innerHTML');
-      this.innerHTML = this.contents;
-    }
+    // TODO: check if innerHTML and content are the same,
+    // if not copy contents to innerHTML
+    // console.debug('check innerHTML and content: ', {
+    //   'innerHTML': this.innerHTML,
+    //   'contents': this.contents,
+    //   'same?': Boolean(this.innerHTML == this.contents)
+    // });
+
+    // if (this.innerHTML != this.contents) {
+    //   console.debug('copy contents to innerHTML');
+    //   this.innerHTML = this.contents;
+    // }
 
     // nothing fancy to render..
     return html`
-      <div @click=${this.clickHandler}>
-        <div
-          id="editor"
-          class="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
-        ></div>
-        <div id="contents"></div>
-        <slot @slotchange=${this.handleSlotchange}></slot>
+      <div id="editor-container-${this.id}" @click=${this.clickHandler}>
+        <div id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
       </div>
     `;
   }
 
-  handleSlotchange(e: Event) {
-    console.info('handleSlotchange: ', e);
-    const slot = e.target as HTMLSlotElement;
-    const childNodes = slot.assignedNodes({flatten: true});
-    console.info(childNodes);
-    // this.allText = childNodes.map((node) => {
-    //   return node.textContent ? node.textContent : ''
-    // }).join('');
-  }
-
   clickHandler(_e: Event) {
-    console.info('received click');
-    console.info(this);
+    console.debug('vtbtext:clickHandler: ', _e);
+
+    console.debug('check innerHTML and content: ', {
+      innerHTML: this.innerHTML,
+      contents: this.contents,
+      'same?': Boolean(this.innerHTML == this.contents),
+    });
+
     if (this.isEditorInitialized && this._destroy_timer) {
       console.debug('clear editor destruction timer');
       clearTimeout(this._destroy_timer);
@@ -149,25 +191,21 @@ export class VtbTextElement extends LitElement {
     }
 
     if (this.editable && !this.isEditorInitialized) {
-      // just a little scope hack
-      console.info('initializing editor');
-      console.info(this._editor);
-      console.info(this.shadowRoot?.querySelector('slot'));
+      console.debug('initializing editor');
+
+      if (!this._editor) {
+        console.warn('not initializing the editor, editor is null');
+        return;
+      }
 
       // set the inialized bit..
       this.isEditorInitialized = true;
 
-      // setup customized! InlineEditor
-      const builder: typeof InlineEditor | null = editor_manager.getEditorType('inline');
-      if (!builder) {
-        console.error('builder is null');
-        return;
-      }
-
-      builder.create(this._editor, {
+      InlineEditor.create(this._editor, {
         updateSourceElementOnDestroy: true,
         // every tool has a plugin!
         plugins: [
+          VtbTextSave,
           Essentials,
           Heading,
           Bold,
@@ -179,6 +217,8 @@ export class VtbTextElement extends LitElement {
         ],
         // these are the available tools
         toolbar: [
+          // 'save',
+          '|',
           'heading',
           '|', // separator!
           'bold',
@@ -189,156 +229,74 @@ export class VtbTextElement extends LitElement {
           'undo',
           'redo',
         ],
-        // autosave: {
-        //   save(editor: Editor) {
-        //     console.info('autosave:save', editor);
-        //     // return proxy(editor);
-        //     return new Promise((resolve) => {
-        //       // nothing much, just set the dataIsChanged bit..
-        //       // TODO: only set when changed!..
-        //       // this.dataIsChanged = true;
-        //       console.info('receiveupdate');
-        //       return resolve(editor);
-        //     });
-        //   }
-        // },
       })
         .then((editorInstance) => {
-          console.info('promise:then');
+          console.debug('promise:then');
           this.editor = editorInstance;
 
           if (!this.editor) {
-            console.info('no editor (yet)');
+            console.debug('no editor (yet)');
             return;
           }
 
-          editor_manager.registerEditorInstance('inline', editorInstance);
+          // keep track on focus.
+          // if lostFocus and changed, trigger changed event
+          this.editor.ui.focusTracker.on(
+            'change:isFocused',
+            (_evt, _name, isFocused) => {
+              console.debug('focus changed');
+              if (!isFocused) {
+                this.lostFocus();
+              }
+            }
+          );
 
-          // const slot = this.shadowRoot?.querySelector('slot');
-          // if (slot) {
-          //   slot.style.display = 'none';
-          // }
-
-          // // copy data from lightDom to editor in shadowDom
-          // console.info('loading content');
-          // let content = '';
-          // for (const child of this.children) {
-          //   content += child.outerHTML + '\r\n';
-          // }
-
-          // // set data on editor
-          // console.info('setting data');
-          // this.editor.setData(content);
-
-          // // backup for receiving data changed events..
-          // // currently using autosave
-          // this.editor.model.document.on('change:data', () => {
-          //   console.debug('The data has changed!');
-          // });
-
-          // // keep track on focus.
-          // // if lostFocus and changed, trigger changed event
-          // this.editor.ui.focusTracker.on(
-          //   'change:isFocused',
-          //   (_evt, _name, isFocused) => {
-          //     console.info('focus changed');
-          //     if (!isFocused) {
-          //       this.lostFocus();
-          //     }
-          //   }
-          // );
-
-          // // since we are initializing dynamically, we need to explicitly focus
-          // console.info('explicit set focus~');
-          // this.editor.focus();
+          // since we are initializing dynamically, we need to explicitly focus
+          this.editor.focus();
         })
-        // .catch((error) => {
-        //   console.info('received error');
-        //   console.info(error.stack);
-        // });
+        .catch((error) => {
+          console.debug('received error');
+          console.debug(error.stack);
+        });
     }
-  }
-
-  protected receiveUpdate(editor: Editor) {
-    console.info('receiv updatye called');
-    return new Promise((resolve) => {
-      // nothing much, just set the dataIsChanged bit..
-      // TODO: only set when changed!..
-      this.dataIsChanged = true;
-      console.info('receiveupdate');
-      // console.info({
-      //   'editor': this.editor?.getData(),
-      //   'contents': this.contents,
-      //   'innerHTML': this.innerHTML}
-      // );
-      return resolve(editor);
-    });
   }
 
   protected lostFocus() {
-    console.info('lost focus');
-    // if (this.dataIsChanged) {
-    // copy editor data to content property
-    // if (!this.editor) {
-    //   console.info('no editor (yet)');
-    //   return;
+    console.debug('vtbtext:lostFocus');
+
+    if (!this.editor) {
+      console.debug('no editor (yet)');
+      return;
+    }
+
+    console.debug('changed data: ', this.editor.getData());
+
+    // dispatch custom event
+    const changed_content = this.editor.getData();
+    const event = new CustomEvent('vtbTextChanged', {
+      detail: {
+        content: changed_content,
+      },
+      bubbles: true,
+    });
+    console.debug('dispatching change event: ');
+    this.dispatchEvent(event);
+
+    // schedule destroying the editor after losing focus
+    console.debug('schedule destroy');
+    const destroy = this._destroyEditor.bind(this);
+    this._destroy_timer = setTimeout(destroy, 3000);
     // }
-
-    // this.contents = this.editor.getData();
-
-    // // dispatch custom event
-    // const changed_content = this.editor.getData();
-    // const event = new CustomEvent('vtbTextChanged', {
-    //   detail: {
-    //     content: changed_content,
-    //   },
-    //   bubbles: true,
-    // });
-    // this.dispatchEvent(event);
-
-    // // schedule destroying the editor after losing focus
-    // console.info('schedule destroy');
-    // const destroy = this._destroyEditor.bind(this);
-    // this._destroy_timer = setTimeout(destroy, 3000);
-    // // }
   }
 
   protected _destroyEditor() {
-    console.info('destroying editor..');
+    console.debug('destroying editor..');
     if (this.editor) {
-      // const editor_data = this.editor.getData();
-      // this._contents.innerHTML = editor_data;
-      // this._contents.style.display = 'block';
       this.editor.destroy();
       this.isEditorInitialized = false;
-
-      const slot = this.shadowRoot?.querySelector('slot');
-      if (slot) {
-        slot.style.display = 'unset';
-      }
+      delete this.editor;
     }
   }
-
-  // not used
-  protected htmlEntityEncode(text: string) {
-    const textArea = document.createElement('textarea');
-    textArea.innerText = text;
-    let encodedOutput = textArea.innerHTML;
-    const arr = encodedOutput.split('<br>');
-    encodedOutput = arr.join('\n');
-    return encodedOutput;
-  }
-
-  // not used
-  protected htmlEntityDecode(text: string) {
-    const textArea = document.createElement('textarea');
-    textArea.innerHTML = text;
-    return textArea.value;
-  }
-
-  // protected override createRenderRoot() {
-  //   return this;
-  // }
 }
 
 declare global {

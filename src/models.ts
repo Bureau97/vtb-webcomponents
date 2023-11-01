@@ -97,6 +97,7 @@ export class VtbElementGroup {
   hidden = false;
   day?: number;
   type_id?: number;
+  unit_id?: number;
   elements: Dictionary<Array<VtbElement>> = {};
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;

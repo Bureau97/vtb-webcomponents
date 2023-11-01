@@ -108,7 +108,12 @@ export class VtbDataTransformer {
       if (!(segment_data.typeId in this._data.element_groups)) {
         this._data.element_groups[segment_data.typeId] = [];
       } else {
-        console.warn('Duplicate segment', segment_data.typeId);
+        console.warn(
+          'Duplicate segment: ',
+          segment_data.typeId,
+          segment_data.typeName,
+          segment_data.title
+        );
       }
 
       // parse flight info elements
@@ -202,6 +207,8 @@ export class VtbDataTransformer {
       );
     }
 
+    console.info(this._data);
+
     return this._data;
   }
 
@@ -216,6 +223,7 @@ export class VtbDataTransformer {
     element_group.nights = segment_data.nights;
     element_group.day = segment_data.day;
     element_group.type_id = segment_data.typeId;
+    element_group.unit_id = segment_data.unitId;
 
     for (const media_data of segment_data.media) {
       const media = new VtbMedia();

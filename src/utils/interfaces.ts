@@ -3,9 +3,11 @@ export interface Dictionary<Type> {
 }
 
 export interface VtbFilterConfig {
-  segments?: Array<Array<number | string>>;
-  units?: Array<Array<number | string>>;
-  participants?: Array<number | string>;
+  segments?:
+    | Array<Array<number | string | null>>
+    | Array<number | string | null>;
+  units?: Array<Array<number | string | null>> | Array<number | string | null>;
+  participants?: Array<number | string> | Array<number | string | null>;
   days?: Array<number | string>;
   optional?: boolean;
 }

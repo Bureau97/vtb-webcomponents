@@ -3,6 +3,7 @@ import {VtbFilterConfig} from './utils/interfaces';
 import {
   VtbTravelPlanData,
   VtbElement,
+  VtbElementGroup,
   VtbMapMarkerGroup,
   VtbMapMarkerConnectMode,
 } from './models';
@@ -88,7 +89,7 @@ export class Vtb {
     return this;
   }
 
-  filter(config?: VtbFilterConfig) {
+  filter_elements(config?: VtbFilterConfig) {
     const vtb_elements: Array<VtbElement> = [];
 
     const _segment_ids =
@@ -180,8 +181,37 @@ export class Vtb {
     return vtb_elements;
   }
 
+  filter_groups(config: VtbFilterConfig): Array<VtbElementGroup> {
+    const _segment_ids =
+      config?.segments || Object.keys(this._data.element_groups);
+    const segment_ids = _segment_ids.flat(Infinity);
+
+    const _unit_ids = config?.units || [];
+    const unit_ids = _unit_ids.flat(Infinity);
+
+    // const _participant_ids = config?.participants || [];
+    // const participant_ids = _participant_ids.flat(Infinity);
+
+    const vtb_element_groups: Array<VtbElementGroup> = [];
+
+    for (const segment_id of segment_ids) {
+      const segments = this._data.element_groups[Number(segment_id)];
+
+      if (unit_ids.length) {
+        for (const segment of segments) {
+          if (segment.unit_id == undefined && unit_ids.includes(null)) {
+            vtb_element_groups.push(segment);
+          }
+        }
+      } else {
+        vtb_element_groups.push(...segments);
+      }
+    }
+    return vtb_element_groups;
+  }
+
   filter_mapmarkers(config: VtbFilterConfig): VtbMapMarkerGroup {
-    const vtb_marker_elements: Array<VtbElement> = this.filter(config);
+    const vtb_marker_elements: Array<VtbElement> = this.filter_elements(config);
 
     const group = new VtbMapMarkerGroup();
     for (const element of vtb_marker_elements) {

@@ -10,4 +10,6 @@ export interface VtbFilterConfig {
   participants?: Array<number | string> | Array<number | string | null>;
   days?: Array<number | string>;
   optional?: boolean;
+  carrental?: boolean;
+  flight?: boolean;
 }

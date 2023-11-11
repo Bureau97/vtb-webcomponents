@@ -30,7 +30,7 @@ export class VtbDataTransformer {
   ) {
     // search and setup base info
     this._data.title = vtbSrcData.title;
-    this._data.subtitle = vtbSrcData.subtitle || '';
+    this._data.subtitle = vtbSrcData.subTitle || '';
     this._data.start_date = dayjs.utc(vtbSrcData.startDate);
     this._data.end_date = dayjs.utc(vtbSrcData.endDate);
     this._data.duration = vtbSrcData.totalDays;
@@ -97,68 +97,20 @@ export class VtbDataTransformer {
     }
 
     for (const segment_data of vtbSrcData.segments) {
-      // console.info(
-      //   'Segment',
-      //   segment_data.vtbObjectId,
-      //   segment_data.typeId,
-      //   segment_data.typeName,
-      //   segment_data
-      // );
-
-      if (!(segment_data.typeId in this._data.element_groups)) {
-        this._data.element_groups[segment_data.typeId] = [];
-      } else {
-        console.warn(
-          'Duplicate segment: ',
-          segment_data.typeId,
-          segment_data.typeName,
-          segment_data.title
-        );
-      }
+      console.info(
+        'Segment',
+        segment_data.vtbObjectId,
+        segment_data.typeId,
+        segment_data.title,
+        segment_data.day,
+        segment_data.nights
+      );
 
       // parse flight info elements
       if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
-        for (const flight of segment_data.flightInfo) {
-          const carrier = new VtbFlightCarrier();
-          carrier.name =
-            flight.airlineObject.name || flight.airlineObject.carrier_name;
-          carrier.code =
-            flight.airlineObject.code || flight.airlineObject.carrier_code;
-
-          const departure = new VtbFlight();
-          departure.date = dayjs.utc(
-            `${flight.departureDate} ${flight.departureTime}:00`
-          );
-          departure.IATA = flight.departureAirport;
-          departure.description = flight.departureAirportObject.description;
-          departure.country = flight.departureAirportObject.country;
-          departure.city = flight.departureAirportObject.city;
-          departure.location = new VtbGeoLocation();
-          departure.location.lat = flight.departureAirportObject.latitude;
-          departure.location.lng = flight.departureAirportObject.longitude;
-
-          const arrival = new VtbFlight();
-          arrival.date = dayjs.utc(
-            `${flight.arrivalDate} ${flight.arrivalTime}:00`
-          );
-          arrival.IATA = flight.arrivalAirport;
-          arrival.description = flight.arrivalAirportObject.description;
-          arrival.country = flight.arrivalAirportObject.country;
-          arrival.city = flight.arrivalAirportObject.city;
-          arrival.location = new VtbGeoLocation();
-          arrival.location.lat = flight.arrivalAirportObject.latitude;
-          arrival.location.lng = flight.arrivalAirportObject.longitude;
-
-          const flightElement = new VtbFlightData();
-          flightElement.carrier = carrier;
-          flightElement.departure = departure;
-          flightElement.arrival = arrival;
-          flightElement.flightnumber = flight.flightNumber;
-          flightElement.duration = flight.duration;
-          flightElement.day = segment_data.day;
-
-          this._data.flight_elements.push(flightElement);
-        }
+        this.parse_flight_info(
+          segment_data
+        )
       }
 
       // parse car rental info
@@ -202,14 +154,56 @@ export class VtbDataTransformer {
         }
       }
 
-      this._data.element_groups[segment_data.typeId].push(
-        this.parse_vtb_segment(segment_data)
-      );
+      this._data.add_element_group(this.parse_vtb_segment(segment_data));
     }
 
-    console.info(this._data);
+    // console.info(this._data);
 
     return this._data;
+  }
+
+  protected parse_flight_info(segment_data: any) {
+    for (const flight of segment_data.flightInfo) {
+      const carrier = new VtbFlightCarrier();
+      carrier.name =
+        flight.airlineObject.name || flight.airlineObject.carrier_name;
+      carrier.code =
+        flight.airlineObject.code || flight.airlineObject.carrier_code;
+
+      const departure = new VtbFlight();
+      departure.date = dayjs.utc(
+        `${flight.departureDate} ${flight.departureTime}:00`
+      );
+      departure.IATA = flight.departureAirport;
+      departure.description = flight.departureAirportObject.description;
+      departure.country = flight.departureAirportObject.country;
+      departure.city = flight.departureAirportObject.city;
+      departure.location = new VtbGeoLocation();
+      departure.location.lat = flight.departureAirportObject.latitude;
+      departure.location.lng = flight.departureAirportObject.longitude;
+
+      const arrival = new VtbFlight();
+      arrival.date = dayjs.utc(
+        `${flight.arrivalDate} ${flight.arrivalTime}:00`
+      );
+      arrival.IATA = flight.arrivalAirport;
+      arrival.description = flight.arrivalAirportObject.description;
+      arrival.country = flight.arrivalAirportObject.country;
+      arrival.city = flight.arrivalAirportObject.city;
+      arrival.location = new VtbGeoLocation();
+      arrival.location.lat = flight.arrivalAirportObject.latitude;
+      arrival.location.lng = flight.arrivalAirportObject.longitude;
+
+      const flightElement = new VtbFlightData();
+      flightElement.carrier = carrier;
+      flightElement.departure = departure;
+      flightElement.arrival = arrival;
+      flightElement.flightnumber = flight.flightNumber;
+      flightElement.duration = flight.duration;
+      flightElement.day = segment_data.day;
+
+      this._data.add_flight_element(flightElement);
+    }
   }
 
   protected parse_vtb_segment(
@@ -220,10 +214,25 @@ export class VtbDataTransformer {
     element_group.title = segment_data.title;
     element_group.subtitle = segment_data.subTitle;
     element_group.description = segment_data.content;
-    element_group.nights = segment_data.nights;
     element_group.day = segment_data.day;
+    element_group.nights = segment_data.nights;
     element_group.type_id = segment_data.typeId;
     element_group.unit_id = segment_data.unitId;
+
+    if (segment_data.date) {
+      element_group.startdate = dayjs(segment_data.date);
+    }
+    if (segment_data.endDate) {
+      element_group.enddate = dayjs(segment_data.endDate);
+    }
+
+    if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
+      element_group.is_flight = true;
+    }
+
+    if (segment_data.carRentalElements && segment_data.carRentalElements.length >= 1) {
+      element_group.is_carrental = true;
+    }
 
     for (const media_data of segment_data.media) {
       const media = new VtbMedia();
@@ -236,52 +245,46 @@ export class VtbDataTransformer {
 
     let last_element: VtbElement | null = null;
     for (const element_data of segment_data.elements) {
-      if (
-        element_group.elements &&
-        !(element_data.unitId in element_group.elements)
-      ) {
-        element_group.elements[element_data.unitId] = [];
-      }
 
-      const price_element: VtbElement = this.parse_vtb_element(
+      const vtb_element: VtbElement = this.parse_vtb_element(
         element_data,
         segment_data.title
       );
 
       if (
         last_element &&
-        price_element.optional &&
-        last_element.unit_id == price_element.unit_id
+        vtb_element.optional &&
+        last_element.unit_id == vtb_element.unit_id
       ) {
         console.debug(
           'Optional element: ',
-          price_element.title,
-          price_element.subtitle,
-          price_element.price,
+          vtb_element.title,
+          vtb_element.subtitle,
+          vtb_element.price,
           last_element.price,
-          last_element.price - price_element.price
+          last_element.price - vtb_element.price
         );
-        price_element.price_diff = price_element.price - last_element.price; // price difference between non-optional and optional elements
+        vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
       }
 
-      element_group.elements[element_data.unitId].push(price_element);
+      element_group.add_element(vtb_element);
 
       if (
-        !price_element.optional ||
-        (last_element && price_element.unit_id != last_element.unit_id)
+        !vtb_element.optional ||
+        (last_element && vtb_element.unit_id != last_element.unit_id)
       ) {
         console.debug(
           'set last element: ',
-          price_element.title,
-          price_element.subtitle,
-          price_element.price
+          vtb_element.title,
+          vtb_element.subtitle,
+          vtb_element.price
         );
-        last_element = price_element; // act as default element
+        last_element = vtb_element; // act as default element
       }
     }
 
     if (segment_data.maps) {
-      console.debug('segment_data.maps', segment_data);
+      // console.debug('segment_data.maps', segment_data);
       element_group.location = new VtbMapMarker();
       element_group.location.lat = segment_data.maps.latitude;
       element_group.location.lng = segment_data.maps.longitude;
@@ -291,19 +294,23 @@ export class VtbDataTransformer {
     return element_group;
   }
 
+  private re_body = /<body[^>]+>(.*)<\/body>/g;
+  private re_style = /style="[^"]+"/gi;
+
   protected parse_vtb_element(
     element_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     grouptitle?: string
   ) {
     const vtb_element = new VtbElement();
-    console.debug('element_data: ', element_data);
+    // console.debug('element_data: ', element_data);
     vtb_element.id = element_data.id;
     vtb_element.title = element_data.title;
     vtb_element.subtitle = element_data.subTitle;
-    vtb_element.description = element_data.additionalText?.replace(
-      /^.*?<body[^>]+>(.*)<\/body>.*$/g,
-      '$1'
-    );
+    // set element description, get all contents from the <body> and remove all style attributes
+    vtb_element.description = element_data.additionalText
+      ?.replace(this.re_body, '$1')
+      ?.replace(this.re_style, '');
+
     vtb_element.optional = element_data.optional;
     vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
     vtb_element.nights = element_data.flexNights || element_data.nights;
@@ -351,7 +358,7 @@ export class VtbDataTransformer {
       element_data.maps.latitude != 0 &&
       element_data.maps.longitude != 0
     ) {
-      console.debug('element_data.maps', element_data);
+      // console.debug('element_data.maps', element_data);
 
       vtb_element.location = new VtbMapMarker();
       vtb_element.location.lat = element_data.maps.latitude;

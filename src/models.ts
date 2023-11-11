@@ -35,6 +35,15 @@ export class VtbExtraField {
   type?: string;
   group_name?: string;
   options?: Array<string>;
+
+  get content(): string | null
+  {
+    return this.value ?? null;
+  }
+
+  toString(): string {
+    return this.value ?? '';
+  }
 }
 
 export class VtbFlight {
@@ -68,7 +77,7 @@ export class VtbParticipantPrice {
 }
 
 export class VtbElement {
-  id = 0;
+  id: string = '';
   object_id?: string;
   title?: string;
   subtitle?: string;
@@ -89,18 +98,67 @@ export class VtbElement {
 }
 
 export class VtbElementGroup {
-  id = 0;
+  id: string = '';
   title?: string;
   subtitle?: string;
   description?: string;
   nights = 0;
   hidden = false;
   day?: number;
+  startdate?: Dayjs;
+  enddate?: Dayjs;
   type_id?: number;
   unit_id?: number;
-  elements: Dictionary<Array<VtbElement>> = {};
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
+  is_flight = false;
+  is_carrental = false;
+
+  private mapped_elements_by_id: Dictionary<VtbElement> = {};
+  private elements_order: Array<string> = [];
+  private mapped_elements_by_type: Dictionary<Array<string>> = {};
+  private mapped_elements_by_day: Dictionary<Array<string>> = {};
+
+  public add_element(element: VtbElement) {
+    this.mapped_elements_by_id[element.id] = element;
+    this.elements_order.push(element.id);
+
+    if (element.unit_id) {
+      if (!this.mapped_elements_by_type[element.unit_id]) {
+        this.mapped_elements_by_type[element.unit_id] = [];
+      }
+      this.mapped_elements_by_type[element.unit_id].push(element.id);
+    }
+
+    if (element.day) {
+      if (!this.mapped_elements_by_day[element.day]) {
+        this.mapped_elements_by_day[element.day] = [];
+      }
+      this.mapped_elements_by_day[element.day].push(element.id);
+    }
+  }
+
+  get elements(): Array<VtbElement> {
+    let ret: Array<VtbElement> = [];
+    for (const id of this.elements_order) {
+      ret.push(this.mapped_elements_by_id[id]);
+    }
+    return ret;
+  }
+
+  get_element_unit_ids(): Array<number> {
+    return Object.keys(this.mapped_elements_by_type).map((id) => {
+      return Number(id);
+    })
+  }
+
+  get_elements_by_unit_id(unit_id: number): Array<VtbElement> {
+    let ret: Array<VtbElement> = [];
+    for (const id of this.mapped_elements_by_type[unit_id]) {
+      ret.push(this.mapped_elements_by_id[id]);
+    }
+    return ret;
+  }
 }
 
 export class VtbGeoLocation {
@@ -147,22 +205,93 @@ export class VtbMapMarkerGroup {
 export class VtbTravelPlanData {
   title: string = '';
   subtitle: string = '';
+  covers: Array<VtbMedia> = [];
+  extra_fields: Dictionary<VtbExtraField> = {};
 
   start_date?: Dayjs;
   end_date?: Dayjs;
   duration: number = 0; // the number of days
+  parties: Dictionary<VtbParty> = {};
+  participants: Dictionary<VtbParticipant> = {};
+
   sales_price: number = 0;
 
   flight_elements: Array<VtbFlightData> = [];
+
+  public add_flight_element(flight_element: VtbFlightData) {
+    this.flight_elements.push(flight_element);
+  }
+
   car_rental_elements: Array<VtbElement> = [];
-  participants: Dictionary<VtbParticipant> = {};
-  parties: Dictionary<VtbParty> = {};
 
-  covers: Array<VtbMedia> = [];
-  extra_fields: Dictionary<VtbExtraField> = {};
-  days: Array<VtbElement> = [];
+  public add_carrental_element(carrental_element: VtbElement) {
+    this.car_rental_elements.push(carrental_element);
+  }
 
-  element_groups: Dictionary<Array<VtbElementGroup>> = {};
+  // days: Array<VtbElement> = [];
+
+  private mapped_element_groups: Dictionary<VtbElementGroup> = {};
+  private element_groups_order: Array<string> = [];
+  private mapped_element_groups_by_type: Dictionary<Array<string>> = {};
+  private mapped_element_groups_by_day: Dictionary<Array<string>> = {};
+
+  public add_element_group(group: VtbElementGroup) {
+    this.mapped_element_groups[group.id] = group;
+    this.element_groups_order.push(group.id);
+
+    if (group.type_id) {
+      if (!this.mapped_element_groups_by_type[group.type_id]) {
+        this.mapped_element_groups_by_type[group.type_id] = [];
+      }
+      this.mapped_element_groups_by_type[group.type_id].push(group.id);
+    }
+
+    if (group.day) {
+      if (!this.mapped_element_groups_by_day[group.day]) {
+        this.mapped_element_groups_by_day[group.day] = [];
+      }
+      this.mapped_element_groups_by_day[group.day].push(group.id);
+    }
+  }
+
+  get element_groups(): Array<VtbElementGroup> {
+    let ret: Array<VtbElementGroup> = [];
+    for (const group_id of this.element_groups_order) {
+      ret.push(this.mapped_element_groups[group_id]);
+    }
+    return ret;
+  }
+
+  public get_element_group_by_id(id: string): VtbElementGroup {
+    return this.mapped_element_groups[id];
+  }
+
+  public get_element_groups_by_type_id(group_type_id: number): Array<VtbElementGroup> {
+    const _group_ids = this.mapped_element_groups_by_type[group_type_id];
+    let ret: Array<VtbElementGroup> = [];
+    for (const group_id of _group_ids) {
+      ret.push(this.mapped_element_groups[group_id]);
+    }
+    return ret;
+  }
+
+  public get_element_group_type_ids(): Array<number> {
+    return Object.keys(this.mapped_element_groups_by_type).map((id) => {
+      return Number(id);
+    });
+  }
+
+  public get_element_groups_by_day(day: number): Array<VtbElementGroup> {
+    const _group_ids = this.mapped_element_groups_by_day[day];
+    let ret: Array<VtbElementGroup> = [];
+    for (const group_id of _group_ids) {
+      ret.push(this.mapped_element_groups[group_id]);
+    }
+    return ret;
+  }
+
+  // private mapped_elements: Dictionary<VtbElement> = {};
+
 
   // markergroups: Dictionary<Array<VtbMapMarkerGroup>> = [];
 }

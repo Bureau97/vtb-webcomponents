@@ -23,6 +23,7 @@ export class VtbMediaElement extends LitElement {
   static override styles = css`
     :host {
       display: inline-block;
+      overflow: hidden;
     }
 
     img {

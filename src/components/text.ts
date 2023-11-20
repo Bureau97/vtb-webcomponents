@@ -24,10 +24,9 @@ import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import Command from '@ckeditor/ckeditor5-core/src/command';
 // import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { ButtonView } from 'ckeditor5/src/ui';
+import {ButtonView} from 'ckeditor5/src/ui';
 
 import '@ckeditor/ckeditor5-theme-lark';
-
 
 class VtbTextSaveCommand extends Command {
   override execute() {
@@ -65,7 +64,7 @@ function VtbTextSave(editor: Editor) {
       label: t('Save'),
       withText: true,
       tooltip: true,
-      isToggleable: true
+      isToggleable: true,
     });
 
     button.on('execute', () => {

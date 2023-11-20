@@ -50,7 +50,11 @@ export class VtbDataTransformer {
         _pax.name = pax.name;
         _pax.prefix = pax.surname_prefix;
         _pax.surname = pax.surname;
-        _pax.birthdate = dayjs(pax.birthdate);
+        _pax.calc_type = pax.age_calc_type;
+        console.info(pax);
+        if (pax.birthdate) {
+          _pax.birthdate = dayjs.utc(pax.birthdate);
+        }
 
         this._data.participants[pax.id] = _pax;
         _party.participants?.push(_pax);
@@ -75,7 +79,7 @@ export class VtbDataTransformer {
     for (const fieldgroup of vtbSrcData.extraFieldValues) {
       for (const field of fieldgroup.fields) {
         const _field = new VtbExtraField();
-        _field.name = field.name.toLowerCase().replace(/\s+/, '_');
+        _field.name = field.name.toLowerCase().replace(/[\s\-]+/, '_');
         _field.title = field.translated_name;
         _field.value = field.value;
         _field.type = field.field_type;
@@ -108,9 +112,7 @@ export class VtbDataTransformer {
 
       // parse flight info elements
       if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
-        this.parse_flight_info(
-          segment_data
-        )
+        this.parse_flight_info(segment_data);
       }
 
       // parse car rental info
@@ -202,6 +204,10 @@ export class VtbDataTransformer {
       flightElement.duration = flight.duration;
       flightElement.day = segment_data.day;
 
+      if (!flightElement.duration) {
+        flightElement.duration = dayjs.duration(arrival.date.diff(departure.date)).format('H:mmu')
+      }
+
       this._data.add_flight_element(flightElement);
     }
   }
@@ -213,7 +219,7 @@ export class VtbDataTransformer {
     element_group.id = segment_data.vtbObjectId;
     element_group.title = segment_data.title;
     element_group.subtitle = segment_data.subTitle;
-    element_group.description = segment_data.content;
+    element_group.description = segment_data.content || '';
     element_group.day = segment_data.day;
     element_group.nights = segment_data.nights;
     element_group.type_id = segment_data.typeId;
@@ -230,7 +236,10 @@ export class VtbDataTransformer {
       element_group.is_flight = true;
     }
 
-    if (segment_data.carRentalElements && segment_data.carRentalElements.length >= 1) {
+    if (
+      segment_data.carRentalElements &&
+      segment_data.carRentalElements.length >= 1
+    ) {
       element_group.is_carrental = true;
     }
 
@@ -245,7 +254,6 @@ export class VtbDataTransformer {
 
     let last_element: VtbElement | null = null;
     for (const element_data of segment_data.elements) {
-
       const vtb_element: VtbElement = this.parse_vtb_element(
         element_data,
         segment_data.title
@@ -303,11 +311,15 @@ export class VtbDataTransformer {
   ) {
     const vtb_element = new VtbElement();
     // console.debug('element_data: ', element_data);
-    vtb_element.id = element_data.id;
+    vtb_element.id = element_data.vtbObjectId;
     vtb_element.title = element_data.title;
     vtb_element.subtitle = element_data.subTitle;
     // set element description, get all contents from the <body> and remove all style attributes
     vtb_element.description = element_data.additionalText
+      ?.replace(this.re_body, '$1')
+      ?.replace(this.re_style, '');
+
+    vtb_element.additional_description = element_data.subAdditionalText
       ?.replace(this.re_body, '$1')
       ?.replace(this.re_style, '');
 
@@ -334,7 +346,7 @@ export class VtbDataTransformer {
         media.id = media_data.sourceId;
         media.tags = media_data.tags;
 
-        vtb_element.media?.push(media);
+        vtb_element.media.push(media);
       }
     }
 

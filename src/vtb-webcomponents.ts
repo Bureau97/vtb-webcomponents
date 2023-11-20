@@ -7,6 +7,7 @@ import {
   VtbMapMarkerGroup,
   VtbMapMarkerConnectMode,
   VtbExtraField,
+  VtbParticipant,
 } from './models';
 import {VtbDataTransformer} from './utils/transformer';
 import {VtbMapElement, VtbMapOptions} from './components/map';
@@ -60,12 +61,16 @@ export class Vtb {
     return this._data.sales_price;
   }
 
+  get has_flightinfo(): boolean {
+    return this.flightinfo.length > 0;
+  }
+
   get flight_info() {
     return this.flightinfo;
   }
 
-  get participants() {
-    return this._data.participants;
+  get participants(): Array<VtbParticipant> {
+    return Object.values(this._data.participants);
   }
 
   get parties() {
@@ -92,14 +97,55 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  get element_groups(): Dictionary<Array<VtbElementGroup>>
-  {
-    console.info(this._data.element_groups);
-    return this._data.element_groups;
+  private _get_element_groups_cache: Array<VtbElementGroup> = [];
+
+  get element_groups(): Array<VtbElementGroup> {
+    if (this._get_element_groups_cache.length > 0) {
+      return this._get_element_groups_cache;
+    }
+    const ret: Array<VtbElementGroup> = [];
+    let last_group: VtbElementGroup | null = null;
+
+    const element_groups: Array<VtbElementGroup> = this._data.element_groups;
+    for (const group of element_groups) {
+      if (!last_group) {
+        last_group = group;
+        continue;
+      }
+
+      if (group.day == last_group.day) {
+        // if the next group has the same day
+        // we add it its elements to the current group
+        const elements: Array<VtbElement> = group.elements;
+        for (const element of elements) {
+          last_group?.add_element(element);
+        }
+
+        if (!last_group.title && group.title) {
+          last_group.title = group.title;
+        }
+
+        last_group.description += group.description;
+
+        if (last_group.nights < group.nights) {
+          last_group.nights = group.nights;
+          last_group.enddate = group.enddate;
+        }
+      } else {
+        ret.push(last_group);
+        last_group = group;
+      }
+    }
+    if (last_group && ret[ret.length - 1] !== last_group) {
+      ret.push(last_group);
+    }
+
+    this._get_element_groups_cache = ret;
+
+    return ret;
   }
 
-  public async load(travelplan_source_url: string): Promise<Vtb>
-  {
+  public async load(travelplan_source_url: string): Promise<Vtb> {
     // async load of travelplan json
     console.info('Loading', travelplan_source_url);
     const response = await fetch(travelplan_source_url);
@@ -109,27 +155,19 @@ export class Vtb {
     return this;
   }
 
-  public parse_vtb_data (vtbSrcData: any): void
-  {
+  public parse_vtb_data(vtbSrcData: any): void {
     this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
   }
 
-
-
-  public filter_elements(config?: VtbFilterConfig): Array<VtbElement>
-  {
+  public filter_elements(config?: VtbFilterConfig): Array<VtbElement> {
     const vtb_elements: Array<VtbElement> = [];
 
     const _segment_ids =
       config?.segments || this._data.get_element_group_type_ids();
     const segment_ids = _segment_ids.flat(Infinity);
 
-    console.info(segment_ids);
-
     const _unit_ids = config?.units || [];
     const unit_ids = _unit_ids.flat(Infinity);
-
-    console.info(unit_ids);
 
     const _participant_ids = config?.participants || [];
     const participant_ids = _participant_ids.flat(Infinity);
@@ -155,7 +193,9 @@ export class Vtb {
     }
 
     for (const segment_id of segment_ids) {
-      const element_groups = this._data.get_element_groups_by_type_id(Number(segment_id));
+      const element_groups = this._data.get_element_groups_by_type_id(
+        Number(segment_id)
+      );
 
       if (!element_groups || !element_groups.length) {
         console.warn('no elements in segment', segment_id);
@@ -169,7 +209,9 @@ export class Vtb {
             (check_unit_ids && unit_ids.includes(Number(unit_id)))
           ) {
             if (!skip_optional && !check_participant_ids && !only_optional) {
-              vtb_elements.push(...element_group.get_elements_by_unit_id(unit_id));
+              vtb_elements.push(
+                ...element_group.get_elements_by_unit_id(unit_id)
+              );
               continue;
             }
 
@@ -214,8 +256,7 @@ export class Vtb {
     return vtb_elements;
   }
 
-  public filter_groups(config: VtbFilterConfig): Array<VtbElementGroup>
-  {
+  public filter_groups(config: VtbFilterConfig): Array<VtbElementGroup> {
     const _segment_ids =
       config?.segments || this._data.get_element_group_type_ids();
     const segment_ids = _segment_ids.flat(Infinity);
@@ -233,7 +274,9 @@ export class Vtb {
     const vtb_element_groups: Array<VtbElementGroup> = [];
 
     for (const segment_id of segment_ids) {
-      const segments = this._data.get_element_groups_by_type_id(Number(segment_id));
+      const segments = this._data.get_element_groups_by_type_id(
+        Number(segment_id)
+      );
 
       if (unit_ids.length) {
         for (const segment of segments) {
@@ -248,7 +291,7 @@ export class Vtb {
     return vtb_element_groups;
   }
 
-  public calculate_price(elements: Array<VtbElement>) : number {
+  public calculate_price(elements: Array<VtbElement>): number {
     let total = 0.0;
     // console.info(elements)
 

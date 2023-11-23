@@ -1,0 +1,2000 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/vtb-webcomponents.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFilterConfig",
+          "members": [
+            {
+              "kind": "field",
+              "name": "segments",
+              "type": {
+                "text": "Array<Array<number | string>> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "units",
+              "type": {
+                "text": "Array<Array<number | string>> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "type": {
+                "text": "Array<number | string> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "type": {
+                "text": "Array<number | string> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "optional",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Vtb",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_data",
+              "type": {
+                "text": "any"
+              },
+              "privacy": "private",
+              "default": "{}"
+            },
+            {
+              "kind": "method",
+              "name": "load",
+              "parameters": [
+                {
+                  "name": "travelplan_source_url",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "filter",
+              "parameters": [
+                {
+                  "name": "config",
+                  "optional": true,
+                  "type": {
+                    "text": "VtbFilterConfig"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "subtitle",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "startdate",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "enddate",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "duration",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "sales_price",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "flight_info",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "parties",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "flightinfo",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "carrental",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "extra_fields",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "covers",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "calculate_price",
+              "parameters": [
+                {
+                  "name": "elements",
+                  "type": {
+                    "text": "Array<VtbElement>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbFilterConfig",
+          "declaration": {
+            "name": "VtbFilterConfig",
+            "module": "src/vtb-webcomponents.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Vtb",
+          "declaration": {
+            "name": "Vtb",
+            "module": "src/vtb-webcomponents.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/interfaces.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/data.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbParticipant",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "number | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "prefix",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "surname",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "birthdate",
+              "type": {
+                "text": "Dayjs | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbParty",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "number | string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "type": {
+                "text": "Array<VtbParticipant>"
+              },
+              "default": "[]"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbMedia",
+          "members": [
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "tags",
+              "type": {
+                "text": "Array<string>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbExtraField",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "group_name",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "Array<string> | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlight",
+          "members": [
+            {
+              "kind": "field",
+              "name": "date",
+              "type": {
+                "text": "Dayjs | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "IATA",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dateformat",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'DD MMM'"
+            },
+            {
+              "kind": "field",
+              "name": "timezone",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'UTC+01:00'"
+            },
+            {
+              "kind": "field",
+              "name": "country",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "city",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbGeoLocation | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightCarrier",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "code",
+              "type": {
+                "text": "string | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightData",
+          "members": [
+            {
+              "kind": "field",
+              "name": "departure",
+              "type": {
+                "text": "VtbFlight | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "arrival",
+              "type": {
+                "text": "VtbFlight | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "carrier",
+              "type": {
+                "text": "VtbFlightCarrier | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "flightnumber",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "day",
+              "type": {
+                "text": "number | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbParticipantPrice",
+          "members": [
+            {
+              "kind": "field",
+              "name": "participant_id",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "object_id",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "subtitle",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "optional",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "nights",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "hidden",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "day",
+              "type": {
+                "text": "number | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "unit_id",
+              "type": {
+                "text": "number | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "type": {
+                "text": "Array<VtbParticipantPrice>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "grouptitle",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "media",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbGeoLocation | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbElementGroup",
+          "members": [
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "subtitle",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "nights",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "hidden",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "day",
+              "type": {
+                "text": "number | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "type_id",
+              "type": {
+                "text": "number | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "elements",
+              "type": {
+                "text": "Dictionary<Array<VtbElement>>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "media",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbGeoLocation | undefined"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbGeoLocation",
+          "members": [
+            {
+              "kind": "field",
+              "name": "lat",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "lng",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbData",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "subtitle",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "start_date",
+              "type": {
+                "text": "Dayjs | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "end_date",
+              "type": {
+                "text": "Dayjs | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "duration",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "sales_price",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "flight_elements",
+              "type": {
+                "text": "Array<VtbFlightData>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "car_rental_elements",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "type": {
+                "text": "Dictionary<VtbParticipant>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "parties",
+              "type": {
+                "text": "Dictionary<VtbParty>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "covers",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "extra_fields",
+              "type": {
+                "text": "Dictionary<VtbExtraField>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "elements",
+              "type": {
+                "text": "Dictionary<VtbElementGroup>"
+              },
+              "default": "{}"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbParticipant",
+          "declaration": {
+            "name": "VtbParticipant",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParty",
+          "declaration": {
+            "name": "VtbParty",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMedia",
+          "declaration": {
+            "name": "VtbMedia",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbExtraField",
+          "declaration": {
+            "name": "VtbExtraField",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlight",
+          "declaration": {
+            "name": "VtbFlight",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightCarrier",
+          "declaration": {
+            "name": "VtbFlightCarrier",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightData",
+          "declaration": {
+            "name": "VtbFlightData",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParticipantPrice",
+          "declaration": {
+            "name": "VtbParticipantPrice",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbElement",
+          "declaration": {
+            "name": "VtbElement",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbElementGroup",
+          "declaration": {
+            "name": "VtbElementGroup",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbGeoLocation",
+          "declaration": {
+            "name": "VtbGeoLocation",
+            "module": "src/components/data.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbData",
+          "declaration": {
+            "name": "VtbData",
+            "module": "src/components/data.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/flightschedule.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightDepartureElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "string"
+              },
+              "default": "'departure'",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "IATA",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "IATA",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "date",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "date",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "time",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "time",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "timezone",
+              "type": {
+                "text": "string"
+              },
+              "default": "'02:00'",
+              "attribute": "timezone",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "attribute": "dateformat",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "VtbBaseFlightElement",
+            "module": "src/components/flightschedule.ts"
+          },
+          "tagName": "vtb-flight-departure",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "IATA",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "IATA",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "date",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "time",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "time",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "timezone",
+              "type": {
+                "text": "string"
+              },
+              "default": "'02:00'",
+              "fieldName": "timezone",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "fieldName": "dateformat",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightArrivalElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "string"
+              },
+              "default": "'arrival'",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "IATA",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "IATA",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "date",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "date",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "time",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "time",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "timezone",
+              "type": {
+                "text": "string"
+              },
+              "default": "'02:00'",
+              "attribute": "timezone",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "attribute": "dateformat",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "VtbBaseFlightElement",
+            "module": "src/components/flightschedule.ts"
+          },
+          "tagName": "vtb-flight-arrival",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "IATA",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "IATA",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "date",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "date",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "time",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "time",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "timezone",
+              "type": {
+                "text": "string"
+              },
+              "default": "'02:00'",
+              "fieldName": "timezone",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            },
+            {
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "fieldName": "dateformat",
+              "inheritedFrom": {
+                "name": "VtbBaseFlightElement",
+                "module": "src/components/flightschedule.ts"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "flightnumber",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "flightnumber"
+            },
+            {
+              "kind": "field",
+              "name": "carrier",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "carrier"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "flightnumber",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "flightnumber"
+            },
+            {
+              "name": "carrier",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "carrier"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "vtb-flight-element",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbFlightScheduleElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "flightinfo",
+              "type": {
+                "text": "Array<VtbFlightData>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "attribute": "dateformat"
+            },
+            {
+              "kind": "method",
+              "name": "_renderFlightInfo",
+              "privacy": "private"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "dateformat",
+              "type": {
+                "text": "string"
+              },
+              "default": "'DD MMM (hh:mm)'",
+              "fieldName": "dateformat"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "vtb-flightschedule",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbFlightDepartureElement",
+          "declaration": {
+            "name": "VtbFlightDepartureElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-flight-departure",
+          "declaration": {
+            "name": "VtbFlightDepartureElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightArrivalElement",
+          "declaration": {
+            "name": "VtbFlightArrivalElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-flight-arrival",
+          "declaration": {
+            "name": "VtbFlightArrivalElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightElement",
+          "declaration": {
+            "name": "VtbFlightElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-flight-element",
+          "declaration": {
+            "name": "VtbFlightElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightScheduleElement",
+          "declaration": {
+            "name": "VtbFlightScheduleElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-flightschedule",
+          "declaration": {
+            "name": "VtbFlightScheduleElement",
+            "module": "src/components/flightschedule.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/map.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbMapMarkerElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "lat",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "lat",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "lng",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "lng",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "icon"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "label"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "lat",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "lat"
+            },
+            {
+              "name": "lng",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "lng"
+            },
+            {
+              "name": "icon",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "icon"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "vtb-map-marker",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbMapMarkerGroupElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "connectMarkers",
+              "type": {
+                "text": "Boolean"
+              },
+              "default": "false",
+              "attribute": "connect-markers"
+            },
+            {
+              "kind": "field",
+              "name": "connectMode",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'flight'",
+              "attribute": "connect-mode"
+            },
+            {
+              "kind": "field",
+              "name": "markers",
+              "type": {
+                "text": "Array<Node> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_markers",
+              "type": {
+                "text": "Array<VtbMapMarkerElement> | undefined"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "connect-markers",
+              "type": {
+                "text": "Boolean"
+              },
+              "default": "false",
+              "fieldName": "connectMarkers"
+            },
+            {
+              "name": "connect-mode",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "'flight'",
+              "fieldName": "connectMode"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "vtb-map-marker-group",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbMapElement",
+          "members": [
+            {
+              "kind": "field",
+              "name": "apiKey",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "attribute": "api-key"
+            },
+            {
+              "kind": "field",
+              "name": "markergroups",
+              "type": {
+                "text": "Array<VtbMapMarkerGroupElement> | undefined"
+              },
+              "default": "[]",
+              "attribute": "markergroups"
+            },
+            {
+              "kind": "field",
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "height"
+            },
+            {
+              "kind": "field",
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "width"
+            },
+            {
+              "kind": "field",
+              "name": "zoom",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "zoom"
+            },
+            {
+              "kind": "field",
+              "name": "centerLat",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "center-lat"
+            },
+            {
+              "kind": "field",
+              "name": "centerLng",
+              "type": {
+                "text": "number"
+              },
+              "attribute": "center-lng"
+            },
+            {
+              "kind": "field",
+              "name": "center",
+              "type": {
+                "text": "string | undefined"
+              },
+              "attribute": "center"
+            },
+            {
+              "kind": "field",
+              "name": "connectMarkers",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "connect-markers"
+            },
+            {
+              "kind": "field",
+              "name": "useInfoWindow",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "infowindow-enabled"
+            },
+            {
+              "kind": "field",
+              "name": "mapstyles",
+              "type": {
+                "text": "Array<google.maps.MapTypeStyle> | undefined"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_container",
+              "type": {
+                "text": "HTMLElement | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_markergroups",
+              "type": {
+                "text": "Array<VtbMapMarkerGroupElement> | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_loader",
+              "type": {
+                "text": "any | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_google",
+              "type": {
+                "text": "typeof google.maps | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
+              "name": "_map",
+              "type": {
+                "text": "google.maps.Map | null | undefined | undefined"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_directions_service",
+              "type": {
+                "text": "google.maps.DirectionsService | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
+              "name": "_directions_renderer",
+              "type": {
+                "text": "google.maps.DirectionsRenderer | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
+              "name": "_bounds",
+              "type": {
+                "text": "google.maps.LatLngBounds | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined"
+            },
+            {
+              "kind": "method",
+              "name": "initializeMap",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "setMapStyle",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "renderMarkers",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "addMarker",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "m",
+                  "type": {
+                    "text": "VtbMapMarkerElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderDirections",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "tripCoordinates",
+                  "type": {
+                    "text": "Array<google.maps.LatLng>"
+                  }
+                },
+                {
+                  "name": "travel_mode",
+                  "default": "google.maps.TravelMode.DRIVING",
+                  "type": {
+                    "text": "google.maps.TravelMode"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "api-key",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "fieldName": "apiKey"
+            },
+            {
+              "name": "markergroups",
+              "type": {
+                "text": "Array<VtbMapMarkerGroupElement> | undefined"
+              },
+              "default": "[]",
+              "fieldName": "markergroups"
+            },
+            {
+              "name": "height",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "height"
+            },
+            {
+              "name": "width",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "width"
+            },
+            {
+              "name": "zoom",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "zoom"
+            },
+            {
+              "name": "center-lat",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "centerLat"
+            },
+            {
+              "name": "center-lng",
+              "type": {
+                "text": "number"
+              },
+              "fieldName": "centerLng"
+            },
+            {
+              "name": "center",
+              "type": {
+                "text": "string | undefined"
+              },
+              "fieldName": "center"
+            },
+            {
+              "name": "connect-markers",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "connectMarkers"
+            },
+            {
+              "name": "infowindow-enabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "useInfoWindow"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "vtb-map",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerElement",
+          "declaration": {
+            "name": "VtbMapMarkerElement",
+            "module": "src/components/map.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-map-marker",
+          "declaration": {
+            "name": "VtbMapMarkerElement",
+            "module": "src/components/map.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerGroupElement",
+          "declaration": {
+            "name": "VtbMapMarkerGroupElement",
+            "module": "src/components/map.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-map-marker-group",
+          "declaration": {
+            "name": "VtbMapMarkerGroupElement",
+            "module": "src/components/map.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapElement",
+          "declaration": {
+            "name": "VtbMapElement",
+            "module": "src/components/map.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "vtb-map",
+          "declaration": {
+            "name": "VtbMapElement",
+            "module": "src/components/map.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/transformer.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbDataTransformer",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_data",
+              "privacy": "private",
+              "default": "new VtbData()"
+            },
+            {
+              "kind": "method",
+              "name": "parse_vtb_data",
+              "parameters": [
+                {
+                  "name": "vtbSrcData",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parse_vtb_segment",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "segment",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parse_vtb_element",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "element_data",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "grouptitle",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbDataTransformer",
+          "declaration": {
+            "name": "VtbDataTransformer",
+            "module": "src/components/transformer.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

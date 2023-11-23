@@ -79,7 +79,7 @@ export class VtbDataTransformer {
     for (const fieldgroup of vtbSrcData.extraFieldValues) {
       for (const field of fieldgroup.fields) {
         const _field = new VtbExtraField();
-        _field.name = field.name.toLowerCase().replace(/[\s\-]+/, '_');
+        _field.name = field.name.toLowerCase().replace(/[\s\-]+/g, '_');
         _field.title = field.translated_name;
         _field.value = field.value;
         _field.type = field.field_type;

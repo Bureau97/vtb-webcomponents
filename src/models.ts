@@ -160,15 +160,18 @@ export class VtbElementGroup {
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
     const vtb_elements: Array<VtbElement> = [];
 
-    const _unit_ids = config.units || this.get_element_unit_ids();
-    const unit_ids = _unit_ids.flat(Infinity);
+    const _element_ids = config.element_ids || [];
+    const element_ids = _element_ids.flat(Infinity);
 
-    const _participant_ids = config?.participants || [];
+    const _element_unit_ids = config.element_unit_ids || [];
+    const element_unit_ids = _element_unit_ids.flat(Infinity);
+
+    const _participant_ids = config?.participant_ids || [];
     const participant_ids = _participant_ids.flat(Infinity);
 
-    let check_unit_ids = false;
-    if (unit_ids.length >= 1) {
-      check_unit_ids = true;
+    let check_element_unit_ids = false;
+    if (element_unit_ids.length >= 1) {
+      check_element_unit_ids = true;
     }
 
     let check_participant_ids = false;
@@ -186,10 +189,42 @@ export class VtbElementGroup {
       only_optional = true;
     }
 
-    for (const unit_id of unit_ids) {
+    if (!check_element_unit_ids && !check_participant_ids && !skip_optional && !only_optional) {
+      return this.elements;
+    }
+
+    let _elm_ids: Array<string> = [];
+    for (const unit_id of element_unit_ids) {
+
+      if (!this.mapped_elements_by_type[Number(unit_id)]) {
+        continue;
+      }
+
+      _elm_ids = _elm_ids.concat(this.mapped_elements_by_type[Number(unit_id)]);
+    }
+
+    let _elements : Array<VtbElement> = [];
+    for (const id of this.elements_order) {
+      if (!_elm_ids.includes(id)) {
+        continue;
+      }
+
+      const _element = this.mapped_elements_by_id[id];
+
+      if (participant_ids.length >= 1) {
+        if (!this.mapped_elements_by_id[id].participants) {
+          continue;
+        }
+
+
+      _elements.push(this.mapped_elements_by_id[id]);
+
+    }
+
+
       if (
-        !check_unit_ids ||
-        (check_unit_ids && unit_ids.includes(Number(unit_id)))
+        !check_element_unit_ids ||
+        (check_element_unit_ids && element_unit_ids.includes(Number(unit_id)))
       ) {
         if (!skip_optional && !check_participant_ids && !only_optional) {
           vtb_elements.push(...this.get_elements_by_unit_id(unit_id));
@@ -232,7 +267,7 @@ export class VtbElementGroup {
     return vtb_elements;
   }
 
-  get_element_unit_ids(): Array<number> {
+  get_element_element_unit_ids(): Array<number> {
     return Object.keys(this.mapped_elements_by_type).map((id) => {
       return Number(id);
     });
@@ -335,10 +370,11 @@ export class VtbTravelPlanData {
     this.element_groups_order.push(group.id);
 
     if (group.type_id) {
-      if (!this.mapped_element_groups_by_type[group.type_id]) {
-        this.mapped_element_groups_by_type[group.type_id] = [];
+      const group_type_id = Number(group.type_id);
+      if (!this.mapped_element_groups_by_type[group_type_id]) {
+        this.mapped_element_groups_by_type[group_type_id] = [];
       }
-      this.mapped_element_groups_by_type[group.type_id].push(group.id);
+      this.mapped_element_groups_by_type[group_type_id].push(group.id);
     }
 
     if (group.day) {
@@ -357,28 +393,44 @@ export class VtbTravelPlanData {
     return ret;
   }
 
-  public get_element_group_by_id(id: string): VtbElementGroup {
-    return this.mapped_element_groups[id];
-  }
+  public filter_element_groups(config: VtbFilterConfig): Array<VtbElementGroup> {
+    const ret: Array<VtbElementGroup> = [];
 
-  public get_element_groups_by_type_id(
-    group_type_id: number
-  ): Array<VtbElementGroup> {
-    const _group_ids = this.mapped_element_groups_by_type[group_type_id];
-    let ret: Array<VtbElementGroup> = [];
-    for (const group_id of _group_ids) {
-      ret.push(this.mapped_element_groups[group_id]);
+    const _group_type_ids =
+      config?.group_type_ids || [];
+
+    // if no group_type_ids are set, then we get and return all groups
+    if (_group_type_ids.length == 0) {
+      return this.element_groups;
     }
+
+    let _group_ids: Array<string> = [];
+    for (const group_type_id of _group_type_ids) {
+      _group_ids = _group_ids.concat(this.mapped_element_groups_by_type[Number(group_type_id)]);
+    }
+
+    for (const group_id of this.element_groups_order) {
+      if (_group_ids.includes(group_id)) {
+        ret.push(this.mapped_element_groups[group_id]);
+      }
+    }
+
     return ret;
   }
 
-  public get_element_group_type_ids(): Array<number> {
-    return Object.keys(this.mapped_element_groups_by_type).map((id) => {
-      return Number(id);
-    });
+  public filter_elements(config: VtbFilterConfig): Array<VtbElement> {
+    let ret: Array<VtbElement> = [];
+
+    const element_groups = this.filter_element_groups(config);
+    for (const group of element_groups) {
+      ret = ret.concat(group.filter_elements(config));
+    }
+
+    return ret;
   }
 
   public get_element_groups_by_day(day: number): Array<VtbElementGroup> {
+    // TODO: refactor
     const _group_ids = this.mapped_element_groups_by_day[day];
     let ret: Array<VtbElementGroup> = [];
     for (const group_id of _group_ids) {

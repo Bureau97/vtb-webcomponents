@@ -158,7 +158,6 @@ export class VtbElementGroup {
   }
 
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
-    const vtb_elements: Array<VtbElement> = [];
 
     const _element_ids = config.element_ids || [];
     const element_ids = _element_ids.flat(Infinity);
@@ -211,79 +210,35 @@ export class VtbElementGroup {
 
       const _element = this.mapped_elements_by_id[id];
 
-      if (participant_ids.length >= 1) {
-        if (!this.mapped_elements_by_id[id].participants) {
-          continue;
-        }
+      if (skip_optional && _element.optional) {
+        continue;
+      }
 
+      if (only_optional && !_element.optional) {
+        continue;
+      }
 
-      _elements.push(this.mapped_elements_by_id[id]);
+      if (!check_participant_ids) {
+        _elements.push(_element);
+        continue;
+      }
 
-    }
+      if (check_participant_ids && _element.participants) {
+        // make a shallow copy so we're not messing with the original price element
+        const _element_copy: VtbElement = {..._element};
 
-
-      if (
-        !check_element_unit_ids ||
-        (check_element_unit_ids && element_unit_ids.includes(Number(unit_id)))
-      ) {
-        if (!skip_optional && !check_participant_ids && !only_optional) {
-          vtb_elements.push(...this.get_elements_by_unit_id(unit_id));
-          continue;
-        }
-
-        // additional checks
-        const units: Array<VtbElement> = [];
-        for (const u of this.get_elements_by_unit_id(unit_id)) {
-          // check on optional
-          if ((skip_optional && u.optional) || (only_optional && !u.optional)) {
-            continue;
-          }
-
-          // if no check for participants is required
-          if (!check_participant_ids) {
-            units.push(u);
-            continue;
-          }
-
-          // check participants
-          if (check_participant_ids && u.participants) {
-            // make a shallow copy so we're not messing with the original price element
-            const u_copy = {...u};
-
-            let participants_unit_price = 0.0;
-            for (const p of u.participants) {
-              if (participant_ids.includes(p.participant_id.toString())) {
-                participants_unit_price += p.price;
-              }
-            }
-            u_copy.price = participants_unit_price;
-            units.push(u);
+        let participants_unit_price = 0.0;
+        for (const p of _element.participants) {
+          if (participant_ids.includes(p.participant_id.toString())) {
+            participants_unit_price += p.price;
           }
         }
-        vtb_elements.push(...units);
+        _element_copy.price = participants_unit_price;
+        _elements.push(_element_copy);
       }
     }
 
-    return vtb_elements;
-  }
-
-  get_element_element_unit_ids(): Array<number> {
-    return Object.keys(this.mapped_elements_by_type).map((id) => {
-      return Number(id);
-    });
-  }
-
-  get_elements_by_unit_id(unit_id: number): Array<VtbElement> {
-    let ret: Array<VtbElement> = [];
-
-    if (!this.mapped_elements_by_type[unit_id]) {
-      return ret;
-    }
-
-    for (const id of this.mapped_elements_by_type[unit_id]) {
-      ret.push(this.mapped_elements_by_id[id]);
-    }
-    return ret;
+    return _elements;
   }
 }
 

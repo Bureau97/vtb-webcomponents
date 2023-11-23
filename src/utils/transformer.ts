@@ -75,6 +75,16 @@ export class VtbDataTransformer {
       }
     }
 
+    for (const text_key of Object.keys(vtbSrcData.TSOrder.texts)) {
+      const _field = new VtbExtraField();
+      _field.name = text_key.toLowerCase().replace(/[\s\-]+/g, '_');
+      _field.value = vtbSrcData.TSOrder.texts[text_key];
+      if (this._data.extra_fields[_field.name]) {
+        console.warn('Duplicate text field', _field.name);
+      }
+      this._data.extra_fields[_field.name] = _field;
+    }
+
     // search and setup extra fields on travelplan
     for (const fieldgroup of vtbSrcData.extraFieldValues) {
       for (const field of fieldgroup.fields) {
@@ -93,7 +103,7 @@ export class VtbDataTransformer {
         }
 
         if (this._data.extra_fields[_field.name]) {
-          // console.warn('Duplicate extra field', _field.name);
+          console.warn('Duplicate extra field', _field.name);
         }
 
         this._data.extra_fields[_field.name] = _field;

@@ -44,6 +44,9 @@ export class VtbMediaElement extends LitElement {
     if (this.height > 0) {
       imgStyle.height = this.height + 'px';
     }
+    else {
+      imgStyle.height = '100%';
+    }
     return imgStyle;
   }
 

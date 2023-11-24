@@ -34,7 +34,7 @@ export class VtbDataTransformer {
     this._data.start_date = dayjs.utc(vtbSrcData.startDate);
     this._data.end_date = dayjs.utc(vtbSrcData.endDate);
     this._data.duration = vtbSrcData.totalDays;
-    this._data.sales_price = vtbSrcData.salesPriceAfterRounding;
+    this._data.sales_price = vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
 
     // search and setup participants and parties
     for (const party_id of Object.keys(vtbSrcData.participants)) {
@@ -44,19 +44,26 @@ export class VtbDataTransformer {
       _party.id = party_id;
 
       for (const pax of participants) {
+
         const _pax = new VtbParticipant();
-        _pax.id = pax.id;
+        _pax.id = Number(pax.id);
+
+        // temporary workaround
+        if (pax.age_calc_type != 'Adult') {
+          _pax.id = parseInt(String(50 + Math.random() * 100), 10);
+        }
+
         _pax.title = pax.title;
         _pax.name = pax.name;
         _pax.prefix = pax.surname_prefix;
         _pax.surname = pax.surname;
         _pax.calc_type = pax.age_calc_type;
-        console.info(pax);
+
         if (pax.birthdate) {
           _pax.birthdate = dayjs.utc(pax.birthdate);
         }
 
-        this._data.participants[pax.id] = _pax;
+        this._data.add_participant(_pax);
         _party.participants?.push(_pax);
       }
 
@@ -360,18 +367,17 @@ export class VtbDataTransformer {
       }
     }
 
-    vtb_element.participants = [];
     for (const participant_id of Object.keys(
       element_data.olPrices?.participants
     )) {
-      const participant_element = new VtbParticipantPrice();
+      const participant_element_price = new VtbParticipantPrice();
 
-      participant_element.participant_id = participant_id;
-      participant_element.price = parseFloat(
+      participant_element_price.participant_id = Number(participant_id);
+      participant_element_price.price = parseFloat(
         element_data.olPrices.participants[participant_id]?.salesPrice || 0
       );
 
-      vtb_element.participants.push(participant_element);
+      vtb_element.participant_prices.push(participant_element_price);
     }
 
     if (

@@ -167,15 +167,21 @@ export class Vtb {
     return this._data.filter_elements(config);
   }
 
-  public calculate_price(elements: Array<VtbElement>): number {
-    let total = 0.0;
-    // console.info(elements)
+  public calculate_price(config?: VtbFilterConfig, elements?: Array<VtbElement>): number {
+    console.info('calculate_price: ', config, elements);
+    if (!elements) {
+      elements = this.filter_elements(config ?? {});
+    }
+    console.info('calculate_price: ', elements);
 
+    let total = 0.0;
     for (const element of elements) {
       if (element && !element.optional) {
         total += element.price;
       }
     }
+
+    console.info('calculate_price: ', total);
 
     return total;
   }

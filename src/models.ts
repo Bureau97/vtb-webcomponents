@@ -82,7 +82,7 @@ export class VtbFlightData {
 }
 
 export class VtbParticipantPrice {
-  participant_id = '';
+  participant_id: number = 0;
   price = 0.0;
 }
 
@@ -102,10 +102,16 @@ export class VtbElement {
   startdate: Dayjs = dayjs();
   enddate: Dayjs = dayjs();
   unit_id: number = 0;
-  participants: Array<VtbParticipantPrice> = [];
+  participant_prices: Array<VtbParticipantPrice> = [];
   grouptitle?: string;
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
+
+  get participants(): Array<number> {
+    return this.participant_prices.map((participant_price) => {
+      return participant_price.participant_id;
+    });
+  }
 }
 
 export class VtbElementGroup {
@@ -193,13 +199,18 @@ export class VtbElementGroup {
     }
 
     let _elm_ids: Array<string> = [];
-    for (const unit_id of element_unit_ids) {
+    if (check_element_unit_ids) {
+      for (const unit_id of element_unit_ids) {
 
-      if (!this.mapped_elements_by_type[Number(unit_id)]) {
-        continue;
+        if (!this.mapped_elements_by_type[Number(unit_id)]) {
+          continue;
+        }
+
+        _elm_ids = _elm_ids.concat(this.mapped_elements_by_type[Number(unit_id)]);
       }
-
-      _elm_ids = _elm_ids.concat(this.mapped_elements_by_type[Number(unit_id)]);
+    }
+    else {
+      _elm_ids = this.elements_order;
     }
 
     let _elements : Array<VtbElement> = [];
@@ -225,12 +236,15 @@ export class VtbElementGroup {
 
       if (check_participant_ids && _element.participants) {
         // make a shallow copy so we're not messing with the original price element
-        const _element_copy: VtbElement = {..._element};
+        const _element_copy: VtbElement = {
+          ..._element,
+          participants: []
+        };
 
         let participants_unit_price = 0.0;
-        for (const p of _element.participants) {
-          if (participant_ids.includes(p.participant_id.toString())) {
-            participants_unit_price += p.price;
+        for (const participant_price of _element.participant_prices) {
+          if (participant_ids.includes(participant_price.participant_id)) {
+            participants_unit_price += participant_price.price;
           }
         }
         _element_copy.price = participants_unit_price;
@@ -297,7 +311,22 @@ export class VtbTravelPlanData {
   end_date?: Dayjs;
   duration: number = 0; // the number of days
   parties: Dictionary<VtbParty> = {};
-  participants: Dictionary<VtbParticipant> = {};
+
+  private mapped_participants: Dictionary<VtbParticipant> = {};
+  private participants_order: Array<number> = [];
+
+  public add_participant(participant: VtbParticipant) {
+    this.mapped_participants[participant.id] = participant;
+    this.participants_order.push(participant.id);
+  }
+
+  get participants(): Array<VtbParticipant> {
+    let ret: Array<VtbParticipant> = [];
+    for (const id of this.participants_order) {
+      ret.push(this.mapped_participants[id]);
+    }
+    return ret;
+  }
 
   sales_price: number = 0;
 

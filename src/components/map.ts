@@ -76,7 +76,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
   @property({
     type: Array,
     hasChanged(newVal: Array<VtbMapMarker>, oldVal: Array<VtbMapMarker>) {
-      console.debug('VtbMapElement::markers::hasChanged');
+      // console.debug('VtbMapElement::markers::hasChanged');
       return !isEqual(newVal, oldVal);
     },
   })
@@ -171,7 +171,7 @@ export class VtbMapElement extends LitElement {
       newVal: Array<VtbMapMarkerGroup>,
       oldVal: Array<VtbMapMarkerGroup>
     ) {
-      console.debug('VtbMapElement::markergroups::hasChanged');
+      // console.debug('VtbMapElement::markergroups::hasChanged');
       return !isEqual(newVal, oldVal);
     },
   })
@@ -410,7 +410,7 @@ export class VtbMapElement extends LitElement {
 
     this._map?.addListener('mapcapabilities_changed', () => {
       const mapCapabilities = this._map?.getMapCapabilities();
-      console.debug('mapCapabilities: ', mapCapabilities);
+      // console.debug('mapCapabilities: ', mapCapabilities);
 
       // if (!mapCapabilities?.isAdvancedMarkersAvailable) {
       //   // Advanced markers are *not* available, add a fallback.
@@ -448,7 +448,7 @@ export class VtbMapElement extends LitElement {
     // console.debug('VTB-MAP::addMarkers');
 
     if (!this._google || !this._map) {
-      console.debug('not adding markers (yet): ', [this._google, this._map]);
+      // console.debug('not adding markers (yet): ', [this._google, this._map]);
       return;
     }
 
@@ -522,7 +522,7 @@ export class VtbMapElement extends LitElement {
       });
 
       gmarker.addListener('click', () => {
-        console.debug('click');
+        // console.debug('click');
         infowindow.open({
           anchor: gmarker,
           map,

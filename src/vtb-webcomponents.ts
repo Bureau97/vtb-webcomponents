@@ -168,11 +168,11 @@ export class Vtb {
   }
 
   public calculate_price(config?: VtbFilterConfig, elements?: Array<VtbElement>): number {
-    console.info('calculate_price: ', config, elements);
+    // console.info('calculate_price: ', config, elements);
     if (!elements) {
       elements = this.filter_elements(config ?? {});
     }
-    console.info('calculate_price: ', elements);
+    // console.info('calculate_price: ', elements);
 
     let total = 0.0;
     for (const element of elements) {
@@ -181,7 +181,7 @@ export class Vtb {
       }
     }
 
-    console.info('calculate_price: ', total);
+    // console.info('calculate_price: ', total);
 
     return total;
   }
@@ -228,12 +228,12 @@ export class Vtb {
     flightschedule_options?: VtbFlightScheduleOptions
   ): VtbFlightScheduleElement {
     // to do
-    console.debug(
-      'flightschedule',
-      container_id,
-      filter_config,
-      flightschedule_options
-    );
+    // console.debug(
+    //   'flightschedule',
+    //   container_id,
+    //   filter_config,
+    //   flightschedule_options
+    // );
 
     const flightschedule = new VtbFlightScheduleElement();
     flightschedule.flightinfo = this.flightinfo;

@@ -69,7 +69,7 @@ export class VtbMediaElement extends LitElement {
       old_crop.reverse();
 
       if (old_crop.join('/') == crop) {
-        console.log(
+        console.debug(
           'Requested crop is the same as current crop, return original url. Remove crop (attribute) from vtb-media element for optimization.'
         );
         return src;

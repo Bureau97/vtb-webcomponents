@@ -31,7 +31,7 @@ import '@ckeditor/ckeditor5-theme-lark';
 class VtbTextSaveCommand extends Command {
   override execute() {
     console.info('VtbTextSaveCommand:execute');
-    console.info(this.editor);
+    // console.info(this.editor);
   }
 }
 
@@ -53,7 +53,7 @@ class VtbTextSaveCommand extends Command {
 // }
 
 function VtbTextSave(editor: Editor) {
-  console.info('VtbTextSave registerd');
+  // console.info('VtbTextSave registerd');
   editor.commands.add('save', new VtbTextSaveCommand(editor));
   editor.ui.componentFactory.add('save', (locale) => {
     const button = new ButtonView(locale);
@@ -114,7 +114,7 @@ export class VtbTextElement extends LitElement {
 
   constructor() {
     super();
-    console.debug('vtbtext:constructor');
+    // console.debug('vtbtext:constructor');
     // create an id for the editor when no id is defined
     // this makes sure no conflicts can occur when
     // having multiple editors active at the same time
@@ -130,12 +130,12 @@ export class VtbTextElement extends LitElement {
     // it'll throw an error as soon as you try to
     // type anything in the editor.
     // the main error is coming from @ckeditor/ckeditor5-utils/src/dom/getborderwidths
-    console.debug('vtbtext:createRenderRoot');
+    // console.debug('vtbtext:createRenderRoot');
     return this;
   }
 
   override connectedCallback() {
-    console.debug('vtbtext:connectedCallback');
+    // console.debug('vtbtext:connectedCallback');
     super.connectedCallback();
 
     // copy innerHTML to the contents property
@@ -151,7 +151,7 @@ export class VtbTextElement extends LitElement {
   }
 
   override render() {
-    console.debug('vtbtext:render');
+    // console.debug('vtbtext:render');
 
     // TODO: check if innerHTML and content are the same,
     // if not copy contents to innerHTML
@@ -175,22 +175,22 @@ export class VtbTextElement extends LitElement {
   }
 
   clickHandler(_e: Event) {
-    console.debug('vtbtext:clickHandler: ', _e);
+    // console.debug('vtbtext:clickHandler: ', _e);
 
-    console.debug('check innerHTML and content: ', {
-      innerHTML: this.innerHTML,
-      contents: this.contents,
-      'same?': Boolean(this.innerHTML == this.contents),
-    });
+    // // console.debug('check innerHTML and content: ', {
+    //   innerHTML: this.innerHTML,
+    //   contents: this.contents,
+    //   'same?': Boolean(this.innerHTML == this.contents),
+    // });
 
     if (this.isEditorInitialized && this._destroy_timer) {
-      console.debug('clear editor destruction timer');
+      // console.debug('clear editor destruction timer');
       clearTimeout(this._destroy_timer);
       this._destroy_timer = undefined;
     }
 
     if (this.editable && !this.isEditorInitialized) {
-      console.debug('initializing editor');
+      // console.debug('initializing editor');
 
       if (!this._editor) {
         console.warn('not initializing the editor, editor is null');
@@ -230,11 +230,11 @@ export class VtbTextElement extends LitElement {
         ],
       })
         .then((editorInstance) => {
-          console.debug('promise:then');
+          // console.debug('promise:then');
           this.editor = editorInstance;
 
           if (!this.editor) {
-            console.debug('no editor (yet)');
+            // console.debug('no editor (yet)');
             return;
           }
 
@@ -243,7 +243,7 @@ export class VtbTextElement extends LitElement {
           this.editor.ui.focusTracker.on(
             'change:isFocused',
             (_evt, _name, isFocused) => {
-              console.debug('focus changed');
+              // console.debug('focus changed');
               if (!isFocused) {
                 this.lostFocus();
               }
@@ -254,21 +254,21 @@ export class VtbTextElement extends LitElement {
           this.editor.focus();
         })
         .catch((error) => {
-          console.debug('received error');
-          console.debug(error.stack);
+          // console.debug('received error');
+          console.error(error.stack);
         });
     }
   }
 
   protected lostFocus() {
-    console.debug('vtbtext:lostFocus');
+    // console.debug('vtbtext:lostFocus');
 
     if (!this.editor) {
-      console.debug('no editor (yet)');
+      // console.debug('no editor (yet)');
       return;
     }
 
-    console.debug('changed data: ', this.editor.getData());
+    // console.debug('changed data: ', this.editor.getData());
 
     // dispatch custom event
     const changed_content = this.editor.getData();
@@ -278,18 +278,18 @@ export class VtbTextElement extends LitElement {
       },
       bubbles: true,
     });
-    console.debug('dispatching change event: ');
+    // console.debug('dispatching change event: ');
     this.dispatchEvent(event);
 
     // schedule destroying the editor after losing focus
-    console.debug('schedule destroy');
+    // console.debug('schedule destroy');
     const destroy = this._destroyEditor.bind(this);
     this._destroy_timer = setTimeout(destroy, 3000);
     // }
   }
 
   protected _destroyEditor() {
-    console.debug('destroying editor..');
+    // console.debug('destroying editor..');
     if (this.editor) {
       this.editor.destroy();
       this.isEditorInitialized = false;

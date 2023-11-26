@@ -32,6 +32,12 @@ class VtbBaseFlightElement extends LitElement {
   @property({type: String})
   dateformat = 'DD MMM (hh:mm)';
 
+  @property({type: String})
+  country?: string;
+
+  @property({type: String})
+  city?: string;
+
   type = 'departure';
 
   static override styles = css`

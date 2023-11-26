@@ -11,7 +11,7 @@ import {Dictionary, VtbFilterConfig} from './utils/interfaces';
 export type VtbParticipantCalcType = 'Adult' | 'Teenager' | 'Child' | 'Baby';
 
 export class VtbParticipant {
-  id: number;
+  id = 0;
   title?: string;
   name?: string;
   prefix?: string;
@@ -156,7 +156,7 @@ export class VtbElementGroup {
   }
 
   get elements(): Array<VtbElement> {
-    let ret: Array<VtbElement> = [];
+    const ret: Array<VtbElement> = [];
     for (const id of this.elements_order) {
       ret.push(this.mapped_elements_by_id[id]);
     }
@@ -164,9 +164,8 @@ export class VtbElementGroup {
   }
 
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
-
-    const _element_ids = config.element_ids || [];
-    const element_ids = _element_ids.flat(Infinity);
+    // const _element_ids = config.element_ids || [];
+    // const element_ids = _element_ids.flat(Infinity);
 
     const _element_unit_ids = config.element_unit_ids || [];
     const element_unit_ids = _element_unit_ids.flat(Infinity);
@@ -194,26 +193,31 @@ export class VtbElementGroup {
       only_optional = true;
     }
 
-    if (!check_element_unit_ids && !check_participant_ids && !skip_optional && !only_optional) {
+    if (
+      !check_element_unit_ids &&
+      !check_participant_ids &&
+      !skip_optional &&
+      !only_optional
+    ) {
       return this.elements;
     }
 
     let _elm_ids: Array<string> = [];
     if (check_element_unit_ids) {
       for (const unit_id of element_unit_ids) {
-
         if (!this.mapped_elements_by_type[Number(unit_id)]) {
           continue;
         }
 
-        _elm_ids = _elm_ids.concat(this.mapped_elements_by_type[Number(unit_id)]);
+        _elm_ids = _elm_ids.concat(
+          this.mapped_elements_by_type[Number(unit_id)]
+        );
       }
-    }
-    else {
+    } else {
       _elm_ids = this.elements_order;
     }
 
-    let _elements : Array<VtbElement> = [];
+    const _elements: Array<VtbElement> = [];
     for (const id of this.elements_order) {
       if (!_elm_ids.includes(id)) {
         continue;
@@ -238,7 +242,7 @@ export class VtbElementGroup {
         // make a shallow copy so we're not messing with the original price element
         const _element_copy: VtbElement = {
           ..._element,
-          participants: []
+          participants: [],
         };
 
         let participants_unit_price = 0.0;
@@ -321,7 +325,7 @@ export class VtbTravelPlanData {
   }
 
   get participants(): Array<VtbParticipant> {
-    let ret: Array<VtbParticipant> = [];
+    const ret: Array<VtbParticipant> = [];
     for (const id of this.participants_order) {
       ret.push(this.mapped_participants[id]);
     }
@@ -370,18 +374,19 @@ export class VtbTravelPlanData {
   }
 
   get element_groups(): Array<VtbElementGroup> {
-    let ret: Array<VtbElementGroup> = [];
+    const ret: Array<VtbElementGroup> = [];
     for (const group_id of this.element_groups_order) {
       ret.push(this.mapped_element_groups[group_id]);
     }
     return ret;
   }
 
-  public filter_element_groups(config: VtbFilterConfig): Array<VtbElementGroup> {
+  public filter_element_groups(
+    config: VtbFilterConfig
+  ): Array<VtbElementGroup> {
     const ret: Array<VtbElementGroup> = [];
 
-    const _group_type_ids =
-      config?.group_type_ids || [];
+    const _group_type_ids = config?.group_type_ids || [];
 
     // if no group_type_ids are set, then we get and return all groups
     if (_group_type_ids.length == 0) {
@@ -390,7 +395,9 @@ export class VtbTravelPlanData {
 
     let _group_ids: Array<string> = [];
     for (const group_type_id of _group_type_ids) {
-      _group_ids = _group_ids.concat(this.mapped_element_groups_by_type[Number(group_type_id)]);
+      _group_ids = _group_ids.concat(
+        this.mapped_element_groups_by_type[Number(group_type_id)]
+      );
     }
 
     for (const group_id of this.element_groups_order) {
@@ -416,7 +423,7 @@ export class VtbTravelPlanData {
   public get_element_groups_by_day(day: number): Array<VtbElementGroup> {
     // TODO: refactor
     const _group_ids = this.mapped_element_groups_by_day[day];
-    let ret: Array<VtbElementGroup> = [];
+    const ret: Array<VtbElementGroup> = [];
     for (const group_id of _group_ids) {
       ret.push(this.mapped_element_groups[group_id]);
     }

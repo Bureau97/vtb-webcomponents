@@ -288,7 +288,7 @@ export class VtbCalculatorElement extends LitElement {
 
       elementTemplates.push(html`
         <vtb-calculator-element
-          price=${this.getElementPrice(element)}
+          price=${parseFloat(this.getElementPrice(element))}
           currency=${this.currency}
           price-type=""
           display-price="true"

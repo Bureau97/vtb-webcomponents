@@ -1,4 +1,4 @@
-import {VtbFilterConfig, Dictionary} from './utils/interfaces';
+import {VtbFilterConfig} from './utils/interfaces';
 
 import {
   VtbTravelPlanData,
@@ -125,7 +125,9 @@ export class Vtb {
           last_group.title = group.title;
         }
 
-        last_group.description += group.description;
+        if (group.description) {
+          last_group.description += group.description;
+        }
 
         if (last_group.nights < group.nights) {
           last_group.nights = group.nights;
@@ -155,7 +157,9 @@ export class Vtb {
     return this;
   }
 
-  public parse_vtb_data(vtbSrcData: any): void {
+  public parse_vtb_data(
+    vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): void {
     this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
   }
 
@@ -167,7 +171,10 @@ export class Vtb {
     return this._data.filter_elements(config);
   }
 
-  public calculate_price(config?: VtbFilterConfig, elements?: Array<VtbElement>): number {
+  public calculate_price(
+    config?: VtbFilterConfig,
+    elements?: Array<VtbElement>
+  ): number {
     // console.info('calculate_price: ', config, elements);
     if (!elements) {
       elements = this.filter_elements(config ?? {});
@@ -228,12 +235,12 @@ export class Vtb {
     flightschedule_options?: VtbFlightScheduleOptions
   ): VtbFlightScheduleElement {
     // to do
-    // console.debug(
-    //   'flightschedule',
-    //   container_id,
-    //   filter_config,
-    //   flightschedule_options
-    // );
+    console.debug(
+      'flightschedule',
+      container_id,
+      filter_config,
+      flightschedule_options
+    );
 
     const flightschedule = new VtbFlightScheduleElement();
     flightschedule.flightinfo = this.flightinfo;

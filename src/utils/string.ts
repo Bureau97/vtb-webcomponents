@@ -1,4 +1,3 @@
-
 export function strip_tags(html?: string) {
   if (!html) {
     return '';

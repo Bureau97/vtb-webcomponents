@@ -34,7 +34,8 @@ export class VtbDataTransformer {
     this._data.start_date = dayjs.utc(vtbSrcData.startDate);
     this._data.end_date = dayjs.utc(vtbSrcData.endDate);
     this._data.duration = vtbSrcData.totalDays;
-    this._data.sales_price = vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
+    this._data.sales_price =
+      vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
 
     // search and setup participants and parties
     for (const party_id of Object.keys(vtbSrcData.participants)) {
@@ -44,7 +45,6 @@ export class VtbDataTransformer {
       _party.id = party_id;
 
       for (const pax of participants) {
-
         const _pax = new VtbParticipant();
         _pax.id = Number(pax.id);
 
@@ -84,7 +84,7 @@ export class VtbDataTransformer {
 
     for (const text_key of Object.keys(vtbSrcData.TSOrder.texts)) {
       const _field = new VtbExtraField();
-      _field.name = text_key.toLowerCase().replace(/[\s\-]+/g, '_');
+      _field.name = text_key.toLowerCase().replace(/[\s-]+/g, '_');
       _field.value = vtbSrcData.TSOrder.texts[text_key];
       if (this._data.extra_fields[_field.name]) {
         console.warn('Duplicate text field', _field.name);
@@ -96,7 +96,7 @@ export class VtbDataTransformer {
     for (const fieldgroup of vtbSrcData.extraFieldValues) {
       for (const field of fieldgroup.fields) {
         const _field = new VtbExtraField();
-        _field.name = field.name.toLowerCase().replace(/[\s\-]+/g, '_');
+        _field.name = field.name.toLowerCase().replace(/[\s-]+/g, '_');
         _field.title = field.translated_name;
         _field.value = field.value;
         _field.type = field.field_type;
@@ -181,7 +181,9 @@ export class VtbDataTransformer {
     return this._data;
   }
 
-  protected parse_flight_info(segment_data: any) {
+  protected parse_flight_info(
+    segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) {
     for (const flight of segment_data.flightInfo) {
       const carrier = new VtbFlightCarrier();
       carrier.name =
@@ -222,7 +224,9 @@ export class VtbDataTransformer {
       flightElement.day = segment_data.day;
 
       if (!flightElement.duration) {
-        flightElement.duration = dayjs.duration(arrival.date.diff(departure.date)).format('H:mmu')
+        flightElement.duration = dayjs
+          .duration(arrival.date.diff(departure.date))
+          .format('H:mmu');
       }
 
       this._data.add_flight_element(flightElement);

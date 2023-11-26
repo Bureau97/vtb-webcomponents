@@ -110,8 +110,8 @@ function vtbDataLoaded(vtb: Vtb) {
 
   // accos on map
   const acco_search: VtbFilterConfig = {
-    segments: [segment_types.ARRANGEMENT],
-    units: [unit_types.NACHTEN],
+    group_type_ids: [segment_types.ARRANGEMENT],
+    element_unit_ids: [unit_types.NACHTEN],
   };
 
   const marker_group_accos = vtb.filter_mapmarkers(acco_search);
@@ -150,12 +150,12 @@ function vtbDataLoaded(vtb: Vtb) {
   // console.info(map2);
 
   const additions_elements = vtb.filter_elements({
-    segments: [segment_types.ADDITIONEEL],
-    // units: [unit_types.additions],
+    group_type_ids: [segment_types.ADDITIONEEL],
+    // element_unit_ids: [unit_types.additions],
     // optional: false,
     // participants: ['1211769']
   });
-  const additions_total = vtb.calculate_price(additions_elements);
+  const additions_total = vtb.calculate_price(undefined, additions_elements);
 
   const additionsTable = document.getElementById(
     'calc-dynamic-additions'
@@ -170,18 +170,18 @@ function vtbDataLoaded(vtb: Vtb) {
   // accommodations
 
   const all_acco_elements = vtb.filter_elements({
-    segments: [segment_types.ARRANGEMENT],
-    units: [unit_types.NACHTEN],
+    group_type_ids: [segment_types.ARRANGEMENT],
+    element_unit_ids: [unit_types.NACHTEN],
     // optional: false,
   });
 
   const acco_elements = vtb.filter_elements({
-    segments: [segment_types.ARRANGEMENT],
-    units: [unit_types.NACHTEN],
+    group_type_ids: [segment_types.ARRANGEMENT],
+    element_unit_ids: [unit_types.NACHTEN],
     optional: false,
   });
 
-  const acco_total = vtb.calculate_price(acco_elements);
+  const acco_total = vtb.calculate_price(undefined, acco_elements);
 
   const accoTable = document.getElementById(
     'calc-dynamic-accos'
@@ -206,17 +206,17 @@ function vtbDataLoaded(vtb: Vtb) {
   // autohuur
 
   const all_carrental_elements = vtb.filter_elements({
-    segments: [segment_types.CARRENTAL],
-    // units: [unit_types.NACHTEN],
+    group_type_ids: [segment_types.CARRENTAL],
+    // element_unit_ids: [unit_types.NACHTEN],
     optional: true,
   });
 
   const carrental_elements = vtb.filter_elements({
-    segments: [segment_types.CARRENTAL],
-    // units: [unit_types.NACHTEN],
+    group_type_ids: [segment_types.CARRENTAL],
+    // element_unit_ids: [unit_types.NACHTEN],
     optional: false,
   });
-  const carrental_total = vtb.calculate_price(carrental_elements);
+  const carrental_total = vtb.calculate_price(undefined, carrental_elements);
 
   const carrentalTable = document.getElementById(
     'calc-dynamic-carrental'
@@ -233,10 +233,10 @@ function vtbDataLoaded(vtb: Vtb) {
   carrentalTable.totalPrice = carrental_total;
 
   const flight_elements = vtb.filter_elements({
-    segments: [segment_types.FLIGHT],
-    // units: [unit_types.NACHTEN]
+    group_type_ids: [segment_types.FLIGHT],
+    // element_unit_ids: [unit_types.NACHTEN]
   });
-  const flight_total = vtb.calculate_price(flight_elements);
+  const flight_total = vtb.calculate_price(undefined, flight_elements);
 
   const flightTable = document.getElementById(
     'calc-dynamic-flight'
@@ -252,10 +252,13 @@ function vtbDataLoaded(vtb: Vtb) {
   flightTable.totalPrice = flight_total;
 
   const flightAdditional_elements = vtb.filter_elements({
-    segments: [segment_types.FLIGHT_ADDITIONAL],
-    // units: [unit_types.NACHTEN]
+    group_type_ids: [segment_types.FLIGHT_ADDITIONAL],
+    // element_unit_ids: [unit_types.NACHTEN]
   });
-  const flightAdditional_total = vtb.calculate_price(flightAdditional_elements);
+  const flightAdditional_total = vtb.calculate_price(
+    undefined,
+    flightAdditional_elements
+  );
 
   const flightAdditionalTable = document.getElementById(
     'calc-dynamic-flightadditional'
@@ -287,16 +290,14 @@ function vtbDataLoaded(vtb: Vtb) {
   // flightTotalTable.totalPrice = flightTotal_total;
 
   const test_elements = vtb.filter_elements({
-    segments: [segment_types.ARRANGEMENT],
-    units: [unit_types.MAAL],
-    participants: ['1211769'],
+    group_type_ids: [segment_types.ARRANGEMENT],
+    element_unit_ids: [unit_types.MAAL],
+    participant_ids: ['1211769'],
   });
 
-  const test_total = vtb.calculate_price(
-    vtb.filter_elements({
-      optional: false,
-    })
-  );
+  const test_total = vtb.calculate_price({
+    optional: false,
+  });
 
   const testTable = document.getElementById(
     'calc-dynamic-test'
@@ -321,8 +322,8 @@ function vtbDataLoaded(vtb: Vtb) {
   }
 
   const itenerary_elements = vtb.filter_groups({
-    segments: [1, 2],
-    units: [null], // explicitly set null!
+    group_type_ids: [1, 2],
+    // element_unit_ids: [null], // explicitly set null!
   });
   console.info(itenerary_elements);
 

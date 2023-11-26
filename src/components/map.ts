@@ -408,15 +408,15 @@ export class VtbMapElement extends LitElement {
       this._map = map;
     }
 
-    this._map?.addListener('mapcapabilities_changed', () => {
-      const mapCapabilities = this._map?.getMapCapabilities();
-      // console.debug('mapCapabilities: ', mapCapabilities);
+    // this._map?.addListener('mapcapabilities_changed', () => {
+    //   // const mapCapabilities = this._map?.getMapCapabilities();
+    //   // console.debug('mapCapabilities: ', mapCapabilities);
 
-      // if (!mapCapabilities?.isAdvancedMarkersAvailable) {
-      //   // Advanced markers are *not* available, add a fallback.
-      //   console.warn('Advanced markers are not available');
-      // }
-    });
+    //   // if (!mapCapabilities?.isAdvancedMarkersAvailable) {
+    //   //   // Advanced markers are *not* available, add a fallback.
+    //   //   console.warn('Advanced markers are not available');
+    //   // }
+    // });
 
     this.setMapStyle();
     this.addMarkers();

@@ -43,8 +43,7 @@ export class VtbMediaElement extends LitElement {
 
     if (this.height > 0) {
       imgStyle.height = this.height + 'px';
-    }
-    else {
+    } else {
       imgStyle.height = '100%';
     }
     return imgStyle;
@@ -59,7 +58,7 @@ export class VtbMediaElement extends LitElement {
 
       const url = new URL(src);
 
-      let path = url.pathname.split('/');
+      const path = url.pathname.split('/');
       const old_crop = [];
 
       path.shift(); // remove first (empty) element

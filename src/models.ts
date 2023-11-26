@@ -121,9 +121,9 @@ export class VtbElementGroup {
   description?: string;
   nights = 0;
   hidden = false;
-  day?: number;
-  startdate?: Dayjs;
-  enddate?: Dayjs;
+  day = 0;
+  startdate: Dayjs = dayjs();
+  enddate: Dayjs = dayjs();
   type_id?: number;
   unit_id?: number;
   media: Array<VtbMedia> = [];

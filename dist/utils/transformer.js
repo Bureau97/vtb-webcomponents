@@ -13,7 +13,6 @@ export class VtbDataTransformer {
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
-        var _a, _b;
         // search and setup base info
         this._data.title = vtbSrcData.title;
         this._data.subtitle = vtbSrcData.subTitle || '';
@@ -21,7 +20,7 @@ export class VtbDataTransformer {
         this._data.end_date = dayjs.utc(vtbSrcData.endDate);
         this._data.duration = vtbSrcData.totalDays;
         this._data.sales_price =
-            (_a = vtbSrcData.salesPriceAfterRounding) !== null && _a !== void 0 ? _a : vtbSrcData.salesPriceBeforeRounding;
+            vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
         // search and setup participants and parties
         for (const party_id of Object.keys(vtbSrcData.participants)) {
             const participants = vtbSrcData.participants[party_id];
@@ -43,7 +42,7 @@ export class VtbDataTransformer {
                     _pax.birthdate = dayjs.utc(pax.birthdate);
                 }
                 this._data.add_participant(_pax);
-                (_b = _party.participants) === null || _b === void 0 ? void 0 : _b.push(_pax);
+                _party.participants?.push(_pax);
             }
             this._data.parties[party_id] = _party;
         }
@@ -237,17 +236,20 @@ export class VtbDataTransformer {
     }
     parse_vtb_element(element_data, // eslint-disable-line @typescript-eslint/no-explicit-any
     grouptitle) {
-        var _a, _b, _c, _d, _e, _f, _g;
         const vtb_element = new VtbElement();
         // console.debug('element_data: ', element_data);
         vtb_element.id = element_data.vtbObjectId;
         vtb_element.title = element_data.title;
         vtb_element.subtitle = element_data.subTitle;
         // set element description, get all contents from the <body> and remove all style attributes
-        vtb_element.description = (_b = (_a = element_data.additionalText) === null || _a === void 0 ? void 0 : _a.replace(this.re_body, '$1')) === null || _b === void 0 ? void 0 : _b.replace(this.re_style, '');
-        vtb_element.additional_description = (_d = (_c = element_data.subAdditionalText) === null || _c === void 0 ? void 0 : _c.replace(this.re_body, '$1')) === null || _d === void 0 ? void 0 : _d.replace(this.re_style, '');
+        vtb_element.description = element_data.additionalText
+            ?.replace(this.re_body, '$1')
+            ?.replace(this.re_style, '');
+        vtb_element.additional_description = element_data.subAdditionalText
+            ?.replace(this.re_body, '$1')
+            ?.replace(this.re_style, '');
         vtb_element.optional = element_data.optional;
-        vtb_element.price = parseFloat(((_e = element_data.olPrices) === null || _e === void 0 ? void 0 : _e.salesTotal) || 0);
+        vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
         vtb_element.nights = element_data.flexNights || element_data.nights;
         vtb_element.day = element_data.day;
         vtb_element.unit_id = element_data.unitId;
@@ -268,10 +270,10 @@ export class VtbDataTransformer {
                 vtb_element.media.push(media);
             }
         }
-        for (const participant_id of Object.keys((_f = element_data.olPrices) === null || _f === void 0 ? void 0 : _f.participants)) {
+        for (const participant_id of Object.keys(element_data.olPrices?.participants)) {
             const participant_element_price = new VtbParticipantPrice();
             participant_element_price.participant_id = Number(participant_id);
-            participant_element_price.price = parseFloat(((_g = element_data.olPrices.participants[participant_id]) === null || _g === void 0 ? void 0 : _g.salesPrice) || 0);
+            participant_element_price.price = parseFloat(element_data.olPrices.participants[participant_id]?.salesPrice || 0);
             vtb_element.participant_prices.push(participant_element_price);
         }
         if (element_data.maps &&

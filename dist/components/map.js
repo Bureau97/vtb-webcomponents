@@ -275,19 +275,20 @@ let VtbMapElement = class VtbMapElement extends LitElement {
     `;
     }
     firstUpdated() {
-        var _a;
         // console.debug('VTB-MAP::firstUpdated');
-        (_a = this._loader) === null || _a === void 0 ? void 0 : _a.load().then((google // eslint-disable-line @typescript-eslint/no-explicit-any
+        this._loader
+            ?.load()
+            .then((google // eslint-disable-line @typescript-eslint/no-explicit-any
         ) => {
             this._google = google.maps;
             this._bounds = new google.maps.LatLngBounds();
             this.initializeMap();
-        }).catch((err) => {
+        })
+            .catch((err) => {
             console.error(err);
         });
     }
     initializeMap() {
-        var _a, _b;
         // console.debug('VTB-MAP::initializeMap');
         const mapoptions = {
             zoom: 1,
@@ -311,9 +312,9 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         this.addMarkers();
         if (this._bounds) {
             // console.debug('fitting bounds: ', this._bounds);
-            (_a = this._map) === null || _a === void 0 ? void 0 : _a.fitBounds(this._bounds);
+            this._map?.fitBounds(this._bounds);
             // console.debug('setting center: ', this._bounds.getCenter());
-            (_b = this._map) === null || _b === void 0 ? void 0 : _b.setCenter(this._bounds.getCenter());
+            this._map?.setCenter(this._bounds.getCenter());
         }
     }
     setMapStyle() {
@@ -374,7 +375,6 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         }
     }
     addMarker(marker) {
-        var _a;
         // console.debug('VTB-MAP::addMarker => ', marker);
         const map = this._map;
         const markerOptions = {};
@@ -396,7 +396,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
                 });
             });
         }
-        (_a = this._bounds) === null || _a === void 0 ? void 0 : _a.extend(gmarker.getPosition());
+        this._bounds?.extend(gmarker.getPosition());
         this.marker_counter++;
     }
     renderDirections(tripCoordinates, travel_mode = google.maps.TravelMode.DRIVING) {
@@ -432,9 +432,8 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             directions_request.waypoints = waypoints;
         }
         this._directions_service.route(directions_request, (result, status) => {
-            var _a;
             if (status == 'OK' && result) {
-                (_a = this._directions_renderer) === null || _a === void 0 ? void 0 : _a.setDirections(result);
+                this._directions_renderer?.setDirections(result);
             }
             else {
                 console.error('Directions request failed due to ' + status);

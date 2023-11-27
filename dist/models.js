@@ -31,12 +31,10 @@ export class VtbExtraField {
         this.name = '';
     }
     get content() {
-        var _a;
-        return (_a = this.value) !== null && _a !== void 0 ? _a : null;
+        return this.value ?? null;
     }
     toString() {
-        var _a;
-        return (_a = this.value) !== null && _a !== void 0 ? _a : '';
+        return this.value ?? '';
     }
 }
 export class VtbFlight {
@@ -121,7 +119,7 @@ export class VtbElementGroup {
         // const element_ids = _element_ids.flat(Infinity);
         const _element_unit_ids = config.element_unit_ids || [];
         const element_unit_ids = _element_unit_ids.flat(Infinity);
-        const _participant_ids = (config === null || config === void 0 ? void 0 : config.participant_ids) || [];
+        const _participant_ids = config?.participant_ids || [];
         const participant_ids = _participant_ids.flat(Infinity);
         let check_element_unit_ids = false;
         if (element_unit_ids.length >= 1) {
@@ -132,11 +130,11 @@ export class VtbElementGroup {
             check_participant_ids = true;
         }
         let skip_optional = false;
-        if ((config === null || config === void 0 ? void 0 : config.optional) === false) {
+        if (config?.optional === false) {
             skip_optional = true;
         }
         let only_optional = false;
-        if ((config === null || config === void 0 ? void 0 : config.optional) === true) {
+        if (config?.optional === true) {
             only_optional = true;
         }
         if (!check_element_unit_ids &&
@@ -289,7 +287,7 @@ export class VtbTravelPlanData {
     }
     filter_element_groups(config) {
         const ret = [];
-        const _group_type_ids = (config === null || config === void 0 ? void 0 : config.group_type_ids) || [];
+        const _group_type_ids = config?.group_type_ids || [];
         // if no group_type_ids are set, then we get and return all groups
         if (_group_type_ids.length == 0) {
             return this.element_groups;

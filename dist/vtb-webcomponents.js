@@ -81,7 +81,7 @@ export class Vtb {
                 // we add it its elements to the current group
                 const elements = group.elements;
                 for (const element of elements) {
-                    last_group === null || last_group === void 0 ? void 0 : last_group.add_element(element);
+                    last_group?.add_element(element);
                 }
                 if (!last_group.title && group.title) {
                     last_group.title = group.title;
@@ -127,7 +127,7 @@ export class Vtb {
     calculate_price(config, elements) {
         // console.info('calculate_price: ', config, elements);
         if (!elements) {
-            elements = this.filter_elements(config !== null && config !== void 0 ? config : {});
+            elements = this.filter_elements(config ?? {});
         }
         // console.info('calculate_price: ', elements);
         let total = 0.0;
@@ -151,7 +151,7 @@ export class Vtb {
         map.zoom = map_options.zoom;
         map.markergroups = [marker_group];
         const container = document.getElementById(container_id);
-        container === null || container === void 0 ? void 0 : container.appendChild(map);
+        container?.appendChild(map);
         return map;
     }
     filter_mapmarkers(config) {
@@ -169,11 +169,11 @@ export class Vtb {
         console.debug('flightschedule', container_id, filter_config, flightschedule_options);
         const flightschedule = new VtbFlightScheduleElement();
         flightschedule.flightinfo = this.flightinfo;
-        if (flightschedule_options === null || flightschedule_options === void 0 ? void 0 : flightschedule_options.dateformat) {
+        if (flightschedule_options?.dateformat) {
             flightschedule.dateformat = flightschedule_options.dateformat;
         }
         const container = document.getElementById(container_id);
-        container === null || container === void 0 ? void 0 : container.appendChild(flightschedule);
+        container?.appendChild(flightschedule);
         return flightschedule;
     }
 }

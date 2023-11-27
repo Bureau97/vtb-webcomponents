@@ -177,52 +177,51 @@ let VtbFlightScheduleElement = class VtbFlightScheduleElement extends LitElement
     `;
     }
     _renderFlightInfo() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
         const flightinfo = this.flightinfo;
         const scheduleTemplates = [];
         for (const _schedule of flightinfo) {
             let departure_date = null;
             let arrival_date = null;
-            if (((_a = _schedule.departure) === null || _a === void 0 ? void 0 : _a.date) &&
-                typeof ((_b = _schedule.departure) === null || _b === void 0 ? void 0 : _b.date) == 'string') {
-                departure_date = dayjs((_c = _schedule.departure) === null || _c === void 0 ? void 0 : _c.date);
+            if (_schedule.departure?.date &&
+                typeof _schedule.departure?.date == 'string') {
+                departure_date = dayjs(_schedule.departure?.date);
             }
             else {
-                departure_date = (_d = _schedule.departure) === null || _d === void 0 ? void 0 : _d.date;
+                departure_date = _schedule.departure?.date;
             }
-            if (((_e = _schedule.arrival) === null || _e === void 0 ? void 0 : _e.date) &&
-                typeof ((_f = _schedule.arrival) === null || _f === void 0 ? void 0 : _f.date) == 'string') {
-                arrival_date = dayjs((_g = _schedule.arrival) === null || _g === void 0 ? void 0 : _g.date);
+            if (_schedule.arrival?.date &&
+                typeof _schedule.arrival?.date == 'string') {
+                arrival_date = dayjs(_schedule.arrival?.date);
             }
             else {
-                arrival_date = (_h = _schedule.arrival) === null || _h === void 0 ? void 0 : _h.date;
+                arrival_date = _schedule.arrival?.date;
             }
             scheduleTemplates.push(html `
         <vtb-flight-element
-          carrier=${ifDefined((_j = _schedule.carrier) === null || _j === void 0 ? void 0 : _j.name)}
-          carrier_code=${ifDefined((_k = _schedule.carrier) === null || _k === void 0 ? void 0 : _k.code)}
+          carrier=${ifDefined(_schedule.carrier?.name)}
+          carrier_code=${ifDefined(_schedule.carrier?.code)}
           duration=${ifDefined(_schedule.duration)}
           flightnumber=${ifDefined(_schedule.flightnumber)}
         >
           <vtb-flight-departure
-            date=${ifDefined(departure_date === null || departure_date === void 0 ? void 0 : departure_date.format('YYYY-MM-DD HH:mm'))}
-            IATA=${ifDefined((_l = _schedule.departure) === null || _l === void 0 ? void 0 : _l.IATA)}
+            date=${ifDefined(departure_date?.format('YYYY-MM-DD HH:mm'))}
+            IATA=${ifDefined(_schedule.departure?.IATA)}
             dateformat=${this.dateformat}
-            country=${ifDefined((_m = _schedule.departure) === null || _m === void 0 ? void 0 : _m.country)}
-            city=${ifDefined((_o = _schedule.departure) === null || _o === void 0 ? void 0 : _o.city)}
-            timezone=${ifDefined((_p = _schedule.departure) === null || _p === void 0 ? void 0 : _p.timezone)}
+            country=${ifDefined(_schedule.departure?.country)}
+            city=${ifDefined(_schedule.departure?.city)}
+            timezone=${ifDefined(_schedule.departure?.timezone)}
           >
-            ${ifDefined((_q = _schedule.departure) === null || _q === void 0 ? void 0 : _q.description)}
+            ${ifDefined(_schedule.departure?.description)}
           </vtb-flight-departure>
           <vtb-flight-arrival
-            date=${ifDefined(arrival_date === null || arrival_date === void 0 ? void 0 : arrival_date.format('YYYY-MM-DD HH:mm'))}
-            IATA=${ifDefined((_r = _schedule.arrival) === null || _r === void 0 ? void 0 : _r.IATA)}
+            date=${ifDefined(arrival_date?.format('YYYY-MM-DD HH:mm'))}
+            IATA=${ifDefined(_schedule.arrival?.IATA)}
             dateformat=${this.dateformat}
-            country=${ifDefined((_s = _schedule.arrival) === null || _s === void 0 ? void 0 : _s.country)}
-            city=${ifDefined((_t = _schedule.arrival) === null || _t === void 0 ? void 0 : _t.city)}
-            timezone=${ifDefined((_u = _schedule.arrival) === null || _u === void 0 ? void 0 : _u.timezone)}
+            country=${ifDefined(_schedule.arrival?.country)}
+            city=${ifDefined(_schedule.arrival?.city)}
+            timezone=${ifDefined(_schedule.arrival?.timezone)}
           >
-            ${ifDefined((_v = _schedule.arrival) === null || _v === void 0 ? void 0 : _v.description)}
+            ${ifDefined(_schedule.arrival?.description)}
           </vtb-flight-arrival>
         </vtb-flight-element>
       `);

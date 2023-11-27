@@ -97,5 +97,11 @@
     "last 5 chrome version",
     "last 5 firefox version",
     "last 5 safari version"
-  ]
+  ],
+  "exports": {
+    ".": "./dist/vtb-webcomponents.js",
+    "./models": "./dist/models.js",
+    "./utils/*": "./dist/utils/*.js",
+    "./components/*": "./dist/components/*.js"
+  }
 }

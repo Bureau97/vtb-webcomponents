@@ -3,7 +3,7 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import dayjs from 'dayjs';
-import 'dayjs/esm/locale/nl.js';
+import 'dayjs/locale/nl.js';
 dayjs.locale('nl');
 import * as _ from 'lodash';
 const { isEqual } = _;

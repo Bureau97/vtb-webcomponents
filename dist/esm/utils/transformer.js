@@ -1,6 +1,6 @@
-import dayjs from 'dayjs/esm/index.js';
-import utc from 'dayjs/esm/plugin/utc/index.js';
-import duration from 'dayjs/esm/plugin/duration/index.js'; // import plugin
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import duration from 'dayjs/plugin/duration.js'; // import plugin
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);

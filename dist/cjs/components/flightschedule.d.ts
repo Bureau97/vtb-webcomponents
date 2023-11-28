@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { TemplateResult } from 'lit-element';
-import 'dayjs/esm/locale/nl.js';
+import 'dayjs/locale/nl.js';
 import { VtbFlightData } from '../models.js';
 export interface VtbFlightScheduleOptions {
     dateformat?: string;

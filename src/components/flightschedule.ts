@@ -4,7 +4,7 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 import {TemplateResult} from 'lit-element';
 
 import dayjs, {type Dayjs} from 'dayjs';
-import 'dayjs/esm/locale/nl.js';
+import 'dayjs/locale/nl.js';
 dayjs.locale('nl');
 
 import * as _ from 'lodash';

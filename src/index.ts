@@ -1,4 +1,4 @@
-import {Vtb} from './vtb';
+import {Vtb} from './vtb.js';
 
 import {
   VtbParticipantCalcType,
@@ -17,20 +17,20 @@ import {
   VtbMapMarkerConnectMode,
   VtbMapMarkerGroup,
   VtbTravelPlanData,
-} from './models';
+} from './models.js';
 
 import {
   strip_tags,
   VtbDataTransformer,
   Dictionary,
   VtbFilterConfig,
-} from './utils';
+} from './utils/index.js';
 
 import {
   VtbCalculatorElement,
   VtbCalculatorPriceElement,
   VtbCalculatorPriceListElement,
-} from './components/calculator';
+} from './components/calculator.js';
 
 import {
   VtbFlightScheduleElement,
@@ -38,17 +38,17 @@ import {
   VtbFlightElement,
   VtbFlightArrivalElement,
   VtbFlightDepartureElement,
-} from './components/flightschedule';
+} from './components/flightschedule.js';
 
 import {
   VtbMapElement,
   VtbMapMarkerGroupElement,
   VtbMapMarkerElement,
-} from './components/map';
+} from './components/map.js';
 
-import {VtbMediaElement} from './components/media';
+import {VtbMediaElement} from './components/media.js';
 
-import {VtbTextElement} from './components/text';
+import {VtbTextElement} from './components/text.js';
 
 export {
   Vtb,

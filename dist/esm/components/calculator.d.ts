@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { TemplateResult } from 'lit-element';
-import { VtbElement } from '../models';
+import { VtbElement } from '../models.js';
 export declare class VtbCalculatorPriceElement extends LitElement {
     static styles: import("lit").CSSResult;
     locale: string;

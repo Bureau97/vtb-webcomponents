@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VtbTextElement = exports.VtbMediaElement = exports.VtbMapMarkerElement = exports.VtbMapMarkerGroupElement = exports.VtbMapElement = exports.VtbFlightDepartureElement = exports.VtbFlightArrivalElement = exports.VtbFlightElement = exports.VtbFlightScheduleElement = exports.VtbCalculatorPriceListElement = exports.VtbCalculatorPriceElement = exports.VtbCalculatorElement = exports.VtbDataTransformer = exports.strip_tags = exports.VtbTravelPlanData = exports.VtbMapMarkerGroup = exports.VtbMapMarker = exports.VtbGeoLocation = exports.VtbElementGroup = exports.VtbElement = exports.VtbParticipantPrice = exports.VtbFlightData = exports.VtbFlightCarrier = exports.VtbFlight = exports.VtbExtraField = exports.VtbMedia = exports.VtbParty = exports.VtbParticipant = exports.Vtb = void 0;
+exports.VtbMediaElement = exports.VtbMapMarkerElement = exports.VtbMapMarkerGroupElement = exports.VtbMapElement = exports.VtbFlightDepartureElement = exports.VtbFlightArrivalElement = exports.VtbFlightElement = exports.VtbFlightScheduleElement = exports.VtbCalculatorPriceListElement = exports.VtbCalculatorPriceElement = exports.VtbCalculatorElement = exports.VtbDataTransformer = exports.strip_tags = exports.VtbTravelPlanData = exports.VtbMapMarkerGroup = exports.VtbMapMarker = exports.VtbGeoLocation = exports.VtbElementGroup = exports.VtbElement = exports.VtbParticipantPrice = exports.VtbFlightData = exports.VtbFlightCarrier = exports.VtbFlight = exports.VtbExtraField = exports.VtbMedia = exports.VtbParty = exports.VtbParticipant = exports.Vtb = void 0;
 const vtb_js_1 = require("./vtb.js");
 Object.defineProperty(exports, "Vtb", { enumerable: true, get: function () { return vtb_js_1.Vtb; } });
 const models_js_1 = require("./models.js");
@@ -36,6 +36,4 @@ Object.defineProperty(exports, "VtbMapMarkerGroupElement", { enumerable: true, g
 Object.defineProperty(exports, "VtbMapMarkerElement", { enumerable: true, get: function () { return map_js_1.VtbMapMarkerElement; } });
 const media_js_1 = require("./components/media.js");
 Object.defineProperty(exports, "VtbMediaElement", { enumerable: true, get: function () { return media_js_1.VtbMediaElement; } });
-const text_js_1 = require("./components/text.js");
-Object.defineProperty(exports, "VtbTextElement", { enumerable: true, get: function () { return text_js_1.VtbTextElement; } });
 //# sourceMappingURL=index.js.map

@@ -9,7 +9,7 @@ const _ = require("lodash");
 const { isEqual } = _;
 const GMaps = require("@googlemaps/js-api-loader");
 const { Loader } = GMaps;
-const models_1 = require("../models");
+const models_js_1 = require("../models.js");
 let VtbMapMarkerElement = class VtbMapMarkerElement extends lit_1.LitElement {
     constructor() {
         super(...arguments);
@@ -99,7 +99,7 @@ let VtbMapMarkerGroupElement = class VtbMapMarkerGroupElement extends lit_1.LitE
         const re_marker = /^vtb-map-marker$/i;
         if (re_marker.test(element.tagName)) {
             const _marker_element = element;
-            const marker = new models_1.VtbMapMarker();
+            const marker = new models_js_1.VtbMapMarker();
             marker.title = element.title || element.innerHTML;
             marker.lat =
                 parseFloat(_marker_element.getAttribute('lat')) || 0.0;
@@ -232,7 +232,7 @@ let VtbMapElement = class VtbMapElement extends lit_1.LitElement {
         // console.debug('VTB-MAP::parseChildNode', childNode);
         const re_group = /^vtb-map-marker-group$/i, re_marker = /^vtb-map-marker$/i;
         if (re_group.test(childNode.tagName)) {
-            const group = new models_1.VtbMapMarkerGroup();
+            const group = new models_js_1.VtbMapMarkerGroup();
             const groupElement = childNode;
             group.connectMode = childNode.getAttribute('connect-mode');
             group.connectMarkers = childNode.hasAttribute('connect-markers') || false;
@@ -245,7 +245,7 @@ let VtbMapElement = class VtbMapElement extends lit_1.LitElement {
             const _marker_element = childNode;
             const marker = new VtbMapMarkerGroupElement().parseMarkerElement(_marker_element);
             if (this.markergroups.length <= 0) {
-                this.markergroups.push(new models_1.VtbMapMarkerGroup());
+                this.markergroups.push(new models_js_1.VtbMapMarkerGroup());
                 this.markergroups[0].connectMarkers = this.connect_markers;
                 this.markergroups[0].connectMode = this
                     .connect_mode;

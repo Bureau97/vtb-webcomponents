@@ -6,7 +6,7 @@ const lit_1 = require("lit");
 const decorators_js_1 = require("lit/decorators.js");
 const if_defined_js_1 = require("lit/directives/if-defined.js");
 const dayjs_1 = require("dayjs");
-require("dayjs/locale/nl");
+require("dayjs/esm/locale/nl/index.js");
 dayjs_1.default.locale('nl');
 const _ = require("lodash");
 const { isEqual } = _;

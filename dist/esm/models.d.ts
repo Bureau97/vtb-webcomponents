@@ -1,5 +1,5 @@
-import { type Dayjs } from 'dayjs';
-import { Dictionary, VtbFilterConfig } from './utils/interfaces';
+import { type Dayjs } from 'dayjs/esm/index.js';
+import { Dictionary, VtbFilterConfig } from './utils/interfaces.js';
 export type VtbParticipantCalcType = 'Adult' | 'Teenager' | 'Child' | 'Baby';
 export declare class VtbParticipant {
     id: number;

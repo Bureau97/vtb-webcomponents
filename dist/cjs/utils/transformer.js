@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VtbDataTransformer = void 0;
-const dayjs_1 = require("dayjs");
-const utc_1 = require("dayjs/plugin/utc");
-const duration_1 = require("dayjs/plugin/duration"); // import plugin
-dayjs_1.default.locale('nl');
-dayjs_1.default.extend(utc_1.default);
-dayjs_1.default.extend(duration_1.default);
-const models_1 = require("../models");
+const index_1 = require("dayjs/esm/index");
+const index_js_1 = require("dayjs/esm/plugin/utc/index.js");
+const index_js_2 = require("dayjs/esm/plugin/duration/index.js"); // import plugin
+index_1.default.locale('nl');
+index_1.default.extend(index_js_1.default);
+index_1.default.extend(index_js_2.default);
+const models_js_1 = require("../models.js");
 class VtbDataTransformer {
     constructor() {
-        this._data = new models_1.VtbTravelPlanData();
+        this._data = new models_js_1.VtbTravelPlanData();
         this.re_body = /<body[^>]+>(.*)<\/body>/g;
         this.re_style = /style="[^"]+"/gi;
     }
@@ -19,18 +19,18 @@ class VtbDataTransformer {
         // search and setup base info
         this._data.title = vtbSrcData.title;
         this._data.subtitle = vtbSrcData.subTitle || '';
-        this._data.start_date = dayjs_1.default.utc(vtbSrcData.startDate);
-        this._data.end_date = dayjs_1.default.utc(vtbSrcData.endDate);
+        this._data.start_date = index_1.default.utc(vtbSrcData.startDate);
+        this._data.end_date = index_1.default.utc(vtbSrcData.endDate);
         this._data.duration = vtbSrcData.totalDays;
         this._data.sales_price =
             vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
         // search and setup participants and parties
         for (const party_id of Object.keys(vtbSrcData.participants)) {
             const participants = vtbSrcData.participants[party_id];
-            const _party = new models_1.VtbParty();
+            const _party = new models_js_1.VtbParty();
             _party.id = party_id;
             for (const pax of participants) {
-                const _pax = new models_1.VtbParticipant();
+                const _pax = new models_js_1.VtbParticipant();
                 _pax.id = Number(pax.id);
                 // temporary workaround
                 if (pax.age_calc_type != 'Adult') {
@@ -42,7 +42,7 @@ class VtbDataTransformer {
                 _pax.surname = pax.surname;
                 _pax.calc_type = pax.age_calc_type;
                 if (pax.birthdate) {
-                    _pax.birthdate = dayjs_1.default.utc(pax.birthdate);
+                    _pax.birthdate = index_1.default.utc(pax.birthdate);
                 }
                 this._data.add_participant(_pax);
                 _party.participants?.push(_pax);
@@ -52,7 +52,7 @@ class VtbDataTransformer {
         // search and setup covers (can be 0 or more!)
         if (vtbSrcData.cover && vtbSrcData.cover.length >= 1) {
             for (const src of vtbSrcData.cover) {
-                const _media = new models_1.VtbMedia();
+                const _media = new models_js_1.VtbMedia();
                 _media.src = src.url;
                 _media.id = src.sourceId;
                 _media.tags = src.tags;
@@ -60,7 +60,7 @@ class VtbDataTransformer {
             }
         }
         for (const text_key of Object.keys(vtbSrcData.TSOrder.texts)) {
-            const _field = new models_1.VtbExtraField();
+            const _field = new models_js_1.VtbExtraField();
             _field.name = text_key.toLowerCase().replace(/[\s-]+/g, '_');
             _field.value = vtbSrcData.TSOrder.texts[text_key];
             if (this._data.extra_fields[_field.name]) {
@@ -71,7 +71,7 @@ class VtbDataTransformer {
         // search and setup extra fields on travelplan
         for (const fieldgroup of vtbSrcData.extraFieldValues) {
             for (const field of fieldgroup.fields) {
-                const _field = new models_1.VtbExtraField();
+                const _field = new models_js_1.VtbExtraField();
                 _field.name = field.name.toLowerCase().replace(/[\s-]+/g, '_');
                 _field.title = field.translated_name;
                 _field.value = field.value;
@@ -131,30 +131,30 @@ class VtbDataTransformer {
     parse_flight_info(segment_data // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
         for (const flight of segment_data.flightInfo) {
-            const carrier = new models_1.VtbFlightCarrier();
+            const carrier = new models_js_1.VtbFlightCarrier();
             carrier.name =
                 flight.airlineObject.name || flight.airlineObject.carrier_name;
             carrier.code =
                 flight.airlineObject.code || flight.airlineObject.carrier_code;
-            const departure = new models_1.VtbFlight();
-            departure.date = dayjs_1.default.utc(`${flight.departureDate} ${flight.departureTime}:00`);
+            const departure = new models_js_1.VtbFlight();
+            departure.date = index_1.default.utc(`${flight.departureDate} ${flight.departureTime}:00`);
             departure.IATA = flight.departureAirport;
             departure.description = flight.departureAirportObject.description;
             departure.country = flight.departureAirportObject.country;
             departure.city = flight.departureAirportObject.city;
-            departure.location = new models_1.VtbGeoLocation();
+            departure.location = new models_js_1.VtbGeoLocation();
             departure.location.lat = flight.departureAirportObject.latitude;
             departure.location.lng = flight.departureAirportObject.longitude;
-            const arrival = new models_1.VtbFlight();
-            arrival.date = dayjs_1.default.utc(`${flight.arrivalDate} ${flight.arrivalTime}:00`);
+            const arrival = new models_js_1.VtbFlight();
+            arrival.date = index_1.default.utc(`${flight.arrivalDate} ${flight.arrivalTime}:00`);
             arrival.IATA = flight.arrivalAirport;
             arrival.description = flight.arrivalAirportObject.description;
             arrival.country = flight.arrivalAirportObject.country;
             arrival.city = flight.arrivalAirportObject.city;
-            arrival.location = new models_1.VtbGeoLocation();
+            arrival.location = new models_js_1.VtbGeoLocation();
             arrival.location.lat = flight.arrivalAirportObject.latitude;
             arrival.location.lng = flight.arrivalAirportObject.longitude;
-            const flightElement = new models_1.VtbFlightData();
+            const flightElement = new models_js_1.VtbFlightData();
             flightElement.carrier = carrier;
             flightElement.departure = departure;
             flightElement.arrival = arrival;
@@ -162,7 +162,7 @@ class VtbDataTransformer {
             flightElement.duration = flight.duration;
             flightElement.day = segment_data.day;
             if (!flightElement.duration) {
-                flightElement.duration = dayjs_1.default
+                flightElement.duration = index_1.default
                     .duration(arrival.date.diff(departure.date))
                     .format('H:mmu');
             }
@@ -171,7 +171,7 @@ class VtbDataTransformer {
     }
     parse_vtb_segment(segment_data // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
-        const element_group = new models_1.VtbElementGroup();
+        const element_group = new models_js_1.VtbElementGroup();
         element_group.id = segment_data.vtbObjectId;
         element_group.title = segment_data.title;
         element_group.subtitle = segment_data.subTitle;
@@ -181,10 +181,10 @@ class VtbDataTransformer {
         element_group.type_id = segment_data.typeId;
         element_group.unit_id = segment_data.unitId;
         if (segment_data.date) {
-            element_group.startdate = (0, dayjs_1.default)(segment_data.date);
+            element_group.startdate = (0, index_1.default)(segment_data.date);
         }
         if (segment_data.endDate) {
-            element_group.enddate = (0, dayjs_1.default)(segment_data.endDate);
+            element_group.enddate = (0, index_1.default)(segment_data.endDate);
         }
         if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
             element_group.is_flight = true;
@@ -194,7 +194,7 @@ class VtbDataTransformer {
             element_group.is_carrental = true;
         }
         for (const media_data of segment_data.media) {
-            const media = new models_1.VtbMedia();
+            const media = new models_js_1.VtbMedia();
             media.src = media_data.url;
             media.id = media_data.sourceId;
             media.tags = media_data.tags;
@@ -230,7 +230,7 @@ class VtbDataTransformer {
         }
         if (segment_data.maps) {
             // console.debug('segment_data.maps', segment_data);
-            element_group.location = new models_1.VtbMapMarker();
+            element_group.location = new models_js_1.VtbMapMarker();
             element_group.location.lat = segment_data.maps.latitude;
             element_group.location.lng = segment_data.maps.longitude;
             element_group.location.zoom = segment_data.maps.zoom;
@@ -239,7 +239,7 @@ class VtbDataTransformer {
     }
     parse_vtb_element(element_data, // eslint-disable-line @typescript-eslint/no-explicit-any
     grouptitle) {
-        const vtb_element = new models_1.VtbElement();
+        const vtb_element = new models_js_1.VtbElement();
         // console.debug('element_data: ', element_data);
         vtb_element.id = element_data.vtbObjectId;
         vtb_element.title = element_data.title;
@@ -259,14 +259,14 @@ class VtbDataTransformer {
         vtb_element.grouptitle = grouptitle;
         vtb_element.object_id = element_data.vtbObjectId;
         if (element_data.date) {
-            vtb_element.startdate = (0, dayjs_1.default)(element_data.date);
+            vtb_element.startdate = (0, index_1.default)(element_data.date);
         }
         if (element_data.endDate) {
-            vtb_element.enddate = (0, dayjs_1.default)(element_data.endDate);
+            vtb_element.enddate = (0, index_1.default)(element_data.endDate);
         }
         if (element_data.media && element_data.media.length >= 1) {
             for (const media_data of element_data.media) {
-                const media = new models_1.VtbMedia();
+                const media = new models_js_1.VtbMedia();
                 media.src = media_data.url;
                 media.id = media_data.sourceId;
                 media.tags = media_data.tags;
@@ -274,7 +274,7 @@ class VtbDataTransformer {
             }
         }
         for (const participant_id of Object.keys(element_data.olPrices?.participants)) {
-            const participant_element_price = new models_1.VtbParticipantPrice();
+            const participant_element_price = new models_js_1.VtbParticipantPrice();
             participant_element_price.participant_id = Number(participant_id);
             participant_element_price.price = parseFloat(element_data.olPrices.participants[participant_id]?.salesPrice || 0);
             vtb_element.participant_prices.push(participant_element_price);
@@ -284,7 +284,7 @@ class VtbDataTransformer {
             element_data.maps.latitude != 0 &&
             element_data.maps.longitude != 0) {
             // console.debug('element_data.maps', element_data);
-            vtb_element.location = new models_1.VtbMapMarker();
+            vtb_element.location = new models_js_1.VtbMapMarker();
             vtb_element.location.lat = element_data.maps.latitude;
             vtb_element.location.lng = element_data.maps.longitude;
             vtb_element.location.zoom = element_data.maps.zoom || 16;

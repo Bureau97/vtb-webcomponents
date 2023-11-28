@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import duration from 'dayjs/plugin/duration'; // import plugin
+import dayjs from 'dayjs/esm/index';
+import utc from 'dayjs/esm/plugin/utc/index.js';
+import duration from 'dayjs/esm/plugin/duration/index.js'; // import plugin
 
 dayjs.locale('nl');
 dayjs.extend(utc);
@@ -20,7 +20,7 @@ import {
   VtbParticipantPrice,
   VtbParty,
   VtbMapMarker,
-} from '../models';
+} from '../models.js';
 
 export class VtbDataTransformer {
   private _data = new VtbTravelPlanData();

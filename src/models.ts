@@ -1,12 +1,12 @@
-import dayjs, {type Dayjs} from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import duration from 'dayjs/plugin/duration';
+import dayjs, {type Dayjs} from 'dayjs/esm/index.js';
+import utc from 'dayjs/esm/plugin/utc/index.js';
+import duration from 'dayjs/esm/plugin/duration/index.js';
 
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
 
-import {Dictionary, VtbFilterConfig} from './utils/interfaces';
+import {Dictionary, VtbFilterConfig} from './utils/interfaces.js';
 
 export type VtbParticipantCalcType = 'Adult' | 'Teenager' | 'Child' | 'Baby';
 

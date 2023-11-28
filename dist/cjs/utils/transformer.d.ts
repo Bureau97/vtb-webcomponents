@@ -1,4 +1,4 @@
-import { VtbTravelPlanData, VtbElement, VtbElementGroup } from '../models';
+import { VtbTravelPlanData, VtbElement, VtbElementGroup } from '../models.js';
 export declare class VtbDataTransformer {
     private _data;
     parse_vtb_data(vtbSrcData: any): VtbTravelPlanData;

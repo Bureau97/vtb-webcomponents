@@ -4,13 +4,13 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 import {TemplateResult} from 'lit-element';
 
 import dayjs, {type Dayjs} from 'dayjs';
-import 'dayjs/locale/nl';
+import 'dayjs/esm/locale/nl/index.js';
 dayjs.locale('nl');
 
 import * as _ from 'lodash';
 const {isEqual} = _;
 
-import {VtbFlightData} from '../models';
+import {VtbFlightData} from '../models.js';
 
 export interface VtbFlightScheduleOptions {
   dateformat?: string;

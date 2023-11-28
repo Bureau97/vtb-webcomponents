@@ -1,7 +1,7 @@
-import { VtbFilterConfig } from './utils/interfaces';
-import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbMapMarkerGroup, VtbExtraField, VtbParticipant } from './models';
-import { VtbMapElement, VtbMapOptions } from './components/map';
-import { VtbFlightScheduleElement, VtbFlightScheduleOptions } from './components/flightschedule';
+import { VtbFilterConfig } from './utils/interfaces.js';
+import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbMapMarkerGroup, VtbExtraField, VtbParticipant } from './models.js';
+import { VtbMapElement, VtbMapOptions } from './components/map.js';
+import { VtbFlightScheduleElement, VtbFlightScheduleOptions } from './components/flightschedule.js';
 export declare class Vtb {
     private _data;
     constructor(vtb_parsed_data?: VtbTravelPlanData);

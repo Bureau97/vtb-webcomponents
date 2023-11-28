@@ -1,4 +1,4 @@
-import {VtbFilterConfig} from './utils/interfaces';
+import {VtbFilterConfig} from './utils/interfaces.js';
 
 import {
   VtbTravelPlanData,
@@ -8,13 +8,13 @@ import {
   VtbMapMarkerConnectMode,
   VtbExtraField,
   VtbParticipant,
-} from './models';
-import {VtbDataTransformer} from './utils/transformer';
-import {VtbMapElement, VtbMapOptions} from './components/map';
+} from './models.js';
+import {VtbDataTransformer} from './utils/transformer.js';
+import {VtbMapElement, VtbMapOptions} from './components/map.js';
 import {
   VtbFlightScheduleElement,
   VtbFlightScheduleOptions,
-} from './components/flightschedule';
+} from './components/flightschedule.js';
 
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any

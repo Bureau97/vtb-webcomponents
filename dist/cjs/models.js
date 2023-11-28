@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VtbTravelPlanData = exports.VtbMapMarkerGroup = exports.VtbMapMarker = exports.VtbGeoLocation = exports.VtbElementGroup = exports.VtbElement = exports.VtbParticipantPrice = exports.VtbFlightData = exports.VtbFlightCarrier = exports.VtbFlight = exports.VtbExtraField = exports.VtbMedia = exports.VtbParty = exports.VtbParticipant = void 0;
-const dayjs_1 = require("dayjs");
-const utc_1 = require("dayjs/plugin/utc");
-const duration_1 = require("dayjs/plugin/duration");
-dayjs_1.default.locale('nl');
-dayjs_1.default.extend(utc_1.default);
-dayjs_1.default.extend(duration_1.default);
+const index_js_1 = require("dayjs/esm/index.js");
+const index_js_2 = require("dayjs/esm/plugin/utc/index.js");
+const index_js_3 = require("dayjs/esm/plugin/duration/index.js");
+index_js_1.default.locale('nl');
+index_js_1.default.extend(index_js_2.default);
+index_js_1.default.extend(index_js_3.default);
 class VtbParticipant {
     constructor() {
         this.id = 0;
@@ -15,7 +15,7 @@ class VtbParticipant {
         if (!this.birthdate) {
             return null;
         }
-        return (0, dayjs_1.default)().diff(this.birthdate, 'year');
+        return (0, index_js_1.default)().diff(this.birthdate, 'year');
     }
 }
 exports.VtbParticipant = VtbParticipant;
@@ -74,8 +74,8 @@ class VtbElement {
         this.nights = 0;
         this.hidden = false;
         this.day = 0;
-        this.startdate = (0, dayjs_1.default)();
-        this.enddate = (0, dayjs_1.default)();
+        this.startdate = (0, index_js_1.default)();
+        this.enddate = (0, index_js_1.default)();
         this.unit_id = 0;
         this.participant_prices = [];
         this.media = [];
@@ -93,8 +93,8 @@ class VtbElementGroup {
         this.nights = 0;
         this.hidden = false;
         this.day = 0;
-        this.startdate = (0, dayjs_1.default)();
-        this.enddate = (0, dayjs_1.default)();
+        this.startdate = (0, index_js_1.default)();
+        this.enddate = (0, index_js_1.default)();
         this.media = [];
         this.is_flight = false;
         this.is_carrental = false;

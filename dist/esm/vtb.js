@@ -1,7 +1,7 @@
-import { VtbMapMarkerGroup, } from './models';
-import { VtbDataTransformer } from './utils/transformer';
-import { VtbMapElement } from './components/map';
-import { VtbFlightScheduleElement, } from './components/flightschedule';
+import { VtbMapMarkerGroup, } from './models.js';
+import { VtbDataTransformer } from './utils/transformer.js';
+import { VtbMapElement } from './components/map.js';
+import { VtbFlightScheduleElement, } from './components/flightschedule.js';
 export class Vtb {
     constructor(vtb_parsed_data) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any

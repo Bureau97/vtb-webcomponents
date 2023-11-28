@@ -5,6 +5,8 @@ import { VtbCalculatorElement, VtbCalculatorPriceElement, VtbCalculatorPriceList
 import { VtbFlightScheduleElement, VtbFlightElement, VtbFlightArrivalElement, VtbFlightDepartureElement, } from './components/flightschedule.js';
 import { VtbMapElement, VtbMapMarkerGroupElement, VtbMapMarkerElement, } from './components/map.js';
 import { VtbMediaElement } from './components/media.js';
-import { VtbTextElement } from './components/text.js';
-export { Vtb, VtbParticipant, VtbParty, VtbMedia, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbParticipantPrice, VtbElement, VtbElementGroup, VtbGeoLocation, VtbMapMarker, VtbMapMarkerGroup, VtbTravelPlanData, strip_tags, VtbDataTransformer, VtbCalculatorElement, VtbCalculatorPriceElement, VtbCalculatorPriceListElement, VtbFlightScheduleElement, VtbFlightElement, VtbFlightArrivalElement, VtbFlightDepartureElement, VtbMapElement, VtbMapMarkerGroupElement, VtbMapMarkerElement, VtbMediaElement, VtbTextElement, };
+// import {VtbTextElement} from './components/text.js';
+export { Vtb, VtbParticipant, VtbParty, VtbMedia, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbParticipantPrice, VtbElement, VtbElementGroup, VtbGeoLocation, VtbMapMarker, VtbMapMarkerGroup, VtbTravelPlanData, strip_tags, VtbDataTransformer, VtbCalculatorElement, VtbCalculatorPriceElement, VtbCalculatorPriceListElement, VtbFlightScheduleElement, VtbFlightElement, VtbFlightArrivalElement, VtbFlightDepartureElement, VtbMapElement, VtbMapMarkerGroupElement, VtbMapMarkerElement, VtbMediaElement,
+// VtbTextElement,
+ };
 //# sourceMappingURL=index.js.map

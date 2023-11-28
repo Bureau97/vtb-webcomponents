@@ -12,7 +12,7 @@ import {
   VtbMapMarkerGroup,
   VtbMapMarker,
   VtbMapMarkerConnectMode,
-} from '../models';
+} from '../models.js';
 
 export interface VtbMapOptions {
   connect_mode?: string;

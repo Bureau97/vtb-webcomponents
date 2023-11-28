@@ -48,7 +48,7 @@ import {
 
 import {VtbMediaElement} from './components/media.js';
 
-import {VtbTextElement} from './components/text.js';
+// import {VtbTextElement} from './components/text.js';
 
 export {
   Vtb,
@@ -84,5 +84,5 @@ export {
   VtbMapMarkerGroupElement,
   VtbMapMarkerElement,
   VtbMediaElement,
-  VtbTextElement,
+  // VtbTextElement,
 };

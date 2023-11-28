@@ -270,14 +270,6 @@
             "name": "VtbMediaElement",
             "module": "src/index.ts"
           }
-        },
-        {
-          "kind": "js",
-          "name": "VtbTextElement",
-          "declaration": {
-            "name": "VtbTextElement",
-            "module": "src/index.ts"
-          }
         }
       ]
     },

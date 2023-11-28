@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vtb = void 0;
-const models_1 = require("./models");
-const transformer_1 = require("./utils/transformer");
-const map_1 = require("./components/map");
-const flightschedule_1 = require("./components/flightschedule");
+const models_js_1 = require("./models.js");
+const transformer_js_1 = require("./utils/transformer.js");
+const map_js_1 = require("./components/map.js");
+const flightschedule_js_1 = require("./components/flightschedule.js");
 class Vtb {
     constructor(vtb_parsed_data) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -119,7 +119,7 @@ class Vtb {
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
-        this._data = new transformer_1.VtbDataTransformer().parse_vtb_data(vtbSrcData);
+        this._data = new transformer_js_1.VtbDataTransformer().parse_vtb_data(vtbSrcData);
     }
     filter_groups(config) {
         return this._data.filter_element_groups(config);
@@ -147,7 +147,7 @@ class Vtb {
         marker_group.connectMarkers = map_options.connect_markers;
         marker_group.connectMode =
             map_options.connect_mode;
-        const map = new map_1.VtbMapElement();
+        const map = new map_js_1.VtbMapElement();
         map.apiKey = map_options.api_key;
         map.height = map_options.height || 500;
         map.width = map_options.width;
@@ -159,7 +159,7 @@ class Vtb {
     }
     filter_mapmarkers(config) {
         const vtb_marker_elements = this.filter_elements(config);
-        const group = new models_1.VtbMapMarkerGroup();
+        const group = new models_js_1.VtbMapMarkerGroup();
         for (const element of vtb_marker_elements) {
             if (element.location) {
                 group.markers.push(element.location);
@@ -170,7 +170,7 @@ class Vtb {
     flightschedule(container_id, filter_config, flightschedule_options) {
         // to do
         console.debug('flightschedule', container_id, filter_config, flightschedule_options);
-        const flightschedule = new flightschedule_1.VtbFlightScheduleElement();
+        const flightschedule = new flightschedule_js_1.VtbFlightScheduleElement();
         flightschedule.flightinfo = this.flightinfo;
         if (flightschedule_options?.dateformat) {
             flightschedule.dateformat = flightschedule_options.dateformat;

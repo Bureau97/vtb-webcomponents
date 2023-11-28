@@ -3,7 +3,7 @@ import {customElement, property} from 'lit/decorators.js';
 import {TemplateResult} from 'lit-element';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
-import {VtbElement} from '../models';
+import {VtbElement} from '../models.js';
 
 @customElement('vtb-calculator-element')
 export class VtbCalculatorPriceElement extends LitElement {

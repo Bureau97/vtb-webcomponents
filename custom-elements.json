@@ -4,6 +4,285 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Vtb",
+          "declaration": {
+            "name": "Vtb",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParticipantCalcType",
+          "declaration": {
+            "name": "VtbParticipantCalcType",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParticipant",
+          "declaration": {
+            "name": "VtbParticipant",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParty",
+          "declaration": {
+            "name": "VtbParty",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMedia",
+          "declaration": {
+            "name": "VtbMedia",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbExtraField",
+          "declaration": {
+            "name": "VtbExtraField",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlight",
+          "declaration": {
+            "name": "VtbFlight",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightCarrier",
+          "declaration": {
+            "name": "VtbFlightCarrier",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightData",
+          "declaration": {
+            "name": "VtbFlightData",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbParticipantPrice",
+          "declaration": {
+            "name": "VtbParticipantPrice",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbElement",
+          "declaration": {
+            "name": "VtbElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbElementGroup",
+          "declaration": {
+            "name": "VtbElementGroup",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbGeoLocation",
+          "declaration": {
+            "name": "VtbGeoLocation",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarker",
+          "declaration": {
+            "name": "VtbMapMarker",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerConnectMode",
+          "declaration": {
+            "name": "VtbMapMarkerConnectMode",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerGroup",
+          "declaration": {
+            "name": "VtbMapMarkerGroup",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbTravelPlanData",
+          "declaration": {
+            "name": "VtbTravelPlanData",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "strip_tags",
+          "declaration": {
+            "name": "strip_tags",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbDataTransformer",
+          "declaration": {
+            "name": "VtbDataTransformer",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Dictionary",
+          "declaration": {
+            "name": "Dictionary",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFilterConfig",
+          "declaration": {
+            "name": "VtbFilterConfig",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbCalculatorElement",
+          "declaration": {
+            "name": "VtbCalculatorElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbCalculatorPriceElement",
+          "declaration": {
+            "name": "VtbCalculatorPriceElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbCalculatorPriceListElement",
+          "declaration": {
+            "name": "VtbCalculatorPriceListElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightScheduleElement",
+          "declaration": {
+            "name": "VtbFlightScheduleElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightScheduleOptions",
+          "declaration": {
+            "name": "VtbFlightScheduleOptions",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightElement",
+          "declaration": {
+            "name": "VtbFlightElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightArrivalElement",
+          "declaration": {
+            "name": "VtbFlightArrivalElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFlightDepartureElement",
+          "declaration": {
+            "name": "VtbFlightDepartureElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapElement",
+          "declaration": {
+            "name": "VtbMapElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerGroupElement",
+          "declaration": {
+            "name": "VtbMapMarkerGroupElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMapMarkerElement",
+          "declaration": {
+            "name": "VtbMapMarkerElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbMediaElement",
+          "declaration": {
+            "name": "VtbMediaElement",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbTextElement",
+          "declaration": {
+            "name": "VtbTextElement",
+            "module": "src/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/models.ts",
       "declarations": [
         {
@@ -1241,7 +1520,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/vtb-webcomponents.ts",
+      "path": "src/vtb.ts",
       "declarations": [
         {
           "kind": "class",
@@ -1579,7 +1858,7 @@
           "name": "Vtb",
           "declaration": {
             "name": "Vtb",
-            "module": "src/vtb-webcomponents.ts"
+            "module": "src/vtb.ts"
           }
         }
       ]
@@ -3511,6 +3790,51 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "strip_tags",
+          "declaration": {
+            "name": "strip_tags",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbDataTransformer",
+          "declaration": {
+            "name": "VtbDataTransformer",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "Dictionary",
+          "declaration": {
+            "name": "Dictionary",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbFilterConfig",
+          "declaration": {
+            "name": "VtbFilterConfig",
+            "module": "src/utils/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/interfaces.ts",
       "declarations": [],
       "exports": []
@@ -3642,12 +3966,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
     }
   ]
 }

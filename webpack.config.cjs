@@ -6,7 +6,7 @@ module.exports = {
 
   devtool: 'inline-source-map',
 
-  entry: ['./src/vtb-webcomponents.ts', './src/dev/main.ts'],
+  entry: ['./src/index.ts', './src/dev/main.ts'],
 
   module: {
     rules: [

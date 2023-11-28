@@ -1,11 +1,11 @@
-import '../vtb-webcomponents';
+import '../vtb';
 import '../components/media';
 import '../components/flightschedule';
 import '../components/map';
 import '../components/calculator';
 import '../components/text';
 
-import {Vtb} from '../vtb-webcomponents';
+import {Vtb} from '../vtb';
 import {VtbFilterConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';

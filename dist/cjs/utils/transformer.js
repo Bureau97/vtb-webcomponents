@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VtbDataTransformer = void 0;
-const index_1 = require("dayjs/esm/index");
-const index_js_1 = require("dayjs/esm/plugin/utc/index.js");
-const index_js_2 = require("dayjs/esm/plugin/duration/index.js"); // import plugin
-index_1.default.locale('nl');
-index_1.default.extend(index_js_1.default);
-index_1.default.extend(index_js_2.default);
+const index_js_1 = require("dayjs/esm/index.js");
+const index_js_2 = require("dayjs/esm/plugin/utc/index.js");
+const index_js_3 = require("dayjs/esm/plugin/duration/index.js"); // import plugin
+index_js_1.default.locale('nl');
+index_js_1.default.extend(index_js_2.default);
+index_js_1.default.extend(index_js_3.default);
 const models_js_1 = require("../models.js");
 class VtbDataTransformer {
     constructor() {
@@ -19,8 +19,8 @@ class VtbDataTransformer {
         // search and setup base info
         this._data.title = vtbSrcData.title;
         this._data.subtitle = vtbSrcData.subTitle || '';
-        this._data.start_date = index_1.default.utc(vtbSrcData.startDate);
-        this._data.end_date = index_1.default.utc(vtbSrcData.endDate);
+        this._data.start_date = index_js_1.default.utc(vtbSrcData.startDate);
+        this._data.end_date = index_js_1.default.utc(vtbSrcData.endDate);
         this._data.duration = vtbSrcData.totalDays;
         this._data.sales_price =
             vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
@@ -42,7 +42,7 @@ class VtbDataTransformer {
                 _pax.surname = pax.surname;
                 _pax.calc_type = pax.age_calc_type;
                 if (pax.birthdate) {
-                    _pax.birthdate = index_1.default.utc(pax.birthdate);
+                    _pax.birthdate = index_js_1.default.utc(pax.birthdate);
                 }
                 this._data.add_participant(_pax);
                 _party.participants?.push(_pax);
@@ -137,7 +137,7 @@ class VtbDataTransformer {
             carrier.code =
                 flight.airlineObject.code || flight.airlineObject.carrier_code;
             const departure = new models_js_1.VtbFlight();
-            departure.date = index_1.default.utc(`${flight.departureDate} ${flight.departureTime}:00`);
+            departure.date = index_js_1.default.utc(`${flight.departureDate} ${flight.departureTime}:00`);
             departure.IATA = flight.departureAirport;
             departure.description = flight.departureAirportObject.description;
             departure.country = flight.departureAirportObject.country;
@@ -146,7 +146,7 @@ class VtbDataTransformer {
             departure.location.lat = flight.departureAirportObject.latitude;
             departure.location.lng = flight.departureAirportObject.longitude;
             const arrival = new models_js_1.VtbFlight();
-            arrival.date = index_1.default.utc(`${flight.arrivalDate} ${flight.arrivalTime}:00`);
+            arrival.date = index_js_1.default.utc(`${flight.arrivalDate} ${flight.arrivalTime}:00`);
             arrival.IATA = flight.arrivalAirport;
             arrival.description = flight.arrivalAirportObject.description;
             arrival.country = flight.arrivalAirportObject.country;
@@ -162,7 +162,7 @@ class VtbDataTransformer {
             flightElement.duration = flight.duration;
             flightElement.day = segment_data.day;
             if (!flightElement.duration) {
-                flightElement.duration = index_1.default
+                flightElement.duration = index_js_1.default
                     .duration(arrival.date.diff(departure.date))
                     .format('H:mmu');
             }
@@ -181,10 +181,10 @@ class VtbDataTransformer {
         element_group.type_id = segment_data.typeId;
         element_group.unit_id = segment_data.unitId;
         if (segment_data.date) {
-            element_group.startdate = (0, index_1.default)(segment_data.date);
+            element_group.startdate = (0, index_js_1.default)(segment_data.date);
         }
         if (segment_data.endDate) {
-            element_group.enddate = (0, index_1.default)(segment_data.endDate);
+            element_group.enddate = (0, index_js_1.default)(segment_data.endDate);
         }
         if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
             element_group.is_flight = true;
@@ -259,10 +259,10 @@ class VtbDataTransformer {
         vtb_element.grouptitle = grouptitle;
         vtb_element.object_id = element_data.vtbObjectId;
         if (element_data.date) {
-            vtb_element.startdate = (0, index_1.default)(element_data.date);
+            vtb_element.startdate = (0, index_js_1.default)(element_data.date);
         }
         if (element_data.endDate) {
-            vtb_element.enddate = (0, index_1.default)(element_data.endDate);
+            vtb_element.enddate = (0, index_js_1.default)(element_data.endDate);
         }
         if (element_data.media && element_data.media.length >= 1) {
             for (const media_data of element_data.media) {

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs/esm/index';
+import dayjs from 'dayjs/esm/index.js';
 import utc from 'dayjs/esm/plugin/utc/index.js';
 import duration from 'dayjs/esm/plugin/duration/index.js'; // import plugin
 dayjs.locale('nl');

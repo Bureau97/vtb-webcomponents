@@ -51,7 +51,7 @@ const segment_types = new SegmentTypes();
 
 class UnitTypes {
   readonly FLIGHT: Array<number> = [6, 18];
-  readonly CARRENTAL: Array<number> = [5];
+  readonly CARRENTAL: Array<number> = [6];
   readonly MAAL: Array<number> = [3];
   readonly NACHTEN: Array<number> = [2];
   readonly INTRO_TEXT: Array<number> = [19];
@@ -74,7 +74,7 @@ const unit_types = new UnitTypes();
 // const unit_types = new UnitTypesOptional();
 
 function vtbDataLoaded(vtb: Vtb) {
-  console.info('vtbDataLoaded');
+  // console.info('vtbDataLoaded');
 
   // render hero content
   const h1 = document.createElement('h1');
@@ -97,6 +97,7 @@ function vtbDataLoaded(vtb: Vtb) {
   console.info(vtb.enddate?.format('D MMM'));
   console.info(vtb.participants);
   console.info(vtb.parties);
+  console.info(vtb.carrental);
 
   // render hero using the first cover
   const hero = document.getElementById('hero') as VtbMediaElement;
@@ -208,7 +209,6 @@ function vtbDataLoaded(vtb: Vtb) {
   const all_carrental_elements = vtb.filter_elements({
     group_type_ids: [segment_types.CARRENTAL],
     // element_unit_ids: [unit_types.NACHTEN],
-    optional: true,
   });
 
   const carrental_elements = vtb.filter_elements({

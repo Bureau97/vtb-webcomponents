@@ -3925,6 +3925,12 @@
                   "type": {
                     "text": "any"
                   }
+                },
+                {
+                  "name": "segment_parent_data",
+                  "type": {
+                    "text": "any"
+                  }
                 }
               ]
             },

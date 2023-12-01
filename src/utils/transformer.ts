@@ -133,7 +133,10 @@ export class VtbDataTransformer {
       ) {
         // console.info('has carRentalElements: ', segment_data.carRentalElements);
 
-        this.parse_carrental_elements(segment_data.carRentalElements);
+        this.parse_carrental_elements(
+          segment_data.carRentalElements,
+          segment_data
+        );
       }
 
       this._data.add_element_group(this.parse_vtb_segment(segment_data));
@@ -145,7 +148,8 @@ export class VtbDataTransformer {
   }
 
   protected parse_carrental_elements(
-    segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
+    segment_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any,
+    segment_parent_data: any // eslint-disable-line @typescript-eslint/no-explicit-any,
   ): void {
     // console.info(segment_data, typeof segment_data);
 
@@ -155,6 +159,11 @@ export class VtbDataTransformer {
         carElementData.element,
         segment_data.title
       );
+
+      // todo: check if this is a feature or a bug, or a pebkac?!?
+      if (!car_element.description && segment_parent_data.content) {
+        car_element.description = segment_parent_data.content;
+      }
 
       if (
         last_element &&
@@ -182,7 +191,7 @@ export class VtbDataTransformer {
       }
     }
 
-    // console.info('carrental: ', this._data.car_rental_elements);
+    console.info('carrental: ', this._data.car_rental_elements);
   }
 
   protected parse_flight_info(

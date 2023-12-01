@@ -98,19 +98,24 @@ export class VtbDataTransformer {
             if (segment_data.carRentalElements &&
                 segment_data.carRentalElements.length >= 1) {
                 // console.info('has carRentalElements: ', segment_data.carRentalElements);
-                this.parse_carrental_elements(segment_data.carRentalElements);
+                this.parse_carrental_elements(segment_data.carRentalElements, segment_data);
             }
             this._data.add_element_group(this.parse_vtb_segment(segment_data));
         }
         // console.info(this._data);
         return this._data;
     }
-    parse_carrental_elements(segment_data // eslint-disable-line @typescript-eslint/no-explicit-any
+    parse_carrental_elements(segment_data, // eslint-disable-line @typescript-eslint/no-explicit-any,
+    segment_parent_data // eslint-disable-line @typescript-eslint/no-explicit-any,
     ) {
         // console.info(segment_data, typeof segment_data);
         let last_element = null;
         for (const carElementData of segment_data) {
             const car_element = this.parse_vtb_element(carElementData.element, segment_data.title);
+            // todo: check if this is a feature or a bug, or a pebkac?!?
+            if (!car_element.description && segment_parent_data.content) {
+                car_element.description = segment_parent_data.content;
+            }
             if (last_element &&
                 car_element.optional &&
                 last_element.unit_id == car_element.unit_id) {
@@ -125,7 +130,7 @@ export class VtbDataTransformer {
                 }
             }
         }
-        // console.info('carrental: ', this._data.car_rental_elements);
+        console.info('carrental: ', this._data.car_rental_elements);
     }
     parse_flight_info(segment_data // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {

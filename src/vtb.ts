@@ -97,56 +97,6 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  private _get_element_groups_cache: Array<VtbElementGroup> = [];
-
-  get element_groups(): Array<VtbElementGroup> {
-    if (this._get_element_groups_cache.length > 0) {
-      return this._get_element_groups_cache;
-    }
-    const ret: Array<VtbElementGroup> = [];
-    let last_group: VtbElementGroup | null = null;
-
-    const element_groups: Array<VtbElementGroup> = this._data.element_groups;
-    for (const group of element_groups) {
-      if (!last_group) {
-        last_group = group;
-        continue;
-      }
-
-      if (group.day == last_group.day) {
-        // if the next group has the same day
-        // we add it its elements to the current group
-        const elements: Array<VtbElement> = group.elements;
-        for (const element of elements) {
-          last_group?.add_element(element);
-        }
-
-        if (!last_group.title && group.title) {
-          last_group.title = group.title;
-        }
-
-        if (group.description) {
-          last_group.description += group.description;
-        }
-
-        if (last_group.nights < group.nights) {
-          last_group.nights = group.nights;
-          last_group.enddate = group.enddate;
-        }
-      } else {
-        ret.push(last_group);
-        last_group = group;
-      }
-    }
-    if (last_group && ret[ret.length - 1] !== last_group) {
-      ret.push(last_group);
-    }
-
-    this._get_element_groups_cache = ret;
-
-    return ret;
-  }
-
   public async load(travelplan_source_url: string): Promise<Vtb> {
     // async load of travelplan json
     console.info('Loading', travelplan_source_url);
@@ -161,6 +111,10 @@ export class Vtb {
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
   ): void {
     this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
+  }
+
+  get element_groups(): Array<VtbElementGroup> {
+    return this._data.element_groups;
   }
 
   public filter_groups(config: VtbFilterConfig): Array<VtbElementGroup> {

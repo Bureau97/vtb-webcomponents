@@ -9,6 +9,7 @@ module.exports = {
   entry: ['./src/index.ts', './src/dev/main.ts'],
 
   module: {
+
     rules: [
       {
         test: /\.tsx?$/,
@@ -55,6 +56,9 @@ module.exports = {
 
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    extensionAlias: {
+      '.js': ['.ts', '.js'],
+    },
   },
 
   output: {

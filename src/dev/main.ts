@@ -334,7 +334,7 @@ function vtbDataLoaded(vtb: Vtb) {
     for (const itenerary_element of itenerary_elements) {
       const _h = document.createElement('h3');
       _h.innerHTML =
-        'Dag ' + itenerary_element.day + ': ' + itenerary_element.title ||
+        'Dag ' + itenerary_element.day + (itenerary_element.nights > 1 ? '-'+ (itenerary_element.day + itenerary_element.nights) : '') + ': ' + itenerary_element.title ||
         'not set';
       itenerary.appendChild(_h);
 
@@ -354,6 +354,27 @@ function vtbDataLoaded(vtb: Vtb) {
       _t.innerHTML = itenerary_element.description || 'not set';
       _t.id = String(itenerary_element.id);
       itenerary.appendChild(_t);
+
+      for (const element of itenerary_element.filter_elements({
+        element_unit_ids: [2, 10],
+      })) {
+        const _h5 = document.createElement('h5');
+        let title = element.title;
+        if (element.subtitle) {
+          title += element.subtitle;
+        }
+
+        if (element.optional) {
+          title += ' [optioneel]';
+        }
+        _h5.innerHTML = element.title ;
+
+        itenerary.appendChild(_h5);
+
+        const _p = document.createElement('p');
+        _p.innerHTML = element.description ?? 'not set';
+        itenerary.appendChild(_p);
+      }
     }
   }
 }

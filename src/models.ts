@@ -378,6 +378,61 @@ export class VtbTravelPlanData {
     for (const group_id of this.element_groups_order) {
       ret.push(this.mapped_element_groups[group_id]);
     }
+    return this.group_by_day(ret);
+  }
+
+  /**
+   * groups the list of element groups by day
+   * @param element_groups
+   * @returns
+   */
+  private group_by_day(element_groups: Array<VtbElementGroup>): Array<VtbElementGroup> {
+    const ret: Array<VtbElementGroup> = [];
+
+    let last_group: VtbElementGroup | null = null;
+
+    for (const group of element_groups) {
+
+      // skip carrental and flight groups
+      if (group.is_carrental || group.is_flight) {
+        continue;
+      }
+
+      if (!last_group) {
+        last_group = group;
+        continue;
+      }
+
+      if (group.day == last_group.day) {
+        // if the next group has the same day
+        // we add it its elements to the current group
+        const elements: Array<VtbElement> = group.elements;
+        for (const element of elements) {
+          last_group?.add_element(element);
+        }
+
+        if (!last_group.title && group.title) {
+          last_group.title = group.title;
+        }
+
+        if (group.description) {
+          last_group.description += group.description;
+        }
+
+        if (last_group.nights < group.nights) {
+          last_group.nights = group.nights;
+          last_group.enddate = group.enddate;
+        }
+      } else {
+        ret.push(last_group);
+        last_group = group;
+      }
+    }
+
+    if (last_group && ret[ret.length - 1] !== last_group) {
+      ret.push(last_group);
+    }
+
     return ret;
   }
 
@@ -406,7 +461,7 @@ export class VtbTravelPlanData {
       }
     }
 
-    return ret;
+    return this.group_by_day(ret);
   }
 
   public filter_elements(config: VtbFilterConfig): Array<VtbElement> {

@@ -1,26 +1,31 @@
 import { type Dayjs } from 'dayjs';
 import { Dictionary, VtbFilterConfig } from './utils/interfaces.js';
-export type VtbParticipantCalcType = 'Adult' | 'Teenager' | 'Child' | 'Baby';
-export declare class VtbParticipant {
+import * as interfaces from './utils/interfaces.js';
+import * as types from './utils/types.js';
+export declare class VtbParticipant implements interfaces.VtbParticipant {
     id: number;
     title?: string;
     name?: string;
     prefix?: string;
     surname?: string;
     birthdate?: Dayjs;
-    calc_type?: VtbParticipantCalcType;
+    calc_type?: types.VtbParticipantCalcType;
     get age(): number | null;
 }
-export declare class VtbParty {
+export declare class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
+    participant_id: number;
+    price: number;
+}
+export declare class VtbParty implements interfaces.VtbParty {
     id: number | string;
     participants: Array<VtbParticipant>;
 }
-export declare class VtbMedia {
+export declare class VtbMedia implements interfaces.VtbMedia {
     src?: string;
     tags: Array<string>;
     id?: string;
 }
-export declare class VtbExtraField {
+export declare class VtbExtraField implements interfaces.VtbExtraField {
     name: string;
     title?: string;
     value?: string;
@@ -30,7 +35,7 @@ export declare class VtbExtraField {
     get content(): string | null;
     toString(): string;
 }
-export declare class VtbFlight {
+export declare class VtbFlight implements interfaces.VtbFlight {
     date?: Dayjs;
     IATA?: string;
     dateformat?: string;
@@ -40,11 +45,11 @@ export declare class VtbFlight {
     description?: string;
     location?: VtbGeoLocation;
 }
-export declare class VtbFlightCarrier {
+export declare class VtbFlightCarrier implements interfaces.VtbFlightCarrier {
     name?: string;
     code?: string;
 }
-export declare class VtbFlightData {
+export declare class VtbFlightData implements interfaces.VtbFlightData {
     departure?: VtbFlight;
     arrival?: VtbFlight;
     carrier?: VtbFlightCarrier;
@@ -52,11 +57,7 @@ export declare class VtbFlightData {
     duration?: string;
     day?: number;
 }
-export declare class VtbParticipantPrice {
-    participant_id: number;
-    price: number;
-}
-export declare class VtbElement {
+export declare class VtbElement implements interfaces.VtbElement {
     id: string;
     object_id?: string;
     title: string;
@@ -77,8 +78,9 @@ export declare class VtbElement {
     media: Array<VtbMedia>;
     location?: VtbMapMarker;
     get participants(): Array<number>;
+    clone(): VtbElement;
 }
-export declare class VtbElementGroup {
+export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     id: string;
     title?: string;
     subtitle?: string;
@@ -101,30 +103,30 @@ export declare class VtbElementGroup {
     add_element(element: VtbElement): void;
     get elements(): Array<VtbElement>;
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;
+    clone(): VtbElementGroup;
 }
-export declare class VtbGeoLocation {
+export declare class VtbGeoLocation implements interfaces.VtbGeoLocation {
     lat: number;
     lng: number;
 }
-export declare class VtbMapMarker extends VtbGeoLocation {
+export declare class VtbMapMarker extends VtbGeoLocation implements interfaces.VtbMapMarker {
     label?: string;
     icon?: string;
     zoom?: number;
     title?: string;
     content?: string;
 }
-export type VtbMapMarkerConnectMode = 'flight' | 'drive';
-export declare class VtbMapMarkerGroup {
+export declare class VtbMapMarkerGroup implements interfaces.VtbMapMarkerGroup {
     connect_markers: boolean;
     markers: Array<VtbMapMarker>;
-    connect_mode?: VtbMapMarkerConnectMode;
+    connect_mode?: types.VtbMapMarkerConnectMode;
     get connectMode(): string;
-    set connectMode(connect_mode: VtbMapMarkerConnectMode);
+    set connectMode(connect_mode: types.VtbMapMarkerConnectMode);
     get connectMarkers(): boolean;
     set connectMarkers(connect_markers: boolean);
     get _markers(): Array<VtbMapMarker>;
 }
-export declare class VtbTravelPlanData {
+export declare class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
     title: string;
     subtitle: string;
     covers: Array<VtbMedia>;

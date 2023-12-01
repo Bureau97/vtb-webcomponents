@@ -15,6 +15,12 @@ export class VtbParticipant {
         return dayjs().diff(this.birthdate, 'year');
     }
 }
+export class VtbParticipantPrice {
+    constructor() {
+        this.participant_id = 0;
+        this.price = 0.0;
+    }
+}
 export class VtbParty {
     constructor() {
         this.id = '';
@@ -47,12 +53,6 @@ export class VtbFlightCarrier {
 }
 export class VtbFlightData {
 }
-export class VtbParticipantPrice {
-    constructor() {
-        this.participant_id = 0;
-        this.price = 0.0;
-    }
-}
 export class VtbElement {
     constructor() {
         this.id = '';
@@ -73,6 +73,16 @@ export class VtbElement {
         return this.participant_prices.map((participant_price) => {
             return participant_price.participant_id;
         });
+    }
+    clone() {
+        const _clone = Object.assign(new VtbElement(), structuredClone(this));
+        _clone.startdate = dayjs(this.startdate.format());
+        _clone.enddate = dayjs(this.enddate.format());
+        _clone.media = [];
+        for (const _m of this.media) {
+            _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+        }
+        return _clone;
     }
 }
 export class VtbElementGroup {
@@ -173,10 +183,7 @@ export class VtbElementGroup {
             }
             if (check_participant_ids && _element.participants) {
                 // make a shallow copy so we're not messing with the original price element
-                const _element_copy = {
-                    ..._element,
-                    participants: [],
-                };
+                const _element_copy = _element.clone();
                 let participants_unit_price = 0.0;
                 for (const participant_price of _element.participant_prices) {
                     if (participant_ids.includes(participant_price.participant_id)) {
@@ -188,6 +195,22 @@ export class VtbElementGroup {
             }
         }
         return _elements;
+    }
+    clone() {
+        const _clone = Object.assign(new VtbElementGroup(), structuredClone(this));
+        _clone.startdate = dayjs(this.startdate.format());
+        _clone.enddate = dayjs(this.enddate.format());
+        _clone.media = [];
+        for (const _m of this.media) {
+            _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+        }
+        for (const key of Object.keys(this.mapped_elements_by_id)) {
+            _clone.mapped_elements_by_id[key] =
+                this.mapped_elements_by_id[key].clone();
+        }
+        console.info(this, _clone);
+        return _clone;
+        // return Object.assign(Object.create(Object.getPrototypeOf(this)), structuredClone(this));
     }
 }
 export class VtbGeoLocation {
@@ -298,34 +321,35 @@ export class VtbTravelPlanData {
             if (group.is_carrental) {
                 continue;
             }
+            const current_group = group.clone();
             // if (group.elements.length <= 0) {
             //   continue;
             // }
             if (!last_group) {
-                last_group = group;
+                last_group = current_group;
                 continue;
             }
-            if (group.day == last_group.day) {
+            if (current_group.day == last_group.day) {
                 // if the next group has the same day
                 // we add it its elements to the current group
-                const elements = group.elements;
+                const elements = current_group.elements;
                 for (const element of elements) {
                     last_group?.add_element(element);
                 }
-                if (!last_group.title && group.title) {
-                    last_group.title = group.title;
+                if (!last_group.title && current_group.title) {
+                    last_group.title = current_group.title;
                 }
-                if (group.description) {
-                    last_group.description += group.description;
+                if (current_group.description) {
+                    last_group.description += current_group.description;
                 }
-                if (last_group.nights < group.nights) {
-                    last_group.nights = group.nights;
-                    last_group.enddate = group.enddate;
+                if (last_group.nights < current_group.nights) {
+                    last_group.nights = current_group.nights;
+                    last_group.enddate = current_group.enddate;
                 }
             }
             else {
                 ret.push(last_group);
-                last_group = group;
+                last_group = current_group;
             }
         }
         if (last_group && ret[ret.length - 1] !== last_group) {

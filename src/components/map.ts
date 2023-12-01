@@ -8,12 +8,9 @@ const {isEqual} = _;
 import * as GMaps from '@googlemaps/js-api-loader';
 const {Loader} = GMaps;
 
-import {
-  VtbMapMarkerGroup,
-  VtbMapMarker,
-} from '../models.js';
+import {VtbMapMarkerGroup, VtbMapMarker} from '../models.js';
 
-import { VtbMapMarkerConnectMode, } from '../utils/types.js';
+import {VtbMapMarkerConnectMode} from '../utils/types.js';
 
 export interface VtbMapOptions {
   connect_mode?: string;

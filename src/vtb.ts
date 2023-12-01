@@ -8,7 +8,7 @@ import {
   VtbExtraField,
   VtbParticipant,
 } from './models.js';
-import { VtbMapMarkerConnectMode, } from './utils/types.js';
+import {VtbMapMarkerConnectMode} from './utils/types.js';
 import {VtbDataTransformer} from './utils/transformer.js';
 import {VtbMapElement, VtbMapOptions} from './components/map.js';
 import {

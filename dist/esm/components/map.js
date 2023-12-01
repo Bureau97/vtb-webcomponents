@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 const { isEqual } = _;
 import * as GMaps from '@googlemaps/js-api-loader';
 const { Loader } = GMaps;
-import { VtbMapMarkerGroup, VtbMapMarker, } from '../models.js';
+import { VtbMapMarkerGroup, VtbMapMarker } from '../models.js';
 let VtbMapMarkerElement = class VtbMapMarkerElement extends LitElement {
     constructor() {
         super(...arguments);

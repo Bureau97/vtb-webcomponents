@@ -1,6 +1,5 @@
-import { type Dayjs } from 'dayjs';
+import {type Dayjs} from 'dayjs';
 import * as types from './types.js';
-
 
 export interface Dictionary<Type> {
   [key: string | number]: Type;
@@ -24,7 +23,6 @@ export interface VtbFilterConfig {
   flight?: boolean;
 }
 
-
 export interface VtbParticipant {
   title?: string;
   name?: string;
@@ -33,7 +31,6 @@ export interface VtbParticipant {
   birthdate?: Dayjs;
   calc_type?: types.VtbParticipantCalcType;
 }
-
 
 export interface VtbParty {
   id: number | string;
@@ -54,7 +51,6 @@ export interface VtbExtraField {
   group_name?: string;
   options?: Array<string>;
 }
-
 
 export interface VtbFlight {
   date?: Dayjs;
@@ -93,9 +89,9 @@ export interface VtbElement {
   subtitle?: string;
   description?: string;
   additional_description?: string;
-  price : number;
-  price_diff : number;
-  optional : boolean;
+  price: number;
+  price_diff: number;
+  optional: boolean;
   nights: number;
   hidden: boolean;
   day: number;
@@ -115,7 +111,7 @@ export interface VtbElementGroup {
   description?: string;
   nights: number;
   hidden: boolean;
-  day : number;
+  day: number;
   startdate: Dayjs;
   enddate: Dayjs;
   type_id?: number;

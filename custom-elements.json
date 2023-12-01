@@ -329,7 +329,7 @@
               "kind": "field",
               "name": "calc_type",
               "type": {
-                "text": "VtbParticipantCalcType | undefined"
+                "text": "types.VtbParticipantCalcType | undefined"
               }
             },
             {
@@ -339,6 +339,29 @@
                 "text": "number | null"
               },
               "readonly": true
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbParticipantPrice",
+          "members": [
+            {
+              "kind": "field",
+              "name": "participant_id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
             }
           ]
         },
@@ -599,29 +622,6 @@
         {
           "kind": "class",
           "description": "",
-          "name": "VtbParticipantPrice",
-          "members": [
-            {
-              "kind": "field",
-              "name": "participant_id",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            }
-          ]
-        },
-        {
-          "kind": "class",
-          "description": "",
           "name": "VtbElement",
           "members": [
             {
@@ -775,6 +775,15 @@
                 "text": "Array<number>"
               },
               "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "clone",
+              "return": {
+                "type": {
+                  "text": "VtbElement"
+                }
+              }
             }
           ]
         },
@@ -968,6 +977,16 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "clone",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "VtbElementGroup"
+                }
+              }
             }
           ]
         },
@@ -1089,7 +1108,7 @@
               "kind": "field",
               "name": "connect_mode",
               "type": {
-                "text": "VtbMapMarkerConnectMode | undefined"
+                "text": "types.VtbMapMarkerConnectMode | undefined"
               },
               "default": "'flight'"
             },
@@ -1425,6 +1444,14 @@
         },
         {
           "kind": "js",
+          "name": "VtbParticipantPrice",
+          "declaration": {
+            "name": "VtbParticipantPrice",
+            "module": "src/models.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "VtbParty",
           "declaration": {
             "name": "VtbParty",
@@ -1468,14 +1495,6 @@
           "name": "VtbFlightData",
           "declaration": {
             "name": "VtbFlightData",
-            "module": "src/models.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "VtbParticipantPrice",
-          "declaration": {
-            "name": "VtbParticipantPrice",
             "module": "src/models.ts"
           }
         },
@@ -1864,12 +1883,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3792,6 +3805,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/index.ts",
       "declarations": [],
       "exports": [
@@ -3965,7 +3984,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
+      "path": "src/utils/types.ts",
       "declarations": [],
       "exports": []
     }

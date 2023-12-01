@@ -10,8 +10,6 @@ import {Dictionary, VtbFilterConfig} from './utils/interfaces.js';
 import * as interfaces from './utils/interfaces.js';
 import * as types from './utils/types.js';
 
-
-
 export class VtbParticipant implements interfaces.VtbParticipant {
   id = 0;
   title?: string;
@@ -28,6 +26,11 @@ export class VtbParticipant implements interfaces.VtbParticipant {
 
     return dayjs().diff(this.birthdate, 'year');
   }
+}
+
+export class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
+  participant_id: number = 0;
+  price = 0.0;
 }
 
 export class VtbParty implements interfaces.VtbParty {
@@ -83,11 +86,6 @@ export class VtbFlightData implements interfaces.VtbFlightData {
   day?: number;
 }
 
-export class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
-  participant_id: number = 0;
-  price = 0.0;
-}
-
 export class VtbElement implements interfaces.VtbElement {
   id: string = '';
   object_id?: string;
@@ -113,6 +111,20 @@ export class VtbElement implements interfaces.VtbElement {
     return this.participant_prices.map((participant_price) => {
       return participant_price.participant_id;
     });
+  }
+
+  clone(): VtbElement {
+    const _clone = Object.assign(new VtbElement(), structuredClone(this));
+
+    _clone.startdate = dayjs(this.startdate.format());
+    _clone.enddate = dayjs(this.enddate.format());
+
+    _clone.media = [];
+    for (const _m of this.media) {
+      _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+    }
+
+    return _clone;
   }
 }
 
@@ -242,10 +254,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
 
       if (check_participant_ids && _element.participants) {
         // make a shallow copy so we're not messing with the original price element
-        const _element_copy: VtbElement = {
-          ..._element,
-          participants: [],
-        };
+        const _element_copy: VtbElement = _element.clone();
 
         let participants_unit_price = 0.0;
         for (const participant_price of _element.participant_prices) {
@@ -262,7 +271,26 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
   }
 
   public clone(): VtbElementGroup {
-    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
+    const _clone = Object.assign(new VtbElementGroup(), structuredClone(this));
+
+    _clone.startdate = dayjs(this.startdate.format());
+    _clone.enddate = dayjs(this.enddate.format());
+
+    _clone.media = [];
+    for (const _m of this.media) {
+      _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+    }
+
+    for (const key of Object.keys(this.mapped_elements_by_id)) {
+      _clone.mapped_elements_by_id[key] =
+        this.mapped_elements_by_id[key].clone();
+    }
+
+    console.info(this, _clone);
+
+    return _clone;
+
+    // return Object.assign(Object.create(Object.getPrototypeOf(this)), structuredClone(this));
   }
 }
 
@@ -271,7 +299,10 @@ export class VtbGeoLocation implements interfaces.VtbGeoLocation {
   lng = 0.0;
 }
 
-export class VtbMapMarker extends VtbGeoLocation implements interfaces.VtbMapMarker  {
+export class VtbMapMarker
+  extends VtbGeoLocation
+  implements interfaces.VtbMapMarker
+{
   label?: string;
   icon?: string;
   zoom?: number;

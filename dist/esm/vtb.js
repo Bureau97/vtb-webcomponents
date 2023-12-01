@@ -5,7 +5,6 @@ import { VtbFlightScheduleElement, } from './components/flightschedule.js';
 export class Vtb {
     constructor(vtb_parsed_data) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        this._get_element_groups_cache = [];
         if (vtb_parsed_data) {
             this._data = vtb_parsed_data;
         }
@@ -64,47 +63,6 @@ export class Vtb {
     extraField(name) {
         return this.extra_field(name);
     }
-    get element_groups() {
-        if (this._get_element_groups_cache.length > 0) {
-            return this._get_element_groups_cache;
-        }
-        const ret = [];
-        let last_group = null;
-        const element_groups = this._data.element_groups;
-        for (const group of element_groups) {
-            if (!last_group) {
-                last_group = group;
-                continue;
-            }
-            if (group.day == last_group.day) {
-                // if the next group has the same day
-                // we add it its elements to the current group
-                const elements = group.elements;
-                for (const element of elements) {
-                    last_group?.add_element(element);
-                }
-                if (!last_group.title && group.title) {
-                    last_group.title = group.title;
-                }
-                if (group.description) {
-                    last_group.description += group.description;
-                }
-                if (last_group.nights < group.nights) {
-                    last_group.nights = group.nights;
-                    last_group.enddate = group.enddate;
-                }
-            }
-            else {
-                ret.push(last_group);
-                last_group = group;
-            }
-        }
-        if (last_group && ret[ret.length - 1] !== last_group) {
-            ret.push(last_group);
-        }
-        this._get_element_groups_cache = ret;
-        return ret;
-    }
     async load(travelplan_source_url) {
         // async load of travelplan json
         console.info('Loading', travelplan_source_url);
@@ -117,6 +75,9 @@ export class Vtb {
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
         this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
+    }
+    get element_groups() {
+        return this._data.element_groups;
     }
     filter_groups(config) {
         return this._data.filter_element_groups(config);

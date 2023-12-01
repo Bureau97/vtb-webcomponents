@@ -9,7 +9,6 @@ module.exports = {
   entry: ['./src/index.ts', './src/dev/main.ts'],
 
   module: {
-
     rules: [
       {
         test: /\.tsx?$/,

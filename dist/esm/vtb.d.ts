@@ -23,10 +23,9 @@ export declare class Vtb {
     get extra_fields(): any;
     extra_field(name: string): VtbExtraField | null;
     extraField(name: string): VtbExtraField | null;
-    private _get_element_groups_cache;
-    get element_groups(): Array<VtbElementGroup>;
     load(travelplan_source_url: string): Promise<Vtb>;
     parse_vtb_data(vtbSrcData: any): void;
+    get element_groups(): Array<VtbElementGroup>;
     filter_groups(config: VtbFilterConfig): Array<VtbElementGroup>;
     filter_elements(config?: VtbFilterConfig): Array<VtbElement>;
     calculate_price(config?: VtbFilterConfig, elements?: Array<VtbElement>): number;

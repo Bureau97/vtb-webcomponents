@@ -334,8 +334,13 @@ function vtbDataLoaded(vtb: Vtb) {
     for (const itenerary_element of itenerary_elements) {
       const _h = document.createElement('h3');
       _h.innerHTML =
-        'Dag ' + itenerary_element.day + (itenerary_element.nights > 1 ? '-'+ (itenerary_element.day + itenerary_element.nights) : '') + ': ' + itenerary_element.title ||
-        'not set';
+        'Dag ' +
+          itenerary_element.day +
+          (itenerary_element.nights > 1
+            ? '-' + (itenerary_element.day + itenerary_element.nights)
+            : '') +
+          ': ' +
+          itenerary_element.title || 'not set';
       itenerary.appendChild(_h);
 
       if (itenerary_element.subtitle) {
@@ -367,7 +372,7 @@ function vtbDataLoaded(vtb: Vtb) {
         if (element.optional) {
           title += ' [optioneel]';
         }
-        _h5.innerHTML = element.title ;
+        _h5.innerHTML = element.title;
 
         itenerary.appendChild(_h5);
 

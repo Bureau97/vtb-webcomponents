@@ -386,13 +386,14 @@ export class VtbTravelPlanData {
    * @param element_groups
    * @returns
    */
-  private group_by_day(element_groups: Array<VtbElementGroup>): Array<VtbElementGroup> {
+  private group_by_day(
+    element_groups: Array<VtbElementGroup>
+  ): Array<VtbElementGroup> {
     const ret: Array<VtbElementGroup> = [];
 
     let last_group: VtbElementGroup | null = null;
 
     for (const group of element_groups) {
-
       // skip carrental and flight groups
       if (group.is_carrental || group.is_flight) {
         continue;

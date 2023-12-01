@@ -208,9 +208,7 @@ export class VtbElementGroup {
             _clone.mapped_elements_by_id[key] =
                 this.mapped_elements_by_id[key].clone();
         }
-        console.info(this, _clone);
         return _clone;
-        // return Object.assign(Object.create(Object.getPrototypeOf(this)), structuredClone(this));
     }
 }
 export class VtbGeoLocation {
@@ -282,6 +280,7 @@ export class VtbTravelPlanData {
         this.flight_elements.push(flight_element);
     }
     add_carrental_element(carrental_element) {
+        // console.info('carrental: ', carrental_element);
         this.car_rental_elements.push(carrental_element);
     }
     add_element_group(group) {

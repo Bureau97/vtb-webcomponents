@@ -286,11 +286,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
         this.mapped_elements_by_id[key].clone();
     }
 
-    console.info(this, _clone);
-
     return _clone;
-
-    // return Object.assign(Object.create(Object.getPrototypeOf(this)), structuredClone(this));
   }
 }
 
@@ -378,6 +374,7 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
   car_rental_elements: Array<VtbElement> = [];
 
   public add_carrental_element(carrental_element: VtbElement) {
+    // console.info('carrental: ', carrental_element);
     this.car_rental_elements.push(carrental_element);
   }
 

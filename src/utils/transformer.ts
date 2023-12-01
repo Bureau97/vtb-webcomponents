@@ -47,12 +47,6 @@ export class VtbDataTransformer {
       for (const pax of participants) {
         const _pax = new VtbParticipant();
         _pax.id = Number(pax.id);
-
-        // temporary workaround
-        if (pax.age_calc_type != 'Adult') {
-          _pax.id = parseInt(String(50 + Math.random() * 100), 10);
-        }
-
         _pax.title = pax.title;
         _pax.name = pax.name;
         _pax.prefix = pax.surname_prefix;
@@ -134,43 +128,12 @@ export class VtbDataTransformer {
 
       // parse car rental info
       if (
-        segment_data.car_rental_elements &&
-        segment_data.car_rental_elements.length >= 1
+        segment_data.carRentalElements &&
+        segment_data.carRentalElements.length >= 1
       ) {
-        // console.info('has car_rental_elements');
+        // console.info('has carRentalElements: ', segment_data.carRentalElements);
 
-        let last_element: VtbElement | null = null;
-        for (const carElementData of segment_data.car_rental_elements) {
-          const car_element = this.parse_vtb_element(
-            carElementData.element,
-            segment_data.title
-          );
-
-          if (
-            last_element &&
-            car_element.optional &&
-            last_element.unit_id == car_element.unit_id
-          ) {
-            car_element.price_diff = car_element.price - last_element.price; // price difference between non-optional and optional elements
-          }
-
-          if (
-            !this._data.car_rental_elements.find(
-              (element) =>
-                element.object_id == car_element.object_id &&
-                element.day == car_element.day
-            )
-          ) {
-            this._data.car_rental_elements.push(car_element);
-
-            if (
-              !car_element.optional ||
-              (last_element && car_element.unit_id != last_element.unit_id)
-            ) {
-              last_element = car_element; // act as default element
-            }
-          }
-        }
+        this.parse_carrental_elements(segment_data.carRentalElements);
       }
 
       this._data.add_element_group(this.parse_vtb_segment(segment_data));
@@ -181,9 +144,50 @@ export class VtbDataTransformer {
     return this._data;
   }
 
+  protected parse_carrental_elements(
+    segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): void {
+    // console.info(segment_data, typeof segment_data);
+
+    let last_element: VtbElement | null = null;
+    for (const carElementData of segment_data) {
+      const car_element = this.parse_vtb_element(
+        carElementData.element,
+        segment_data.title
+      );
+
+      if (
+        last_element &&
+        car_element.optional &&
+        last_element.unit_id == car_element.unit_id
+      ) {
+        car_element.price_diff = car_element.price - last_element.price; // price difference between non-optional and optional elements
+      }
+
+      if (
+        !this._data.car_rental_elements.find(
+          (element) =>
+            element.object_id == car_element.object_id &&
+            element.day == car_element.day
+        )
+      ) {
+        this._data.car_rental_elements.push(car_element);
+
+        if (
+          !car_element.optional ||
+          (last_element && car_element.unit_id != last_element.unit_id)
+        ) {
+          last_element = car_element; // act as default element
+        }
+      }
+    }
+
+    // console.info('carrental: ', this._data.car_rental_elements);
+  }
+
   protected parse_flight_info(
     segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) {
+  ): void {
     for (const flight of segment_data.flightInfo) {
       const carrier = new VtbFlightCarrier();
       carrier.name =

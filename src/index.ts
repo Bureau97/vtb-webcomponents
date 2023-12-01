@@ -1,7 +1,6 @@
 import {Vtb} from './vtb.js';
 
 import {
-  VtbParticipantCalcType,
   VtbParticipant,
   VtbParty,
   VtbMedia,
@@ -14,10 +13,14 @@ import {
   VtbElementGroup,
   VtbGeoLocation,
   VtbMapMarker,
-  VtbMapMarkerConnectMode,
   VtbMapMarkerGroup,
   VtbTravelPlanData,
 } from './models.js';
+
+import {
+  VtbParticipantCalcType,
+  VtbMapMarkerConnectMode,
+} from './utils/types.js';
 
 import {
   strip_tags,

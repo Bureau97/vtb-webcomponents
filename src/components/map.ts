@@ -11,8 +11,9 @@ const {Loader} = GMaps;
 import {
   VtbMapMarkerGroup,
   VtbMapMarker,
-  VtbMapMarkerConnectMode,
 } from '../models.js';
+
+import { VtbMapMarkerConnectMode, } from '../utils/types.js';
 
 export interface VtbMapOptions {
   connect_mode?: string;

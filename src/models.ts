@@ -7,17 +7,19 @@ dayjs.extend(utc);
 dayjs.extend(duration);
 
 import {Dictionary, VtbFilterConfig} from './utils/interfaces.js';
+import * as interfaces from './utils/interfaces.js';
+import * as types from './utils/types.js';
 
-export type VtbParticipantCalcType = 'Adult' | 'Teenager' | 'Child' | 'Baby';
 
-export class VtbParticipant {
+
+export class VtbParticipant implements interfaces.VtbParticipant {
   id = 0;
   title?: string;
   name?: string;
   prefix?: string;
   surname?: string;
   birthdate?: Dayjs;
-  calc_type?: VtbParticipantCalcType;
+  calc_type?: types.VtbParticipantCalcType;
 
   get age(): number | null {
     if (!this.birthdate) {
@@ -28,18 +30,18 @@ export class VtbParticipant {
   }
 }
 
-export class VtbParty {
+export class VtbParty implements interfaces.VtbParty {
   id: number | string = '';
   participants: Array<VtbParticipant> = [];
 }
 
-export class VtbMedia {
+export class VtbMedia implements interfaces.VtbMedia {
   src?: string;
   tags: Array<string> = [];
   id?: string;
 }
 
-export class VtbExtraField {
+export class VtbExtraField implements interfaces.VtbExtraField {
   name: string = '';
   title?: string;
   value?: string;
@@ -56,7 +58,7 @@ export class VtbExtraField {
   }
 }
 
-export class VtbFlight {
+export class VtbFlight implements interfaces.VtbFlight {
   date?: Dayjs;
   IATA?: string;
   dateformat?: string = 'DD MMM';
@@ -67,12 +69,12 @@ export class VtbFlight {
   location?: VtbGeoLocation;
 }
 
-export class VtbFlightCarrier {
+export class VtbFlightCarrier implements interfaces.VtbFlightCarrier {
   name?: string;
   code?: string;
 }
 
-export class VtbFlightData {
+export class VtbFlightData implements interfaces.VtbFlightData {
   departure?: VtbFlight;
   arrival?: VtbFlight;
   carrier?: VtbFlightCarrier;
@@ -81,12 +83,12 @@ export class VtbFlightData {
   day?: number;
 }
 
-export class VtbParticipantPrice {
+export class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
   participant_id: number = 0;
   price = 0.0;
 }
 
-export class VtbElement {
+export class VtbElement implements interfaces.VtbElement {
   id: string = '';
   object_id?: string;
   title: string = '';
@@ -114,7 +116,7 @@ export class VtbElement {
   }
 }
 
-export class VtbElementGroup {
+export class VtbElementGroup implements interfaces.VtbElementGroup {
   id: string = '';
   title?: string;
   subtitle?: string;
@@ -258,14 +260,18 @@ export class VtbElementGroup {
 
     return _elements;
   }
+
+  public clone(): VtbElementGroup {
+    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
+  }
 }
 
-export class VtbGeoLocation {
+export class VtbGeoLocation implements interfaces.VtbGeoLocation {
   lat = 0.0;
   lng = 0.0;
 }
 
-export class VtbMapMarker extends VtbGeoLocation {
+export class VtbMapMarker extends VtbGeoLocation implements interfaces.VtbMapMarker  {
   label?: string;
   icon?: string;
   zoom?: number;
@@ -273,18 +279,16 @@ export class VtbMapMarker extends VtbGeoLocation {
   content?: string;
 }
 
-export type VtbMapMarkerConnectMode = 'flight' | 'drive';
-
-export class VtbMapMarkerGroup {
+export class VtbMapMarkerGroup implements interfaces.VtbMapMarkerGroup {
   connect_markers: boolean = false;
   markers: Array<VtbMapMarker> = [];
-  connect_mode?: VtbMapMarkerConnectMode = 'flight';
+  connect_mode?: types.VtbMapMarkerConnectMode = 'flight';
 
   get connectMode(): string {
     return <string>this.connect_mode;
   }
 
-  set connectMode(connect_mode: VtbMapMarkerConnectMode) {
+  set connectMode(connect_mode: types.VtbMapMarkerConnectMode) {
     this.connect_mode = connect_mode;
   }
 
@@ -301,7 +305,7 @@ export class VtbMapMarkerGroup {
   }
 }
 
-export class VtbTravelPlanData {
+export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
   title: string = '';
   subtitle: string = '';
   covers: Array<VtbMedia> = [];
@@ -399,38 +403,40 @@ export class VtbTravelPlanData {
         continue;
       }
 
+      const current_group: VtbElementGroup = group.clone();
+
       // if (group.elements.length <= 0) {
       //   continue;
       // }
 
       if (!last_group) {
-        last_group = group;
+        last_group = current_group;
         continue;
       }
 
-      if (group.day == last_group.day) {
+      if (current_group.day == last_group.day) {
         // if the next group has the same day
         // we add it its elements to the current group
-        const elements: Array<VtbElement> = group.elements;
+        const elements: Array<VtbElement> = current_group.elements;
         for (const element of elements) {
           last_group?.add_element(element);
         }
 
-        if (!last_group.title && group.title) {
-          last_group.title = group.title;
+        if (!last_group.title && current_group.title) {
+          last_group.title = current_group.title;
         }
 
-        if (group.description) {
-          last_group.description += group.description;
+        if (current_group.description) {
+          last_group.description += current_group.description;
         }
 
-        if (last_group.nights < group.nights) {
-          last_group.nights = group.nights;
-          last_group.enddate = group.enddate;
+        if (last_group.nights < current_group.nights) {
+          last_group.nights = current_group.nights;
+          last_group.enddate = current_group.enddate;
         }
       } else {
         ret.push(last_group);
-        last_group = group;
+        last_group = current_group;
       }
     }
 

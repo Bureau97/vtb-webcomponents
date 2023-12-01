@@ -294,10 +294,13 @@ export class VtbTravelPlanData {
         const ret = [];
         let last_group = null;
         for (const group of element_groups) {
-            // skip carrental and flight groups
-            if (group.is_carrental || group.is_flight) {
+            // skip carrental groups ??
+            if (group.is_carrental) {
                 continue;
             }
+            // if (group.elements.length <= 0) {
+            //   continue;
+            // }
             if (!last_group) {
                 last_group = group;
                 continue;

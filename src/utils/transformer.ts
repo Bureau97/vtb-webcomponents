@@ -112,14 +112,12 @@ export class VtbDataTransformer {
     }
 
     for (const segment_data of vtbSrcData.segments) {
-      // console.info(
-      //   'Segment',
-      //   segment_data.vtbObjectId,
-      //   segment_data.typeId,
-      //   segment_data.title,
-      //   segment_data.day,
-      //   segment_data.nights
-      // );
+      console.info('Segment', {
+        typeId: segment_data.typeId,
+        title: segment_data.title,
+        day: segment_data.day,
+        nights: segment_data.nights,
+      });
 
       // parse flight info elements
       if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
@@ -191,7 +189,7 @@ export class VtbDataTransformer {
       }
     }
 
-    console.info('carrental: ', this._data.car_rental_elements);
+    // console.info('carrental: ', this._data.car_rental_elements);
   }
 
   protected parse_flight_info(
@@ -298,14 +296,13 @@ export class VtbDataTransformer {
         vtb_element.optional &&
         last_element.unit_id == vtb_element.unit_id
       ) {
-        // console.debug(
-        //   'Optional element: ',
-        //   vtb_element.title,
-        //   vtb_element.subtitle,
-        //   vtb_element.price,
-        //   last_element.price,
-        //   last_element.price - vtb_element.price
-        // );
+        console.debug('Optional element: ', {
+          title: vtb_element.title,
+          subtitle: vtb_element.subtitle,
+          price: vtb_element.price,
+          last_price: last_element.price,
+          price_diff: last_element.price - vtb_element.price,
+        });
         vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
       }
 
@@ -315,12 +312,11 @@ export class VtbDataTransformer {
         !vtb_element.optional ||
         (last_element && vtb_element.unit_id != last_element.unit_id)
       ) {
-        // console.debug(
-        //   'set last element: ',
-        //   vtb_element.title,
-        //   vtb_element.subtitle,
-        //   vtb_element.price
-        // );
+        console.debug('set last element: ', {
+          title: vtb_element.title,
+          subtitle: vtb_element.subtitle,
+          price: vtb_element.price,
+        });
         last_element = vtb_element; // act as default element
       }
     }

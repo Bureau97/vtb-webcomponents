@@ -427,9 +427,9 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
 
     for (const group of element_groups) {
       // skip carrental groups ??
-      if (group.is_carrental) {
-        continue;
-      }
+      // if (group.is_carrental) {
+      //   continue;
+      // }
 
       const current_group: VtbElementGroup = group.clone();
 
@@ -438,11 +438,16 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
       // }
 
       if (!last_group) {
+        console.info('set last group from current group', current_group);
         last_group = current_group;
         continue;
       }
 
       if (current_group.day == last_group.day) {
+        console.info(
+          'current group day == last group day: ',
+          current_group.day
+        );
         // if the next group has the same day
         // we add it its elements to the current group
         const elements: Array<VtbElement> = current_group.elements;

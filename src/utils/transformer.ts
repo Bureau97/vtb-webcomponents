@@ -236,6 +236,10 @@ export class VtbDataTransformer {
       flightElement.duration = flight.duration;
       flightElement.day = segment_data.day;
 
+      if (flight?.operatedBy) {
+        flightElement.operated_by = flight.operatedBy;
+      }
+
       if (!flightElement.duration) {
         flightElement.duration = dayjs
           .duration(arrival.date.diff(departure.date))

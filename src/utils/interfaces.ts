@@ -75,6 +75,7 @@ export interface VtbFlightData {
   flightnumber?: string;
   duration?: string;
   day?: number;
+  operated_by?: string;
 }
 
 export interface VtbParticipantPrice {

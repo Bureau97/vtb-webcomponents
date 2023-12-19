@@ -85,7 +85,6 @@ export class Vtb {
     return this.carrental.length > 0;
   }
 
-
   get carrental() {
     return this._data.car_rental_elements;
   }
@@ -95,12 +94,12 @@ export class Vtb {
   }
 
   public extra_field(name: string): VtbExtraField | null {
-    console.warn('deprecated call, use extra_fields getter instead')
+    console.warn('deprecated call, use extra_fields getter instead');
     return this._data.extra_fields[name] || null;
   }
 
   public extraField(name: string) {
-    console.warn('deprecated call, use extra_fields getter instead')
+    console.warn('deprecated call, use extra_fields getter instead');
     return this.extra_field(name);
   }
 
@@ -110,7 +109,6 @@ export class Vtb {
     const response = await fetch(travelplan_source_url);
     const vtbSrcData = await response.json();
     this.parse_vtb_data(vtbSrcData);
-    // console.info(this._data);
     return this;
   }
 
@@ -222,4 +220,82 @@ export class Vtb {
   // ) {
   //   // to do
   // }
+
+  /**
+   * merge element groups of possibly different types
+   * into one with all elements, media en concatted description
+   * of those groups
+   *
+   * @param element_groups
+   * @returns
+   */
+  public merge_groups_by_day(
+    element_groups: Array<VtbElementGroup>
+  ): Array<VtbElementGroup> {
+    const ret: Array<VtbElementGroup> = [];
+
+    let last_group: VtbElementGroup | null = null;
+
+    for (const group of element_groups) {
+      // skip carrental groups ??
+      // if (group.is_carrental) {
+      //   continue;
+      // }
+
+      const current_group: VtbElementGroup = group.clone();
+
+      // if (group.elements.length <= 0) {
+      //   continue;
+      // }
+
+      if (!last_group) {
+        console.info('set last group from current group', current_group);
+        last_group = current_group;
+        continue;
+      }
+
+      if (current_group.day == last_group.day) {
+        console.info(
+          'current group day == last group day: ',
+          current_group.day
+        );
+        // if the next group has the same day
+        // we add it its elements to the current group
+        const elements: Array<VtbElement> = current_group.elements;
+        for (const element of elements) {
+          last_group?.add_element(element);
+        }
+
+        // set title if no title was set
+        if (!last_group.title && current_group.title) {
+          last_group.title = current_group.title;
+        }
+
+        // concat description
+        if (current_group.description) {
+          last_group.description += current_group.description;
+        }
+
+        // set the nights as the highest number of nights
+        if (last_group.nights < current_group.nights) {
+          last_group.nights = current_group.nights;
+          last_group.enddate = current_group.enddate;
+        }
+
+        // merge all media
+        if (current_group.media.length > 0) {
+          last_group.media.push(...current_group.media);
+        }
+      } else {
+        ret.push(last_group);
+        last_group = current_group;
+      }
+    }
+
+    if (last_group && ret[ret.length - 1] !== last_group) {
+      ret.push(last_group);
+    }
+
+    return ret;
+  }
 }

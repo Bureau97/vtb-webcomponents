@@ -56,6 +56,7 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
     flightnumber?: string;
     duration?: string;
     day?: number;
+    operated_by?: string;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
@@ -151,12 +152,6 @@ export declare class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
     private mapped_element_groups_by_day;
     add_element_group(group: VtbElementGroup): void;
     get element_groups(): Array<VtbElementGroup>;
-    /**
-     * groups the list of element groups by day
-     * @param element_groups
-     * @returns
-     */
-    private group_by_day;
     filter_element_groups(config: VtbFilterConfig): Array<VtbElementGroup>;
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;
     get_element_groups_by_day(day: number): Array<VtbElementGroup>;

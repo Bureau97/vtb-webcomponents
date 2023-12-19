@@ -411,73 +411,6 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
     for (const group_id of this.element_groups_order) {
       ret.push(this.mapped_element_groups[group_id]);
     }
-    return this.group_by_day(ret);
-  }
-
-  /**
-   * groups the list of element groups by day
-   * @param element_groups
-   * @returns
-   */
-  private group_by_day(
-    element_groups: Array<VtbElementGroup>
-  ): Array<VtbElementGroup> {
-    const ret: Array<VtbElementGroup> = [];
-
-    let last_group: VtbElementGroup | null = null;
-
-    for (const group of element_groups) {
-      // skip carrental groups ??
-      // if (group.is_carrental) {
-      //   continue;
-      // }
-
-      const current_group: VtbElementGroup = group.clone();
-
-      // if (group.elements.length <= 0) {
-      //   continue;
-      // }
-
-      if (!last_group) {
-        console.info('set last group from current group', current_group);
-        last_group = current_group;
-        continue;
-      }
-
-      if (current_group.day == last_group.day) {
-        console.info(
-          'current group day == last group day: ',
-          current_group.day
-        );
-        // if the next group has the same day
-        // we add it its elements to the current group
-        const elements: Array<VtbElement> = current_group.elements;
-        for (const element of elements) {
-          last_group?.add_element(element);
-        }
-
-        if (!last_group.title && current_group.title) {
-          last_group.title = current_group.title;
-        }
-
-        if (current_group.description) {
-          last_group.description += current_group.description;
-        }
-
-        if (last_group.nights < current_group.nights) {
-          last_group.nights = current_group.nights;
-          last_group.enddate = current_group.enddate;
-        }
-      } else {
-        ret.push(last_group);
-        last_group = current_group;
-      }
-    }
-
-    if (last_group && ret[ret.length - 1] !== last_group) {
-      ret.push(last_group);
-    }
-
     return ret;
   }
 
@@ -506,7 +439,7 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
       }
     }
 
-    return this.group_by_day(ret);
+    return ret;
   }
 
   public filter_elements(config: VtbFilterConfig): Array<VtbElement> {

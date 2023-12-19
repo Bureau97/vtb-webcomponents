@@ -19,6 +19,7 @@ export declare class Vtb {
     get participants(): Array<VtbParticipant>;
     get parties(): any;
     get flightinfo(): any;
+    get has_carrental(): boolean;
     get carrental(): any;
     get extra_fields(): any;
     extra_field(name: string): VtbExtraField | null;
@@ -32,5 +33,14 @@ export declare class Vtb {
     map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions): VtbMapElement;
     filter_mapmarkers(config: VtbFilterConfig): VtbMapMarkerGroup;
     flightschedule(container_id: string, filter_config?: VtbFilterConfig, flightschedule_options?: VtbFlightScheduleOptions): VtbFlightScheduleElement;
+    /**
+     * merge element groups of possibly different types
+     * into one with all elements, media en concatted description
+     * of those groups
+     *
+     * @param element_groups
+     * @returns
+     */
+    merge_groups_by_day(element_groups: Array<VtbElementGroup>): Array<VtbElementGroup>;
 }
 //# sourceMappingURL=vtb.d.ts.map

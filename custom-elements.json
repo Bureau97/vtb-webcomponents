@@ -616,6 +616,13 @@
               "type": {
                 "text": "number | undefined"
               }
+            },
+            {
+              "kind": "field",
+              "name": "operated_by",
+              "type": {
+                "text": "string | undefined"
+              }
             }
           ]
         },
@@ -1359,25 +1366,6 @@
             },
             {
               "kind": "method",
-              "name": "group_by_day",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              },
-              "parameters": [
-                {
-                  "name": "element_groups",
-                  "type": {
-                    "text": "Array<VtbElementGroup>"
-                  }
-                }
-              ],
-              "description": "groups the list of element groups by day"
-            },
-            {
-              "kind": "method",
               "name": "filter_element_groups",
               "privacy": "public",
               "return": {
@@ -1644,6 +1632,14 @@
             },
             {
               "kind": "field",
+              "name": "has_carrental",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "carrental",
               "readonly": true
             },
@@ -1869,6 +1865,25 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "merge_groups_by_day",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element_groups",
+                  "type": {
+                    "text": "Array<VtbElementGroup>"
+                  }
+                }
+              ],
+              "description": "merge element groups of possibly different types\ninto one with all elements, media en concatted description\nof those groups"
             }
           ]
         }

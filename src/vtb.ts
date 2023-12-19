@@ -81,6 +81,11 @@ export class Vtb {
     return this._data.flight_elements;
   }
 
+  get has_carrental(): boolean {
+    return this.carrental.length > 0;
+  }
+
+
   get carrental() {
     return this._data.car_rental_elements;
   }
@@ -90,10 +95,12 @@ export class Vtb {
   }
 
   public extra_field(name: string): VtbExtraField | null {
+    console.warn('deprecated call, use extra_fields getter instead')
     return this._data.extra_fields[name] || null;
   }
 
   public extraField(name: string) {
+    console.warn('deprecated call, use extra_fields getter instead')
     return this.extra_field(name);
   }
 

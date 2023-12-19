@@ -14,7 +14,7 @@ export class VtbParticipant implements interfaces.VtbParticipant {
   id = 0;
   title?: string;
   name?: string;
-  prefix?: string;
+  prefix?: string = '';
   surname?: string;
   birthdate?: Dayjs;
   calc_type?: types.VtbParticipantCalcType;

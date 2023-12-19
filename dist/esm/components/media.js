@@ -11,6 +11,8 @@ let VtbMediaElement = class VtbMediaElement extends LitElement {
         this.height = Number.NaN;
         this.crop = '';
         this.alt = '';
+        this.cover = false;
+        this.cover_position = '';
     }
     _imageStyles() {
         const imgStyle = {};
@@ -22,6 +24,12 @@ let VtbMediaElement = class VtbMediaElement extends LitElement {
         }
         else {
             imgStyle.height = '100%';
+        }
+        if (this.cover) {
+            imgStyle.width = '100%';
+            // imgStyle.height = '100%';
+            imgStyle.objectFit = 'cover';
+            imgStyle.objectPosition = this.cover_position ?? 'center';
         }
         return imgStyle;
     }
@@ -84,11 +92,12 @@ VtbMediaElement.styles = css `
     }
 
     img {
-      object-fit: cover;
-      object-position: center;
+      // object-fit: cover;
+      // object-position: center;
       display: block;
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      margin: 0 auto;
     }
   `;
 __decorate([
@@ -106,6 +115,12 @@ __decorate([
 __decorate([
     property({ type: String })
 ], VtbMediaElement.prototype, "alt", void 0);
+__decorate([
+    property({ type: Boolean })
+], VtbMediaElement.prototype, "cover", void 0);
+__decorate([
+    property({ type: String, attribute: 'cover-position' })
+], VtbMediaElement.prototype, "cover_position", void 0);
 VtbMediaElement = __decorate([
     customElement('vtb-media')
 ], VtbMediaElement);

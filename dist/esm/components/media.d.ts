@@ -5,6 +5,8 @@ export declare class VtbMediaElement extends LitElement {
     height: number;
     crop?: string;
     alt?: string;
+    cover?: boolean;
+    cover_position?: string;
     static styles: import("lit").CSSResult;
     private _imageStyles;
     private _applyCrop;

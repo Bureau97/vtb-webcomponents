@@ -7,6 +7,7 @@ dayjs.extend(duration);
 export class VtbParticipant {
     constructor() {
         this.id = 0;
+        this.prefix = '';
     }
     get age() {
         if (!this.birthdate) {

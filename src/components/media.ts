@@ -20,6 +20,12 @@ export class VtbMediaElement extends LitElement {
   @property({type: String})
   alt?: string = '';
 
+  @property({type: Boolean})
+  cover?: boolean = false;
+
+  @property({type: String, attribute: 'cover-position'})
+  cover_position?: string = '';
+
   static override styles = css`
     :host {
       display: inline-block;
@@ -27,11 +33,12 @@ export class VtbMediaElement extends LitElement {
     }
 
     img {
-      object-fit: cover;
-      object-position: center;
+      // object-fit: cover;
+      // object-position: center;
       display: block;
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      margin: 0 auto;
     }
   `;
 
@@ -45,6 +52,13 @@ export class VtbMediaElement extends LitElement {
       imgStyle.height = this.height + 'px';
     } else {
       imgStyle.height = '100%';
+    }
+
+    if (this.cover) {
+      imgStyle.width = '100%';
+      // imgStyle.height = '100%';
+      imgStyle.objectFit = 'cover';
+      imgStyle.objectPosition = this.cover_position ?? 'center';
     }
     return imgStyle;
   }

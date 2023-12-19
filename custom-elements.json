@@ -309,7 +309,8 @@
               "name": "prefix",
               "type": {
                 "text": "string | undefined"
-              }
+              },
+              "default": "''"
             },
             {
               "kind": "field",
@@ -3579,6 +3580,24 @@
               "attribute": "alt"
             },
             {
+              "kind": "field",
+              "name": "cover",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "default": "false",
+              "attribute": "cover"
+            },
+            {
+              "kind": "field",
+              "name": "cover_position",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "''",
+              "attribute": "cover-position"
+            },
+            {
               "kind": "method",
               "name": "_imageStyles",
               "privacy": "private",
@@ -3646,6 +3665,22 @@
               },
               "default": "''",
               "fieldName": "alt"
+            },
+            {
+              "name": "cover",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "default": "false",
+              "fieldName": "cover"
+            },
+            {
+              "name": "cover-position",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "''",
+              "fieldName": "cover_position"
             }
           ],
           "superclass": {

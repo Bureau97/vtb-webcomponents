@@ -26,6 +26,10 @@ export class VtbParticipant implements interfaces.VtbParticipant {
 
     return dayjs().diff(this.birthdate, 'year');
   }
+
+  get fullname(): string {
+    return `${this.name} ${this.prefix ? this.prefix + ' ' : ''}${this.surname}`;
+  }
 }
 
 export class VtbParticipantPrice implements interfaces.VtbParticipantPrice {

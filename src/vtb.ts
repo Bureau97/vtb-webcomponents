@@ -194,15 +194,24 @@ export class Vtb {
     flightschedule_options?: VtbFlightScheduleOptions
   ): VtbFlightScheduleElement {
     // to do
-    console.debug(
-      'flightschedule',
-      container_id,
-      filter_config,
-      flightschedule_options
-    );
+    // console.debug(
+    //   'flightschedule',
+    //   container_id,
+    //   filter_config,
+    //   flightschedule_options
+    // );
 
     const flightschedule = new VtbFlightScheduleElement();
-    flightschedule.flightinfo = this.flightinfo;
+    if (!filter_config) {
+      flightschedule.flightinfo = this.flightinfo;
+    } else {
+      // TODO:
+      console.debug(
+        'using filter config on flight element is not implemented yet'
+      );
+      // flightschedule.flightinfo = this.filter_flightinfo(filter_config);
+    }
+
     if (flightschedule_options?.dateformat) {
       flightschedule.dateformat = flightschedule_options.dateformat;
     }
@@ -249,16 +258,16 @@ export class Vtb {
       // }
 
       if (!last_group) {
-        console.info('set last group from current group', current_group);
+        // console.info('set last group from current group', current_group);
         last_group = current_group;
         continue;
       }
 
       if (current_group.day == last_group.day) {
-        console.info(
-          'current group day == last group day: ',
-          current_group.day
-        );
+        // console.info(
+        //   'current group day == last group day: ',
+        //   current_group.day
+        // );
         // if the next group has the same day
         // we add it its elements to the current group
         const elements: Array<VtbElement> = current_group.elements;

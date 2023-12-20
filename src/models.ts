@@ -28,7 +28,9 @@ export class VtbParticipant implements interfaces.VtbParticipant {
   }
 
   get fullname(): string {
-    return `${this.name} ${this.prefix ? this.prefix + ' ' : ''}${this.surname}`;
+    return `${this.name} ${this.prefix ? this.prefix + ' ' : ''}${
+      this.surname
+    }`;
   }
 }
 

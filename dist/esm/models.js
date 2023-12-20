@@ -15,6 +15,9 @@ export class VtbParticipant {
         }
         return dayjs().diff(this.birthdate, 'year');
     }
+    get fullname() {
+        return `${this.name} ${this.prefix ? this.prefix + ' ' : ''}${this.surname}`;
+    }
 }
 export class VtbParticipantPrice {
     constructor() {

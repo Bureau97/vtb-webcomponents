@@ -11,6 +11,7 @@ export declare class VtbParticipant implements interfaces.VtbParticipant {
     birthdate?: Dayjs;
     calc_type?: types.VtbParticipantCalcType;
     get age(): number | null;
+    get fullname(): string;
 }
 export declare class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
     participant_id: number;

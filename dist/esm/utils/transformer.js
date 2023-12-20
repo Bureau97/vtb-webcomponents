@@ -31,7 +31,7 @@ export class VtbDataTransformer {
                 _pax.id = Number(pax.id);
                 _pax.title = pax.title;
                 _pax.name = pax.name;
-                _pax.prefix = pax.surname_prefix;
+                _pax.prefix = pax.surname_prefix ?? '';
                 _pax.surname = pax.surname;
                 _pax.calc_type = pax.age_calc_type;
                 if (pax.birthdate) {

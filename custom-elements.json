@@ -340,6 +340,14 @@
                 "text": "number | null"
               },
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "fullname",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
             }
           ]
         },
@@ -4064,6 +4072,12 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

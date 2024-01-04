@@ -33,11 +33,7 @@ export class VtbMediaElement extends LitElement {
     }
 
     img {
-      // object-fit: cover;
-      // object-position: center;
       display: block;
-      max-width: 100%;
-      max-height: 100%;
       margin: 0 auto;
     }
   `;
@@ -47,19 +43,37 @@ export class VtbMediaElement extends LitElement {
     if (this.width > 0) {
       imgStyle.width = this.width + 'px';
     }
+    // else {
+    //   imgStyle.width = 'auto';
+    // }
 
     if (this.height > 0) {
       imgStyle.height = this.height + 'px';
-    } else {
-      imgStyle.height = '100%';
     }
+    // else {
+    //   imgStyle.height = 'auto';
+    // }
 
     if (this.cover) {
-      imgStyle.width = '100%';
-      // imgStyle.height = '100%';
+      if (!this.width || this.width <= 0) {
+        imgStyle.width = '100%';
+      }
+
+      if (!this.height || this.height <= 0) {
+        imgStyle.height = '100%';
+      }
+
       imgStyle.objectFit = 'cover';
-      imgStyle.objectPosition = this.cover_position ?? 'center';
+      imgStyle.objectPosition = this.cover_position
+        ? this.cover_position
+        : 'center';
+    } else {
+      imgStyle.objectFit = 'contain';
+      imgStyle.objectPosition = this.cover_position
+        ? this.cover_position
+        : 'center';
     }
+
     return imgStyle;
   }
 

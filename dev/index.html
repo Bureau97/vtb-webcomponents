@@ -37,10 +37,8 @@
       }
 
       section.hero vtb-media {
-        min-height: 500px;
-        width: 100%;
         height: 500px;
-        object-fit: cover;
+        width: 100%;
       }
 
       section.hero .hero-content {
@@ -58,6 +56,92 @@
     <section class="hero" height="500">
       <vtb-media id="hero" crop="wordpress/large" cover></vtb-media>
       <div class="hero-content"></div>
+    </section>
+
+    <section class="images">
+      <h1>VTB Images</h1>
+      <div class="">
+        <h2>Cover images (square / fixed width and height)</h2>
+        <vtb-media
+          width="300"
+          height="300"
+          cover
+          cover-position="top"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          height="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>"Normal" images (square / fixed width and height)</h2>
+        <vtb-media
+          width="300"
+          height="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          height="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div class="">
+        <h2>Cover images (fixed width)</h2>
+        <vtb-media
+          width="300"
+          cover
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>"Normal" images (fixed width)</h2>
+        <vtb-media
+          width="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div class="">
+        <h2>Cover images (fixed height)</h2>
+        <vtb-media
+          height="300"
+          cover
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          height="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>"Normal" images (fixed height)</h2>
+        <vtb-media
+          height="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          height="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
     </section>
 
     <section class="flightschedule">

@@ -1,7 +1,7 @@
 {
   "name": "vtb-webcomponents",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Visual Tour Builder - Web Components Library",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

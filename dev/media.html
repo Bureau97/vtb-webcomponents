@@ -1,0 +1,498 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VTB Webcomponents Demo - VTB Media</title>
+    <!--
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/lit/polyfill-support.js"></script>
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="/dist/main.js"></script>
+    <style>
+      body {
+        line-height: 170%;
+        font-family: 'Open Sans', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      section {
+        max-width: 1140px;
+        margin: 25px auto;
+        padding-bottom: 25px;
+      }
+
+      section h1 {
+        border-bottom: 1px solid #888;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+
+      div.hero {
+        position: relative;
+      }
+
+      div.hero vtb-media {
+        height: 500px;
+        width: 100%;
+      }
+
+      div.hero .media-demo-hero-content {
+        position: absolute;
+        bottom: 30%;
+        right: 50%;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      vtb-media,
+      img {
+        margin: 0;
+        padding: 2px;
+        border: 1px dashed red;
+      }
+
+      .container {
+        max-width: 1140px;
+        margin: 0 auto;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1%;
+      }
+
+      .row > * {
+        max-width: 100%;
+      }
+
+      .col {
+        width: 24%;
+        border: 1px solid #888;
+      }
+
+      .max-width {
+        max-width: 100%;
+      }
+
+      .max-height {
+        max-height: 100%;
+      }
+
+      .max-height-200 {
+        max-height: 200px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hero" height="500">
+      <vtb-media
+        id="hero"
+        src="https://s3-eu-west-1.amazonaws.com/media.reismetkinderen.nl/wordpress/large/miami-beach-.jpeg"
+        crop="wordpress/large"
+        cover
+      ></vtb-media>
+      <div class="media-demo-hero-content">
+        This is a hero with a vtb-media element as a cover
+      </div>
+    </div>
+
+    <section class="images">
+      <h1>Media with fixed width and height (square)</h1>
+
+      <div class="">
+        <h2>VTB Media with cover set</h2>
+        <vtb-media
+          width="300"
+          height="300"
+          cover
+          cover-position="top"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          height="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>VTB Media w/o cover set</h2>
+        <vtb-media
+          width="300"
+          height="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          height="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div class="">
+        <h2>HTML IMG elements</h2>
+        <img
+          height="300"
+          width="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        />
+        <img
+          height="300"
+          width="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        />
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Media with fixed width and no height set</h1>
+      <div class="">
+        <h2>VTB Media with cover set</h2>
+        <vtb-media
+          width="300"
+          cover
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>VTB Media w/o cover set</h2>
+        <vtb-media
+          width="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          width="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div class="">
+        <h2>HTML IMG elements</h2>
+        <img
+          width="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        />
+        <img
+          width="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        />
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Media with fixed height and no width set</h1>
+      <div class="">
+        <h2>VTB Media with cover set</h2>
+        <vtb-media
+          height="300"
+          cover
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          height="300"
+          cover
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div>
+        <h2>VTB Media w/o cover set</h2>
+        <vtb-media
+          height="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        ></vtb-media>
+        <vtb-media
+          height="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        ></vtb-media>
+      </div>
+
+      <div class="">
+        <h2>HTML IMG elements</h2>
+        <img
+          height="300"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+        />
+        <img
+          height="300"
+          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+        />
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Contained Media (fixed height)</h1>
+
+      <div class="container">
+        <h2>VTB Media with cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              height="300"
+              cover
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              height="300"
+              cover
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>VTB Media w/o cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              height="300"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              height="300"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>HTML IMG elements</h2>
+        <div class="row">
+          <div class="col">
+            <img
+              height="300"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            />
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <img
+              height="300"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            />
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Contained Media (without dimensions set)</h1>
+
+      <div class="container">
+        <h2>VTB Media with cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              cover
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              cover
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>VTB Media w/o cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>HTML IMG elements</h2>
+        <div class="row">
+          <div class="col">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            />
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <img
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            />
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Contained Media (css max width set to 100%)</h1>
+
+      <div class="container">
+        <h2>VTB Media with cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              cover
+              class="max-width"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              cover
+              class="max-width"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>VTB Media w/o cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              class="max-width"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              class="max-width"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>HTML IMG elements</h2>
+        <div class="row">
+          <div class="col">
+            <img
+              class="max-width"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            />
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <img
+              class="max-width"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            />
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="images">
+      <h1>Contained Media (css max height set to 100%)</h1>
+
+      <div class="container">
+        <h2>VTB Media with cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              cover
+              class="max-height"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              cover
+              class="max-height"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>VTB Media w/o cover set</h2>
+        <div class="row">
+          <div class="col">
+            <vtb-media
+              class="max-height"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <vtb-media
+              class="max-height"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            ></vtb-media>
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>HTML IMG elements</h2>
+        <div class="row">
+          <div class="col">
+            <img
+              class="max-height"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
+            />
+          </div>
+          <div class="col">portrait image</div>
+          <div class="col">
+            <img
+              class="max-height"
+              src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
+            />
+          </div>
+          <div class="col">landscape image</div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

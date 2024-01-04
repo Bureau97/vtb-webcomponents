@@ -52,6 +52,11 @@ function vtbDataLoaded(vtb: Vtb) {
     'hero-content'
   )[0] as HTMLElement;
 
+  if (!heroContentContainer) {
+    console.error('heroContentContainer not found');
+    return;
+  }
+
   heroContentContainer.innerHTML = '';
   heroContentContainer.appendChild(h1);
   heroContentContainer.appendChild(h2);

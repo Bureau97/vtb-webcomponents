@@ -16,6 +16,12 @@ let VtbMediaElement = class VtbMediaElement extends LitElement {
     }
     _imageStyles() {
         const imgStyle = {};
+        // copy element styles set on element.style
+        const elementStyle = this.style || '';
+        for (let i = elementStyle.length; i--;) {
+            const nameString = elementStyle[i];
+            imgStyle[nameString] = elementStyle.getPropertyValue(nameString);
+        }
         if (this.width > 0) {
             imgStyle.width = this.width + 'px';
         }
@@ -29,10 +35,10 @@ let VtbMediaElement = class VtbMediaElement extends LitElement {
         //   imgStyle.height = 'auto';
         // }
         if (this.cover) {
-            if (!this.width || this.width <= 0) {
+            if ((!this.width || this.width <= 0) && !imgStyle.width) {
                 imgStyle.width = '100%';
             }
-            if (!this.height || this.height <= 0) {
+            if ((!this.height || this.height <= 0) && !imgStyle.height) {
                 imgStyle.height = '100%';
             }
             imgStyle.objectFit = 'cover';
@@ -41,6 +47,8 @@ let VtbMediaElement = class VtbMediaElement extends LitElement {
                 : 'center';
         }
         else {
+            imgStyle.maxWidth = imgStyle.maxWidth || '100%';
+            imgStyle.maxHeight = imgStyle.maxHeight || '100%';
             imgStyle.objectFit = 'contain';
             imgStyle.objectPosition = this.cover_position
                 ? this.cover_position

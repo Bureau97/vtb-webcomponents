@@ -3,6 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VTB Webcomponents Demo</title>
     <!--
     <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -55,103 +56,9 @@
   <body>
     <ul>
       <li><a href="/media.html">VTB Media</a></li>
+      <li><a href="/flightschedule.html">VTB Flight Schedule</a></li>
     </ul>
 
-    <section class="hero" height="500">
-      <vtb-media id="hero" crop="wordpress/large" cover></vtb-media>
-      <div class="hero-content"></div>
-    </section>
-
-    <section class="images">
-      <h1>VTB Images</h1>
-      <div class="">
-        <h2>Cover images (square / fixed width and height)</h2>
-        <vtb-media
-          width="300"
-          height="300"
-          cover
-          cover-position="top"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          width="300"
-          height="300"
-          cover
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-
-      <div>
-        <h2>"Normal" images (square / fixed width and height)</h2>
-        <vtb-media
-          width="300"
-          height="300"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          width="300"
-          height="300"
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-
-      <div class="">
-        <h2>Cover images (fixed width)</h2>
-        <vtb-media
-          width="300"
-          cover
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          width="300"
-          cover
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-
-      <div>
-        <h2>"Normal" images (fixed width)</h2>
-        <vtb-media
-          width="300"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          width="300"
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-
-      <div class="">
-        <h2>Cover images (fixed height)</h2>
-        <vtb-media
-          height="300"
-          cover
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          height="300"
-          cover
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-
-      <div>
-        <h2>"Normal" images (fixed height)</h2>
-        <vtb-media
-          height="300"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Phoenicopterus_roseus_%28Walvis_bay%29.jpg/800px-Phoenicopterus_roseus_%28Walvis_bay%29.jpg"
-        ></vtb-media>
-        <vtb-media
-          height="300"
-          src="https://hips.hearstapps.com/hmg-prod/images/01-pinker-flamingos-aggressive-01441174.jpg"
-        ></vtb-media>
-      </div>
-    </section>
-
-    <section class="flightschedule">
-      <h1>VTB Flightschedule</h1>
-      <vtb-flightschedule id="flightschedule"></vtb-flightschedule>
-    </section>
 
     <section class="maps">
       <h1>VTB Map (Dynamic)</h1>

@@ -42,25 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
 
-  // render hero content
-  const h1 = document.createElement('h1');
-  h1.innerHTML = vtb.title;
-  const h2 = document.createElement('h2');
-  h2.innerHTML = vtb.subtitle;
-
-  const heroContentContainer = document.getElementsByClassName(
-    'hero-content'
-  )[0] as HTMLElement;
-
-  if (!heroContentContainer) {
-    console.error('heroContentContainer not found');
-    return;
-  }
-
-  heroContentContainer.innerHTML = '';
-  heroContentContainer.appendChild(h1);
-  heroContentContainer.appendChild(h2);
-
   // get info
   console.info(vtb.title + ' ' + vtb.subtitle);
   console.info(vtb.startdate?.format('D MMM'));
@@ -74,42 +55,70 @@ function vtbDataLoaded(vtb: Vtb) {
     console.info(p.fullname);
   }
 
-  // render hero using the first cover
-  const hero = document.getElementById('hero') as VtbMediaElement;
-  hero.src = vtb.covers[0].src;
+  // render hero content
+  const heroContentContainer = document.getElementsByClassName(
+    'hero-content'
+  )[0] as HTMLElement;
+
+  if (heroContentContainer) {
+    const h1 = document.createElement('h1');
+    h1.innerHTML = vtb.title;
+    const h2 = document.createElement('h2');
+    h2.innerHTML = vtb.subtitle;
+
+    heroContentContainer.innerHTML = '';
+    heroContentContainer.appendChild(h1);
+    heroContentContainer.appendChild(h2);
+
+    // render hero using the first cover
+    const hero = document.getElementById('hero') as VtbMediaElement;
+    hero.src = vtb.covers[0].src;
+  }
+
+
+
 
   // add flightschedule
   const flightschedule = document.getElementById(
     'flightschedule'
   ) as VtbFlightScheduleElement;
-  flightschedule.flightinfo = vtb.flightinfo;
 
-  // accos on map
-  const acco_search: VtbFilterConfig = {
-    group_type_ids: [SegmentTypes.DEFAULT],
-    element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
-  };
-  console.info('acco search: ', acco_search);
+  if (flightschedule) {
+    console.info('flightschedule', vtb.flightinfo);
+    flightschedule.flightinfo = vtb.flightinfo;
+  }
 
-  const acco_elements = vtb.filter_elements(acco_search);
-  console.info('acco elements: ', acco_elements);
+  if (false) {
 
-  const acco_price = vtb.calculate_price({
-    group_type_ids: [SegmentTypes.DEFAULT],
-    element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
-    optional: false,
-  });
-  console.info('acco price: ', acco_price);
+    // accos on map
+    const acco_search: VtbFilterConfig = {
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
+    };
+    console.info('acco search: ', acco_search);
 
-  const carrrental = vtb.carrental;
-  console.info('carrrental: ', carrrental);
+    const acco_elements = vtb.filter_elements(acco_search);
+    console.info('acco elements: ', acco_elements);
 
-  const carrental_price = vtb.calculate_price({
-    group_type_ids: [SegmentTypes.DEFAULT],
-    element_unit_ids: [UnitTypes.CARRENTAL],
-    optional: false,
-  });
-  console.info('carrental price: ', carrental_price);
+    const acco_price = vtb.calculate_price({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
+      optional: false,
+    });
+    console.info('acco price: ', acco_price);
+
+    const carrrental = vtb.carrental;
+    console.info('carrrental: ', carrrental);
+
+    const carrental_price = vtb.calculate_price({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.CARRENTAL],
+      optional: false,
+    });
+    console.info('carrental price: ', carrental_price);
+
+  }
+
 
   // const marker_group_accos = vtb.filter_mapmarkers(acco_search);
   // marker_group_accos.connectMarkers = true;

@@ -37,10 +37,7 @@ import {
 
 import {
   VtbFlightScheduleElement,
-  VtbFlightScheduleOptions,
-  VtbFlightElement,
-  VtbFlightArrivalElement,
-  VtbFlightDepartureElement,
+  VtbFlightScheduleOptions
 } from './components/flightschedule.js';
 
 import {
@@ -80,9 +77,6 @@ export {
   VtbCalculatorPriceListElement,
   VtbFlightScheduleElement,
   VtbFlightScheduleOptions,
-  VtbFlightElement,
-  VtbFlightArrivalElement,
-  VtbFlightDepartureElement,
   VtbMapElement,
   VtbMapMarkerGroupElement,
   VtbMapMarkerElement,

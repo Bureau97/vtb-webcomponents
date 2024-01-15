@@ -6,11 +6,12 @@ import '../components/calculator';
 import '../components/text';
 
 import {Vtb} from '../vtb';
+import {VtbElement} from '../models';
 import {VtbFilterConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
-// import {VtbMapElement, VtbMapOptions} from '../components/map';
-// import {VtbCalculatorElement} from '../components/calculator';
+import {VtbMapOptions} from '../components/map';
+import {VtbCalculatorElement} from '../components/calculator';
 // import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
@@ -76,8 +77,6 @@ function vtbDataLoaded(vtb: Vtb) {
   }
 
 
-
-
   // add flightschedule
   const flightschedule = document.getElementById(
     'flightschedule'
@@ -88,58 +87,22 @@ function vtbDataLoaded(vtb: Vtb) {
     flightschedule.flightinfo = vtb.flightinfo;
   }
 
-  if (false) {
-
-    // accos on map
-    const acco_search: VtbFilterConfig = {
-      group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
+  const map = document.getElementById('complete-map');
+  if (map) {
+    const map_options: VtbMapOptions = {
+      connect_markers: true,
+      connect_mode: 'flight',
+      api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ',
     };
-    console.info('acco search: ', acco_search);
 
-    const acco_elements = vtb.filter_elements(acco_search);
-    console.info('acco elements: ', acco_elements);
-
-    const acco_price = vtb.calculate_price({
+    const map_search: VtbFilterConfig = {
       group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.ACTIVITY],
+      element_unit_ids: [UnitTypes.ACCO],
       optional: false,
-    });
-    console.info('acco price: ', acco_price);
+    };
 
-    const carrrental = vtb.carrental;
-    console.info('carrrental: ', carrrental);
-
-    const carrental_price = vtb.calculate_price({
-      group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.CARRENTAL],
-      optional: false,
-    });
-    console.info('carrental price: ', carrental_price);
-
+    vtb.map('complete-map', map_search, map_options);
   }
-
-
-  // const marker_group_accos = vtb.filter_mapmarkers(acco_search);
-  // marker_group_accos.connectMarkers = true;
-  // marker_group_accos.connectMode = 'drive';
-  // console.info('acco group: ', marker_group_accos);
-
-  // const map = document.getElementById('dynamic-map') as VtbMapElement;
-  // console.info(map);
-  // if (map) {
-  //   map.markergroups = [marker_group_accos];
-  // }
-
-  // const map_options: VtbMapOptions = {
-  //   connect_markers: true,
-  //   connect_mode: 'drive',
-  //   api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ',
-  // };
-
-  // console.info(map_options);
-
-  // // vtb.map('complete-map', acco_search, map_options);
 
   // // // flight on map
   // // const flight_search = new VtbFilterConfig();
@@ -155,23 +118,128 @@ function vtbDataLoaded(vtb: Vtb) {
   // // const map2 = document.getElementById('dynamic-map-flight1') as VtbMapElement;
   // // console.info(map2);
 
-  // const additions_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.ADDITIONEEL],
-  //   // element_unit_ids: [unit_types.additions],
-  //   // optional: false,
-  //   // participants: ['1211769']
-  // });
-  // const additions_total = vtb.calculate_price(undefined, additions_elements);
+  const acco_calculator = document.getElementById('calc-dynamic-accos') as VtbCalculatorElement;
+  if (acco_calculator) {
 
-  // const additionsTable = document.getElementById(
-  //   'calc-dynamic-additions'
-  // ) as VtbCalculatorElement;
-  // additionsTable.renderElementDescription = function (element) {
-  //   return `${element.title}`;
-  // };
-  // additionsTable.displayTotals = false;
-  // additionsTable.priceData = additions_elements;
-  // additionsTable.totalPrice = additions_total;
+    const acco_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACCO],
+      optional: false
+    });
+    console.info('acco elements: ', acco_elements);
+
+    const acco_total = vtb.calculate_price(undefined, acco_elements);
+    console.info('acco price: ', acco_total);
+
+    function renderAccoElementDescription(element: VtbElement) {
+      return `Dag: ${element.day}-${element.day + element.nights} | ${element.nights
+        } ${element.nights == 1 ? 'nacht' : 'nachten'} ${element.title
+        } - ${element.subtitle} voor ${element.participants.length} personen ${element.optional ? '[optioneel]' : ''
+        }`;
+    }
+
+    const accoTable = document.getElementById(
+      'calc-dynamic-accos'
+    ) as VtbCalculatorElement;
+    accoTable.renderElementDescription = renderAccoElementDescription;
+    accoTable.getElementPrice = function (element) {
+      return `${element.optional ? element.price_diff : element.price}`;
+    };
+    accoTable.displayTotals = false;
+    accoTable.priceData = acco_elements;
+    accoTable.totalPrice = acco_total;
+
+
+    function renderAcivityElementDescription(element: VtbElement) {
+      return `Dag: ${element.day} | ${element.title} ${element.optional ? '[optioneel]' : ''}`;
+    }
+
+    const activity_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACTIVITY],
+      optional: false
+    });
+    console.info('acco elements: ', activity_elements);
+
+    const activity_total = vtb.calculate_price(undefined, activity_elements);
+    console.info('acco price: ', activity_total);
+
+    const activityTable = document.getElementById(
+      'calc-dynamic-activities'
+    ) as VtbCalculatorElement;
+    activityTable.renderElementDescription = renderAcivityElementDescription;
+    activityTable.getElementPrice = function (element) {
+      return `${element.optional ? element.price_diff : element.price}`;
+    };
+    activityTable.displayTotals = false;
+    activityTable.priceData = activity_elements;
+    activityTable.totalPrice = activity_total;
+
+
+    // const all_carrental_elements = vtb.filter_elements({
+    //   group_type_ids: [SegmentTypes.DEFAULT],
+    //   element_unit_ids: [UnitTypes.CARRENTAL],
+    // });
+
+    // const carrental_elements = vtb.filter_elements({
+    //   group_type_ids: [SegmentTypes.DEFAULT],
+    //   element_unit_ids: [UnitTypes.CARRENTAL],
+    //   optional: false,
+    // });
+    // const carrental_total = vtb.calculate_price(undefined, carrental_elements);
+
+    // const carrentalTable = document.getElementById(
+    //   'calc-dynamic-carrental'
+    // ) as VtbCalculatorElement;
+    // carrentalTable.renderElementDescription = (element) =>
+    //   `${element.nights + 1} dgn. ${element.subtitle?.replace('Type', '')} ${
+    //     element.optional ? '[optioneel]' : ''
+    //   } (${element.price})`;
+    // carrentalTable.getElementPrice = function (element) {
+    //   return `${element.optional ? element.price_diff : element.price}`;
+    // };
+    // carrentalTable.displayTotals = true;
+    // carrentalTable.priceData = all_carrental_elements;
+    // carrentalTable.totalPrice = carrental_total;
+
+    const additions_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.TOESLAGEN],
+      // element_unit_ids: [unit_types.additions],
+      // optional: false,
+      // participants: ['1211769']
+    });
+    const additions_total = vtb.calculate_price(undefined, additions_elements);
+
+    const additionsTable = document.getElementById(
+      'calc-dynamic-additions'
+    ) as VtbCalculatorElement;
+    additionsTable.renderElementDescription = function (element) {
+      return `${element.title}`;
+    };
+    additionsTable.displayTotals = false;
+    additionsTable.priceData = additions_elements;
+    additionsTable.totalPrice = additions_total;
+  }
+
+  if (false) {
+
+    // accos on map
+
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
 
   // // accommodations
 
@@ -189,53 +257,11 @@ function vtbDataLoaded(vtb: Vtb) {
 
   // const acco_total = vtb.calculate_price(undefined, acco_elements);
 
-  // const accoTable = document.getElementById(
-  //   'calc-dynamic-accos'
-  // ) as VtbCalculatorElement;
-  // accoTable.renderElementDescription = function (element) {
-  //   // console.info(element);
-  //   return `Dag: ${element.day} __${element.startdate?.format('D MMM')}__ (${
-  //     element.nights
-  //   } ${element.nights == 1 ? 'nacht' : 'nachten'}) - ${
-  //     element.title
-  //   } (kamertype: ${element.subtitle}) ${
-  //     element.optional ? '[optioneel]' : ''
-  //   } (${element.price})`;
-  // };
-  // accoTable.getElementPrice = function (element) {
-  //   return `${element.optional ? element.price_diff : element.price}`;
-  // };
-  // accoTable.displayTotals = true;
-  // accoTable.priceData = all_acco_elements;
-  // accoTable.totalPrice = acco_total;
+
 
   // // autohuur
 
-  // const all_carrental_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.CARRENTAL],
-  //   // element_unit_ids: [unit_types.NACHTEN],
-  // });
 
-  // const carrental_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.CARRENTAL],
-  //   // element_unit_ids: [unit_types.NACHTEN],
-  //   optional: false,
-  // });
-  // const carrental_total = vtb.calculate_price(undefined, carrental_elements);
-
-  // const carrentalTable = document.getElementById(
-  //   'calc-dynamic-carrental'
-  // ) as VtbCalculatorElement;
-  // carrentalTable.renderElementDescription = (element) =>
-  //   `${element.nights + 1} dgn. ${element.subtitle?.replace('Type', '')} ${
-  //     element.optional ? '[optioneel]' : ''
-  //   } (${element.price})`;
-  // carrentalTable.getElementPrice = function (element) {
-  //   return `${element.optional ? element.price_diff : element.price}`;
-  // };
-  // carrentalTable.displayTotals = true;
-  // carrentalTable.priceData = all_carrental_elements;
-  // carrentalTable.totalPrice = carrental_total;
 
   // const flight_elements = vtb.filter_elements({
   //   group_type_ids: [segment_types.FLIGHT],

@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VTB Webcomponents Demo</title>
+  <!--
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/lit/polyfill-support.js"></script>
+    -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <script type="module" src="/dist/main.js"></script>
+  <style>
+    body {
+      line-height: 170%;
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    vtb-calculator {
+      max-width: 768px;
+      margin: 0 auto;
+    }
+
+    vtb-calculator-element {
+      border-bottom: 1px solid #ccc;
+    }
+
+    section.hero {
+      position: relative;
+    }
+
+    section.hero vtb-media {
+      height: 500px;
+      width: 100%;
+    }
+
+    section.hero .hero-content {
+      position: absolute;
+      bottom: 0;
+      right: 50%;
+    }
+
+    section.travelplan-info {
+      max-width: 768px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <ul>
+    <li><a href="/index.html">Index</a></li>
+    <li><a href="/media.html">VTB Media</a></li>
+    <li><a href="/flightschedule.html">VTB Flight Schedule</a></li>
+    <li><a href="/map.html">VTB Map</a></li>
+    <li><a href="/calculator.html">VTB Calculator</a></li>
+  </ul>
+
+  <section class="calculator">
+
+    <h2>Dynamic calculators</h2>
+
+    <vtb-calculator id="calc-dynamic-accos" title="Accommodaties"></vtb-calculator>
+
+    <vtb-calculator id="calc-dynamic-activities" title="Activiteiten"></vtb-calculator>
+
+    <vtb-calculator id="calc-dynamic-carrental" title="Autohuur"></vtb-calculator>
+
+    <vtb-calculator id="calc-dynamic-flight" title="Vluchten"></vtb-calculator>
+
+    <vtb-calculator id="calc-dynamic-flightadditional"
+      title="Vluchten bijkomende kosten"></vtb-calculator>
+
+    <!-- <vtb-calculator
+        id="calc-dynamic-flighttotal"
+        display-totals
+        title="Vluchten"
+      ></vtb-calculator>
+ -->
+    <vtb-calculator id="calc-dynamic-additions" display-totals title="Toeslagen"></vtb-calculator>
+
+    <vtb-calculator id="calc-dynamic-test" display-totals title="Pakket"></vtb-calculator>
+  </section>
+
+
+</body>
+
+</html>

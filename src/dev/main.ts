@@ -11,7 +11,7 @@ import {VtbFilterConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
-import {VtbCalculatorElement} from '../components/calculator';
+import {VtbCalculatorElement, VtbCalculatorPriceElement} from '../components/calculator';
 // import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
@@ -121,228 +121,194 @@ function vtbDataLoaded(vtb: Vtb) {
   const acco_calculator = document.getElementById('calc-dynamic-accos') as VtbCalculatorElement;
   if (acco_calculator) {
 
+    // accommodations
     const acco_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACCO],
       optional: false
     });
-    console.info('acco elements: ', acco_elements);
-
-    const acco_total = vtb.calculate_price(undefined, acco_elements);
-    console.info('acco price: ', acco_total);
-
-    function renderAccoElementDescription(element: VtbElement) {
-      return `Dag: ${element.day}-${element.day + element.nights} | ${element.nights
-        } ${element.nights == 1 ? 'nacht' : 'nachten'} ${element.title
-        } - ${element.subtitle} voor ${element.participants.length} personen ${element.optional ? '[optioneel]' : ''
-        }`;
-    }
 
     const accoTable = document.getElementById(
       'calc-dynamic-accos'
     ) as VtbCalculatorElement;
-    accoTable.renderElementDescription = renderAccoElementDescription;
-    accoTable.getElementPrice = function (element) {
-      return `${element.optional ? element.price_diff : element.price}`;
-    };
-    accoTable.displayTotals = false;
-    accoTable.priceData = acco_elements;
-    accoTable.totalPrice = acco_total;
 
-
-    function renderAcivityElementDescription(element: VtbElement) {
-      return `Dag: ${element.day} | ${element.title} ${element.optional ? '[optioneel]' : ''}`;
+    if (accoTable && acco_elements.length >= 1) {
+      accoTable.render_element_description = function (element: VtbElement) {
+        return `Dag: ${element.day}-${element.last_day} | ${element.nights
+          } ${element.nights == 1 ? 'nacht' : 'nachten'} ${element.title
+          } - ${element.subtitle} voor ${element.participants.length} personen ${element.optional ? '[optioneel]' : ''
+          }`;
+      };
+      accoTable.elements = acco_elements;
     }
 
+
+    // activities
     const activity_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACTIVITY],
       optional: false
     });
-    console.info('acco elements: ', activity_elements);
-
-    const activity_total = vtb.calculate_price(undefined, activity_elements);
-    console.info('acco price: ', activity_total);
 
     const activityTable = document.getElementById(
       'calc-dynamic-activities'
     ) as VtbCalculatorElement;
-    activityTable.renderElementDescription = renderAcivityElementDescription;
-    activityTable.getElementPrice = function (element) {
-      return `${element.optional ? element.price_diff : element.price}`;
-    };
-    activityTable.displayTotals = false;
-    activityTable.priceData = activity_elements;
-    activityTable.totalPrice = activity_total;
+
+    if (activityTable && activity_elements.length >= 1) {
+      activityTable.render_element_description = function (element: VtbElement) {
+        return `Dag: ${element.day} | ${element.title} ${element.optional ? '[optioneel]' : ''}`;
+      };
+
+      activityTable.elements = activity_elements;
+    }
 
 
-    // const all_carrental_elements = vtb.filter_elements({
-    //   group_type_ids: [SegmentTypes.DEFAULT],
-    //   element_unit_ids: [UnitTypes.CARRENTAL],
-    // });
+    // package price
+    const package_total_price_element = document.getElementById('calc-dynamic-total-package') as VtbCalculatorPriceElement;
+    console.info('package_total_price_element', package_total_price_element);
 
-    // const carrental_elements = vtb.filter_elements({
-    //   group_type_ids: [SegmentTypes.DEFAULT],
-    //   element_unit_ids: [UnitTypes.CARRENTAL],
-    //   optional: false,
-    // });
-    // const carrental_total = vtb.calculate_price(undefined, carrental_elements);
+    if (package_total_price_element) {
+      package_total_price_element.price = vtb.calculate_price({
+        group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.HIDDEN],
+        optional: false
+      });
+    }
 
-    // const carrentalTable = document.getElementById(
-    //   'calc-dynamic-carrental'
-    // ) as VtbCalculatorElement;
-    // carrentalTable.renderElementDescription = (element) =>
-    //   `${element.nights + 1} dgn. ${element.subtitle?.replace('Type', '')} ${
-    //     element.optional ? '[optioneel]' : ''
-    //   } (${element.price})`;
-    // carrentalTable.getElementPrice = function (element) {
-    //   return `${element.optional ? element.price_diff : element.price}`;
-    // };
-    // carrentalTable.displayTotals = true;
-    // carrentalTable.priceData = all_carrental_elements;
-    // carrentalTable.totalPrice = carrental_total;
 
+    // flights
+    const flights_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.FLIGHT],
+      element_unit_ids: [UnitTypes.FLIGHT, UnitTypes.FLIGHTNIGHT],
+      optional: false
+    });
+
+    const flightsTable = document.getElementById(
+      'calc-dynamic-flights'
+    ) as VtbCalculatorElement;
+
+    if (flightsTable && flights_elements.length >= 1) {
+      flightsTable.render_element_description = function (element: VtbElement) {
+        if (element.nights >= 1) {
+          return `
+            Dag: ${element.day}-${element.last_day} | ${element.title}
+          `;
+        }
+
+        return `
+          Dag: ${element.day} | ${element.title}
+        `;
+      };
+
+      flightsTable.elements = flights_elements;
+      // flightsTable.display_totals = true;
+      flightsTable.total_price = vtb.calculate_price(undefined, flights_elements);
+    }
+
+    // package price
+    const flights_total_price_element = document.getElementById('calc-dynamic-total-flights') as VtbCalculatorPriceElement;
+    console.info('flights_total_price_element', flights_total_price_element);
+
+    if (flights_total_price_element) {
+      flights_total_price_element.price = vtb.calculate_price(undefined, flights_elements);
+    }
+
+
+    // car rental
+    const carrental_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.CARRENTAL],
+      optional: false,
+    });
+
+    const carrentalTable = document.getElementById(
+      'calc-dynamic-carrental'
+    ) as VtbCalculatorElement;
+
+
+    if (carrentalTable && carrental_elements.length >= 1) {
+      carrentalTable.render_element_description = (element) =>
+        `${element.days} dgn. ${element.subtitle?.replace('Type', '')} ${element.optional ? '[optioneel]' : ''
+        } (${element.price})`;
+
+      carrentalTable.elements = carrental_elements;
+    }
+
+
+    const carrental_total_price_element = document.getElementById('calc-dynamic-total-carrental') as VtbCalculatorPriceElement;
+    console.info('carrental_total_price_element', carrental_total_price_element);
+
+    if (carrental_total_price_element) {
+      carrental_total_price_element.price = vtb.calculate_price(undefined, carrental_elements);
+    }
+
+    // additions
     const additions_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.TOESLAGEN],
-      // element_unit_ids: [unit_types.additions],
-      // optional: false,
-      // participants: ['1211769']
     });
-    const additions_total = vtb.calculate_price(undefined, additions_elements);
 
     const additionsTable = document.getElementById(
       'calc-dynamic-additions'
     ) as VtbCalculatorElement;
-    additionsTable.renderElementDescription = function (element) {
-      return `${element.title}`;
-    };
-    additionsTable.displayTotals = false;
-    additionsTable.priceData = additions_elements;
-    additionsTable.totalPrice = additions_total;
+
+    if (additionsTable && additions_elements.length >= 1) {
+      additionsTable.render_element_description = function (element) {
+        return `${element.title}`;
+      };
+
+      additionsTable.elements = additions_elements;
+    }
+
+
+    // total price
+    const totalTable = document.getElementById(
+      'calc-dynamic-total'
+    ) as VtbCalculatorElement;
+
+    if (totalTable) {
+      const total_price = vtb.calculate_price({
+        optional: false,
+      });
+
+      totalTable.total_price = total_price;
+    }
+
+    // acco upgrades
+    const upgrade_acco_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACCO],
+      optional: true,
+    });
+
+    const upgradeAccoTable = document.getElementById(
+      'calc-dynamic-acco-upgrades'
+    ) as VtbCalculatorElement;
+
+    if (upgradeAccoTable && upgrade_acco_elements.length >= 1) {
+      upgradeAccoTable.elements = upgrade_acco_elements;
+    }
+
+
+    // optional activities
+    const optional_activity_elements = vtb.filter_elements({
+      group_type_ids: [SegmentTypes.DEFAULT],
+      element_unit_ids: [UnitTypes.ACTIVITY],
+      optional: true,
+    });
+
+    const optional_activity_table = document.getElementById(
+      'calc-dynamic-optional-activities'
+    ) as VtbCalculatorElement;
+
+    if (optional_activity_table && optional_activity_elements.length >= 1) {
+      optional_activity_table.elements = optional_activity_elements;
+    }
   }
 
-  if (false) {
-
-    // accos on map
 
 
 
 
 
-
-
-
-  }
-
-
-
-
-
-
-
-
-  // // accommodations
-
-  // const all_acco_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.ARRANGEMENT],
-  //   element_unit_ids: [unit_types.NACHTEN],
-  //   // optional: false,
-  // });
-
-  // const acco_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.ARRANGEMENT],
-  //   element_unit_ids: [unit_types.NACHTEN],
-  //   optional: false,
-  // });
-
-  // const acco_total = vtb.calculate_price(undefined, acco_elements);
-
-
-
-  // // autohuur
-
-
-
-  // const flight_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.FLIGHT],
-  //   // element_unit_ids: [unit_types.NACHTEN]
-  // });
-  // const flight_total = vtb.calculate_price(undefined, flight_elements);
-
-  // const flightTable = document.getElementById(
-  //   'calc-dynamic-flight'
-  // ) as VtbCalculatorElement;
-  // flightTable.renderElementDescription = function (element) {
-  //   if (element.subtitle) {
-  //     return `${element.subtitle} ${element.optional ? '[optioneel]' : ''}`;
-  //   }
-  //   return `${element.grouptitle} ${element.optional ? '[optioneel]' : ''}`;
-  // };
-  // flightTable.displayTotals = false;
-  // flightTable.priceData = flight_elements;
-  // flightTable.totalPrice = flight_total;
-
-  // const flightAdditional_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.FLIGHT_ADDITIONAL],
-  //   // element_unit_ids: [unit_types.NACHTEN]
-  // });
-  // const flightAdditional_total = vtb.calculate_price(
-  //   undefined,
-  //   flightAdditional_elements
-  // );
-
-  // const flightAdditionalTable = document.getElementById(
-  //   'calc-dynamic-flightadditional'
-  // ) as VtbCalculatorElement;
-  // flightAdditionalTable.renderElementDescription = function (element) {
-  //   if (element.subtitle) {
-  //     return `${element.subtitle}`;
-  //   }
-
-  //   return `${element.title}`;
-  // };
-  // flightAdditionalTable.displayTotals = false;
-  // flightAdditionalTable.priceData = flightAdditional_elements;
-  // flightAdditionalTable.totalPrice = flightAdditional_total;
-
-  // // const flightTotal_elements = [...flight_elements, ...flightAdditional_elements];
-  // // const flightTotal_total = vtb.calculate_price(flightTotal_elements);
-
-  // // const flightTotalTable = document.getElementById('calc-dynamic-flighttotal') as VtbCalculatorElement;
-  // // flightTotalTable.renderElementDescription = function (element) {
-  // //   if (element.subtitle) {
-  // //     return `${element.subtitle}`;
-  // //   }
-
-  // //   return `${element.title}`;
-  // // }
-  // // flightTotalTable.displayTotals = true;
-  // // flightTotalTable.priceData = [];
-  // // flightTotalTable.totalPrice = flightTotal_total;
-
-  // const test_elements = vtb.filter_elements({
-  //   group_type_ids: [segment_types.ARRANGEMENT],
-  //   element_unit_ids: [unit_types.MAAL],
-  //   participant_ids: ['1211769'],
-  // });
-
-  // const test_total = vtb.calculate_price({
-  //   optional: false,
-  // });
-
-  // const testTable = document.getElementById(
-  //   'calc-dynamic-test'
-  // ) as VtbCalculatorElement;
-  // testTable.renderElementDescription = function (element) {
-  //   if (element.subtitle) {
-  //     return `${element.subtitle}`;
-  //   }
-
-  //   return `${element.title}`;
-  // };
-  // testTable.displayTotals = true;
-  // testTable.priceData = test_elements;
-  // testTable.totalPrice = test_total;
 
   // const vtbTextTravelplan = document.querySelector('vtb-text#travelplan');
   // if (vtbTextTravelplan) {

@@ -23,34 +23,22 @@
       padding: 0;
     }
 
-    vtb-calculator {
+    section.calculator {
       max-width: 768px;
-      margin: 0 auto;
+      margin: 1rem auto;
     }
 
-    vtb-calculator-element {
-      border-bottom: 1px solid #ccc;
+    .receipt {
+      margin: 1rem auto;
+      border: 1px dashed #888;
+      padding: 0 1rem 1rem;
     }
 
-    section.hero {
-      position: relative;
+    vtb-calculator#calc-dynamic-total {
+      border-bottom: 1px solid #000;
+      padding-bottom: 1rem;
     }
 
-    section.hero vtb-media {
-      height: 500px;
-      width: 100%;
-    }
-
-    section.hero .hero-content {
-      position: absolute;
-      bottom: 0;
-      right: 50%;
-    }
-
-    section.travelplan-info {
-      max-width: 768px;
-      margin: 0 auto;
-    }
   </style>
 </head>
 
@@ -61,6 +49,7 @@
     <li><a href="/flightschedule.html">VTB Flight Schedule</a></li>
     <li><a href="/map.html">VTB Map</a></li>
     <li><a href="/calculator.html">VTB Calculator</a></li>
+    <li><a href="/text.html">VTB Text Editor</a></li>
   </ul>
 
   <section class="calculator">
@@ -73,20 +62,26 @@
 
     <vtb-calculator id="calc-dynamic-carrental" title="Autohuur"></vtb-calculator>
 
-    <vtb-calculator id="calc-dynamic-flight" title="Vluchten"></vtb-calculator>
+    <vtb-calculator id="calc-dynamic-flights" title="Vluchten"></vtb-calculator>
 
-    <vtb-calculator id="calc-dynamic-flightadditional"
-      title="Vluchten bijkomende kosten"></vtb-calculator>
+    <div class="receipt">
 
-    <!-- <vtb-calculator
-        id="calc-dynamic-flighttotal"
-        display-totals
-        title="Vluchten"
-      ></vtb-calculator>
- -->
-    <vtb-calculator id="calc-dynamic-additions" display-totals title="Toeslagen"></vtb-calculator>
+      <vtb-calculator id="calc-dynamic-reissom">
+        <vtb-calculator-list title="Reissom">
+          <vtb-calculator-element id="calc-dynamic-total-package" display-price="true">Arrangement</vtb-calculator-element>
+          <vtb-calculator-element id="calc-dynamic-total-flights" display-price="true">Vluchten</vtb-calculator-element>
+          <vtb-calculator-element id="calc-dynamic-total-carrental" display-price="true">Autohuur</vtb-calculator-element>
+        </vtb-calculator-list>
+      </vtb-calculator>
 
-    <vtb-calculator id="calc-dynamic-test" display-totals title="Pakket"></vtb-calculator>
+      <vtb-calculator id="calc-dynamic-additions" display-prices title="Toeslagen"></vtb-calculator>
+
+      <vtb-calculator id="calc-dynamic-total" display-totals></vtb-calculator>
+
+      <vtb-calculator id="calc-dynamic-acco-upgrades" display-prices title="Accommodatie upgrades"></vtb-calculator>
+
+      <vtb-calculator id="calc-dynamic-optional-activities" display-prices title="Optionele activiteiten"></vtb-calculator>
+    </div>
   </section>
 
 

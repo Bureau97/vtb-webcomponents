@@ -120,7 +120,15 @@ export class VtbElement implements interfaces.VtbElement {
     });
   }
 
-  clone(): VtbElement {
+  get last_day(): number {
+    return this.day + this.nights;
+  }
+
+  get days(): number {
+    return this.nights + 1;
+  }
+
+  public clone(): VtbElement {
     const _clone = Object.assign(new VtbElement(), structuredClone(this));
 
     _clone.startdate = dayjs(this.startdate.format());

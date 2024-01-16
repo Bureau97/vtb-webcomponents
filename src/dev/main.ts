@@ -12,10 +12,12 @@ import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
 import {VtbCalculatorElement, VtbCalculatorPriceElement} from '../components/calculator';
-// import {VtbTextElement} from '../components/text';
+import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
+
+const TEXT_EDIT_MODE_ENABLED = true;
 
 enum SegmentTypes {
   DEFAULT = 1,
@@ -33,6 +35,18 @@ enum UnitTypes {
   CARRENTAL = 6,
   ACTIVITY = 10,
   EXTRA = 11,
+}
+
+const currency_transformer = new Intl.NumberFormat('nl-NL', {
+  style: 'currency',
+  currency: 'EUR'
+});
+
+function currency (value: number | null): string {
+  if (value) {
+    return currency_transformer.format(value);
+  }
+  return String(value);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -134,10 +148,10 @@ function vtbDataLoaded(vtb: Vtb) {
 
     if (accoTable && acco_elements.length >= 1) {
       accoTable.render_element_description = function (element: VtbElement) {
-        return `Dag: ${element.day}-${element.last_day} | ${element.nights
-          } ${element.nights == 1 ? 'nacht' : 'nachten'} ${element.title
-          } - ${element.subtitle} voor ${element.participants.length} personen ${element.optional ? '[optioneel]' : ''
-          }`;
+        return `Dag: ${element.day}-${element.last_day} |
+        ${element.nights} ${element.nights == 1 ? 'nacht' : 'nachten'}
+        ${element.title}
+        `;
       };
       accoTable.elements = acco_elements;
     }
@@ -305,78 +319,201 @@ function vtbDataLoaded(vtb: Vtb) {
   }
 
 
+  // itinerary
+  const itinerary_elements = vtb.filter_groups({
+    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT],
+  });
 
+  const itinerary = document.getElementById('itinerary');
+  if (itinerary) {
 
+    function vtbTextChanged(e?: Event) {
+      console.info('vtbTextChanged: ', e);
+    }
 
+    // walk over all element groups
+    for (const itinerary_element of itinerary_elements) {
+      const _h = document.createElement('h2');
+      _h.innerHTML =
+        'Dag ' +
+          itinerary_element.day +
+          (itinerary_element.nights >= 1
+            ? '-' + (itinerary_element.last_day)
+            : '') +
+          ': ' +
+          itinerary_element.title || 'not set';
+      itinerary.appendChild(_h);
 
+      if (itinerary_element.subtitle) {
+        const _h2 = document.createElement('h3');
+        _h2.innerHTML = itinerary_element.subtitle;
+        itinerary.appendChild(_h2);
+      }
 
-  // const vtbTextTravelplan = document.querySelector('vtb-text#travelplan');
-  // if (vtbTextTravelplan) {
-  //   console.info(vtbTextTravelplan);
-  //   const _p = document.createElement('p');
-  //   _p.innerText = 'hello';
-  //   vtbTextTravelplan.appendChild(_p);
-  // }
+      // add VTB Text element to be able to edit the description
+      const _t = new VtbTextElement();
+      _t.addEventListener('vtbTextChanged', vtbTextChanged);
+      _t.editable = TEXT_EDIT_MODE_ENABLED;
+      _t.innerHTML = itinerary_element.description || 'not set';
+      _t.id = String(itinerary_element.id);
+      itinerary.appendChild(_t);
 
-  // const itenerary_elements = vtb.filter_groups({
-  //   group_type_ids: [1, 2],
-  //   // element_unit_ids: [null], // explicitly set null!
-  // });
-  // console.info(itenerary_elements);
+      // show accos
+      for (const element of itinerary_element.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO],
+        optional: false,
+      })) {
+        const _h3 = document.createElement('h4');
 
-  // const itenerary = document.getElementById('itenerary');
-  // if (itenerary) {
-  //   console.info(itenerary);
+        let title = element.title;
+        if (element.subtitle) {
+          title += element.subtitle;
+        }
+        _h3.innerHTML = title;
+        itinerary.appendChild(_h3);
 
-  //   for (const itenerary_element of itenerary_elements) {
-  //     const _h = document.createElement('h3');
-  //     _h.innerHTML =
-  //       'Dag ' +
-  //         itenerary_element.day +
-  //         (itenerary_element.nights > 1
-  //           ? '-' + (itenerary_element.day + itenerary_element.nights)
-  //           : '') +
-  //         ': ' +
-  //         itenerary_element.title || 'not set';
-  //     itenerary.appendChild(_h);
+        const _p = new VtbTextElement();
+        _p.id = String(element.id);
+        _p.addEventListener('vtbTextChanged', vtbTextChanged);
+        _p.editable = TEXT_EDIT_MODE_ENABLED;
+        _p.innerHTML = element.description ?? 'not set';
+        itinerary.appendChild(_p);
 
-  //     if (itenerary_element.subtitle) {
-  //       const _h2 = document.createElement('h4');
-  //       _h2.innerHTML = itenerary_element.subtitle;
-  //       itenerary.appendChild(_h2);
-  //     }
+        // show all units for this acco
+        const units_list = document.createElement('ul');
+        for (const unit of element.units) {
+          const _u = document.createElement('li');
 
-  //     const _t = new VtbTextElement();
+          let content = unit.title;
 
-  //     _t.addEventListener('vtbTextChanged', (e?: Event) => {
-  //       console.info('vtbTextChanged: ', e);
-  //     });
+          content += ` (voor ${unit.participant_prices.length} ${
+            unit.participant_prices.length === 1 ? 'persoon' : 'personen'
+          })`;
 
-  //     // _t.editable = true;
-  //     _t.innerHTML = itenerary_element.description || 'not set';
-  //     _t.id = String(itenerary_element.id);
-  //     itenerary.appendChild(_t);
+          _u.innerHTML = content;
+          units_list.appendChild(_u);
+        }
 
-  //     for (const element of itenerary_element.filter_elements({
-  //       element_unit_ids: [2, 10],
-  //     })) {
-  //       const _h5 = document.createElement('h5');
-  //       let title = element.title;
-  //       if (element.subtitle) {
-  //         title += element.subtitle;
-  //       }
+        itinerary.appendChild(units_list);
+      }
 
-  //       if (element.optional) {
-  //         title += ' [optioneel]';
-  //       }
-  //       _h5.innerHTML = element.title;
+      // show non-optional activities
+      for (const element of itinerary_element.filter_elements({
+        element_unit_ids: [UnitTypes.ACTIVITY],
+        optional: false,
+      })) {
+        const _h3 = document.createElement('h4');
+        let title = element.title;
+        if (element.subtitle) {
+          title += element.subtitle;
+        }
+        _h3.innerHTML = title;
 
-  //       itenerary.appendChild(_h5);
+        itinerary.appendChild(_h3);
 
-  //       const _p = document.createElement('p');
-  //       _p.innerHTML = element.description ?? 'not set';
-  //       itenerary.appendChild(_p);
-  //     }
-  //   }
-  // }
+        const _p = new VtbTextElement();
+        _p.id = String(element.id);
+        _p.addEventListener('vtbTextChanged', vtbTextChanged);
+        _p.editable = TEXT_EDIT_MODE_ENABLED;
+        _p.innerHTML = element.description ?? 'not set';
+        itinerary.appendChild(_p);
+      }
+
+      // get all upgrade acco elements
+      const upgrade_acco_elements = itinerary_element.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO],
+        optional: true,
+      });
+
+      // get all optional activity elements
+      const optional_activity_elements = itinerary_element.filter_elements({
+        element_unit_ids: [UnitTypes.ACTIVITY],
+        optional: true,
+      });
+
+      // show acco upgrades and optional activities
+      if (upgrade_acco_elements.length >= 1 || optional_activity_elements.length >= 1) {
+        const _upgrades = document.createElement('h4');
+        _upgrades.innerHTML = 'Up- en downgrades';
+        itinerary.appendChild(_upgrades);
+
+        // first acco upgrades
+        for (const element of upgrade_acco_elements) {
+          const _h3 = document.createElement('h4');
+          let title = element.title;
+
+          if (element.subtitle) {
+            title += element.subtitle;
+          }
+
+          if (element.optional) {
+            title += ' [optioneel]';
+          }
+
+          _h3.innerHTML = title;
+          itinerary.appendChild(_h3);
+
+          const _p = new VtbTextElement();
+          _p.id = String(element.id);
+          _p.addEventListener('vtbTextChanged', vtbTextChanged);
+          _p.editable = TEXT_EDIT_MODE_ENABLED;
+          _p.innerHTML = element.description ?? 'not set';
+          itinerary.appendChild(_p);
+
+          const units_list = document.createElement('ul');
+          // show all units for this acco
+          for (const unit of element.units) {
+            const _u = document.createElement('li');
+
+            let content = unit.title;
+
+            content += ` (voor ${unit.participant_prices.length} ${unit.participant_prices.length === 1 ? 'persoon' : 'personen'
+              })`;
+
+            _u.innerHTML = content;
+            units_list.appendChild(_u);
+          }
+
+          itinerary.appendChild(units_list);
+
+          const price = document.createElement('p');
+          if (element.price_diff > 0) {
+            price.innerHTML = `Meerprijs: ${currency(element.price_diff)}`;
+          }
+          if (element.price_diff < 0) {
+            price.innerHTML = `Minderprijs: ${currency(element.price_diff)}`;
+          }
+          itinerary.appendChild(price);
+        }
+
+        // show optional activities
+        for (const element of optional_activity_elements) {
+          const _h3 = document.createElement('h4');
+          let title = element.title;
+
+          if (element.subtitle) {
+            title += element.subtitle;
+          }
+          _h3.innerHTML = title;
+          itinerary.appendChild(_h3);
+
+          const _p = new VtbTextElement();
+          _p.id = String(element.id);
+          _p.addEventListener('vtbTextChanged', vtbTextChanged);
+          _p.editable = TEXT_EDIT_MODE_ENABLED;
+          _p.innerHTML = element.description ?? 'not set';
+          itinerary.appendChild(_p);
+
+          const price = document.createElement('p');
+          if (element.price_diff > 0) {
+            price.innerHTML = `Meerprijs: ${currency(element.price_diff)}`;
+          }
+          if (element.price_diff < 0) {
+            price.innerHTML = `Minderprijs: ${currency(element.price_diff)}`;
+          }
+          itinerary.appendChild(price);
+        }
+      }
+    }
+  }
 }

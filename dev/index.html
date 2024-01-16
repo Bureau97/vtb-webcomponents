@@ -24,33 +24,11 @@
         padding: 0;
       }
 
-      vtb-calculator {
-        max-width: 768px;
-        margin: 0 auto;
+      .container {
+        max-width: 900px;
+        margin: 1rem auto;
       }
 
-      vtb-calculator-element {
-        border-bottom: 1px solid #ccc;
-      }
-
-      section.hero {
-        position: relative;
-      }
-
-      section.hero vtb-media {
-        height: 500px;
-        width: 100%;
-      }
-
-      section.hero .hero-content {
-        position: absolute;
-        bottom: 0;
-        right: 50%;
-      }
-      section.travelplan-info {
-        max-width: 768px;
-        margin: 0 auto;
-      }
     </style>
   </head>
   <body>
@@ -62,5 +40,10 @@
       <li><a href="/calculator.html">VTB Calculator</a></li>
       <li><a href="/text.html">VTB Text Editor</a></li>
     </ul>
+
+    <div class="container">
+      <h1>Itinerary</h1>
+      <div id="itinerary"></div>
+    </div>
   </body>
 </html>

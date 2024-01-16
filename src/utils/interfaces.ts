@@ -83,6 +83,11 @@ export interface VtbParticipantPrice {
   price: number;
 }
 
+export interface VtbElementUnit {
+  title: string;
+  participant_prices: Array<VtbParticipantPrice>;
+}
+
 export interface VtbElement {
   id: string;
   object_id?: string;
@@ -103,6 +108,7 @@ export interface VtbElement {
   grouptitle?: string;
   media: Array<VtbMedia>;
   location?: VtbMapMarker;
+  units: Array<VtbElementUnit>
 }
 
 export interface VtbElementGroup {

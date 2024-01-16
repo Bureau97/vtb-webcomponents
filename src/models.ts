@@ -93,9 +93,15 @@ export class VtbFlightData implements interfaces.VtbFlightData {
   operated_by?: string;
 }
 
+export class VtbElementUnit implements interfaces.VtbElementUnit {
+  title: string = '';
+  participant_prices: Array<VtbParticipantPrice> = [];
+}
+
 export class VtbElement implements interfaces.VtbElement {
   id: string = '';
   object_id?: string;
+  ts_product_id?: number;
   title: string = '';
   subtitle?: string;
   description?: string;
@@ -113,6 +119,7 @@ export class VtbElement implements interfaces.VtbElement {
   grouptitle?: string;
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
+  units: Array<VtbElementUnit> = []
 
   get participants(): Array<number> {
     return this.participant_prices.map((participant_price) => {
@@ -159,6 +166,14 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
   location?: VtbMapMarker;
   is_flight = false;
   is_carrental = false;
+
+  get last_day(): number {
+    return this.day + this.nights;
+  }
+
+  get days(): number {
+    return this.nights + 1;
+  }
 
   private mapped_elements_by_id: Dictionary<VtbElement> = {};
   private elements_order: Array<string> = [];

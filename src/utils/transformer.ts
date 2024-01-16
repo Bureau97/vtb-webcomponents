@@ -10,6 +10,7 @@ import {
   VtbTravelPlanData,
   VtbElement,
   VtbElementGroup,
+  VtbElementUnit,
   VtbExtraField,
   VtbFlight,
   VtbFlightCarrier,
@@ -160,6 +161,7 @@ export class VtbDataTransformer {
 
       // todo: check if this is a feature or a bug, or a pebkac?!?
       if (!car_element.description && segment_parent_data.content) {
+        console.warn('adding segment content to element description!');
         car_element.description = segment_parent_data.content;
       }
 
@@ -290,10 +292,20 @@ export class VtbDataTransformer {
 
     let last_element: VtbElement | null = null;
     for (const element_data of segment_data.elements) {
+
       const vtb_element: VtbElement = this.parse_vtb_element(
         element_data,
         segment_data.title
       );
+
+      if (last_element && last_element.ts_product_id == vtb_element.ts_product_id) {
+        last_element.units = last_element.units.concat(vtb_element.units);
+        last_element.participant_prices = last_element.participant_prices.concat(
+          vtb_element.participant_prices
+        );
+
+        continue;
+      }
 
       if (
         last_element &&
@@ -346,8 +358,11 @@ export class VtbDataTransformer {
     const vtb_element = new VtbElement();
     // console.debug('element_data: ', element_data);
     vtb_element.id = element_data.vtbObjectId;
+    vtb_element.object_id = element_data.vtbObjectId;
+    vtb_element.ts_product_id = element_data.TSProduct.id;
+
     vtb_element.title = element_data.title;
-    vtb_element.subtitle = element_data.subTitle;
+    // vtb_element.subtitle = element_data.subTitle;
     // set element description, get all contents from the <body> and remove all style attributes
     vtb_element.description = element_data.additionalText
       ?.replace(this.re_body, '$1')
@@ -363,7 +378,7 @@ export class VtbDataTransformer {
     vtb_element.day = element_data.day;
     vtb_element.unit_id = element_data.unitId;
     vtb_element.grouptitle = grouptitle;
-    vtb_element.object_id = element_data.vtbObjectId;
+
 
     if (element_data.date) {
       vtb_element.startdate = dayjs(element_data.date);
@@ -384,6 +399,9 @@ export class VtbDataTransformer {
       }
     }
 
+    const vtb_element_unit = new VtbElementUnit();
+    vtb_element_unit.title = element_data.subTitle || element_data.title;
+
     for (const participant_id of Object.keys(
       element_data.olPrices?.participants
     )) {
@@ -395,7 +413,10 @@ export class VtbDataTransformer {
       );
 
       vtb_element.participant_prices.push(participant_element_price);
+      vtb_element_unit.participant_prices.push(participant_element_price);
     }
+
+    vtb_element.units.push(vtb_element_unit);
 
     if (
       element_data.maps &&
@@ -412,6 +433,8 @@ export class VtbDataTransformer {
       vtb_element.location.title = element_data.title;
       vtb_element.location.content = element_data.additionalText;
     }
+
+    console.info('vtb_element: ', vtb_element);
 
     return vtb_element;
   }

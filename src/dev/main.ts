@@ -17,7 +17,8 @@ import {VtbTextElement} from '../components/text';
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
 
-const TEXT_EDIT_MODE_ENABLED = true;
+const TEXT_EDIT_MODE_ENABLED = false;
+const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
 
 enum SegmentTypes {
   DEFAULT = 1,
@@ -106,7 +107,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const map_options: VtbMapOptions = {
       connect_markers: true,
       connect_mode: 'flight',
-      api_key: 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ',
+      api_key: GOOGLE_MAPS_KEY,
     };
 
     const map_search: VtbFilterConfig = {

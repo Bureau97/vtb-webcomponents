@@ -48,8 +48,8 @@ export class VtbCalculatorPriceElement extends LitElement {
     type: String,
     attribute: 'display-price',
     converter: (value, _type) => {
-      console.info('value', value, typeof value);
-      console.info('type', _type);
+      // console.info('value', value, typeof value);
+      // console.info('type', _type);
 
       if (typeof value == 'string' && value == 'true') {
         return true;
@@ -98,7 +98,7 @@ export class VtbCalculatorPriceElement extends LitElement {
   display_prices_if_zero = false;
 
   override render() {
-    console.info('VtbCalculatorPriceElement:render');
+    // console.info('VtbCalculatorPriceElement:render');
     const priceRenderer = new Intl.NumberFormat(this.locale, {
       style: 'currency',
       currency: this.currency,

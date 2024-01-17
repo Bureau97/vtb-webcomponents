@@ -54,7 +54,7 @@ function VtbTextSave(editor) {
             label: t('Save'),
             withText: true,
             tooltip: true,
-            isToggleable: true,
+            isToggleable: true
         });
         button.on('execute', () => {
             editor.execute('save');
@@ -157,7 +157,7 @@ let VtbTextElement = class VtbTextElement extends LitElement {
                     Italic,
                     Link,
                     List,
-                    Paragraph,
+                    Paragraph
                     // Autosave,
                 ],
                 // these are the available tools
@@ -172,8 +172,8 @@ let VtbTextElement = class VtbTextElement extends LitElement {
                     'bulletedList',
                     'numberedList',
                     'undo',
-                    'redo',
-                ],
+                    'redo'
+                ]
             })
                 .then((editorInstance) => {
                 // console.debug('promise:then');
@@ -210,9 +210,9 @@ let VtbTextElement = class VtbTextElement extends LitElement {
         const changed_content = this.editor.getData();
         const event = new CustomEvent('vtbTextChanged', {
             detail: {
-                content: changed_content,
+                content: changed_content
             },
-            bubbles: true,
+            bubbles: true
         });
         // console.debug('dispatching change event: ');
         this.dispatchEvent(event);
@@ -233,7 +233,7 @@ let VtbTextElement = class VtbTextElement extends LitElement {
 };
 VtbTextElement.shadowRootOptions = {
     ...LitElement.shadowRootOptions,
-    delegatesFocus: true,
+    delegatesFocus: true
 };
 VtbTextElement.styles = css `
     :host {
@@ -249,7 +249,7 @@ __decorate([
         attribute: false,
         hasChanged(newVal, oldVal) {
             return Boolean(newVal !== oldVal);
-        },
+        }
     })
 ], VtbTextElement.prototype, "contents", void 0);
 VtbTextElement = __decorate([

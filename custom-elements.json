@@ -217,30 +217,6 @@
         },
         {
           "kind": "js",
-          "name": "VtbFlightElement",
-          "declaration": {
-            "name": "VtbFlightElement",
-            "module": "src/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "VtbFlightArrivalElement",
-          "declaration": {
-            "name": "VtbFlightArrivalElement",
-            "module": "src/index.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "VtbFlightDepartureElement",
-          "declaration": {
-            "name": "VtbFlightDepartureElement",
-            "module": "src/index.ts"
-          }
-        },
-        {
-          "kind": "js",
           "name": "VtbMapElement",
           "declaration": {
             "name": "VtbMapElement",
@@ -638,6 +614,29 @@
         {
           "kind": "class",
           "description": "",
+          "name": "VtbElementUnit",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "participant_prices",
+              "type": {
+                "text": "Array<VtbParticipantPrice>"
+              },
+              "default": "[]"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
           "name": "VtbElement",
           "members": [
             {
@@ -653,6 +652,13 @@
               "name": "object_id",
               "type": {
                 "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "ts_product_id",
+              "type": {
+                "text": "number | undefined"
               }
             },
             {
@@ -786,6 +792,14 @@
             },
             {
               "kind": "field",
+              "name": "units",
+              "type": {
+                "text": "Array<VtbElementUnit>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
               "name": "participants",
               "type": {
                 "text": "Array<number>"
@@ -793,8 +807,25 @@
               "readonly": true
             },
             {
+              "kind": "field",
+              "name": "last_day",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "clone",
+              "privacy": "public",
               "return": {
                 "type": {
                   "text": "VtbElement"
@@ -919,6 +950,22 @@
                 "text": "boolean"
               },
               "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "last_day",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
             },
             {
               "kind": "field",
@@ -1497,6 +1544,14 @@
         },
         {
           "kind": "js",
+          "name": "VtbElementUnit",
+          "declaration": {
+            "name": "VtbElementUnit",
+            "module": "src/models.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "VtbElement",
           "declaration": {
             "name": "VtbElement",
@@ -1910,12 +1965,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/calculator.ts",
       "declarations": [
         {
@@ -1952,7 +2001,7 @@
             },
             {
               "kind": "field",
-              "name": "priceType",
+              "name": "price_type",
               "type": {
                 "text": "string"
               },
@@ -1961,7 +2010,7 @@
             },
             {
               "kind": "field",
-              "name": "displayPrice",
+              "name": "display_price",
               "type": {
                 "text": "boolean | string"
               },
@@ -1970,7 +2019,7 @@
             },
             {
               "kind": "field",
-              "name": "displayPricesIfZero",
+              "name": "display_prices_if_zero",
               "type": {
                 "text": "boolean"
               },
@@ -2009,7 +2058,7 @@
                 "text": "string"
               },
               "default": "'pp'",
-              "fieldName": "priceType"
+              "fieldName": "price_type"
             },
             {
               "name": "display-price",
@@ -2017,7 +2066,7 @@
                 "text": "boolean | string"
               },
               "default": "false",
-              "fieldName": "displayPrice"
+              "fieldName": "display_price"
             },
             {
               "name": "display-zero",
@@ -2025,7 +2074,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "displayPricesIfZero"
+              "fieldName": "display_prices_if_zero"
             }
           ],
           "superclass": {
@@ -2042,7 +2091,7 @@
           "members": [
             {
               "kind": "field",
-              "name": "calculateTotals",
+              "name": "calculate_totals",
               "type": {
                 "text": "boolean"
               },
@@ -2051,7 +2100,7 @@
             },
             {
               "kind": "field",
-              "name": "displayTotals",
+              "name": "display_totals",
               "type": {
                 "text": "boolean"
               },
@@ -2060,15 +2109,16 @@
             },
             {
               "kind": "field",
-              "name": "displayPrices",
+              "name": "display_prices",
               "type": {
                 "text": "boolean"
               },
-              "default": "false"
+              "default": "false",
+              "attribute": "display-prices"
             },
             {
               "kind": "field",
-              "name": "displayPricesIfZero",
+              "name": "display_prices_if_zero",
               "type": {
                 "text": "boolean"
               },
@@ -2095,7 +2145,7 @@
             },
             {
               "kind": "field",
-              "name": "totalPrice",
+              "name": "total_price",
               "type": {
                 "text": "number"
               },
@@ -2110,7 +2160,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "calculateTotals"
+              "fieldName": "calculate_totals"
             },
             {
               "name": "display-totals",
@@ -2118,7 +2168,15 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "displayTotals"
+              "fieldName": "display_totals"
+            },
+            {
+              "name": "display-prices",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "display_prices"
             },
             {
               "name": "display-zero",
@@ -2126,7 +2184,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "displayPricesIfZero"
+              "fieldName": "display_prices_if_zero"
             },
             {
               "name": "locale",
@@ -2150,7 +2208,7 @@
                 "text": "number"
               },
               "default": "0",
-              "fieldName": "totalPrice"
+              "fieldName": "total_price"
             }
           ],
           "superclass": {
@@ -2167,7 +2225,7 @@
           "members": [
             {
               "kind": "field",
-              "name": "calculateTotals",
+              "name": "calculate_totals",
               "type": {
                 "text": "boolean"
               },
@@ -2176,12 +2234,21 @@
             },
             {
               "kind": "field",
-              "name": "displayTotals",
+              "name": "display_totals",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "attribute": "display-totals"
+            },
+            {
+              "kind": "field",
+              "name": "display_element_prices",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "display-prices"
             },
             {
               "kind": "field",
@@ -2203,7 +2270,7 @@
             },
             {
               "kind": "field",
-              "name": "totalPrice",
+              "name": "total_price",
               "type": {
                 "text": "number"
               },
@@ -2212,7 +2279,7 @@
             },
             {
               "kind": "field",
-              "name": "customStyles",
+              "name": "custom_styles",
               "type": {
                 "text": "string"
               },
@@ -2220,10 +2287,11 @@
             },
             {
               "kind": "field",
-              "name": "priceData",
+              "name": "elements",
               "type": {
-                "text": "Array<VtbElement> | undefined"
-              }
+                "text": "Array<VtbElement>"
+              },
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -2235,7 +2303,7 @@
             },
             {
               "kind": "field",
-              "name": "showPerParticipant",
+              "name": "show_per_participant",
               "type": {
                 "text": "boolean"
               },
@@ -2243,12 +2311,12 @@
             },
             {
               "kind": "method",
-              "name": "renderTotals",
+              "name": "render_totals",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "renderElementDescription",
+              "name": "render_element_description",
               "privacy": "public",
               "parameters": [
                 {
@@ -2261,7 +2329,7 @@
             },
             {
               "kind": "method",
-              "name": "getElementPrice",
+              "name": "get_element_price",
               "privacy": "public",
               "parameters": [
                 {
@@ -2274,16 +2342,16 @@
             },
             {
               "kind": "method",
-              "name": "_renderPriceData",
+              "name": "_render_elements",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "_renderPriceList",
+              "name": "_render_price_list",
               "privacy": "private",
               "parameters": [
                 {
-                  "name": "priceList",
+                  "name": "price_list",
                   "type": {
                     "text": "Array<VtbElement>"
                   }
@@ -2298,7 +2366,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "calculateTotals"
+              "fieldName": "calculate_totals"
             },
             {
               "name": "display-totals",
@@ -2306,7 +2374,15 @@
                 "text": "boolean"
               },
               "default": "false",
-              "fieldName": "displayTotals"
+              "fieldName": "display_totals"
+            },
+            {
+              "name": "display-prices",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "display_element_prices"
             },
             {
               "name": "locale",
@@ -2330,7 +2406,7 @@
                 "text": "number"
               },
               "default": "0",
-              "fieldName": "totalPrice"
+              "fieldName": "total_price"
             }
           ],
           "superclass": {
@@ -2399,477 +2475,6 @@
         {
           "kind": "class",
           "description": "",
-          "name": "VtbFlightDepartureElement",
-          "members": [
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "string"
-              },
-              "default": "'departure'",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "IATA",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "IATA",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "date",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "date",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "time",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "time",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "timezone",
-              "type": {
-                "text": "string"
-              },
-              "default": "'02:00'",
-              "attribute": "timezone",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "dateformat",
-              "type": {
-                "text": "string"
-              },
-              "default": "'DD MMM (hh:mm)'",
-              "attribute": "dateformat",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "country",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "country",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "city",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "city",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "VtbBaseFlightElement",
-            "module": "src/components/flightschedule.ts"
-          },
-          "tagName": "vtb-flight-departure",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "IATA",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "IATA",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "date",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "date",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "time",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "time",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "timezone",
-              "type": {
-                "text": "string"
-              },
-              "default": "'02:00'",
-              "fieldName": "timezone",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "dateformat",
-              "type": {
-                "text": "string"
-              },
-              "default": "'DD MMM (hh:mm)'",
-              "fieldName": "dateformat",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "country",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "country",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "city",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "city",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "class",
-          "description": "",
-          "name": "VtbFlightArrivalElement",
-          "members": [
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "string"
-              },
-              "default": "'arrival'",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "IATA",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "IATA",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "date",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "date",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "time",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "time",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "timezone",
-              "type": {
-                "text": "string"
-              },
-              "default": "'02:00'",
-              "attribute": "timezone",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "dateformat",
-              "type": {
-                "text": "string"
-              },
-              "default": "'DD MMM (hh:mm)'",
-              "attribute": "dateformat",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "country",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "country",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "city",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "city",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "VtbBaseFlightElement",
-            "module": "src/components/flightschedule.ts"
-          },
-          "tagName": "vtb-flight-arrival",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "IATA",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "IATA",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "date",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "date",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "time",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "time",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "timezone",
-              "type": {
-                "text": "string"
-              },
-              "default": "'02:00'",
-              "fieldName": "timezone",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "dateformat",
-              "type": {
-                "text": "string"
-              },
-              "default": "'DD MMM (hh:mm)'",
-              "fieldName": "dateformat",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "country",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "country",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            },
-            {
-              "name": "city",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "city",
-              "inheritedFrom": {
-                "name": "VtbBaseFlightElement",
-                "module": "src/components/flightschedule.ts"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "class",
-          "description": "",
-          "name": "VtbFlightElement",
-          "members": [
-            {
-              "kind": "field",
-              "name": "flightnumber",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "flightnumber"
-            },
-            {
-              "kind": "field",
-              "name": "carrier",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "carrier"
-            },
-            {
-              "kind": "field",
-              "name": "carrier_code",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "carrier_code"
-            },
-            {
-              "kind": "field",
-              "name": "duration",
-              "type": {
-                "text": "string | undefined"
-              },
-              "attribute": "duration"
-            },
-            {
-              "kind": "method",
-              "name": "render_carrier"
-            },
-            {
-              "kind": "method",
-              "name": "render_duration"
-            },
-            {
-              "kind": "method",
-              "name": "render_flightnumber"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "flightnumber",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "flightnumber"
-            },
-            {
-              "name": "carrier",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "carrier"
-            },
-            {
-              "name": "carrier_code",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "carrier_code"
-            },
-            {
-              "name": "duration",
-              "type": {
-                "text": "string | undefined"
-              },
-              "fieldName": "duration"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "vtb-flight-element",
-          "customElement": true
-        },
-        {
-          "kind": "class",
-          "description": "",
           "name": "VtbFlightScheduleElement",
           "members": [
             {
@@ -2888,6 +2493,78 @@
               },
               "default": "'DD MMM (hh:mm)'",
               "attribute": "dateformat"
+            },
+            {
+              "kind": "method",
+              "name": "render_airport",
+              "parameters": [
+                {
+                  "name": "airport",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                },
+                {
+                  "name": "IATA",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render_carrier",
+              "parameters": [
+                {
+                  "name": "carrier",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render_duration",
+              "parameters": [
+                {
+                  "name": "duration",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render_flightnumber",
+              "parameters": [
+                {
+                  "name": "flightnumber",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                },
+                {
+                  "name": "carrier_code",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render_operatedby",
+              "parameters": [
+                {
+                  "name": "operated_by",
+                  "type": {
+                    "text": "string | undefined"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -2914,54 +2591,6 @@
         }
       ],
       "exports": [
-        {
-          "kind": "js",
-          "name": "VtbFlightDepartureElement",
-          "declaration": {
-            "name": "VtbFlightDepartureElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "vtb-flight-departure",
-          "declaration": {
-            "name": "VtbFlightDepartureElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "VtbFlightArrivalElement",
-          "declaration": {
-            "name": "VtbFlightArrivalElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "vtb-flight-arrival",
-          "declaration": {
-            "name": "VtbFlightArrivalElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "VtbFlightElement",
-          "declaration": {
-            "name": "VtbFlightElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "vtb-flight-element",
-          "declaration": {
-            "name": "VtbFlightElement",
-            "module": "src/components/flightschedule.ts"
-          }
-        },
         {
           "kind": "js",
           "name": "VtbFlightScheduleElement",
@@ -3740,7 +3369,7 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    ...LitElement.shadowRootOptions,\n    delegatesFocus: true,\n  }"
+              "default": "{\n    ...LitElement.shadowRootOptions,\n    delegatesFocus: true\n  }"
             },
             {
               "kind": "field",
@@ -3866,6 +3495,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",

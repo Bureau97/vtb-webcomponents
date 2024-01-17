@@ -89,7 +89,7 @@ let VtbMapMarkerGroupElement = class VtbMapMarkerGroupElement extends LitElement
             });
         });
         observer.observe(this, {
-            childList: true,
+            childList: true
         });
     }
     parseMarkerElement(element) {
@@ -124,7 +124,7 @@ __decorate([
         hasChanged(newVal, oldVal) {
             // console.debug('VtbMapElement::markers::hasChanged');
             return !isEqual(newVal, oldVal);
-        },
+        }
     })
 ], VtbMapMarkerGroupElement.prototype, "markers", void 0);
 VtbMapMarkerGroupElement = __decorate([
@@ -199,7 +199,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         // setup google maps loader
         this._loader = new Loader({
             apiKey: this.apiKey,
-            version: 'weekly',
+            version: 'weekly'
         });
         // setup mutation observer for changes to dom
         const observer = new MutationObserver((mutations) => {
@@ -222,7 +222,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             });
         });
         observer.observe(this, {
-            childList: true,
+            childList: true
         });
     }
     parseChildNode(childNode) {
@@ -289,7 +289,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             zoom: 1, // default zoom level, without it stops rendering
             mapTypeControl: false, // disable map control
             streetViewControl: false, // disable streetview
-            fullscreenControl: false, // disable fullscreen
+            fullscreenControl: false // disable fullscreen
         };
         if (this._container && this._google) {
             const map = new this._google.Map(this._container, mapoptions);
@@ -341,7 +341,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
                 'plane',
                 'air',
                 'flight',
-                'airplane',
+                'airplane'
             ];
             if (group.connectMarkers &&
                 (!group.connectMode ||
@@ -351,7 +351,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
                     geodesic: true,
                     strokeColor: '#FF0000',
                     strokeOpacity: 1.0,
-                    strokeWeight: 2,
+                    strokeWeight: 2
                 });
                 tripPath.setMap(this._map);
             }
@@ -360,7 +360,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
                 'car',
                 'driving',
                 'byroad',
-                'road',
+                'road'
             ];
             if (group.connectMarkers &&
                 group.connectMode &&
@@ -381,13 +381,13 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             // console.debug('create rich marker markup');
             const infowindow = new google.maps.InfoWindow({
                 content: `<div class="vtb-map-marker-title">${marker.title}</div>`,
-                ariaLabel: marker.title ? marker.title : '',
+                ariaLabel: marker.title ? marker.title : ''
             });
             gmarker.addListener('click', () => {
                 // console.debug('click');
                 infowindow.open({
                     anchor: gmarker,
-                    map,
+                    map
                 });
             });
         }
@@ -404,7 +404,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         }
         if (!this._directions_renderer) {
             this._directions_renderer = new google.maps.DirectionsRenderer({
-                suppressMarkers: true,
+                suppressMarkers: true
             });
             this._directions_renderer.setMap(map);
         }
@@ -420,7 +420,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             tripCoordinates.forEach((elm) => {
                 const wypnt = {
                     location: elm,
-                    stopover: true,
+                    stopover: true
                 };
                 waypoints.push(wypnt);
             });
@@ -454,7 +454,7 @@ __decorate([
         hasChanged(newVal, oldVal) {
             // console.debug('VtbMapElement::markergroups::hasChanged');
             return !isEqual(newVal, oldVal);
-        },
+        }
     })
 ], VtbMapElement.prototype, "markergroups", void 0);
 __decorate([
@@ -481,7 +481,7 @@ __decorate([
         attribute: false,
         hasChanged(newVal, oldVal) {
             return !isEqual(newVal, oldVal);
-        },
+        }
     })
 ], VtbMapElement.prototype, "mapstyles", void 0);
 __decorate([

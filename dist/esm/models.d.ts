@@ -59,9 +59,14 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
     day?: number;
     operated_by?: string;
 }
+export declare class VtbElementUnit implements interfaces.VtbElementUnit {
+    title: string;
+    participant_prices: Array<VtbParticipantPrice>;
+}
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
     object_id?: string;
+    ts_product_id?: number;
     title: string;
     subtitle?: string;
     description?: string;
@@ -79,7 +84,10 @@ export declare class VtbElement implements interfaces.VtbElement {
     grouptitle?: string;
     media: Array<VtbMedia>;
     location?: VtbMapMarker;
+    units: Array<VtbElementUnit>;
     get participants(): Array<number>;
+    get last_day(): number;
+    get days(): number;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {
@@ -98,6 +106,8 @@ export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     location?: VtbMapMarker;
     is_flight: boolean;
     is_carrental: boolean;
+    get last_day(): number;
+    get days(): number;
     private mapped_elements_by_id;
     private elements_order;
     private mapped_elements_by_type;

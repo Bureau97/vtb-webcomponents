@@ -6,39 +6,40 @@ export declare class VtbCalculatorPriceElement extends LitElement {
     locale: string;
     currency: string;
     price: number;
-    priceType: string;
-    displayPrice: boolean | string;
-    displayPricesIfZero: boolean;
+    price_type: string;
+    display_price: boolean | string;
+    display_prices_if_zero: boolean;
     render(): TemplateResult<1>;
 }
 export declare class VtbCalculatorPriceListElement extends LitElement {
     static styles: import("lit").CSSResult;
-    calculateTotals: boolean;
-    displayTotals: boolean;
-    displayPrices: boolean;
-    displayPricesIfZero: boolean;
+    calculate_totals: boolean;
+    display_totals: boolean;
+    display_prices: boolean;
+    display_prices_if_zero: boolean;
     locale: string;
     currency: string;
-    totalPrice: number;
+    total_price: number;
     render(): TemplateResult<1>;
 }
 export declare class VtbCalculatorElement extends LitElement {
     static styles: import("lit").CSSResult;
-    calculateTotals: boolean;
-    displayTotals: boolean;
+    calculate_totals: boolean;
+    display_totals: boolean;
+    display_element_prices: boolean;
     locale: string;
     currency: string;
-    totalPrice: number;
-    customStyles: string;
-    priceData?: Array<VtbElement>;
+    total_price: number;
+    custom_styles: string;
+    elements: Array<VtbElement>;
     groups: string[];
-    showPerParticipant: boolean;
+    show_per_participant: boolean;
     render(): TemplateResult<1>;
-    private renderTotals;
-    renderElementDescription(element: VtbElement): string;
-    getElementPrice(element: VtbElement): string;
-    private _renderPriceData;
-    private _renderPriceList;
+    private render_totals;
+    render_element_description(element: VtbElement): string;
+    get_element_price(element: VtbElement): string;
+    private _render_elements;
+    private _render_price_list;
 }
 declare global {
     interface HTMLElementTagNameMap {

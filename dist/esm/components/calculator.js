@@ -8,29 +8,30 @@ let VtbCalculatorPriceElement = class VtbCalculatorPriceElement extends LitEleme
         this.locale = 'nl-NL';
         this.currency = 'EUR';
         this.price = 0;
-        this.priceType = 'pp';
-        this.displayPrice = false;
-        this.displayPricesIfZero = false;
+        this.price_type = 'pp';
+        this.display_price = false;
+        this.display_prices_if_zero = false;
     }
     render() {
+        // console.info('VtbCalculatorPriceElement:render');
         const priceRenderer = new Intl.NumberFormat(this.locale, {
             style: 'currency',
-            currency: this.currency,
+            currency: this.currency
         });
         let priceDisplay = '';
-        if (this.displayPrice && typeof this.displayPrice == 'boolean') {
+        if (this.display_price && typeof this.display_price == 'boolean') {
             priceDisplay = priceRenderer.format(this.price);
         }
-        if (!this.displayPrice && typeof this.displayPrice == 'boolean') {
+        if (!this.display_price && typeof this.display_price == 'boolean') {
             priceDisplay = '';
         }
-        if (this.displayPrice && typeof this.displayPrice == 'string') {
-            priceDisplay = this.displayPrice;
+        if (this.display_price && typeof this.display_price == 'string') {
+            priceDisplay = this.display_price;
         }
-        if (this.displayPrice &&
-            typeof this.displayPrice == 'boolean' &&
+        if (this.display_price &&
+            typeof this.display_price == 'boolean' &&
             this.price == 0 &&
-            !this.displayPricesIfZero) {
+            !this.display_prices_if_zero) {
             priceDisplay = '';
         }
         return html `
@@ -78,12 +79,14 @@ __decorate([
 ], VtbCalculatorPriceElement.prototype, "price", void 0);
 __decorate([
     property({ type: String, attribute: 'price-type' })
-], VtbCalculatorPriceElement.prototype, "priceType", void 0);
+], VtbCalculatorPriceElement.prototype, "price_type", void 0);
 __decorate([
     property({
         type: String,
         attribute: 'display-price',
         converter: (value, _type) => {
+            // console.info('value', value, typeof value);
+            // console.info('type', _type);
             if (typeof value == 'string' && value == 'true') {
                 return true;
             }
@@ -97,9 +100,9 @@ __decorate([
                 return value.toString();
             }
             return false;
-        },
+        }
     })
-], VtbCalculatorPriceElement.prototype, "displayPrice", void 0);
+], VtbCalculatorPriceElement.prototype, "display_price", void 0);
 __decorate([
     property({
         type: Boolean,
@@ -118,9 +121,9 @@ __decorate([
                 return true;
             }
             return false;
-        },
+        }
     })
-], VtbCalculatorPriceElement.prototype, "displayPricesIfZero", void 0);
+], VtbCalculatorPriceElement.prototype, "display_prices_if_zero", void 0);
 VtbCalculatorPriceElement = __decorate([
     customElement('vtb-calculator-element')
 ], VtbCalculatorPriceElement);
@@ -128,13 +131,13 @@ export { VtbCalculatorPriceElement };
 let VtbCalculatorPriceListElement = class VtbCalculatorPriceListElement extends LitElement {
     constructor() {
         super(...arguments);
-        this.calculateTotals = false;
-        this.displayTotals = false;
-        this.displayPrices = false;
-        this.displayPricesIfZero = false;
+        this.calculate_totals = false;
+        this.display_totals = false;
+        this.display_prices = false;
+        this.display_prices_if_zero = false;
         this.locale = 'nl-NL';
         this.currency = 'EUR';
-        this.totalPrice = 0;
+        this.total_price = 0;
     }
     render() {
         return html `
@@ -154,16 +157,16 @@ VtbCalculatorPriceListElement.styles = css `
   `;
 __decorate([
     property({ type: Boolean, attribute: 'calculate-totals' })
-], VtbCalculatorPriceListElement.prototype, "calculateTotals", void 0);
+], VtbCalculatorPriceListElement.prototype, "calculate_totals", void 0);
 __decorate([
     property({ type: Boolean, attribute: 'display-totals' })
-], VtbCalculatorPriceListElement.prototype, "displayTotals", void 0);
+], VtbCalculatorPriceListElement.prototype, "display_totals", void 0);
 __decorate([
-    property({ type: Boolean, attribute: false })
-], VtbCalculatorPriceListElement.prototype, "displayPrices", void 0);
+    property({ type: Boolean, attribute: 'display-prices' })
+], VtbCalculatorPriceListElement.prototype, "display_prices", void 0);
 __decorate([
     property({ type: Boolean, attribute: 'display-zero' })
-], VtbCalculatorPriceListElement.prototype, "displayPricesIfZero", void 0);
+], VtbCalculatorPriceListElement.prototype, "display_prices_if_zero", void 0);
 __decorate([
     property({ type: String })
 ], VtbCalculatorPriceListElement.prototype, "locale", void 0);
@@ -172,7 +175,7 @@ __decorate([
 ], VtbCalculatorPriceListElement.prototype, "currency", void 0);
 __decorate([
     property({ type: Number, attribute: 'total-price' })
-], VtbCalculatorPriceListElement.prototype, "totalPrice", void 0);
+], VtbCalculatorPriceListElement.prototype, "total_price", void 0);
 VtbCalculatorPriceListElement = __decorate([
     customElement('vtb-calculator-list')
 ], VtbCalculatorPriceListElement);
@@ -180,40 +183,44 @@ export { VtbCalculatorPriceListElement };
 let VtbCalculatorElement = class VtbCalculatorElement extends LitElement {
     constructor() {
         super(...arguments);
-        this.calculateTotals = false;
-        this.displayTotals = false;
+        this.calculate_totals = false;
+        this.display_totals = false;
+        this.display_element_prices = false;
         this.locale = 'nl-NL';
         this.currency = 'EUR';
-        this.totalPrice = 0;
-        this.customStyles = '';
+        this.total_price = 0;
+        this.custom_styles = '';
+        // @property({type: Object, attribute: false})
+        // elements?: VtbCalculatorData;
+        this.elements = [];
         this.groups = ['elements', 'surcharges', 'optionals'];
-        this.showPerParticipant = false;
+        this.show_per_participant = false;
     }
     render() {
-        let slotHTML = '';
-        if (this.children.length == 0 && this.priceData) {
-            slotHTML = this._renderPriceData();
+        let slot_html = '';
+        if (this.children.length == 0 && this.elements) {
+            slot_html = this._render_elements();
         }
-        let customStyles;
-        if (this.customStyles) {
-            customStyles = html `
-                <style type=text/css>${this.customStyles}</style>
+        let custom_styles;
+        if (this.custom_styles) {
+            custom_styles = html `
+                <style type=text/css>${this.custom_styles}</style>
             `;
         }
         return html `
-      ${customStyles}
+      ${custom_styles}
       <div class="price-calculator">
-        <slot>${slotHTML}</slot>
-        ${this.renderTotals()}
+        <slot>${slot_html}</slot>
+        ${this.render_totals()}
       </div>
     `;
     }
-    renderTotals() {
-        if (this.displayTotals) {
+    render_totals() {
+        if (this.display_totals && this.total_price > 0) {
             return html `
         <div class="price-calculator-totals">
           <vtb-calculator-element
-            price=${this.totalPrice}
+            price=${this.total_price}
             currency=${this.currency}
             locale=${this.locale}
             display-price="true"
@@ -225,34 +232,37 @@ let VtbCalculatorElement = class VtbCalculatorElement extends LitElement {
         }
         return '';
     }
-    renderElementDescription(element) {
-        return `${element.nights + 1} dgn. - ${element.title}`;
+    render_element_description(element) {
+        return `${element.days} dgn. - ${element.title}`;
     }
-    getElementPrice(element) {
+    get_element_price(element) {
         return `${element.price}`;
     }
-    _renderPriceData() {
-        const priceData = this.priceData;
-        return html `
-      <vtb-calculator-list title=${ifDefined(this.title)}>
-        ${this._renderPriceList(priceData)}
-      </vtb-calculator-list>
-    `;
+    _render_elements() {
+        const elements = this.elements;
+        if (elements.length >= 1) {
+            return html `
+        <vtb-calculator-list title=${ifDefined(this.title)}>
+          ${this._render_price_list(elements)}
+        </vtb-calculator-list>
+      `;
+        }
+        return html `<!-- no elements -->`;
     }
-    _renderPriceList(priceList) {
+    _render_price_list(price_list) {
         const elementTemplates = [];
-        for (const element of priceList) {
+        for (const element of price_list) {
             if (element && element.hidden) {
                 continue;
             }
             elementTemplates.push(html `
         <vtb-calculator-element
-          price=${parseFloat(this.getElementPrice(element))}
+          price=${parseFloat(this.get_element_price(element))}
           currency=${this.currency}
-          price-type=""
-          display-price="true"
+          locale=${this.locale}
+          display-price=${this.display_element_prices}
         >
-          ${this.renderElementDescription(element)}
+          ${this.render_element_description(element)}
         </vtb-calculator-element>
       `);
         }
@@ -274,10 +284,13 @@ VtbCalculatorElement.styles = css `
   `;
 __decorate([
     property({ type: Boolean, attribute: 'calculate-totals' })
-], VtbCalculatorElement.prototype, "calculateTotals", void 0);
+], VtbCalculatorElement.prototype, "calculate_totals", void 0);
 __decorate([
     property({ type: Boolean, attribute: 'display-totals' })
-], VtbCalculatorElement.prototype, "displayTotals", void 0);
+], VtbCalculatorElement.prototype, "display_totals", void 0);
+__decorate([
+    property({ type: Boolean, attribute: 'display-prices' })
+], VtbCalculatorElement.prototype, "display_element_prices", void 0);
 __decorate([
     property({ type: String })
 ], VtbCalculatorElement.prototype, "locale", void 0);
@@ -286,19 +299,19 @@ __decorate([
 ], VtbCalculatorElement.prototype, "currency", void 0);
 __decorate([
     property({ type: Number, attribute: 'total-price' })
-], VtbCalculatorElement.prototype, "totalPrice", void 0);
+], VtbCalculatorElement.prototype, "total_price", void 0);
 __decorate([
     property({ type: String, attribute: false })
-], VtbCalculatorElement.prototype, "customStyles", void 0);
+], VtbCalculatorElement.prototype, "custom_styles", void 0);
 __decorate([
     property({ type: Array, attribute: false })
-], VtbCalculatorElement.prototype, "priceData", void 0);
+], VtbCalculatorElement.prototype, "elements", void 0);
 __decorate([
     property({ type: Array, attribute: false })
 ], VtbCalculatorElement.prototype, "groups", void 0);
 __decorate([
     property({ type: Boolean, attribute: false })
-], VtbCalculatorElement.prototype, "showPerParticipant", void 0);
+], VtbCalculatorElement.prototype, "show_per_participant", void 0);
 VtbCalculatorElement = __decorate([
     customElement('vtb-calculator')
 ], VtbCalculatorElement);

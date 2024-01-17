@@ -57,6 +57,12 @@ export class VtbFlightCarrier {
 }
 export class VtbFlightData {
 }
+export class VtbElementUnit {
+    constructor() {
+        this.title = '';
+        this.participant_prices = [];
+    }
+}
 export class VtbElement {
     constructor() {
         this.id = '';
@@ -72,11 +78,18 @@ export class VtbElement {
         this.unit_id = 0;
         this.participant_prices = [];
         this.media = [];
+        this.units = [];
     }
     get participants() {
         return this.participant_prices.map((participant_price) => {
             return participant_price.participant_id;
         });
+    }
+    get last_day() {
+        return this.day + this.nights;
+    }
+    get days() {
+        return this.nights + 1;
     }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));
@@ -104,6 +117,12 @@ export class VtbElementGroup {
         this.elements_order = [];
         this.mapped_elements_by_type = {};
         this.mapped_elements_by_day = {};
+    }
+    get last_day() {
+        return this.day + this.nights;
+    }
+    get days() {
+        return this.nights + 1;
     }
     add_element(element) {
         this.mapped_elements_by_id[element.id] = element;

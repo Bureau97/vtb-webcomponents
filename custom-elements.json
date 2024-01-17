@@ -631,6 +631,14 @@
                 "text": "Array<VtbParticipantPrice>"
               },
               "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "participants",
+              "type": {
+                "text": "Array<number>"
+              },
+              "readonly": true
             }
           ]
         },
@@ -1962,6 +1970,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3495,12 +3509,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",

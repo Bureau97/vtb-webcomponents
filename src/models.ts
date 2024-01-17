@@ -96,6 +96,12 @@ export class VtbFlightData implements interfaces.VtbFlightData {
 export class VtbElementUnit implements interfaces.VtbElementUnit {
   title: string = '';
   participant_prices: Array<VtbParticipantPrice> = [];
+
+  get participants(): Array<number> {
+    return this.participant_prices.map((participant_price) => {
+      return participant_price.participant_id;
+    });
+  }
 }
 
 export class VtbElement implements interfaces.VtbElement {

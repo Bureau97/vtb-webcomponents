@@ -62,6 +62,11 @@ export class VtbElementUnit {
         this.title = '';
         this.participant_prices = [];
     }
+    get participants() {
+        return this.participant_prices.map((participant_price) => {
+            return participant_price.participant_id;
+        });
+    }
 }
 export class VtbElement {
     constructor() {

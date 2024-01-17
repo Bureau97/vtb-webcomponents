@@ -62,6 +62,7 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;
     participant_prices: Array<VtbParticipantPrice>;
+    get participants(): Array<number>;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;

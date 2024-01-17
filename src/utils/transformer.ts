@@ -292,17 +292,20 @@ export class VtbDataTransformer {
 
     let last_element: VtbElement | null = null;
     for (const element_data of segment_data.elements) {
-
       const vtb_element: VtbElement = this.parse_vtb_element(
         element_data,
         segment_data.title
       );
 
-      if (last_element && last_element.ts_product_id == vtb_element.ts_product_id) {
+      if (
+        last_element &&
+        last_element.ts_product_id == vtb_element.ts_product_id
+      ) {
         last_element.units = last_element.units.concat(vtb_element.units);
-        last_element.participant_prices = last_element.participant_prices.concat(
-          vtb_element.participant_prices
-        );
+        last_element.participant_prices =
+          last_element.participant_prices.concat(
+            vtb_element.participant_prices
+          );
 
         continue;
       }
@@ -378,7 +381,6 @@ export class VtbDataTransformer {
     vtb_element.day = element_data.day;
     vtb_element.unit_id = element_data.unitId;
     vtb_element.grouptitle = grouptitle;
-
 
     if (element_data.date) {
       vtb_element.startdate = dayjs(element_data.date);

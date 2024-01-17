@@ -37,7 +37,7 @@ import {
 
 import {
   VtbFlightScheduleElement,
-  VtbFlightScheduleOptions
+  VtbFlightScheduleOptions,
 } from './components/flightschedule.js';
 
 import {

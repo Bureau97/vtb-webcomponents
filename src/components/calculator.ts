@@ -151,7 +151,7 @@ export class VtbCalculatorPriceListElement extends LitElement {
   @property({type: Boolean, attribute: 'display-totals'})
   display_totals = false;
 
-  @property({ type: Boolean, attribute: 'display-prices' })
+  @property({type: Boolean, attribute: 'display-prices'})
   display_prices = false;
 
   @property({type: Boolean, attribute: 'display-zero'})
@@ -200,7 +200,7 @@ export class VtbCalculatorElement extends LitElement {
   @property({type: Boolean, attribute: 'display-totals'})
   display_totals = false;
 
-  @property({ type: Boolean, attribute: 'display-prices' })
+  @property({type: Boolean, attribute: 'display-prices'})
   display_element_prices = false;
 
   @property({type: String})
@@ -258,7 +258,7 @@ export class VtbCalculatorElement extends LitElement {
             price=${this.total_price}
             currency=${this.currency}
             locale=${this.locale}
-            display-price=true
+            display-price="true"
           >
             Totaal
           </vtb-calculator-element>

@@ -2,7 +2,7 @@ import {LitElement, css, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 // import {ifDefined} from 'lit/directives/if-defined.js';
 import {TemplateResult} from 'lit-element';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 import dayjs, {type Dayjs} from 'dayjs';
 import 'dayjs/locale/nl.js';
@@ -16,8 +16,6 @@ import {VtbFlightData} from '../models.js';
 export interface VtbFlightScheduleOptions {
   dateformat?: string;
 }
-
-
 
 @customElement('vtb-flightschedule')
 export class VtbFlightScheduleElement extends LitElement {
@@ -72,7 +70,7 @@ export class VtbFlightScheduleElement extends LitElement {
 
     div.flights--flight > div > span {
       display: block;
-	    flex: 1;
+      flex: 1;
     }
 
     .flights--flight:nth-child(even) {
@@ -96,7 +94,6 @@ export class VtbFlightScheduleElement extends LitElement {
         display: flex;
       }
     }
-
   `;
 
   @property({
@@ -157,7 +154,10 @@ export class VtbFlightScheduleElement extends LitElement {
     return '';
   }
 
-  render_flightnumber(flightnumber: string | undefined, carrier_code: string | undefined) {
+  render_flightnumber(
+    flightnumber: string | undefined,
+    carrier_code: string | undefined
+  ) {
     if (flightnumber) {
       return html`${carrier_code}${flightnumber}`;
     }
@@ -166,7 +166,9 @@ export class VtbFlightScheduleElement extends LitElement {
 
   render_operatedby(operated_by: string | undefined) {
     if (operated_by) {
-      return html`<span class="operatedby">Uitgevoerd door ${operated_by}</span>`;
+      return html`<span class="operatedby"
+        >Uitgevoerd door ${operated_by}</span
+      >`;
     }
     return '';
   }
@@ -179,19 +181,13 @@ export class VtbFlightScheduleElement extends LitElement {
       let departure_date: Dayjs | undefined | null = null;
       let arrival_date: Dayjs | undefined | null = null;
 
-      if (
-        flight.departure?.date &&
-        typeof flight.departure?.date == 'string'
-      ) {
+      if (flight.departure?.date && typeof flight.departure?.date == 'string') {
         departure_date = dayjs(flight.departure?.date);
       } else {
         departure_date = flight.departure?.date;
       }
 
-      if (
-        flight.arrival?.date &&
-        typeof flight.arrival?.date == 'string'
-      ) {
+      if (flight.arrival?.date && typeof flight.arrival?.date == 'string') {
         arrival_date = dayjs(flight.arrival?.date);
       } else {
         arrival_date = flight.arrival?.date;
@@ -220,18 +216,25 @@ export class VtbFlightScheduleElement extends LitElement {
           <div class="departure--datetime col-lg">
             <span class="flightdata--key d-lg-none">Vertrek</span>
             <span class="flightdata--value"
-              >${unsafeHTML(departure_date?.format(this.dateformat))}</span>
+              >${unsafeHTML(departure_date?.format(this.dateformat))}</span
+            >
           </div>
           <div class="arrival--datetime col-lg">
             <span class="flightdata--key d-lg-none">Aankomst</span>
             <span class="flightdata--value"
-              >${unsafeHTML(arrival_date?.format(this.dateformat))}</span>
+              >${unsafeHTML(arrival_date?.format(this.dateformat))}</span
+            >
           </div>
           <div class="carrier col-lg">
-            <span class="flightdata--key d-lg-none">Vluchtnr.<!-- + duur --></span>
+            <span class="flightdata--key d-lg-none"
+              >Vluchtnr.<!-- + duur --></span
+            >
             <span class="flightdata--value">
               ${this.render_carrier(flight.carrier?.name)}
-              (${this.render_flightnumber(flight.flightnumber, flight.carrier?.code)})
+              (${this.render_flightnumber(
+                flight.flightnumber,
+                flight.carrier?.code
+              )})
               ${this.render_operatedby(flight.operated_by)}
             </span>
           </div>

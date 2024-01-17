@@ -108,7 +108,7 @@ export interface VtbElement {
   grouptitle?: string;
   media: Array<VtbMedia>;
   location?: VtbMapMarker;
-  units: Array<VtbElementUnit>
+  units: Array<VtbElementUnit>;
 }
 
 export interface VtbElementGroup {

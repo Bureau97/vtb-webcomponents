@@ -11,7 +11,10 @@ import {VtbFilterConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
-import {VtbCalculatorElement, VtbCalculatorPriceElement} from '../components/calculator';
+import {
+  VtbCalculatorElement,
+  VtbCalculatorPriceElement,
+} from '../components/calculator';
 import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
@@ -40,14 +43,18 @@ enum UnitTypes {
 
 const currency_transformer = new Intl.NumberFormat('nl-NL', {
   style: 'currency',
-  currency: 'EUR'
+  currency: 'EUR',
 });
 
-function currency (value: number | null): string {
+function currency(value: number | null): string {
   if (value) {
     return currency_transformer.format(value);
   }
   return String(value);
+}
+
+function vtbTextChanged(e?: Event) {
+  console.info('vtbTextChanged: ', e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,7 +98,6 @@ function vtbDataLoaded(vtb: Vtb) {
     hero.src = vtb.covers[0].src;
   }
 
-
   // add flightschedule
   const flightschedule = document.getElementById(
     'flightschedule'
@@ -133,14 +139,15 @@ function vtbDataLoaded(vtb: Vtb) {
   // // const map2 = document.getElementById('dynamic-map-flight1') as VtbMapElement;
   // // console.info(map2);
 
-  const acco_calculator = document.getElementById('calc-dynamic-accos') as VtbCalculatorElement;
+  const acco_calculator = document.getElementById(
+    'calc-dynamic-accos'
+  ) as VtbCalculatorElement;
   if (acco_calculator) {
-
     // accommodations
     const acco_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACCO],
-      optional: false
+      optional: false,
     });
 
     const accoTable = document.getElementById(
@@ -157,12 +164,11 @@ function vtbDataLoaded(vtb: Vtb) {
       accoTable.elements = acco_elements;
     }
 
-
     // activities
     const activity_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACTIVITY],
-      optional: false
+      optional: false,
     });
 
     const activityTable = document.getElementById(
@@ -170,31 +176,35 @@ function vtbDataLoaded(vtb: Vtb) {
     ) as VtbCalculatorElement;
 
     if (activityTable && activity_elements.length >= 1) {
-      activityTable.render_element_description = function (element: VtbElement) {
-        return `Dag: ${element.day} | ${element.title} ${element.optional ? '[optioneel]' : ''}`;
+      activityTable.render_element_description = function (
+        element: VtbElement
+      ) {
+        return `Dag: ${element.day} | ${element.title} ${
+          element.optional ? '[optioneel]' : ''
+        }`;
       };
 
       activityTable.elements = activity_elements;
     }
 
-
     // package price
-    const package_total_price_element = document.getElementById('calc-dynamic-total-package') as VtbCalculatorPriceElement;
+    const package_total_price_element = document.getElementById(
+      'calc-dynamic-total-package'
+    ) as VtbCalculatorPriceElement;
     console.info('package_total_price_element', package_total_price_element);
 
     if (package_total_price_element) {
       package_total_price_element.price = vtb.calculate_price({
         group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.HIDDEN],
-        optional: false
+        optional: false,
       });
     }
-
 
     // flights
     const flights_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.FLIGHT],
       element_unit_ids: [UnitTypes.FLIGHT, UnitTypes.FLIGHTNIGHT],
-      optional: false
+      optional: false,
     });
 
     const flightsTable = document.getElementById(
@@ -216,17 +226,24 @@ function vtbDataLoaded(vtb: Vtb) {
 
       flightsTable.elements = flights_elements;
       // flightsTable.display_totals = true;
-      flightsTable.total_price = vtb.calculate_price(undefined, flights_elements);
+      flightsTable.total_price = vtb.calculate_price(
+        undefined,
+        flights_elements
+      );
     }
 
     // package price
-    const flights_total_price_element = document.getElementById('calc-dynamic-total-flights') as VtbCalculatorPriceElement;
+    const flights_total_price_element = document.getElementById(
+      'calc-dynamic-total-flights'
+    ) as VtbCalculatorPriceElement;
     console.info('flights_total_price_element', flights_total_price_element);
 
     if (flights_total_price_element) {
-      flights_total_price_element.price = vtb.calculate_price(undefined, flights_elements);
+      flights_total_price_element.price = vtb.calculate_price(
+        undefined,
+        flights_elements
+      );
     }
-
 
     // car rental
     const carrental_elements = vtb.filter_elements({
@@ -239,21 +256,28 @@ function vtbDataLoaded(vtb: Vtb) {
       'calc-dynamic-carrental'
     ) as VtbCalculatorElement;
 
-
     if (carrentalTable && carrental_elements.length >= 1) {
       carrentalTable.render_element_description = (element) =>
-        `${element.days} dgn. ${element.subtitle?.replace('Type', '')} ${element.optional ? '[optioneel]' : ''
+        `${element.days} dgn. ${element.subtitle?.replace('Type', '')} ${
+          element.optional ? '[optioneel]' : ''
         } (${element.price})`;
 
       carrentalTable.elements = carrental_elements;
     }
 
-
-    const carrental_total_price_element = document.getElementById('calc-dynamic-total-carrental') as VtbCalculatorPriceElement;
-    console.info('carrental_total_price_element', carrental_total_price_element);
+    const carrental_total_price_element = document.getElementById(
+      'calc-dynamic-total-carrental'
+    ) as VtbCalculatorPriceElement;
+    console.info(
+      'carrental_total_price_element',
+      carrental_total_price_element
+    );
 
     if (carrental_total_price_element) {
-      carrental_total_price_element.price = vtb.calculate_price(undefined, carrental_elements);
+      carrental_total_price_element.price = vtb.calculate_price(
+        undefined,
+        carrental_elements
+      );
     }
 
     // additions
@@ -272,7 +296,6 @@ function vtbDataLoaded(vtb: Vtb) {
 
       additionsTable.elements = additions_elements;
     }
-
 
     // total price
     const totalTable = document.getElementById(
@@ -302,7 +325,6 @@ function vtbDataLoaded(vtb: Vtb) {
       upgradeAccoTable.elements = upgrade_acco_elements;
     }
 
-
     // optional activities
     const optional_activity_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
@@ -319,7 +341,6 @@ function vtbDataLoaded(vtb: Vtb) {
     }
   }
 
-
   // itinerary
   const itinerary_elements = vtb.filter_groups({
     group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT],
@@ -327,11 +348,6 @@ function vtbDataLoaded(vtb: Vtb) {
 
   const itinerary = document.getElementById('itinerary');
   if (itinerary) {
-
-    function vtbTextChanged(e?: Event) {
-      console.info('vtbTextChanged: ', e);
-    }
-
     // walk over all element groups
     for (const itinerary_element of itinerary_elements) {
       const _h = document.createElement('h2');
@@ -339,7 +355,7 @@ function vtbDataLoaded(vtb: Vtb) {
         'Dag ' +
           itinerary_element.day +
           (itinerary_element.nights >= 1
-            ? '-' + (itinerary_element.last_day)
+            ? '-' + itinerary_element.last_day
             : '') +
           ': ' +
           itinerary_element.title || 'not set';
@@ -433,7 +449,10 @@ function vtbDataLoaded(vtb: Vtb) {
       });
 
       // show acco upgrades and optional activities
-      if (upgrade_acco_elements.length >= 1 || optional_activity_elements.length >= 1) {
+      if (
+        upgrade_acco_elements.length >= 1 ||
+        optional_activity_elements.length >= 1
+      ) {
         const _upgrades = document.createElement('h4');
         _upgrades.innerHTML = 'Up- en downgrades';
         itinerary.appendChild(_upgrades);
@@ -468,8 +487,9 @@ function vtbDataLoaded(vtb: Vtb) {
 
             let content = unit.title;
 
-            content += ` (voor ${unit.participant_prices.length} ${unit.participant_prices.length === 1 ? 'persoon' : 'personen'
-              })`;
+            content += ` (voor ${unit.participant_prices.length} ${
+              unit.participant_prices.length === 1 ? 'persoon' : 'personen'
+            })`;
 
             _u.innerHTML = content;
             units_list.appendChild(_u);

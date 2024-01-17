@@ -119,7 +119,7 @@ export class VtbElement implements interfaces.VtbElement {
   grouptitle?: string;
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
-  units: Array<VtbElementUnit> = []
+  units: Array<VtbElementUnit> = [];
 
   get participants(): Array<number> {
     return this.participant_prices.map((participant_price) => {

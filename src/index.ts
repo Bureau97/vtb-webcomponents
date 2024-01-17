@@ -14,36 +14,36 @@ import {
   VtbGeoLocation,
   VtbMapMarker,
   VtbMapMarkerGroup,
-  VtbTravelPlanData,
+  VtbTravelPlanData
 } from './models.js';
 
 import {
   VtbParticipantCalcType,
-  VtbMapMarkerConnectMode,
+  VtbMapMarkerConnectMode
 } from './utils/types.js';
 
 import {
   strip_tags,
   VtbDataTransformer,
   Dictionary,
-  VtbFilterConfig,
+  VtbFilterConfig
 } from './utils/index.js';
 
 import {
   VtbCalculatorElement,
   VtbCalculatorPriceElement,
-  VtbCalculatorPriceListElement,
+  VtbCalculatorPriceListElement
 } from './components/calculator.js';
 
 import {
   VtbFlightScheduleElement,
-  VtbFlightScheduleOptions,
+  VtbFlightScheduleOptions
 } from './components/flightschedule.js';
 
 import {
   VtbMapElement,
   VtbMapMarkerGroupElement,
-  VtbMapMarkerElement,
+  VtbMapMarkerElement
 } from './components/map.js';
 
 import {VtbMediaElement} from './components/media.js';
@@ -80,6 +80,6 @@ export {
   VtbMapElement,
   VtbMapMarkerGroupElement,
   VtbMapMarkerElement,
-  VtbMediaElement,
+  VtbMediaElement
   // VtbTextElement,
 };

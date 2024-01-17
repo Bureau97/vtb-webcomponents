@@ -55,7 +55,7 @@ const browsers = {
   // ===========
   chromium: playwrightLauncher({product: 'chromium'}),
   firefox: playwrightLauncher({product: 'firefox'}),
-  webkit: playwrightLauncher({product: 'webkit'}),
+  webkit: playwrightLauncher({product: 'webkit'})
 
   // Uncomment example launchers for running on Sauce Labs
   // ===========
@@ -99,8 +99,8 @@ export default {
     // https://mochajs.org/api/mocha
     config: {
       ui: 'tdd',
-      timeout: '60000',
-    },
+      timeout: '60000'
+    }
   },
   plugins: [
     // Detect browsers without modules (e.g. IE11) and transform to SystemJS
@@ -115,10 +115,10 @@ export default {
             name: 'lit-polyfill-support',
             path: 'node_modules/lit/polyfill-support.js',
             test: "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || window.ShadyDOM && window.ShadyDOM.force",
-            module: false,
-          },
-        ],
-      },
-    }),
-  ],
+            module: false
+          }
+        ]
+      }
+    })
+  ]
 };

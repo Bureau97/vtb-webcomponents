@@ -20,7 +20,7 @@ import {
   VtbParticipant,
   VtbParticipantPrice,
   VtbParty,
-  VtbMapMarker,
+  VtbMapMarker
 } from '../models.js';
 
 export class VtbDataTransformer {

@@ -13,7 +13,7 @@ export default {
   input: 'vtb-pricecalculator.js',
   output: {
     file: 'vtb-pricecalculator.bundled.js',
-    format: 'esm',
+    format: 'esm'
   },
   onwarn(warning) {
     if (warning.code !== 'THIS_IS_UNDEFINED') {
@@ -29,10 +29,10 @@ export default {
       warnings: true,
       mangle: {
         properties: {
-          regex: /^__/,
-        },
-      },
+          regex: /^__/
+        }
+      }
     }),
-    summary(),
-  ],
+    summary()
+  ]
 };

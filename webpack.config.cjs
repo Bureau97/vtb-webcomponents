@@ -13,16 +13,16 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /\.(sa|sc|c)ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-        use: ['raw-loader'],
+        use: ['raw-loader']
       },
       {
         test: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/, /\.css$/],
@@ -32,9 +32,9 @@ module.exports = {
             options: {
               injectType: 'singletonStyleTag',
               attributes: {
-                'data-cke': true,
-              },
-            },
+                'data-cke': true
+              }
+            }
           },
           'css-loader',
           {
@@ -42,28 +42,28 @@ module.exports = {
             options: {
               postcssOptions: styles.getPostCssConfig({
                 themeImporter: {
-                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
                 },
-                minify: true,
-              }),
-            },
-          },
-        ],
-      },
-    ],
+                minify: true
+              })
+            }
+          }
+        ]
+      }
+    ]
   },
 
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     extensionAlias: {
-      '.js': ['.ts', '.js'],
-    },
+      '.js': ['.ts', '.js']
+    }
   },
 
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: '/dist/',
+    publicPath: '/dist/'
   },
 
   devServer: {
@@ -72,8 +72,8 @@ module.exports = {
     port: 8000,
     host: '0.0.0.0',
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*'
     },
-    allowedHosts: ['localhost'],
-  },
+    allowedHosts: ['localhost']
+  }
 };

@@ -101,7 +101,7 @@ export class VtbFlightScheduleElement extends LitElement {
     attribute: false,
     hasChanged(newVal: Array<VtbFlightData>, oldVal: Array<VtbFlightData>) {
       return !isEqual(newVal, oldVal);
-    },
+    }
   })
   flightinfo: Array<VtbFlightData> = [];
 

@@ -11,11 +11,11 @@ module.exports = function (eleventyConfig) {
   return {
     dir: {
       input: 'docs-src',
-      output: 'docs',
+      output: 'docs'
     },
     templateExtensionAliases: {
       '11ty.cjs': '11ty.js',
-      '11tydata.cjs': '11tydata.js',
-    },
+      '11tydata.cjs': '11tydata.js'
+    }
   };
 };

@@ -64,7 +64,7 @@ function VtbTextSave(editor: Editor) {
       label: t('Save'),
       withText: true,
       tooltip: true,
-      isToggleable: true,
+      isToggleable: true
     });
 
     button.on('execute', () => {
@@ -82,7 +82,7 @@ function VtbTextSave(editor: Editor) {
 export class VtbTextElement extends LitElement {
   static override shadowRootOptions = {
     ...LitElement.shadowRootOptions,
-    delegatesFocus: true,
+    delegatesFocus: true
   };
 
   protected isEditorInitialized: Boolean = false;
@@ -98,7 +98,7 @@ export class VtbTextElement extends LitElement {
     attribute: false,
     hasChanged(newVal: string, oldVal: string) {
       return Boolean(newVal !== oldVal);
-    },
+    }
   })
   contents: string | null = '';
 
@@ -211,7 +211,7 @@ export class VtbTextElement extends LitElement {
           Italic,
           Link,
           List,
-          Paragraph,
+          Paragraph
           // Autosave,
         ],
         // these are the available tools
@@ -226,8 +226,8 @@ export class VtbTextElement extends LitElement {
           'bulletedList',
           'numberedList',
           'undo',
-          'redo',
-        ],
+          'redo'
+        ]
       })
         .then((editorInstance) => {
           // console.debug('promise:then');
@@ -274,9 +274,9 @@ export class VtbTextElement extends LitElement {
     const changed_content = this.editor.getData();
     const event = new CustomEvent('vtbTextChanged', {
       detail: {
-        content: changed_content,
+        content: changed_content
       },
-      bubbles: true,
+      bubbles: true
     });
     // console.debug('dispatching change event: ');
     this.dispatchEvent(event);

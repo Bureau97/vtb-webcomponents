@@ -76,7 +76,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
     hasChanged(newVal: Array<VtbMapMarker>, oldVal: Array<VtbMapMarker>) {
       // console.debug('VtbMapElement::markers::hasChanged');
       return !isEqual(newVal, oldVal);
-    },
+    }
   })
   markers: Array<VtbMapMarker>;
 
@@ -126,7 +126,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
     });
 
     observer.observe(this, {
-      childList: true,
+      childList: true
     });
   }
 
@@ -171,7 +171,7 @@ export class VtbMapElement extends LitElement {
     ) {
       // console.debug('VtbMapElement::markergroups::hasChanged');
       return !isEqual(newVal, oldVal);
-    },
+    }
   })
   markergroups: Array<VtbMapMarkerGroup>;
 
@@ -222,7 +222,7 @@ export class VtbMapElement extends LitElement {
     attribute: false,
     hasChanged(newVal: Array<Node>, oldVal: Array<Node>) {
       return !isEqual(newVal, oldVal);
-    },
+    }
   })
   mapstyles?: Array<google.maps.MapTypeStyle> = [];
 
@@ -283,7 +283,7 @@ export class VtbMapElement extends LitElement {
     // setup google maps loader
     this._loader = new Loader({
       apiKey: this.apiKey,
-      version: 'weekly',
+      version: 'weekly'
     });
 
     // setup mutation observer for changes to dom
@@ -309,7 +309,7 @@ export class VtbMapElement extends LitElement {
     });
 
     observer.observe(this, {
-      childList: true,
+      childList: true
     });
   }
 
@@ -398,7 +398,7 @@ export class VtbMapElement extends LitElement {
       zoom: 1, // default zoom level, without it stops rendering
       mapTypeControl: false, // disable map control
       streetViewControl: false, // disable streetview
-      fullscreenControl: false, // disable fullscreen
+      fullscreenControl: false // disable fullscreen
     } as google.maps.MapOptions;
 
     if (this._container && this._google) {
@@ -466,7 +466,7 @@ export class VtbMapElement extends LitElement {
         'plane',
         'air',
         'flight',
-        'airplane',
+        'airplane'
       ];
 
       if (
@@ -479,7 +479,7 @@ export class VtbMapElement extends LitElement {
           geodesic: true,
           strokeColor: '#FF0000',
           strokeOpacity: 1.0,
-          strokeWeight: 2,
+          strokeWeight: 2
         });
 
         tripPath.setMap(this._map);
@@ -490,7 +490,7 @@ export class VtbMapElement extends LitElement {
         'car',
         'driving',
         'byroad',
-        'road',
+        'road'
       ];
       if (
         group.connectMarkers &&
@@ -516,14 +516,14 @@ export class VtbMapElement extends LitElement {
       // console.debug('create rich marker markup');
       const infowindow = new google.maps.InfoWindow({
         content: `<div class="vtb-map-marker-title">${marker.title}</div>`,
-        ariaLabel: marker.title ? marker.title : '',
+        ariaLabel: marker.title ? marker.title : ''
       });
 
       gmarker.addListener('click', () => {
         // console.debug('click');
         infowindow.open({
           anchor: gmarker,
-          map,
+          map
         });
       });
     }
@@ -549,7 +549,7 @@ export class VtbMapElement extends LitElement {
 
     if (!this._directions_renderer) {
       this._directions_renderer = new google.maps.DirectionsRenderer({
-        suppressMarkers: true,
+        suppressMarkers: true
       });
       this._directions_renderer.setMap(map);
     }
@@ -576,7 +576,7 @@ export class VtbMapElement extends LitElement {
       tripCoordinates.forEach((elm) => {
         const wypnt = {
           location: elm,
-          stopover: true,
+          stopover: true
         } as google.maps.DirectionsWaypoint;
 
         waypoints.push(wypnt);

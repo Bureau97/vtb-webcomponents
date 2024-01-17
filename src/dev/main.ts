@@ -13,7 +13,7 @@ import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
 import {
   VtbCalculatorElement,
-  VtbCalculatorPriceElement,
+  VtbCalculatorPriceElement
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
 
@@ -28,7 +28,7 @@ enum SegmentTypes {
   FLIGHT = 2,
   TOESLAGEN = 3,
   REISSOM = 4,
-  HIDDEN = 5,
+  HIDDEN = 5
 }
 
 enum UnitTypes {
@@ -38,12 +38,12 @@ enum UnitTypes {
   TRANSFER = 5,
   CARRENTAL = 6,
   ACTIVITY = 10,
-  EXTRA = 11,
+  EXTRA = 11
 }
 
 const currency_transformer = new Intl.NumberFormat('nl-NL', {
   style: 'currency',
-  currency: 'EUR',
+  currency: 'EUR'
 });
 
 function currency(value: number | null): string {
@@ -113,13 +113,13 @@ function vtbDataLoaded(vtb: Vtb) {
     const map_options: VtbMapOptions = {
       connect_markers: true,
       connect_mode: 'flight',
-      api_key: GOOGLE_MAPS_KEY,
+      api_key: GOOGLE_MAPS_KEY
     };
 
     const map_search: VtbFilterConfig = {
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACCO],
-      optional: false,
+      optional: false
     };
 
     vtb.map('complete-map', map_search, map_options);
@@ -147,7 +147,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const acco_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACCO],
-      optional: false,
+      optional: false
     });
 
     const accoTable = document.getElementById(
@@ -168,7 +168,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const activity_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACTIVITY],
-      optional: false,
+      optional: false
     });
 
     const activityTable = document.getElementById(
@@ -196,7 +196,7 @@ function vtbDataLoaded(vtb: Vtb) {
     if (package_total_price_element) {
       package_total_price_element.price = vtb.calculate_price({
         group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.HIDDEN],
-        optional: false,
+        optional: false
       });
     }
 
@@ -204,7 +204,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const flights_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.FLIGHT],
       element_unit_ids: [UnitTypes.FLIGHT, UnitTypes.FLIGHTNIGHT],
-      optional: false,
+      optional: false
     });
 
     const flightsTable = document.getElementById(
@@ -249,7 +249,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const carrental_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.CARRENTAL],
-      optional: false,
+      optional: false
     });
 
     const carrentalTable = document.getElementById(
@@ -282,7 +282,7 @@ function vtbDataLoaded(vtb: Vtb) {
 
     // additions
     const additions_elements = vtb.filter_elements({
-      group_type_ids: [SegmentTypes.TOESLAGEN],
+      group_type_ids: [SegmentTypes.TOESLAGEN]
     });
 
     const additionsTable = document.getElementById(
@@ -304,7 +304,7 @@ function vtbDataLoaded(vtb: Vtb) {
 
     if (totalTable) {
       const total_price = vtb.calculate_price({
-        optional: false,
+        optional: false
       });
 
       totalTable.total_price = total_price;
@@ -314,7 +314,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const upgrade_acco_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACCO],
-      optional: true,
+      optional: true
     });
 
     const upgradeAccoTable = document.getElementById(
@@ -329,7 +329,7 @@ function vtbDataLoaded(vtb: Vtb) {
     const optional_activity_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
       element_unit_ids: [UnitTypes.ACTIVITY],
-      optional: true,
+      optional: true
     });
 
     const optional_activity_table = document.getElementById(
@@ -343,7 +343,7 @@ function vtbDataLoaded(vtb: Vtb) {
 
   // itinerary
   const itinerary_elements = vtb.filter_groups({
-    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT],
+    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT]
   });
 
   const itinerary = document.getElementById('itinerary');
@@ -378,7 +378,7 @@ function vtbDataLoaded(vtb: Vtb) {
       // show accos
       for (const element of itinerary_element.filter_elements({
         element_unit_ids: [UnitTypes.ACCO],
-        optional: false,
+        optional: false
       })) {
         const _h3 = document.createElement('h4');
 
@@ -417,7 +417,7 @@ function vtbDataLoaded(vtb: Vtb) {
       // show non-optional activities
       for (const element of itinerary_element.filter_elements({
         element_unit_ids: [UnitTypes.ACTIVITY],
-        optional: false,
+        optional: false
       })) {
         const _h3 = document.createElement('h4');
         let title = element.title;
@@ -439,13 +439,13 @@ function vtbDataLoaded(vtb: Vtb) {
       // get all upgrade acco elements
       const upgrade_acco_elements = itinerary_element.filter_elements({
         element_unit_ids: [UnitTypes.ACCO],
-        optional: true,
+        optional: true
       });
 
       // get all optional activity elements
       const optional_activity_elements = itinerary_element.filter_elements({
         element_unit_ids: [UnitTypes.ACTIVITY],
-        optional: true,
+        optional: true
       });
 
       // show acco upgrades and optional activities

@@ -68,7 +68,7 @@ export class VtbCalculatorPriceElement extends LitElement {
       }
 
       return false;
-    },
+    }
   })
   display_price: boolean | string = false;
 
@@ -93,7 +93,7 @@ export class VtbCalculatorPriceElement extends LitElement {
       }
 
       return false;
-    },
+    }
   })
   display_prices_if_zero = false;
 
@@ -101,7 +101,7 @@ export class VtbCalculatorPriceElement extends LitElement {
     // console.info('VtbCalculatorPriceElement:render');
     const priceRenderer = new Intl.NumberFormat(this.locale, {
       style: 'currency',
-      currency: this.currency,
+      currency: this.currency
     });
 
     let priceDisplay = '';

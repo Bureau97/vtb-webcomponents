@@ -71,7 +71,11 @@ export class VtbElementUnit {
 export class VtbElement {
     constructor() {
         this.id = '';
+        this.ts_product_id = 0;
         this.title = '';
+        this.subtitle = '';
+        this.description = '';
+        this.additional_description = '';
         this.price = 0.0;
         this.price_diff = 0.0;
         this.optional = false;

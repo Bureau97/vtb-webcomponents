@@ -67,11 +67,11 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
     object_id?: string;
-    ts_product_id?: number;
+    ts_product_id: number;
     title: string;
-    subtitle?: string;
-    description?: string;
-    additional_description?: string;
+    subtitle: string;
+    description: string;
+    additional_description: string;
     price: number;
     price_diff: number;
     optional: boolean;

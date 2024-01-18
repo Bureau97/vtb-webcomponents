@@ -666,8 +666,9 @@
               "kind": "field",
               "name": "ts_product_id",
               "type": {
-                "text": "number | undefined"
-              }
+                "text": "number"
+              },
+              "default": "0"
             },
             {
               "kind": "field",
@@ -681,22 +682,25 @@
               "kind": "field",
               "name": "subtitle",
               "type": {
-                "text": "string | undefined"
-              }
+                "text": "string"
+              },
+              "default": "''"
             },
             {
               "kind": "field",
               "name": "description",
               "type": {
-                "text": "string | undefined"
-              }
+                "text": "string"
+              },
+              "default": "''"
             },
             {
               "kind": "field",
               "name": "additional_description",
               "type": {
-                "text": "string | undefined"
-              }
+                "text": "string"
+              },
+              "default": "''"
             },
             {
               "kind": "field",
@@ -1970,12 +1974,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3509,6 +3507,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",

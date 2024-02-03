@@ -1,6 +1,9 @@
 import { VtbTravelPlanData, VtbElement, VtbElementGroup } from '../models.js';
+import { VtbConfig } from './interfaces.js';
 export declare class VtbDataTransformer {
     private _data;
+    private _config?;
+    constructor(vtb_config?: VtbConfig);
     parse_vtb_data(vtbSrcData: any): VtbTravelPlanData;
     protected parse_carrental_elements(segment_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any,
     segment_parent_data: any): void;

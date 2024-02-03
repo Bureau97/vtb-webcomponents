@@ -6,10 +6,13 @@ dayjs.extend(utc);
 dayjs.extend(duration);
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 export class VtbDataTransformer {
-    constructor() {
+    constructor(vtb_config) {
         this._data = new VtbTravelPlanData();
         this.re_body = /<body[^>]+>(.*)<\/body>/g;
         this.re_style = /style="[^"]+"/gi;
+        if (vtb_config) {
+            this._config = vtb_config;
+        }
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
@@ -167,7 +170,7 @@ export class VtbDataTransformer {
             if (flight?.operatedBy) {
                 flightElement.operated_by = flight.operatedBy;
             }
-            if (!flightElement.duration) {
+            if (!flightElement.duration && this._config?.calculate_flight_duration) {
                 flightElement.duration = dayjs
                     .duration(arrival.date.diff(departure.date))
                     .format('H:mmu');

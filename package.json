@@ -48,9 +48,11 @@
   "license": "MIT",
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
+    "@types/pubnub": "^7.4.1",
     "dayjs": "^1.11.10",
     "lit": "^3.0.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "pubnub": "^7.5.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",

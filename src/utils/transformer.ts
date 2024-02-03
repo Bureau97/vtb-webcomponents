@@ -23,8 +23,17 @@ import {
   VtbMapMarker
 } from '../models.js';
 
+import {VtbConfig} from './interfaces.js';
+
 export class VtbDataTransformer {
   private _data = new VtbTravelPlanData();
+  private _config?: VtbConfig;
+
+  constructor(vtb_config?: VtbConfig) {
+    if (vtb_config) {
+      this._config = vtb_config;
+    }
+  }
 
   parse_vtb_data(
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -240,7 +249,7 @@ export class VtbDataTransformer {
         flightElement.operated_by = flight.operatedBy;
       }
 
-      if (!flightElement.duration) {
+      if (!flightElement.duration && this._config?.calculate_flight_duration) {
         flightElement.duration = dayjs
           .duration(arrival.date.diff(departure.date))
           .format('H:mmu');

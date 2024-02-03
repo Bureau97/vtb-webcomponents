@@ -1,4 +1,4 @@
-import {VtbFilterConfig} from './utils/interfaces.js';
+import {VtbConfig, VtbFilterConfig} from './utils/interfaces.js';
 
 import {
   VtbTravelPlanData,
@@ -18,11 +18,19 @@ import {
 
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+  private _config?: VtbConfig;
 
-  constructor(vtb_parsed_data?: VtbTravelPlanData) {
-    if (vtb_parsed_data) {
-      this._data = vtb_parsed_data;
+  constructor(vtb_config_options?: VtbConfig) {
+    if (vtb_config_options) {
+      this._config = vtb_config_options;
     }
+  }
+
+  get is_live_preview(): boolean {
+    if (window.location.search && window.location.search !== '' && /(\?|&)key\=([^&]*)/.test(window.location.search)) {
+      return true
+    }
+    return false;
   }
 
   get title() {
@@ -115,7 +123,12 @@ export class Vtb {
   public parse_vtb_data(
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
   ): void {
-    this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
+    const vtb_config = this._config;
+    this._data = new VtbDataTransformer(vtb_config).parse_vtb_data(vtbSrcData);
+  }
+
+  set data(data: VtbTravelPlanData) {
+    this._data = data;
   }
 
   get element_groups(): Array<VtbElementGroup> {
@@ -229,6 +242,8 @@ export class Vtb {
   // ) {
   //   // to do
   // }
+
+
 
   /**
    * merge element groups of possibly different types

@@ -26,6 +26,7 @@ import {
   strip_tags,
   VtbDataTransformer,
   Dictionary,
+  VtbConfig,
   VtbFilterConfig
 } from './utils/index.js';
 
@@ -71,6 +72,7 @@ export {
   strip_tags,
   VtbDataTransformer,
   Dictionary,
+  VtbConfig,
   VtbFilterConfig,
   VtbCalculatorElement,
   VtbCalculatorPriceElement,

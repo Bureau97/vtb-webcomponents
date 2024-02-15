@@ -1,6 +1,7 @@
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import duration from 'dayjs/plugin/duration.js';
+import murmurhash from 'murmurhash';
 
 dayjs.locale('nl');
 dayjs.extend(utc);
@@ -94,8 +95,21 @@ export class VtbFlightData implements interfaces.VtbFlightData {
 }
 
 export class VtbElementUnit implements interfaces.VtbElementUnit {
+  // id: string = '';  // produced by murmurhash
   title: string = '';
   participant_prices: Array<VtbParticipantPrice> = [];
+  quantity: number = 1;
+
+  private _hash: number = 0;
+
+  get id() : string {
+    if (!this._hash || this._hash == 0) {
+      const to_hash = [this.title, new String(this.participant_prices.length)].join(':');
+      this._hash = murmurhash.v3(to_hash, 0x9747b28c);
+    }
+
+    return this._hash.toString(16); // cast to string
+  }
 
   get participants(): Array<number> {
     return this.participant_prices.map((participant_price) => {
@@ -125,7 +139,26 @@ export class VtbElement implements interfaces.VtbElement {
   grouptitle?: string;
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
-  units: Array<VtbElementUnit> = [];
+  _units: Array<VtbElementUnit> = [];
+
+  private _grouped: Array<VtbElementUnit> = [];
+  get units(): Array<VtbElementUnit> {
+    if (this._grouped.length <= 0 && this._units.length > 1) {
+      const grouped: Dictionary<VtbElementUnit> = {};
+      for (const _u of this._units) {
+        const _existing_keys = Object.keys(grouped);
+        if (!_existing_keys.includes(_u.id)) {
+          grouped[_u.id] = Object.assign(new VtbElementUnit(), structuredClone(_u));
+        }
+        else {
+          grouped[_u.id].quantity++;
+        }
+      }
+      this._grouped = Object.values(grouped);
+    }
+
+    return this._grouped.length ? this._grouped : this._units;
+  }
 
   get participants(): Array<number> {
     return this.participant_prices.map((participant_price) => {
@@ -150,6 +183,11 @@ export class VtbElement implements interfaces.VtbElement {
     _clone.media = [];
     for (const _m of this.media) {
       _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+    }
+
+    _clone._units = [];
+    for (const _u of this._units) {
+      _clone._units.push(Object.assign(new VtbElementUnit(), structuredClone(_u)));
     }
 
     return _clone;

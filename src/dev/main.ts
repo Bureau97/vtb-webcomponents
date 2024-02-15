@@ -405,8 +405,16 @@ function vtbDataLoaded(vtb: Vtb) {
         const units_list = document.createElement('ul');
         for (const unit of element.units) {
           const _u = document.createElement('li');
+          _u.id = unit.id;
 
-          let content = unit.title;
+          let content = '';
+
+          if (unit.quantity > 1) {
+            content += unit.quantity + 'x ' + unit.title;
+          }
+          else {
+            content += unit.title;
+          }
 
           content += ` (voor ${unit.participant_prices.length} ${
             unit.participant_prices.length === 1 ? 'persoon' : 'personen'

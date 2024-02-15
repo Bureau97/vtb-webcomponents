@@ -310,7 +310,10 @@ export class VtbDataTransformer {
         last_element &&
         last_element.ts_product_id == vtb_element.ts_product_id
       ) {
-        last_element.units = last_element.units.concat(vtb_element.units);
+
+        // console.info('adding units to first elements of current product..');
+
+        last_element._units = last_element._units.concat(vtb_element._units);
         last_element.participant_prices =
           last_element.participant_prices.concat(
             vtb_element.participant_prices
@@ -427,7 +430,7 @@ export class VtbDataTransformer {
       vtb_element_unit.participant_prices.push(participant_element_price);
     }
 
-    vtb_element.units.push(vtb_element_unit);
+    vtb_element._units.push(vtb_element_unit);
 
     if (
       element_data.maps &&
@@ -445,7 +448,7 @@ export class VtbDataTransformer {
       vtb_element.location.content = element_data.additionalText;
     }
 
-    console.info('vtb_element: ', vtb_element);
+    // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
 
     return vtb_element;
   }

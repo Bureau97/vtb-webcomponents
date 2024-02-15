@@ -87,6 +87,7 @@
     "eslint": "^8.52.0",
     "fast-glob": "^3.3.2",
     "lit-analyzer": "^2.0.1",
+    "murmurhash": "^2.0.1",
     "prettier": "^3.0.3",
     "ts-lit-plugin": "^2.0.0",
     "ts-loader": "^9.5.0",

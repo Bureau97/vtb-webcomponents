@@ -36,7 +36,7 @@
     "test:prod": "MODE=prod wtr",
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat vtb-webcomponents.bundled.js | gzip -9 | wc -c ; rm vtb-webcomponents.bundled.js",
-    "webpack:dev": "cross-env webpack serve --hot --mode development"
+    "dev": "cross-env webpack serve --hot --mode development"
   },
   "keywords": [
     "web-components",

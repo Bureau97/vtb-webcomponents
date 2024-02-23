@@ -6,10 +6,13 @@ dayjs.extend(utc);
 dayjs.extend(duration);
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 export class VtbDataTransformer {
-    constructor() {
+    constructor(vtb_config) {
         this._data = new VtbTravelPlanData();
         this.re_body = /<body[^>]+>(.*)<\/body>/g;
         this.re_style = /style="[^"]+"/gi;
+        if (vtb_config) {
+            this._config = vtb_config;
+        }
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
@@ -167,7 +170,7 @@ export class VtbDataTransformer {
             if (flight?.operatedBy) {
                 flightElement.operated_by = flight.operatedBy;
             }
-            if (!flightElement.duration) {
+            if (!flightElement.duration && this._config?.calculate_flight_duration) {
                 flightElement.duration = dayjs
                     .duration(arrival.date.diff(departure.date))
                     .format('H:mmu');
@@ -211,7 +214,8 @@ export class VtbDataTransformer {
             const vtb_element = this.parse_vtb_element(element_data, segment_data.title);
             if (last_element &&
                 last_element.ts_product_id == vtb_element.ts_product_id) {
-                last_element.units = last_element.units.concat(vtb_element.units);
+                // console.info('adding units to first elements of current product..');
+                last_element._units = last_element._units.concat(vtb_element._units);
                 last_element.participant_prices =
                     last_element.participant_prices.concat(vtb_element.participant_prices);
                 continue;
@@ -294,7 +298,7 @@ export class VtbDataTransformer {
             vtb_element.participant_prices.push(participant_element_price);
             vtb_element_unit.participant_prices.push(participant_element_price);
         }
-        vtb_element.units.push(vtb_element_unit);
+        vtb_element._units.push(vtb_element_unit);
         if (element_data.maps &&
             element_data.maps.enabled &&
             element_data.maps.latitude != 0 &&
@@ -307,7 +311,7 @@ export class VtbDataTransformer {
             vtb_element.location.title = element_data.title;
             vtb_element.location.content = element_data.additionalText;
         }
-        console.info('vtb_element: ', vtb_element);
+        // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
         return vtb_element;
     }
 }

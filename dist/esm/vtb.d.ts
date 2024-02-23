@@ -1,10 +1,12 @@
-import { VtbFilterConfig } from './utils/interfaces.js';
+import { VtbConfig, VtbFilterConfig } from './utils/interfaces.js';
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbMapMarkerGroup, VtbExtraField, VtbParticipant } from './models.js';
 import { VtbMapElement, VtbMapOptions } from './components/map.js';
 import { VtbFlightScheduleElement, VtbFlightScheduleOptions } from './components/flightschedule.js';
 export declare class Vtb {
     private _data;
-    constructor(vtb_parsed_data?: VtbTravelPlanData);
+    private _config?;
+    constructor(vtb_config_options?: VtbConfig);
+    get is_live_preview(): boolean;
     get title(): any;
     get subtitle(): any;
     get covers(): any;
@@ -26,6 +28,7 @@ export declare class Vtb {
     extraField(name: string): VtbExtraField | null;
     load(travelplan_source_url: string): Promise<Vtb>;
     parse_vtb_data(vtbSrcData: any): void;
+    set data(data: VtbTravelPlanData);
     get element_groups(): Array<VtbElementGroup>;
     filter_groups(config: VtbFilterConfig): Array<VtbElementGroup>;
     filter_elements(config?: VtbFilterConfig): Array<VtbElement>;

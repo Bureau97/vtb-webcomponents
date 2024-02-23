@@ -14,6 +14,9 @@ export interface VtbFilterConfig {
     carrental?: boolean;
     flight?: boolean;
 }
+export interface VtbConfig {
+    calculate_flight_duration: boolean;
+}
 export interface VtbParticipant {
     title?: string;
     name?: string;

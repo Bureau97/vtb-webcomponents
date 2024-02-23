@@ -23,8 +23,17 @@ import {
   VtbMapMarker
 } from '../models.js';
 
+import {VtbConfig} from './interfaces.js';
+
 export class VtbDataTransformer {
   private _data = new VtbTravelPlanData();
+  private _config?: VtbConfig;
+
+  constructor(vtb_config?: VtbConfig) {
+    if (vtb_config) {
+      this._config = vtb_config;
+    }
+  }
 
   parse_vtb_data(
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -240,7 +249,7 @@ export class VtbDataTransformer {
         flightElement.operated_by = flight.operatedBy;
       }
 
-      if (!flightElement.duration) {
+      if (!flightElement.duration && this._config?.calculate_flight_duration) {
         flightElement.duration = dayjs
           .duration(arrival.date.diff(departure.date))
           .format('H:mmu');
@@ -301,7 +310,9 @@ export class VtbDataTransformer {
         last_element &&
         last_element.ts_product_id == vtb_element.ts_product_id
       ) {
-        last_element.units = last_element.units.concat(vtb_element.units);
+        // console.info('adding units to first elements of current product..');
+
+        last_element._units = last_element._units.concat(vtb_element._units);
         last_element.participant_prices =
           last_element.participant_prices.concat(
             vtb_element.participant_prices
@@ -418,7 +429,7 @@ export class VtbDataTransformer {
       vtb_element_unit.participant_prices.push(participant_element_price);
     }
 
-    vtb_element.units.push(vtb_element_unit);
+    vtb_element._units.push(vtb_element_unit);
 
     if (
       element_data.maps &&
@@ -436,7 +447,7 @@ export class VtbDataTransformer {
       vtb_element.location.content = element_data.additionalText;
     }
 
-    console.info('vtb_element: ', vtb_element);
+    // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
 
     return vtb_element;
   }

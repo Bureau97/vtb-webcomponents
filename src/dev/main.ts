@@ -7,7 +7,7 @@ import '../components/text';
 
 import {Vtb} from '../vtb';
 import {VtbElement} from '../models';
-import {VtbFilterConfig} from '../utils/interfaces';
+import {VtbConfig, VtbFilterConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
@@ -59,7 +59,12 @@ function vtbTextChanged(e?: Event) {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.info('DOMContentLoaded');
-  new Vtb().load(travelplan_source_url).then(vtbDataLoaded);
+
+  const config: VtbConfig = {
+    calculate_flight_duration: true
+  };
+
+  new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
 });
 
 function vtbDataLoaded(vtb: Vtb) {
@@ -400,6 +405,7 @@ function vtbDataLoaded(vtb: Vtb) {
         const units_list = document.createElement('ul');
         for (const unit of element.units) {
           const _u = document.createElement('li');
+          _u.id = unit.id;
 
           let content = '';
 

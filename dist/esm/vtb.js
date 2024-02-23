@@ -3,11 +3,19 @@ import { VtbDataTransformer } from './utils/transformer.js';
 import { VtbMapElement } from './components/map.js';
 import { VtbFlightScheduleElement } from './components/flightschedule.js';
 export class Vtb {
-    constructor(vtb_parsed_data) {
+    constructor(vtb_config_options) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        if (vtb_parsed_data) {
-            this._data = vtb_parsed_data;
+        if (vtb_config_options) {
+            this._config = vtb_config_options;
         }
+    }
+    get is_live_preview() {
+        if (window.location.search &&
+            window.location.search !== '' &&
+            /(\?|&)key=([^&]*)/.test(window.location.search)) {
+            return true;
+        }
+        return false;
     }
     get title() {
         return this._data.title;
@@ -78,7 +86,11 @@ export class Vtb {
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
-        this._data = new VtbDataTransformer().parse_vtb_data(vtbSrcData);
+        const vtb_config = this._config;
+        this._data = new VtbDataTransformer(vtb_config).parse_vtb_data(vtbSrcData);
+    }
+    set data(data) {
+        this._data = data;
     }
     get element_groups() {
         return this._data.element_groups;

@@ -1,5 +1,5 @@
 import {strip_tags} from './string.js';
 import {VtbDataTransformer} from './transformer.js';
-import {Dictionary, VtbFilterConfig} from './interfaces.js';
+import {Dictionary, VtbConfig, VtbFilterConfig} from './interfaces.js';
 
-export {strip_tags, VtbDataTransformer, Dictionary, VtbFilterConfig};
+export {strip_tags, VtbDataTransformer, Dictionary, VtbConfig, VtbFilterConfig};

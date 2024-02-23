@@ -62,6 +62,9 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;
     participant_prices: Array<VtbParticipantPrice>;
+    quantity: number;
+    private _hash;
+    get id(): string;
     get participants(): Array<number>;
 }
 export declare class VtbElement implements interfaces.VtbElement {
@@ -85,7 +88,9 @@ export declare class VtbElement implements interfaces.VtbElement {
     grouptitle?: string;
     media: Array<VtbMedia>;
     location?: VtbMapMarker;
-    units: Array<VtbElementUnit>;
+    _units: Array<VtbElementUnit>;
+    private _grouped;
+    get units(): Array<VtbElementUnit>;
     get participants(): Array<number>;
     get last_day(): number;
     get days(): number;

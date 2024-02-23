@@ -10,7 +10,9 @@ export class Vtb {
         }
     }
     get is_live_preview() {
-        if (window.location.search && window.location.search !== '' && /(\?|&)key\=([^&]*)/.test(window.location.search)) {
+        if (window.location.search &&
+            window.location.search !== '' &&
+            /(\?|&)key=([^&]*)/.test(window.location.search)) {
             return true;
         }
         return false;

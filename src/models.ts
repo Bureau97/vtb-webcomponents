@@ -102,9 +102,12 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
 
   private _hash: number = 0;
 
-  get id() : string {
+  get id(): string {
     if (!this._hash || this._hash == 0) {
-      const to_hash = [this.title, new String(this.participant_prices.length)].join(':');
+      const to_hash = [
+        this.title,
+        new String(this.participant_prices.length)
+      ].join(':');
       this._hash = murmurhash.v3(to_hash, 0x9747b28c);
     }
 
@@ -148,9 +151,11 @@ export class VtbElement implements interfaces.VtbElement {
       for (const _u of this._units) {
         const _existing_keys = Object.keys(grouped);
         if (!_existing_keys.includes(_u.id)) {
-          grouped[_u.id] = Object.assign(new VtbElementUnit(), structuredClone(_u));
-        }
-        else {
+          grouped[_u.id] = Object.assign(
+            new VtbElementUnit(),
+            structuredClone(_u)
+          );
+        } else {
           grouped[_u.id].quantity++;
         }
       }
@@ -187,7 +192,9 @@ export class VtbElement implements interfaces.VtbElement {
 
     _clone._units = [];
     for (const _u of this._units) {
-      _clone._units.push(Object.assign(new VtbElementUnit(), structuredClone(_u)));
+      _clone._units.push(
+        Object.assign(new VtbElementUnit(), structuredClone(_u))
+      );
     }
 
     return _clone;

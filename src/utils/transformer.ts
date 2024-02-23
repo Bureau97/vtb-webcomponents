@@ -310,7 +310,6 @@ export class VtbDataTransformer {
         last_element &&
         last_element.ts_product_id == vtb_element.ts_product_id
       ) {
-
         // console.info('adding units to first elements of current product..');
 
         last_element._units = last_element._units.concat(vtb_element._units);

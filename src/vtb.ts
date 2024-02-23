@@ -27,8 +27,12 @@ export class Vtb {
   }
 
   get is_live_preview(): boolean {
-    if (window.location.search && window.location.search !== '' && /(\?|&)key\=([^&]*)/.test(window.location.search)) {
-      return true
+    if (
+      window.location.search &&
+      window.location.search !== '' &&
+        /(\?|&)key=([^&]*)/.test(window.location.search)
+    ) {
+      return true;
     }
     return false;
   }
@@ -242,8 +246,6 @@ export class Vtb {
   // ) {
   //   // to do
   // }
-
-
 
   /**
    * merge element groups of possibly different types

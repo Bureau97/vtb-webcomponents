@@ -1,7 +1,7 @@
 {
   "name": "vtb-webcomponents",
   "private": false,
-  "version": "1.0.8-beta",
+  "version": "1.0.8-beta2",
   "description": "Visual Tour Builder - Web Components Library",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -50,7 +50,8 @@
     "@googlemaps/js-api-loader": "^1.16.2",
     "dayjs": "^1.11.10",
     "lit": "^3.0.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "murmurhash": "^2.0.1"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
@@ -87,7 +88,6 @@
     "eslint": "^8.52.0",
     "fast-glob": "^3.3.2",
     "lit-analyzer": "^2.0.1",
-    "murmurhash": "^2.0.1",
     "prettier": "^3.0.3",
     "ts-lit-plugin": "^2.0.0",
     "ts-loader": "^9.5.0",

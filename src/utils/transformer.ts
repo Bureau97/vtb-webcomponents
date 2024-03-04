@@ -376,7 +376,7 @@ export class VtbDataTransformer {
     vtb_element.ts_product_id = element_data.TSProduct.id;
 
     vtb_element.title = element_data.title;
-    // vtb_element.subtitle = element_data.subTitle;
+    vtb_element.subtitle = element_data.subTitle;
     // set element description, get all contents from the <body> and remove all style attributes
     vtb_element.description = element_data.additionalText
       ?.replace(this.re_body, '$1')

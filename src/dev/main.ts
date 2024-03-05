@@ -411,8 +411,7 @@ function vtbDataLoaded(vtb: Vtb) {
 
           if (unit.quantity > 1) {
             content += unit.quantity + 'x ' + unit.title;
-          }
-          else {
+          } else {
             content += unit.title;
           }
 

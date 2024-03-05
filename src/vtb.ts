@@ -30,7 +30,7 @@ export class Vtb {
     if (
       window.location.search &&
       window.location.search !== '' &&
-        /(\?|&)key=([^&]*)/.test(window.location.search)
+      /(\?|&)key=([^&]*)/.test(window.location.search)
     ) {
       return true;
     }

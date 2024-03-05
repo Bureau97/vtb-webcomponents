@@ -169,6 +169,14 @@
         },
         {
           "kind": "js",
+          "name": "VtbConfig",
+          "declaration": {
+            "name": "VtbConfig",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "VtbFilterConfig",
           "declaration": {
             "name": "VtbFilterConfig",
@@ -634,6 +642,31 @@
             },
             {
               "kind": "field",
+              "name": "quantity",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "_hash",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "participants",
               "type": {
                 "text": "Array<number>"
@@ -804,11 +837,28 @@
             },
             {
               "kind": "field",
-              "name": "units",
+              "name": "_units",
               "type": {
                 "text": "Array<VtbElementUnit>"
               },
               "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_grouped",
+              "type": {
+                "text": "Array<VtbElementUnit>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "units",
+              "type": {
+                "text": "Array<VtbElementUnit>"
+              },
+              "readonly": true
             },
             {
               "kind": "field",
@@ -1632,6 +1682,22 @@
             },
             {
               "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "VtbConfig | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "is_live_preview",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "title",
               "readonly": true
             },
@@ -1790,6 +1856,10 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "field",
+              "name": "data"
             },
             {
               "kind": "field",
@@ -1974,6 +2044,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3510,7 +3586,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     },
@@ -3540,6 +3616,14 @@
           "name": "Dictionary",
           "declaration": {
             "name": "Dictionary",
+            "module": "src/utils/index.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbConfig",
+          "declaration": {
+            "name": "VtbConfig",
             "module": "src/utils/index.ts"
           }
         },
@@ -3602,6 +3686,14 @@
               "name": "_data",
               "privacy": "private",
               "default": "new VtbTravelPlanData()"
+            },
+            {
+              "kind": "field",
+              "name": "_config",
+              "type": {
+                "text": "VtbConfig | undefined"
+              },
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -3719,12 +3811,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

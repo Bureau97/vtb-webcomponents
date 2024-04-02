@@ -1,11 +1,11 @@
-# VTB Webcomponents
+# [VTB Webcomponents](https://github.com/Bureau97/vtb-webcomponents)
 
 Dit project omvat een aantal tools en webcomponenten om het opbouwen van een output van de Visual Tour Builder (VTB) van TravelSpirit te vergemakkelijken.
 
 De volgende features zijn beschikbaar:
 
 - VTB loader, voor het laden en inlezen van de VTB travelplan json uit de VTB
-- VTB Media wecomponent, voor het weergeven van afbeeldingen uit MediaSpirit
+- [VTB Media](./docs/media.md) webcomponent, voor het weergeven van afbeeldingen uit MediaSpirit
 - VTB Calculator, voor het weergeven en berekenen van de prijzen
 - VTB Flightschedule, voor het opbouwen en weergeven van een vluchtschema
 - VTB Map, voor het weergeven van kaarten op basis van Google Maps
@@ -112,6 +112,24 @@ if (accoTable && acco_elements.length >= 1) {
 </html>
 ```
 
-## More information
+## Richtlijnen voor het bijdragen aan het project.
 
-See [Get started](https://lit.dev/docs/getting-started/) on the Lit site for more information.
+Bugs en feature request kunnen worden ingediend via [Github Issues](https://github.com/Bureau97/vtb-webcomponents/issues).
+
+Bijdragen aan code en documentatie kunnen worden toegevoegd via [Pull Requests](https://github.com/Bureau97/vtb-webcomponents/pulls).
+
+## Licentie:
+
+MIT
+
+## Credits
+
+[Huub Segers - Bureau97](https://github.com/huub-segers)
+
+[Barry Nijenhuis - TravelSpirit](https://github.com/bseyb)
+
+[Chris Kanger - 3rd floor coding](https://github.com/ChrisKanger)
+
+[Dennis Essenburg - TravelSpirit](https://github.com/djessenb)
+
+

@@ -4,13 +4,12 @@ Dit project omvat een aantal tools en webcomponenten om het opbouwen van een out
 
 De volgende features zijn beschikbaar:
 
-* VTB loader, voor het laden en inlezen van de VTB travelplan json uit de VTB
-* VTB Media wecomponent, voor het weergeven van afbeeldingen uit MediaSpirit
-* VTB Calculator, voor het weergeven en berekenen van de prijzen
-* VTB Flightschedule, voor het opbouwen en weergeven van een vluchtschema
-* VTB Map, voor het weergeven van kaarten op basis van Google Maps
-* VTB Text, voor het weergeven en het inline bewerken van teksten uit het travelplan
-
+- VTB loader, voor het laden en inlezen van de VTB travelplan json uit de VTB
+- VTB Media wecomponent, voor het weergeven van afbeeldingen uit MediaSpirit
+- VTB Calculator, voor het weergeven en berekenen van de prijzen
+- VTB Flightschedule, voor het opbouwen en weergeven van een vluchtschema
+- VTB Map, voor het weergeven van kaarten op basis van Google Maps
+- VTB Text, voor het weergeven en het inline bewerken van teksten uit het travelplan
 
 ## Installatie
 
@@ -32,7 +31,7 @@ import * as travelplan_data from 'travelplan.json';
 import {Vtb} from 'vtb-webcomponents';
 
 const vtb = new Vtb({
-    calculate_flight_duration: false
+  calculate_flight_duration: false
 });
 vtb.parse_vtb_data(travelplan_data);
 ```
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function vtbDataLoaded(vtb: Vtb) {
-    // doe iets met de data
+  // doe iets met de data
 }
 ```
 
@@ -79,38 +78,40 @@ enum UnitTypes {
 }
 
 const acco_elements = vtb.filter_elements({
-    group_type_ids: [SegmentTypes.DEFAULT],
-    element_unit_ids: [UnitTypes.ACCO],
-    optional: false
+  group_type_ids: [SegmentTypes.DEFAULT],
+  element_unit_ids: [UnitTypes.ACCO],
+  optional: false
 });
 
 const accoTable = document.getElementById(
-    'calc-dynamic-accos'
+  'calc-dynamic-accos'
 ) as VtbCalculatorElement;
 
 if (accoTable && acco_elements.length >= 1) {
-    accoTable.render_element_description = function (element: VtbElement) {
+  accoTable.render_element_description = function (element: VtbElement) {
     return `Dag: ${element.day}-${element.last_day} |
         ${element.nights} ${element.nights == 1 ? 'nacht' : 'nachten'}
         ${element.title}
     `;
-    };
-    accoTable.elements = acco_elements;
+  };
+  accoTable.elements = acco_elements;
 }
 ```
 
 ```html
 <html>
-    <head>...</head>
-<body>
-	<vtb-calculator
-	        id="calc-dynamic-accos"
-	        title="Accommodaties"
-	      ></vtb-calculator>
-</body>
+  <head>
+    ...
+  </head>
+  <body>
+    <vtb-calculator
+      id="calc-dynamic-accos"
+      title="Accommodaties"
+    ></vtb-calculator>
+  </body>
 </html>
-
 ```
+
 ## More information
 
 See [Get started](https://lit.dev/docs/getting-started/) on the Lit site for more information.

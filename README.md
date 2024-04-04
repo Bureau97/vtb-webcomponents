@@ -9,7 +9,7 @@ De volgende features zijn beschikbaar:
 - VTB Calculator, voor het weergeven en berekenen van de prijzen
 - VTB Flightschedule, voor het opbouwen en weergeven van een vluchtschema
 - VTB Map, voor het weergeven van kaarten op basis van Google Maps
-- VTB Text, voor het weergeven en het inline bewerken van teksten uit het travelplan
+- [VTB Text](./docs/text.md), voor het weergeven en het inline bewerken van teksten uit het travelplan
 
 ## Installatie
 

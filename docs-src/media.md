@@ -1,3 +1,8 @@
+---
+layout: page.11ty.cjs
+title: VTB Media Element
+---
+
 # VTB Media
 
 Het VTB Media element &lt;vtb-media&gt; kan worden gebruikt voor het weergeven

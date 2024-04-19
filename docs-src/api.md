@@ -1,11 +1,11 @@
 ---
-layout: layout.njk
-title: VTB API
+layout: page.11ty.cjs
+title: VTB Data API
 ---
 
-# VTB API
+# VTB Data API
 
-De VTB API kan worden gebruikt om een travelplan.json in te laden. De loader biedt een API aan om de data uit het travelplan op een zo eenvoudig mogelijke manier te gebruiken.
+De VTB Data API kan worden gebruikt om een travelplan.json in te laden. De loader biedt een API aan om de data uit het travelplan op een zo eenvoudig mogelijke manier te gebruiken.
 
 
 ## Initialisatie

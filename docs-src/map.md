@@ -1,3 +1,8 @@
+---
+layout: page.11ty.cjs
+title: VTB Map Element
+---
+
 # VTB Map
 
 Het VTB Map element &lt;vtb-map&gt; kan worden gebruikt voor het weergeven van kaarten in de output van de Visual Tour Builder. De kaarten maken gebruik van Google Maps als basis.

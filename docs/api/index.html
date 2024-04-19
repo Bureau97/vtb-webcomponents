@@ -1,17 +1,35 @@
 
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VTB API</title>
-    <link rel="stylesheet" href="/docs.css">
+    <title>VTB Data API</title>
+    <link rel="stylesheet" href="../docs.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto+Mono">
     <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css">
+    <!--
+    <link href="../prism-okaidia.css" rel="stylesheet" />
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="/node_modules/lit/polyfill-support.js"></script>
+    <script type="module" src="../my-element.bundled.js"></script>
+    -->
   </head>
-
   <body>
-    <h1>VTB API</h1>
-<p>De VTB API kan worden gebruikt om een travelplan.json in te laden. De loader biedt een API aan om de data uit het travelplan op een zo eenvoudig mogelijke manier te gebruiken.</p>
+    <header>
+        
+<nav>
+  <a href="../">Home</a>
+  <!-- <a href="../examples/">Examples</a> -->
+  <a href="">API</a>
+  <!-- <a href="../install/">Install</a> -->
+</nav>
+    </header>
+    <div id="main-wrapper">
+      <main>
+        <h1>VTB Data API</h1>
+<p>De VTB Data API kan worden gebruikt om een travelplan.json in te laden. De loader biedt een API aan om de data uit het travelplan op een zo eenvoudig mogelijke manier te gebruiken.</p>
 <h2>Initialisatie</h2>
 <pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
     calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">true</span>
@@ -155,5 +173,10 @@ groups<span class="token punctuation">.</span><span class="token function">each<
     element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">ACCO</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 
+      </main>
+    </div>
+    <footer>
+        &copy; 2023-2024 Bureau97 / B97
+    </footer>
   </body>
 </html>

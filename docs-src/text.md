@@ -1,3 +1,8 @@
+---
+layout: page.11ty.cjs
+title: VTB Text Element
+---
+
 # VTB Text (in ontwikkeling)
 
 Het VTB Text element &lt;vtb-text&gt; kan worden gebruikt voor het weergeven van teksten welke moeten kunnen worden aangepast middels de live-preview functie van de Visual Tour Builder.

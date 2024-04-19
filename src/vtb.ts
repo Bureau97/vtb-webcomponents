@@ -1,3 +1,5 @@
+import dayjs, { type Dayjs } from 'dayjs';
+
 import {VtbConfig, VtbFilterConfig} from './utils/interfaces.js';
 
 import {
@@ -6,7 +8,10 @@ import {
   VtbElementGroup,
   VtbMapMarkerGroup,
   VtbExtraField,
-  VtbParticipant
+  VtbParticipant,
+  VtbParty,
+  VtbMedia,
+  VtbFlightData
 } from './models.js';
 import {VtbMapMarkerConnectMode} from './utils/types.js';
 import {VtbDataTransformer} from './utils/transformer.js';
@@ -20,12 +25,22 @@ export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
   private _config?: VtbConfig;
 
+  /**
+   * @constructor
+   *
+   * @param vtb_config_options VtbConfig
+   */
   constructor(vtb_config_options?: VtbConfig) {
     if (vtb_config_options) {
       this._config = vtb_config_options;
     }
   }
 
+  /**
+   * @property
+   *
+   * @returns {boolean}
+   */
   get is_live_preview(): boolean {
     if (
       window.location.search &&
@@ -37,39 +52,49 @@ export class Vtb {
     return false;
   }
 
-  get title() {
-    return this._data.title;
+  private get _is_initialized(): boolean {
+    const initialized = !!this._data;
+
+    if (!initialized) {
+      console.error('Vtb data not initialized!');
+    }
+
+    return initialized;
   }
 
-  get subtitle() {
-    return this._data.subtitle;
+  get title(): string {
+    return this._is_initialized ? this._data.title : '';
   }
 
-  get covers() {
-    return this._data.covers;
+  get subtitle(): string {
+    return this._is_initialized ? this._data.subtitle : '';
   }
 
-  get startdate() {
+  get covers(): Array<VtbMedia> {
+    return this._is_initialized ? this._data.covers : [];
+  }
+
+  get startdate(): Dayjs | undefined {
     return this._data.start_date;
   }
 
-  get enddate() {
+  get enddate(): Dayjs | undefined {
     return this._data.end_date;
   }
 
-  get duration() {
+  get duration(): number | undefined {
     return this._data.duration;
   }
 
-  get days() {
+  get days(): number | undefined {
     return this.duration;
   }
 
-  get nights() {
-    return this.duration - 1;
+  get nights(): number | undefined {
+    return this.duration ? this.duration - 1 : undefined;
   }
 
-  get sales_price() {
+  get sales_price(): number | undefined {
     return this._data.sales_price;
   }
 
@@ -78,6 +103,7 @@ export class Vtb {
   }
 
   get flight_info() {
+    /** Alias for flightinfo */
     return this.flightinfo;
   }
 
@@ -85,11 +111,11 @@ export class Vtb {
     return Object.values(this._data.participants);
   }
 
-  get parties() {
+  get parties(): Array<VtbParty> {
     return this._data.parties;
   }
 
-  get flightinfo() {
+  get flightinfo(): Array<VtbFlightData> {
     return this._data.flight_elements;
   }
 
@@ -97,7 +123,7 @@ export class Vtb {
     return this.carrental.length > 0;
   }
 
-  get carrental() {
+  get carrental(): Array<VtbElement> {
     return this._data.car_rental_elements;
   }
 

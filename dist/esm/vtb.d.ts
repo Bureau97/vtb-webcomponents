@@ -1,28 +1,40 @@
+import { type Dayjs } from 'dayjs';
 import { VtbConfig, VtbFilterConfig } from './utils/interfaces.js';
-import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbMapMarkerGroup, VtbExtraField, VtbParticipant } from './models.js';
+import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbMapMarkerGroup, VtbExtraField, VtbParticipant, VtbParty, VtbMedia, VtbFlightData } from './models.js';
 import { VtbMapElement, VtbMapOptions } from './components/map.js';
 import { VtbFlightScheduleElement, VtbFlightScheduleOptions } from './components/flightschedule.js';
 export declare class Vtb {
     private _data;
     private _config?;
+    /**
+     * @constructor
+     *
+     * @param vtb_config_options VtbConfig
+     */
     constructor(vtb_config_options?: VtbConfig);
+    /**
+     * @property
+     *
+     * @returns {boolean}
+     */
     get is_live_preview(): boolean;
-    get title(): any;
-    get subtitle(): any;
-    get covers(): any;
-    get startdate(): any;
-    get enddate(): any;
-    get duration(): any;
-    get days(): any;
-    get nights(): number;
-    get sales_price(): any;
+    private get _is_initialized();
+    get title(): string;
+    get subtitle(): string;
+    get covers(): Array<VtbMedia>;
+    get startdate(): Dayjs | undefined;
+    get enddate(): Dayjs | undefined;
+    get duration(): number | undefined;
+    get days(): number | undefined;
+    get nights(): number | undefined;
+    get sales_price(): number | undefined;
     get has_flightinfo(): boolean;
-    get flight_info(): any;
+    get flight_info(): VtbFlightData[];
     get participants(): Array<VtbParticipant>;
-    get parties(): any;
-    get flightinfo(): any;
+    get parties(): Array<VtbParty>;
+    get flightinfo(): Array<VtbFlightData>;
     get has_carrental(): boolean;
-    get carrental(): any;
+    get carrental(): Array<VtbElement>;
     get extra_fields(): any;
     extra_field(name: string): VtbExtraField | null;
     extraField(name: string): VtbExtraField | null;

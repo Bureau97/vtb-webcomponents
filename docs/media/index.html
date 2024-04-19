@@ -1,0 +1,12 @@
+<h1>VTB Media</h1>
+<p>Het VTB Media element &lt;vtb-media&gt; kan worden gebruikt voor het weergeven
+van foto's vanuit MediaSpirit. Door het meegeven van een &quot;crop&quot; eigenschap kan de foto op het juiste formaat worden weergegeven.</p>
+<p>Het VTB Media element gedraagt zich als een HTML img element met een kanttekening dat het VTB media element zich aan de bounding box houdt en
+zichzelf daarop schaalt.</p>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dist/esm/components/vtb-media.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vtb-media</span>
+    <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://s3-eu-west-1.amazonaws.com/media.travelspirit.nl/wordpress/large/miami-beach.jpeg<span class="token punctuation">"</span></span>
+    <span class="token attr-name">crop</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>square/md<span class="token punctuation">"</span></span>
+    <span class="token attr-name">cover</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vtb-media</span><span class="token punctuation">></span></span>;</code></pre>

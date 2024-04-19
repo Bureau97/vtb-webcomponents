@@ -1694,51 +1694,92 @@
               "type": {
                 "text": "boolean"
               },
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_is_initialized",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
               "readonly": true
             },
             {
               "kind": "field",
               "name": "title",
+              "type": {
+                "text": "string"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "subtitle",
+              "type": {
+                "text": "string"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "covers",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "startdate",
+              "type": {
+                "text": "Dayjs | undefined"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "enddate",
+              "type": {
+                "text": "Dayjs | undefined"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "duration",
+              "type": {
+                "text": "number | undefined"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "days",
+              "type": {
+                "text": "number | undefined"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "nights",
+              "type": {
+                "text": "number | undefined"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "sales_price",
+              "type": {
+                "text": "number | undefined"
+              },
               "readonly": true
             },
             {
@@ -1765,11 +1806,17 @@
             {
               "kind": "field",
               "name": "parties",
+              "type": {
+                "text": "Array<VtbParty>"
+              },
               "readonly": true
             },
             {
               "kind": "field",
               "name": "flightinfo",
+              "type": {
+                "text": "Array<VtbFlightData>"
+              },
               "readonly": true
             },
             {
@@ -1783,6 +1830,9 @@
             {
               "kind": "field",
               "name": "carrental",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
               "readonly": true
             },
             {
@@ -2044,6 +2094,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3580,9 +3636,52 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
+      "path": "src/utils/currency.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "currency",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "value",
+              "type": {
+                "text": "number | null"
+              }
+            },
+            {
+              "name": "locale",
+              "default": "'nl-NL'",
+              "type": {
+                "text": "string"
+              },
+              "optional": true
+            },
+            {
+              "name": "currency",
+              "default": "'EUR'",
+              "type": {
+                "text": "string"
+              },
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "currency",
+          "declaration": {
+            "name": "currency",
+            "module": "src/utils/currency.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",

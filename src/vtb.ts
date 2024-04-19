@@ -1,4 +1,4 @@
-import dayjs, { type Dayjs } from 'dayjs';
+import {type Dayjs} from 'dayjs';
 
 import {VtbConfig, VtbFilterConfig} from './utils/interfaces.js';
 

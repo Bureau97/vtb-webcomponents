@@ -131,5 +131,3 @@ MIT
 [Chris Kanger - 3rd floor coding](https://github.com/ChrisKanger)
 
 [Dennis Essenburg - TravelSpirit](https://github.com/djessenb)
-
-

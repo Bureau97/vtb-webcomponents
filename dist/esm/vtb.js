@@ -3,12 +3,22 @@ import { VtbDataTransformer } from './utils/transformer.js';
 import { VtbMapElement } from './components/map.js';
 import { VtbFlightScheduleElement } from './components/flightschedule.js';
 export class Vtb {
+    /**
+     * @constructor
+     *
+     * @param vtb_config_options VtbConfig
+     */
     constructor(vtb_config_options) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
         if (vtb_config_options) {
             this._config = vtb_config_options;
         }
     }
+    /**
+     * @property
+     *
+     * @returns {boolean}
+     */
     get is_live_preview() {
         if (window.location.search &&
             window.location.search !== '' &&
@@ -17,14 +27,21 @@ export class Vtb {
         }
         return false;
     }
+    get _is_initialized() {
+        const initialized = !!this._data;
+        if (!initialized) {
+            console.error('Vtb data not initialized!');
+        }
+        return initialized;
+    }
     get title() {
-        return this._data.title;
+        return this._is_initialized ? this._data.title : '';
     }
     get subtitle() {
-        return this._data.subtitle;
+        return this._is_initialized ? this._data.subtitle : '';
     }
     get covers() {
-        return this._data.covers;
+        return this._is_initialized ? this._data.covers : [];
     }
     get startdate() {
         return this._data.start_date;
@@ -39,7 +56,7 @@ export class Vtb {
         return this.duration;
     }
     get nights() {
-        return this.duration - 1;
+        return this.duration ? this.duration - 1 : undefined;
     }
     get sales_price() {
         return this._data.sales_price;
@@ -48,6 +65,7 @@ export class Vtb {
         return this.flightinfo.length > 0;
     }
     get flight_info() {
+        /** Alias for flightinfo */
         return this.flightinfo;
     }
     get participants() {

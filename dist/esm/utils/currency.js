@@ -22,7 +22,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
 /**
  * @name currency
  *
@@ -47,19 +46,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * @returns {string}
  */
-
-export function currency(
-  value: number | null,
-  locale: string = 'nl-NL',
-  currency: string = 'EUR'
-): string {
-  const currency_transformer = new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currency
-  });
-
-  if (value) {
-    return currency_transformer.format(value);
-  }
-  return String(value);
+export function currency(value, locale = 'nl-NL', currency = 'EUR') {
+    const currency_transformer = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency
+    });
+    if (value) {
+        return currency_transformer.format(value);
+    }
+    return String(value);
 }
+//# sourceMappingURL=currency.js.map

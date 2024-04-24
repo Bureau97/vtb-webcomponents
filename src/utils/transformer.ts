@@ -378,13 +378,15 @@ export class VtbDataTransformer {
     vtb_element.title = element_data.title;
     vtb_element.subtitle = element_data.subTitle;
     // set element description, get all contents from the <body> and remove all style attributes
-    vtb_element.description = element_data.additionalText
+    vtb_element.description = element_data.additionalText ? element_data.additionalText
       ?.replace(this.re_body, '$1')
-      ?.replace(this.re_style, '');
+      ?.replace(this.re_style, '')
+      : '';
 
-    vtb_element.additional_description = element_data.subAdditionalText
+    vtb_element.additional_description = element_data.subAdditionalText ? element_data.subAdditionalText
       ?.replace(this.re_body, '$1')
-      ?.replace(this.re_style, '');
+      ?.replace(this.re_style, '')
+      : '';
 
     vtb_element.optional = element_data.optional;
     vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);

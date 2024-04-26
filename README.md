@@ -1,15 +1,17 @@
-# [VTB Webcomponents](https://github.com/Bureau97/vtb-webcomponents)
+# VTB Webcomponents
 
 Dit project omvat een aantal tools en webcomponenten om het opbouwen van een output van de Visual Tour Builder (VTB) van TravelSpirit te vergemakkelijken.
 
 De volgende features zijn beschikbaar:
 
-- VTB loader, voor het laden en inlezen van de VTB travelplan json uit de VTB
-- [VTB Media](./docs/media.md) webcomponent, voor het weergeven van afbeeldingen uit MediaSpirit
+- VTB API, voor het laden en inlezen van de VTB travelplan json uit de VTB
+- VTB Media webcomponent, voor het weergeven van afbeeldingen uit MediaSpirit
 - VTB Calculator, voor het weergeven en berekenen van de prijzen
 - VTB Flightschedule, voor het opbouwen en weergeven van een vluchtschema
 - VTB Map, voor het weergeven van kaarten op basis van Google Maps
-- [VTB Text](./docs/text.md), voor het weergeven en het inline bewerken van teksten uit het travelplan
+- VTB Text, voor het weergeven en het inline bewerken van teksten uit het travelplan
+
+Voor uitgebreide informatie zie: [Vtb Webcomponents docs](https://bureau97.github.io/vtb-webcomponents/)
 
 ## Installatie
 

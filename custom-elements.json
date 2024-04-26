@@ -2097,12 +2097,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/calculator.ts",
       "declarations": [
         {
@@ -3633,6 +3627,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",

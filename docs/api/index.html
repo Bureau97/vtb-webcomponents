@@ -23,6 +23,11 @@
   <a href="../">Home</a>
   <!-- <a href="../examples/">Examples</a> -->
   <a href="">API</a>
+  <a href="../map/">Map</a>
+  <a href="../media/">Media</a>
+  <a href="../text/">Text</a>
+  <a href="../calculator/">Calculator</a>
+  <a href="../flightschedule/">FLightschedule</a>
   <!-- <a href="../install/">Install</a> -->
 </nav>
     </header>
@@ -172,6 +177,41 @@ groups<span class="token punctuation">.</span><span class="token function">each<
     group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">ACCO</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3><code>.calculate_price(config ?: VtbFilterConfig, elements?: Array&lt;VtbElement&gt;): number</code></h3>
+<p>Deze methode berekend de prijs van de elementen uit de meegegeven FilterConfig of de meegegeven elementen. Optionele elementen worden  niet meegenomen in de berekening.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token comment">// calculate all flight elements</span>
+<span class="token keyword">const</span> flights_price <span class="token operator">=</span> vtb<span class="token punctuation">.</span><span class="token function">calculate_price</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">,</span> SegmentTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">,</span> UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHTNIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    optional<span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span> <span class="token comment">// -> 390,99</span>
+
+utils<span class="token punctuation">.</span><span class="token function">currency</span><span class="token punctuation">(</span>flights_price<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// € 390,99</span></code></pre>
+<h3><code>.map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions): VtbMapElement</code></h3>
+<p>Utility methode om een VTbMapElement weer te geven met de VtbMapElementen die voldoen aan het filter. De VtbMapOptions worden gebruikt voor wel/niet tekenen van verbindingen tussen de punten en als vlucht of over de weg.</p>
+<pre class="language-typescript"><code class="language-typescript">
+<span class="token keyword">const</span> map_options<span class="token operator">:</span> VtbMapOptions <span class="token operator">=</span> <span class="token punctuation">{</span>
+    connect_markers<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    connect_mode<span class="token operator">:</span> <span class="token string">'flight'</span><span class="token punctuation">,</span>
+    api_key<span class="token operator">:</span> <span class="token constant">GOOGLE_MAPS_KEY</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> map_search<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+    group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">ACCO</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    optional<span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+vtb<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token string">'complete-map'</span><span class="token punctuation">,</span> map_search<span class="token punctuation">,</span> map_options<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3><code>.flightschedule(container_id: string, filter_config?: VtbFilterConfig, options: VtbFLightScheduleOptions): VtbFlightScheduleElement</code></h3>
+<p>Utility methode om op basis van een filter config de betreffende vluchten in responsive tabelvorm weer te geven.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> flight_search<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+    group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">,</span> SegmentTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">,</span> UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHTNIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    optional<span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+vtb<span class="token punctuation">.</span><span class="token function">flightschedule</span><span class="token punctuation">(</span><span class="token string">'flights_table'</span><span class="token punctuation">,</span> flight_search<span class="token punctuation">,</span> map_options<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 
       </main>
     </div>

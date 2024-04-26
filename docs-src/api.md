@@ -250,3 +250,54 @@ const acco_elements: Array<VtbElement> = group.filter_elements({
     element_unit_ids: [UnitTypes.ACCO]
 });
 ```
+
+### `.calculate_price(config ?: VtbFilterConfig, elements?: Array<VtbElement>): number`
+
+Deze methode berekend de prijs van de elementen uit de meegegeven FilterConfig of de meegegeven elementen. Optionele elementen worden  niet meegenomen in de berekening.
+
+
+```typescript
+// calculate all flight elements
+const flights_price = vtb.calculate_price({
+    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT],
+    element_unit_ids: [UnitTypes.FLIGHT, UnitTypes.FLIGHTNIGHT],
+    optional: false
+} // -> 390,99
+
+utils.currency(flights_price);  // € 390,99
+```
+
+### `.map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions): VtbMapElement`
+
+Utility methode om een VTbMapElement weer te geven met de VtbMapElementen die voldoen aan het filter. De VtbMapOptions worden gebruikt voor wel/niet tekenen van verbindingen tussen de punten en als vlucht of over de weg.
+
+```typescript
+
+const map_options: VtbMapOptions = {
+    connect_markers: true,
+    connect_mode: 'flight',
+    api_key: GOOGLE_MAPS_KEY
+};
+
+const map_search: VtbFilterConfig = {
+    group_type_ids: [SegmentTypes.DEFAULT],
+    element_unit_ids: [UnitTypes.ACCO],
+    optional: false
+};
+
+vtb.map('complete-map', map_search, map_options);
+```
+
+### `.flightschedule(container_id: string, filter_config?: VtbFilterConfig, options: VtbFLightScheduleOptions): VtbFlightScheduleElement`
+
+Utility methode om op basis van een filter config de betreffende vluchten in responsive tabelvorm weer te geven.
+
+```typescript
+const flight_search: VtbFilterConfig = {
+    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT],
+    element_unit_ids: [UnitTypes.FLIGHT, UnitTypes.FLIGHTNIGHT],
+    optional: false
+};
+
+vtb.flightschedule('flights_table', flight_search, map_options);
+```

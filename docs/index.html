@@ -23,12 +23,117 @@
   <a href="">Home</a>
   <!-- <a href="examples/">Examples</a> -->
   <a href="api/">API</a>
+  <a href="map/">Map</a>
+  <a href="media/">Media</a>
+  <a href="text/">Text</a>
+  <a href="calculator/">Calculator</a>
+  <a href="flightschedule/">FLightschedule</a>
   <!-- <a href="install/">Install</a> -->
 </nav>
     </header>
     <div id="main-wrapper">
       <main>
         <h1>VTB Webcomponents</h1>
+<p>Dit project omvat een aantal tools en webcomponenten om het opbouwen van een output van de Visual Tour Builder (VTB) van TravelSpirit te vergemakkelijken.</p>
+<p>De volgende features zijn beschikbaar:</p>
+<ul>
+<li><a href="/vtb-webcomponents/api/">VTB API</a>, voor het laden en inlezen van de VTB travelplan json uit de VTB</li>
+<li><a href="/vtb-webcomponents/media/">VTB Media</a> webcomponent, voor het weergeven van afbeeldingen uit MediaSpirit</li>
+<li><a href="/vtb-webcomponents/calculator/">VTB Calculator</a>, voor het weergeven en berekenen van de prijzen</li>
+<li><a href="/vtb-webcomponents/flightschedule/">VTB Flightschedule</a>, voor het opbouwen en weergeven van een vluchtschema</li>
+<li><a href="/vtb-webcomponents/map/">VTB Map</a>, voor het weergeven van kaarten op basis van Google Maps</li>
+<li><a href="/vtb-webcomponents/text/">VTB Text</a>, voor het weergeven en het inline bewerken van teksten uit het travelplan</li>
+</ul>
+<h2>Installatie</h2>
+<p>De componenten zijn (nog niet) beschikbaar via npm maar zullen dit binnen
+afzienbare tijd zijn. Tot die tijd kunnen de componenten rechtstreeks van
+GitHub worden geinstalleerd.</p>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> i github:Bureau97/vtb-webcomponents</code></pre>
+<h2>Gebruik</h2>
+<p><strong>Initialisatie en inladen van een travelplan json:</strong></p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> travelplan_data <span class="token keyword">from</span> <span class="token string">'travelplan.json'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> vtb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vtb</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+vtb<span class="token punctuation">.</span><span class="token function">parse_vtb_data</span><span class="token punctuation">(</span>travelplan_data<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>of</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> travelplan_source_url <span class="token operator">=</span> <span class="token string">'/travelplan.json'</span><span class="token punctuation">;</span>
+
+document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'DOMContentLoaded'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+    calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">new</span> <span class="token class-name">Vtb</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>travelplan_source_url<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>vtbDataLoaded<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">vtbDataLoaded</span><span class="token punctuation">(</span>vtb<span class="token operator">:</span> Vtb<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// doe iets met de data</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>Ophalen en weergeven van accommodatie elementen in een prijsoverzicht:</strong></p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">enum</span> SegmentTypes <span class="token punctuation">{</span>
+  <span class="token constant">DEFAULT</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token constant">FLIGHT</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">,</span>
+  <span class="token constant">TOESLAGEN</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">,</span>
+  <span class="token constant">REISSOM</span> <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">,</span>
+  <span class="token constant">HIDDEN</span> <span class="token operator">=</span> <span class="token number">5</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">enum</span> UnitTypes <span class="token punctuation">{</span>
+  <span class="token constant">ACCO</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">,</span>
+  <span class="token constant">FLIGHT</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">,</span>
+  <span class="token constant">FLIGHTNIGHT</span> <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">,</span>
+  <span class="token constant">TRANSFER</span> <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span>
+  <span class="token constant">CARRENTAL</span> <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">,</span>
+  <span class="token constant">ACTIVITY</span> <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span>
+  <span class="token constant">EXTRA</span> <span class="token operator">=</span> <span class="token number">11</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> acco_elements <span class="token operator">=</span> vtb<span class="token punctuation">.</span><span class="token function">filter_elements</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">ACCO</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  optional<span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> accoTable <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span>
+  <span class="token string">'calc-dynamic-accos'</span>
+<span class="token punctuation">)</span> <span class="token keyword">as</span> VtbCalculatorElement<span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>accoTable <span class="token operator">&amp;&amp;</span> acco_elements<span class="token punctuation">.</span>length <span class="token operator">>=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  accoTable<span class="token punctuation">.</span><span class="token function-variable function">render_element_description</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>element<span class="token operator">:</span> VtbElement<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Dag: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>element<span class="token punctuation">.</span>day<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">-</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>element<span class="token punctuation">.</span>last_day<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> |
+        </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>element<span class="token punctuation">.</span>nights<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>element<span class="token punctuation">.</span>nights <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">?</span> <span class="token string">'nacht'</span> <span class="token operator">:</span> <span class="token string">'nachten'</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+        </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>element<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">
+    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  accoTable<span class="token punctuation">.</span>elements <span class="token operator">=</span> acco_elements<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    ...
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vtb-calculator</span>
+      <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>calc-dynamic-accos<span class="token punctuation">"</span></span>
+      <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Accommodaties<span class="token punctuation">"</span></span>
+    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vtb-calculator</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<h2>Richtlijnen voor het bijdragen aan het project.</h2>
+<p>Bugs en feature request kunnen worden ingediend via <a href="https://github.com/Bureau97/vtb-webcomponents/issues">Github Issues</a>.</p>
+<p>Bijdragen aan code en documentatie kunnen worden toegevoegd via <a href="https://github.com/Bureau97/vtb-webcomponents/pulls">Pull Requests</a>.</p>
+<h2>Licentie:</h2>
+<p>MIT</p>
+<h2>Credits</h2>
+<p><a href="https://github.com/huub-segers">Huub Segers - Bureau97</a></p>
+<p><a href="https://github.com/bseyb">Barry Nijenhuis - TravelSpirit</a></p>
+<p><a href="https://github.com/ChrisKanger">Chris Kanger - 3rd floor coding</a></p>
+<p><a href="https://github.com/djessenb">Dennis Essenburg - TravelSpirit</a></p>
 
       </main>
     </div>

@@ -120,6 +120,40 @@ Bugs en feature request kunnen worden ingediend via [Github Issues](https://gith
 
 Bijdragen aan code en documentatie kunnen worden toegevoegd via [Pull Requests](https://github.com/Bureau97/vtb-webcomponents/pulls).
 
+### Bijdragen aan de componenten:
+
+```bash
+npm i github:Bureau97/vtb-webcomponents
+```
+
+Om de componenten te kunnen ontwikkelen is minimaal Nodejs 18.20 vereist. Wanneer gebruik gemaakt wordt Node Version Manager, er is een .nvmrc file toegevoegd met de te gebruiken Nodejs versie.
+
+De componenten maken gebruik van het [Lit framework](https://lit.dev/).
+
+De ontwikkelomgeving kan worden gestart via:
+
+```bash
+npm run webpack:dev
+```
+
+De componenten zijn benaderbaar via http://localhost:8000/
+
+De /src/ directory bevat de componenten, de /dev/ directory bevat bestanden om de output van de componenten te renderen.
+
+
+### Bijdragen aan de documentatie
+
+De documentatie wordt opgebouwd met behulp van 11ty. De bronbestanden zijn MarkDown bestanden in /doc-src/.
+
+De documentatie ontwikkelomgeving kan gestart worden door:
+
+```bash
+npm run docs:serve
+```
+
+De documentatie kan dan worden bekeken via http://localhost:8080/
+
+
 ## Licentie:
 
 MIT

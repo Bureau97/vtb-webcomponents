@@ -1,4 +1,3 @@
-/// <reference types="google.maps" />
 import { LitElement } from 'lit';
 import { VtbMapMarkerGroup, VtbMapMarker } from '../models.js';
 export interface VtbMapOptions {

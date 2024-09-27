@@ -1,11 +1,11 @@
 import { LitElement } from 'lit';
-import InlineEditor from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
-import '@ckeditor/ckeditor5-theme-lark';
+import { InlineEditor } from 'ckeditor5';
 export declare class VtbTextElement extends LitElement {
     static shadowRootOptions: {
         delegatesFocus: boolean;
         mode: ShadowRootMode;
-        slotAssignment?: SlotAssignmentMode | undefined;
+        serializable?: boolean;
+        slotAssignment?: SlotAssignmentMode;
     };
     protected isEditorInitialized: Boolean;
     protected dataIsChanged: Boolean;

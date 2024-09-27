@@ -140,7 +140,6 @@ De componenten zijn benaderbaar via http://localhost:8000/
 
 De /src/ directory bevat de componenten, de /dev/ directory bevat bestanden om de output van de componenten te renderen.
 
-
 ### Bijdragen aan de documentatie
 
 De documentatie wordt opgebouwd met behulp van 11ty. De bronbestanden zijn MarkDown bestanden in /doc-src/.
@@ -152,7 +151,6 @@ npm run docs:serve
 ```
 
 De documentatie kan dan worden bekeken via http://localhost:8080/
-
 
 ## Licentie:
 

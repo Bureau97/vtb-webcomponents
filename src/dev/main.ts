@@ -99,8 +99,12 @@ function vtbDataLoaded(vtb: Vtb) {
     heroContentContainer.appendChild(h2);
 
     // render hero using the first cover
-    const hero = document.getElementById('hero') as VtbMediaElement;
-    hero.src = vtb.covers[0].src;
+    if (vtb.covers.length > 0) {
+      const hero = document.getElementById('hero') as VtbMediaElement;
+      if (hero && vtb.covers[0].src) {
+        hero.src = vtb.covers[0].src;
+      }
+    }
   }
 
   // add flightschedule

@@ -21,7 +21,9 @@ export class VtbDataTransformer {
         this._data.subtitle = vtbSrcData.subTitle || '';
         this._data.start_date = dayjs.utc(vtbSrcData.startDate);
         this._data.end_date = dayjs.utc(vtbSrcData.endDate);
-        this._data.duration = vtbSrcData.totalDays;
+        this._data.duration =
+            vtbSrcData.totalDays ||
+                this._data.end_date.diff(this._data.start_date, 'days');
         this._data.sales_price =
             vtbSrcData.salesPriceAfterRounding ?? vtbSrcData.salesPriceBeforeRounding;
         // search and setup participants and parties
@@ -181,7 +183,7 @@ export class VtbDataTransformer {
     parse_vtb_segment(segment_data // eslint-disable-line @typescript-eslint/no-explicit-any
     ) {
         const element_group = new VtbElementGroup();
-        element_group.id = segment_data.vtbObjectId;
+        element_group.id = segment_data.vtbObjectId || segment_data.TSBlock.id;
         element_group.title = segment_data.title;
         element_group.subtitle = segment_data.subTitle;
         element_group.description = segment_data.content || '';
@@ -194,6 +196,13 @@ export class VtbDataTransformer {
         }
         if (segment_data.endDate) {
             element_group.enddate = dayjs(segment_data.endDate);
+        }
+        if (!segment_data.date && !segment_data.endDate && this._data.start_date) {
+            console.debug('no date found for segment, using start date as segment start date');
+            element_group.startdate = this._data.start_date
+                ?.clone()
+                .add(segment_data.day - 1, 'days');
+            console.debug(`Date set to ${element_group.startdate.format('dddd D MMM')}`);
         }
         if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
             element_group.is_flight = true;
@@ -212,6 +221,19 @@ export class VtbDataTransformer {
         let last_element = null;
         for (const element_data of segment_data.elements) {
             const vtb_element = this.parse_vtb_element(element_data, segment_data.title);
+            if (!vtb_element.day) {
+                vtb_element.day = segment_data.day + element_data.offset;
+            }
+            if (!vtb_element.startdate) {
+                vtb_element.startdate = element_group.startdate
+                    ?.clone()
+                    .add(vtb_element.day - 1, 'days');
+            }
+            if (!vtb_element.enddate) {
+                vtb_element.enddate = vtb_element.startdate
+                    .clone()
+                    .add(vtb_element.nights, 'days');
+            }
             if (last_element &&
                 last_element.ts_product_id == vtb_element.ts_product_id) {
                 // console.info('adding units to first elements of current product..');
@@ -256,8 +278,8 @@ export class VtbDataTransformer {
     grouptitle) {
         const vtb_element = new VtbElement();
         // console.debug('element_data: ', element_data);
-        vtb_element.id = element_data.vtbObjectId;
-        vtb_element.object_id = element_data.vtbObjectId;
+        vtb_element.id = element_data.vtbObjectId || element_data.TSOrderline.id;
+        vtb_element.object_id = element_data.vtbObjectId || vtb_element.id;
         vtb_element.ts_product_id = element_data.TSProduct.id;
         vtb_element.title = element_data.title;
         vtb_element.subtitle = element_data.subTitle;

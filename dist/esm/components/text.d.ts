@@ -7,11 +7,11 @@ export declare class VtbTextElement extends LitElement {
         serializable?: boolean;
         slotAssignment?: SlotAssignmentMode;
     };
-    protected isEditorInitialized: Boolean;
-    protected dataIsChanged: Boolean;
+    protected isEditorInitialized: boolean;
+    protected dataIsChanged: boolean;
     protected editor?: InlineEditor;
     protected _destroy_timer?: ReturnType<typeof setTimeout>;
-    editable: Boolean;
+    editable: boolean;
     contents: string | null;
     private get _editor();
     static styles: import("lit").CSSResult;

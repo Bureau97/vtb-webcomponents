@@ -3,16 +3,20 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 // import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
-import { InlineEditor, Essentials, Bold, Italic, Heading, Link, Paragraph, List, 
+import { 
+// Editor,
+InlineEditor, Essentials, Bold, Italic, Heading, Link, Paragraph, List
 // Plugin,
-Command, ButtonView } from 'ckeditor5';
+// Command,
+// ButtonView
+ } from 'ckeditor5';
 // import 'ckeditor5/ckeditor5.css';
-class VtbTextSaveCommand extends Command {
-    execute() {
-        console.info('VtbTextSaveCommand:execute');
-        // console.info(this.editor);
-    }
-}
+// class VtbTextSaveCommand extends Command {
+//   override execute() {
+//     console.info('VtbTextSaveCommand:execute');
+//     // console.info(this.editor);
+//   }
+// }
 // class VtbTextCommandsPlugin extends Plugin {
 //   init() {
 //     const editor = this.editor;
@@ -27,27 +31,27 @@ class VtbTextSaveCommand extends Command {
 //       })
 //   }
 // }
-function VtbTextSave(editor) {
-    // console.info('VtbTextSave registerd');
-    editor.commands.add('save', new VtbTextSaveCommand(editor));
-    editor.ui.componentFactory.add('save', (locale) => {
-        const button = new ButtonView(locale);
-        // const command = editor.commands.get('save');
-        const t = editor.t;
-        button.set({
-            label: t('Save'),
-            withText: true,
-            tooltip: true,
-            isToggleable: true
-        });
-        button.on('execute', () => {
-            editor.execute('save');
-            editor.editing.view.focus();
-        });
-        // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
-        return button;
-    });
-}
+// function VtbTextSave(editor: Editor) {
+//   // console.info('VtbTextSave registerd');
+//   // editor.commands.add('save', new VtbTextSaveCommand(editor));
+//   editor.ui.componentFactory.add('save', (locale) => {
+//     const button = new ButtonView(locale);
+//     // const command = editor.commands.get('save');
+//     const t = editor.t;
+//     button.set({
+//       label: t('Save'),
+//       withText: true,
+//       tooltip: true,
+//       isToggleable: true
+//     });
+//     button.on('execute', () => {
+//       editor.execute('save');
+//       editor.editing.view.focus();
+//     });
+//     // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
+//     return button;
+//   });
+// }
 let VtbTextElement = class VtbTextElement extends LitElement {
     get _editor() {
         return this.querySelector('div#editor-' + this.id);
@@ -97,7 +101,7 @@ let VtbTextElement = class VtbTextElement extends LitElement {
         // console.debug('check innerHTML and content: ', {
         //   'innerHTML': this.innerHTML,
         //   'contents': this.contents,
-        //   'same?': Boolean(this.innerHTML == this.contents)
+        //   'same?': boolean(this.innerHTML == this.contents)
         // });
         // if (this.innerHTML != this.contents) {
         //   console.debug('copy contents to innerHTML');
@@ -115,7 +119,7 @@ let VtbTextElement = class VtbTextElement extends LitElement {
         // // console.debug('check innerHTML and content: ', {
         //   innerHTML: this.innerHTML,
         //   contents: this.contents,
-        //   'same?': Boolean(this.innerHTML == this.contents),
+        //   'same?': boolean(this.innerHTML == this.contents),
         // });
         if (this.isEditorInitialized && this._destroy_timer) {
             // console.debug('clear editor destruction timer');
@@ -134,7 +138,7 @@ let VtbTextElement = class VtbTextElement extends LitElement {
                 updateSourceElementOnDestroy: true,
                 // every tool has a plugin!
                 plugins: [
-                    VtbTextSave,
+                    // VtbTextSave,
                     Essentials,
                     Heading,
                     Bold,
@@ -232,7 +236,7 @@ __decorate([
         type: String,
         attribute: false,
         hasChanged(newVal, oldVal) {
-            return Boolean(newVal !== oldVal);
+            return newVal !== oldVal;
         }
     })
 ], VtbTextElement.prototype, "contents", void 0);

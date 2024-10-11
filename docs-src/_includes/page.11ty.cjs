@@ -2,8 +2,8 @@ const relative = require('./relative-path.cjs');
 const nav = require('./nav.11ty.cjs');
 
 module.exports = function (data) {
-    const { title, page, content } = data;
-    return `
+  const {title, page, content} = data;
+  return `
 <!doctype html>
 
 <html lang="en">
@@ -18,7 +18,7 @@ module.exports = function (data) {
     <link href="${relative(page.url, '/prism-okaidia.css')}" rel="stylesheet" />
     <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="/node_modules/lit/polyfill-support.js"></script>
-    <script type="module" src="${relative(page.url,'/my-element.bundled.js')}"></script>
+    <script type="module" src="${relative(page.url, '/my-element.bundled.js')}"></script>
     -->
   </head>
   <body>

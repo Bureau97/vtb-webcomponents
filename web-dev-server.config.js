@@ -18,8 +18,8 @@ export default {
     legacyPlugin({
       polyfills: {
         // Manually imported in index.html file
-        webcomponents: false,
-      },
-    }),
-  ],
+        webcomponents: false
+      }
+    })
+  ]
 };

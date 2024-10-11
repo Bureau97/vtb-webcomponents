@@ -3501,13 +3501,13 @@
                 "text": "object"
               },
               "static": true,
-              "default": "{\n    ...LitElement.shadowRootOptions,\n    delegatesFocus: true\n  }"
+              "default": "{ ...LitElement.shadowRootOptions, delegatesFocus: true }"
             },
             {
               "kind": "field",
               "name": "isEditorInitialized",
               "type": {
-                "text": "Boolean"
+                "text": "boolean"
               },
               "privacy": "protected",
               "default": "false"
@@ -3516,7 +3516,7 @@
               "kind": "field",
               "name": "dataIsChanged",
               "type": {
-                "text": "Boolean"
+                "text": "boolean"
               },
               "privacy": "protected",
               "default": "false"
@@ -3542,7 +3542,7 @@
               "kind": "field",
               "name": "editable",
               "type": {
-                "text": "Boolean"
+                "text": "boolean"
               },
               "default": "false",
               "attribute": "editable"
@@ -3591,7 +3591,7 @@
             {
               "name": "editable",
               "type": {
-                "text": "Boolean"
+                "text": "boolean"
               },
               "default": "false",
               "fieldName": "editable"

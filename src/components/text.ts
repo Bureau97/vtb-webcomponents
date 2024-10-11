@@ -4,7 +4,7 @@ import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 // import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
 
 import {
-  Editor,
+  // Editor,
   InlineEditor,
   Essentials,
   Bold,
@@ -12,20 +12,20 @@ import {
   Heading,
   Link,
   Paragraph,
-  List,
+  List
   // Plugin,
-  Command,
-  ButtonView
+  // Command,
+  // ButtonView
 } from 'ckeditor5';
 
 // import 'ckeditor5/ckeditor5.css';
 
-class VtbTextSaveCommand extends Command {
-  override execute() {
-    console.info('VtbTextSaveCommand:execute');
-    // console.info(this.editor);
-  }
-}
+// class VtbTextSaveCommand extends Command {
+//   override execute() {
+//     console.info('VtbTextSaveCommand:execute');
+//     // console.info(this.editor);
+//   }
+// }
 
 // class VtbTextCommandsPlugin extends Plugin {
 //   init() {
@@ -44,31 +44,31 @@ class VtbTextSaveCommand extends Command {
 //   }
 // }
 
-function VtbTextSave(editor: Editor) {
-  // console.info('VtbTextSave registerd');
-  editor.commands.add('save', new VtbTextSaveCommand(editor));
-  editor.ui.componentFactory.add('save', (locale) => {
-    const button = new ButtonView(locale);
-    // const command = editor.commands.get('save');
-    const t = editor.t;
+// function VtbTextSave(editor: Editor) {
+//   // console.info('VtbTextSave registerd');
+//   // editor.commands.add('save', new VtbTextSaveCommand(editor));
+//   editor.ui.componentFactory.add('save', (locale) => {
+//     const button = new ButtonView(locale);
+//     // const command = editor.commands.get('save');
+//     const t = editor.t;
 
-    button.set({
-      label: t('Save'),
-      withText: true,
-      tooltip: true,
-      isToggleable: true
-    });
+//     button.set({
+//       label: t('Save'),
+//       withText: true,
+//       tooltip: true,
+//       isToggleable: true
+//     });
 
-    button.on('execute', () => {
-      editor.execute('save');
-      editor.editing.view.focus();
-    });
+//     button.on('execute', () => {
+//       editor.execute('save');
+//       editor.editing.view.focus();
+//     });
 
-    // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
+//     // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
 
-    return button;
-  });
-}
+//     return button;
+//   });
+// }
 
 @customElement('vtb-text')
 export class VtbTextElement extends LitElement {
@@ -77,19 +77,19 @@ export class VtbTextElement extends LitElement {
     delegatesFocus: true
   };
 
-  protected isEditorInitialized: Boolean = false;
-  protected dataIsChanged: Boolean = false;
+  protected isEditorInitialized: boolean = false;
+  protected dataIsChanged: boolean = false;
   protected editor?: InlineEditor = undefined;
   protected _destroy_timer?: ReturnType<typeof setTimeout>;
 
   @property({type: Boolean})
-  editable: Boolean = false;
+  editable: boolean = false;
 
   @property({
     type: String,
     attribute: false,
-    hasChanged(newVal: string, oldVal: string) {
-      return Boolean(newVal !== oldVal);
+    hasChanged(newVal: string, oldVal: string): boolean {
+      return newVal !== oldVal;
     }
   })
   contents: string | null = '';
@@ -150,7 +150,7 @@ export class VtbTextElement extends LitElement {
     // console.debug('check innerHTML and content: ', {
     //   'innerHTML': this.innerHTML,
     //   'contents': this.contents,
-    //   'same?': Boolean(this.innerHTML == this.contents)
+    //   'same?': boolean(this.innerHTML == this.contents)
     // });
 
     // if (this.innerHTML != this.contents) {
@@ -172,7 +172,7 @@ export class VtbTextElement extends LitElement {
     // // console.debug('check innerHTML and content: ', {
     //   innerHTML: this.innerHTML,
     //   contents: this.contents,
-    //   'same?': Boolean(this.innerHTML == this.contents),
+    //   'same?': boolean(this.innerHTML == this.contents),
     // });
 
     if (this.isEditorInitialized && this._destroy_timer) {
@@ -196,7 +196,7 @@ export class VtbTextElement extends LitElement {
         updateSourceElementOnDestroy: true,
         // every tool has a plugin!
         plugins: [
-          VtbTextSave,
+          // VtbTextSave,
           Essentials,
           Heading,
           Bold,

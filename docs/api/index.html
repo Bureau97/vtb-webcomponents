@@ -1,14 +1,19 @@
-
 <!doctype html>
 
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VTB Data API</title>
-    <link rel="stylesheet" href="../docs.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto+Mono">
-    <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css">
+    <link rel="stylesheet" href="../docs.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto+Mono"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css"
+    />
     <!--
     <link href="../prism-okaidia.css" rel="stylesheet" />
     <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -18,88 +23,139 @@
   </head>
   <body>
     <header>
-        
-<nav>
-  <a href="../">Home</a>
-  <!-- <a href="../examples/">Examples</a> -->
-  <a href="">API</a>
-  <a href="../map/">Map</a>
-  <a href="../media/">Media</a>
-  <a href="../text/">Text</a>
-  <a href="../calculator/">Calculator</a>
-  <a href="../flightschedule/">FLightschedule</a>
-  <!-- <a href="../install/">Install</a> -->
-</nav>
+      <nav>
+        <a href="../">Home</a>
+        <!-- <a href="../examples/">Examples</a> -->
+        <a href="">API</a>
+        <a href="../map/">Map</a>
+        <a href="../media/">Media</a>
+        <a href="../text/">Text</a>
+        <a href="../calculator/">Calculator</a>
+        <a href="../flightschedule/">FLightschedule</a>
+        <!-- <a href="../install/">Install</a> -->
+      </nav>
     </header>
     <div id="main-wrapper">
       <main>
         <h1>VTB Data API</h1>
-<p>De VTB Data API kan worden gebruikt om een travelplan.json in te laden. De loader biedt een API aan om de data uit het travelplan op een zo eenvoudig mogelijke manier te gebruiken.</p>
-<h2>Initialisatie</h2>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <p>
+          De VTB Data API kan worden gebruikt om een travelplan.json in te
+          laden. De loader biedt een API aan om de data uit het travelplan op
+          een zo eenvoudig mogelijke manier te gebruiken.
+        </p>
+        <h2>Initialisatie</h2>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
     calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">true</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">new</span> <span class="token class-name">Vtb</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">'/assets/travelplan.json'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>vtb<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
     <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">vtb data loaded: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2>Properties</h2>
-<h3><code>.title: string</code></h3>
-<p>Geeft de titel van het reisvoorstel</p>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> title <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;h1></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/h1></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span></code></pre>
-<h3><code>.subtitle: string</code></h3>
-<p>Geeft de subtitel van het reisvoorstel</p>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> subtitle <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;h2></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>subtitle<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/h2></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span></code></pre>
-<h3><code>.covers: Array&lt;VtbMedia&gt;</code></h3>
-<p>Geeft een lijst van VtbMedia objecten welke gebruikt kunnen worden voor het opbouwen van een VtbMediaElement voor bijvoorbeeld een &quot;hero&quot; afbeelding.</p>
-<p>Met meerdere covers kan er bijvoorbeeld een hero slider worden opgebouwd.</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> cover<span class="token operator">:</span> VtbMedia <span class="token operator">=</span> vtb<span class="token punctuation">.</span>covers<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <h2>Properties</h2>
+        <h3><code>.title: string</code></h3>
+        <p>Geeft de titel van het reisvoorstel</p>
+        <pre
+          class="language-javascript"
+        ><code class="language-javascript"><span class="token keyword">const</span> title <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;h1></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/h1></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span></code></pre>
+        <h3><code>.subtitle: string</code></h3>
+        <p>Geeft de subtitel van het reisvoorstel</p>
+        <pre
+          class="language-javascript"
+        ><code class="language-javascript"><span class="token keyword">const</span> subtitle <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;h2></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>subtitle<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/h2></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span></code></pre>
+        <h3><code>.covers: Array&lt;VtbMedia&gt;</code></h3>
+        <p>
+          Geeft een lijst van VtbMedia objecten welke gebruikt kunnen worden
+          voor het opbouwen van een VtbMediaElement voor bijvoorbeeld een
+          &quot;hero&quot; afbeelding.
+        </p>
+        <p>
+          Met meerdere covers kan er bijvoorbeeld een hero slider worden
+          opgebouwd.
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> cover<span class="token operator">:</span> VtbMedia <span class="token operator">=</span> vtb<span class="token punctuation">.</span>covers<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> mediaElement <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">VtbMediaElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 mediaElement<span class="token punctuation">.</span>media <span class="token operator">=</span> cover<span class="token punctuation">;</span>
 mediaElement<span class="token punctuation">.</span>cover <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
 
 document<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>mediaElement<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vtb-media</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>...<span class="token punctuation">"</span></span> <span class="token attr-name">cover</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vtb-media</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.startdate: Dayjs</code></h3>
-<p>Geeft de start datum van de reis</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>vtb-media</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>...<span class="token punctuation">"</span></span> <span class="token attr-name">cover</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vtb-media</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.startdate: Dayjs</code></h3>
+        <p>Geeft de start datum van de reis</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Startdatum:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>startdate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">'DD MMM YYYY'</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Startdatum:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>15 april 2024<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.enddate: Dayjs</code></h3>
-<p>Geeft de terugkomst datum van de reis</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Startdatum:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>15 april 2024<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.enddate: Dayjs</code></h3>
+        <p>Geeft de terugkomst datum van de reis</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Einddatum:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>enddate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">'DD MMM YYYY'</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Einddatum:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>26 april 2024<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.duration: number</code></h3>
-<p>Geeft de duur in dagen van de reis</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Einddatum:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>26 april 2024<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.duration: number</code></h3>
+        <p>Geeft de duur in dagen van de reis</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Reisduur:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>duration<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> dagen&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>10 dagen<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.days: number</code></h3>
-<p>Alias van duration</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>10 dagen<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.days: number</code></h3>
+        <p>Alias van duration</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Reisduur:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>days<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> dagen&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>10 dagen<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.nights: number</code></h3>
-<p>Geeft de duur in het aantal nachten van de reis</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>10 dagen<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.nights: number</code></h3>
+        <p>Geeft de duur in het aantal nachten van de reis</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Reisduur:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>nights<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> nachten&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>9 nachten<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.sales_price: number</code></h3>
-<p>Geeft de totaal prijs van de reis (door VTB berekend)</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>currency<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents/utils/currency.js'</span><span class="token punctuation">;</span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Reisduur:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>9 nachten<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.sales_price: number</code></h3>
+        <p>Geeft de totaal prijs van de reis (door VTB berekend)</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>currency<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents/utils/currency.js'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> metadata<span class="token operator">:</span> HTMLDlElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'trip-meta-data'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;dl></span>
 metadata<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;dt>Totaal:&lt;/dt>&lt;dd></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token function">currency</span><span class="token punctuation">(</span>vtb<span class="token punctuation">.</span>sales_price<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/dd></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Totaal:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>€ 1.995,00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.has_flightinfo: boolean</code></h3>
-<p>Geeft aan of er binnen de reis een of meerdere (al dan niet optionele) vluchten zijn opgenomen.</p>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>vtb<span class="token punctuation">.</span>has_flightinfo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dl</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dt</span><span class="token punctuation">></span></span>Totaal:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dt</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dd</span><span class="token punctuation">></span></span>€ 1.995,00<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dd</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dl</span><span class="token punctuation">></span></span></code></pre>
+        <h3><code>.has_flightinfo: boolean</code></h3>
+        <p>
+          Geeft aan of er binnen de reis een of meerdere (al dan niet optionele)
+          vluchten zijn opgenomen.
+        </p>
+        <pre
+          class="language-javascript"
+        ><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>vtb<span class="token punctuation">.</span>has_flightinfo<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// .. do something</span>
 <span class="token punctuation">}</span></code></pre>
-<h3><code>.flightinfo Array&lt;VtbFlightData&gt;</code></h3>
-<p>Geeft een lijst van vluchtelementen (FLightElement) terug</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> flight_table <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'flight-table'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <h3><code>.flightinfo Array&lt;VtbFlightData&gt;</code></h3>
+        <p>Geeft een lijst van vluchtelementen (FLightElement) terug</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> flight_table <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'flight-table'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 vtb<span class="token punctuation">.</span>flightinfo<span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span> flight<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
     flight_table<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
         &lt;tr>
@@ -111,7 +167,9 @@ vtb<span class="token punctuation">.</span>flightinfo<span class="token punctuat
         &lt;/tr>
     </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span><span class="token punctuation">></span></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>tr</span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">></span></span>Amsterdam (AMS)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">></span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">></span></span>10 april<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">></span></span>
@@ -120,35 +178,57 @@ vtb<span class="token punctuation">.</span>flightinfo<span class="token punctuat
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>td</span><span class="token punctuation">></span></span>KLM987<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>td</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span></code></pre>
-<h3><code>.flight_info</code></h3>
-<p>Alias voor flightinfo</p>
-<h3><code>.has_carrental: boolean</code></h3>
-<p>Geeft aan of er autohuur in het reisvoorstel is opgenomen</p>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>vtb<span class="token punctuation">.</span>has_carrental<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <h3><code>.flight_info</code></h3>
+        <p>Alias voor flightinfo</p>
+        <h3><code>.has_carrental: boolean</code></h3>
+        <p>Geeft aan of er autohuur in het reisvoorstel is opgenomen</p>
+        <pre
+          class="language-javascript"
+        ><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>vtb<span class="token punctuation">.</span>has_carrental<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// .. do something</span>
 <span class="token punctuation">}</span></code></pre>
-<h3><code>.carrental: Array&lt;VtbElement&gt;</code></h3>
-<p>Geeft een lijst van elementen</p>
-<h3><code>.participants: Array&lt;VtbParticipant&gt;</code></h3>
-<p>Geeft een lijst van de reizigers binnen het reisvoorstel</p>
-<h3><code>.parties: Array&lt;VtbParty&gt;</code></h3>
-<p>Geeft een lijst van de binnen het reisvoorstel gedefinieerde reizigersgroepen. Er kunnen meerdere groepen bestaan wanneer er bijvoorbeeld twee bevriende koppels met elkaar op vakantie gaan.</p>
-<h3><code>.extra_fields: Dictionary&lt;VtbExtraField&gt;</code></h3>
-<p>Geeft een dictionary terug met extra velden uit het reisvoorstel.</p>
-<h2>Methoden</h2>
-<h3><code>.load(travelplan_source_url: string): Promise&lt;Vtb&gt;</code></h3>
-<p>Laad een travelplan.json bestand van het reisvoorstel en parsed deze data meteen voor gebruik.</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <h3><code>.carrental: Array&lt;VtbElement&gt;</code></h3>
+        <p>Geeft een lijst van elementen</p>
+        <h3><code>.participants: Array&lt;VtbParticipant&gt;</code></h3>
+        <p>Geeft een lijst van de reizigers binnen het reisvoorstel</p>
+        <h3><code>.parties: Array&lt;VtbParty&gt;</code></h3>
+        <p>
+          Geeft een lijst van de binnen het reisvoorstel gedefinieerde
+          reizigersgroepen. Er kunnen meerdere groepen bestaan wanneer er
+          bijvoorbeeld twee bevriende koppels met elkaar op vakantie gaan.
+        </p>
+        <h3><code>.extra_fields: Dictionary&lt;VtbExtraField&gt;</code></h3>
+        <p>Geeft een dictionary terug met extra velden uit het reisvoorstel.</p>
+        <h2>Methoden</h2>
+        <h3>
+          <code>.load(travelplan_source_url: string): Promise&lt;Vtb&gt;</code>
+        </h3>
+        <p>
+          Laad een travelplan.json bestand van het reisvoorstel en parsed deze
+          data meteen voor gebruik.
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> config<span class="token operator">:</span> VtbConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
     calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">true</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token keyword">new</span> <span class="token class-name">Vtb</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">'/assets/travelplan.json'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>vtb<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
     <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">vtb data loaded: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>vtb<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3><code>.parse_vtb_data(vtbSrcData: any): void</code></h3>
-<p>Wanneer op een andere manier de json wordt ingeladen dan via de hierboven genoemde <code>.load()</code> kan de data geparsed worden via deze methode.</p>
-<p>Een voorbeeld via SvelteKit met de json als statische asset waardoor server side rendering / static rendering mogelijk is:</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token comment">// (sveltekit)</span>
+        <h3><code>.parse_vtb_data(vtbSrcData: any): void</code></h3>
+        <p>
+          Wanneer op een andere manier de json wordt ingeladen dan via de
+          hierboven genoemde <code>.load()</code> kan de data geparsed worden
+          via deze methode.
+        </p>
+        <p>
+          Een voorbeeld via SvelteKit met de json als statische asset waardoor
+          server side rendering / static rendering mogelijk is:
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token comment">// (sveltekit)</span>
 <span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> travelplan_data <span class="token keyword">from</span> <span class="token string">'$lib/json/travelplan.json'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
 
@@ -158,12 +238,24 @@ vtb<span class="token punctuation">.</span>flightinfo<span class="token punctuat
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   vtb<span class="token punctuation">.</span><span class="token function">parse_vtb_data</span><span class="token punctuation">(</span>travelplan_data<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h3><code>.element_groups(): Array&lt;VtbElementGroup&gt;</code></h3>
-<p>Geeft alle groepen elementen terug, meestal zijn deze per dag gedefinieerd.</p>
-<h3><code>.filter_groups(config: VtbFilterConfig): Array&lt;VtbElementGroup&gt;</code></h3>
-<p>Geeft groepen terug welke voldoen aan het meegegeven filter:
-<a href="">VtbFilterConfig</a></p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> f<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <h3><code>.element_groups(): Array&lt;VtbElementGroup&gt;</code></h3>
+        <p>
+          Geeft alle groepen elementen terug, meestal zijn deze per dag
+          gedefinieerd.
+        </p>
+        <h3>
+          <code
+            >.filter_groups(config: VtbFilterConfig):
+            Array&lt;VtbElementGroup&gt;</code
+          >
+        </h3>
+        <p>
+          Geeft groepen terug welke voldoen aan het meegegeven filter:
+          <a href="">VtbFilterConfig</a>
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> f<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
     group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">,</span> SegmentTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span>
 
@@ -171,15 +263,35 @@ vtb<span class="token punctuation">.</span>flightinfo<span class="token punctuat
 groups<span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span><span class="token punctuation">(</span>group<span class="token punctuation">,</span> idx<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
     <span class="token comment">// do something with the current group</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3><code>.filter_elements(config: VtbFilterConfig): Array&lt;VtbElement&gt;</code></h3>
-<p>Geeft alle elementen terug welke voldoen aan het meegegeven filter:</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> acco_elements<span class="token operator">:</span> <span class="token builtin">Array</span><span class="token operator">&lt;</span>VtbElement<span class="token operator">></span> <span class="token operator">=</span> group<span class="token punctuation">.</span><span class="token function">filter_elements</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <h3>
+          <code
+            >.filter_elements(config: VtbFilterConfig):
+            Array&lt;VtbElement&gt;</code
+          >
+        </h3>
+        <p>
+          Geeft alle elementen terug welke voldoen aan het meegegeven filter:
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> acco_elements<span class="token operator">:</span> <span class="token builtin">Array</span><span class="token operator">&lt;</span>VtbElement<span class="token operator">></span> <span class="token operator">=</span> group<span class="token punctuation">.</span><span class="token function">filter_elements</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
     group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">ACCO</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3><code>.calculate_price(config ?: VtbFilterConfig, elements?: Array&lt;VtbElement&gt;): number</code></h3>
-<p>Deze methode berekend de prijs van de elementen uit de meegegeven FilterConfig of de meegegeven elementen. Optionele elementen worden  niet meegenomen in de berekening.</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token comment">// calculate all flight elements</span>
+        <h3>
+          <code
+            >.calculate_price(config ?: VtbFilterConfig, elements?:
+            Array&lt;VtbElement&gt;): number</code
+          >
+        </h3>
+        <p>
+          Deze methode berekend de prijs van de elementen uit de meegegeven
+          FilterConfig of de meegegeven elementen. Optionele elementen worden
+          niet meegenomen in de berekening.
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token comment">// calculate all flight elements</span>
 <span class="token keyword">const</span> flights_price <span class="token operator">=</span> vtb<span class="token punctuation">.</span><span class="token function">calculate_price</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
     group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">,</span> SegmentTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">,</span> UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHTNIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -187,9 +299,19 @@ groups<span class="token punctuation">.</span><span class="token function">each<
 <span class="token punctuation">}</span> <span class="token comment">// -> 390,99</span>
 
 utils<span class="token punctuation">.</span><span class="token function">currency</span><span class="token punctuation">(</span>flights_price<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// € 390,99</span></code></pre>
-<h3><code>.map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions): VtbMapElement</code></h3>
-<p>Utility methode om een VTbMapElement weer te geven met de VtbMapElementen die voldoen aan het filter. De VtbMapOptions worden gebruikt voor wel/niet tekenen van verbindingen tussen de punten en als vlucht of over de weg.</p>
-<pre class="language-typescript"><code class="language-typescript">
+        <h3>
+          <code
+            >.map(container_id: string, filter_config: VtbFilterConfig,
+            map_options: VtbMapOptions): VtbMapElement</code
+          >
+        </h3>
+        <p>
+          Utility methode om een VTbMapElement weer te geven met de
+          VtbMapElementen die voldoen aan het filter. De VtbMapOptions worden
+          gebruikt voor wel/niet tekenen van verbindingen tussen de punten en
+          als vlucht of over de weg.
+        </p>
+        <pre class="language-typescript"><code class="language-typescript">
 <span class="token keyword">const</span> map_options<span class="token operator">:</span> VtbMapOptions <span class="token operator">=</span> <span class="token punctuation">{</span>
     connect_markers<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
     connect_mode<span class="token operator">:</span> <span class="token string">'flight'</span><span class="token punctuation">,</span>
@@ -203,20 +325,28 @@ utils<span class="token punctuation">.</span><span class="token function">curren
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 vtb<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token string">'complete-map'</span><span class="token punctuation">,</span> map_search<span class="token punctuation">,</span> map_options<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3><code>.flightschedule(container_id: string, filter_config?: VtbFilterConfig, options: VtbFLightScheduleOptions): VtbFlightScheduleElement</code></h3>
-<p>Utility methode om op basis van een filter config de betreffende vluchten in responsive tabelvorm weer te geven.</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">const</span> flight_search<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <h3>
+          <code
+            >.flightschedule(container_id: string, filter_config?:
+            VtbFilterConfig, options: VtbFLightScheduleOptions):
+            VtbFlightScheduleElement</code
+          >
+        </h3>
+        <p>
+          Utility methode om op basis van een filter config de betreffende
+          vluchten in responsive tabelvorm weer te geven.
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">const</span> flight_search<span class="token operator">:</span> VtbFilterConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
     group_type_ids<span class="token operator">:</span> <span class="token punctuation">[</span>SegmentTypes<span class="token punctuation">.</span><span class="token constant">DEFAULT</span><span class="token punctuation">,</span> SegmentTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     element_unit_ids<span class="token operator">:</span> <span class="token punctuation">[</span>UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHT</span><span class="token punctuation">,</span> UnitTypes<span class="token punctuation">.</span><span class="token constant">FLIGHTNIGHT</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     optional<span class="token operator">:</span> <span class="token boolean">false</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 vtb<span class="token punctuation">.</span><span class="token function">flightschedule</span><span class="token punctuation">(</span><span class="token string">'flights_table'</span><span class="token punctuation">,</span> flight_search<span class="token punctuation">,</span> map_options<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-
       </main>
     </div>
-    <footer>
-        &copy; 2023-2024 Bureau97 / B97
-    </footer>
+    <footer>&copy; 2023-2024 Bureau97 / B97</footer>
   </body>
 </html>

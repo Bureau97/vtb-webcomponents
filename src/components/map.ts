@@ -291,7 +291,7 @@ export class VtbMapElement extends LitElement {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length) {
           // push all nodes to the childElements
-          let _changed: Boolean = false;
+          let _changed: boolean = false;
           for (const node of mutation.addedNodes) {
             const rs = this.parseChildNode(node as Element);
 

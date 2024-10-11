@@ -30,6 +30,3 @@ Wanneer de live preview geactiveerd wordt vanuit de Visual Tour Builder kunnen t
     </p>
 </vtb-tekst>
 ```
-
-
-

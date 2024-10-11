@@ -1,14 +1,19 @@
-
 <!doctype html>
 
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VTB Webcomponents</title>
-    <link rel="stylesheet" href="docs.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto+Mono">
-    <link rel="stylesheet" href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css">
+    <link rel="stylesheet" href="docs.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600|Roboto+Mono"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css"
+    />
     <!--
     <link href="prism-okaidia.css" rel="stylesheet" />
     <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -18,40 +23,69 @@
   </head>
   <body>
     <header>
-        
-<nav>
-  <a href="">Home</a>
-  <!-- <a href="examples/">Examples</a> -->
-  <a href="api/">API</a>
-  <a href="map/">Map</a>
-  <a href="media/">Media</a>
-  <a href="text/">Text</a>
-  <a href="calculator/">Calculator</a>
-  <a href="flightschedule/">FLightschedule</a>
-  <!-- <a href="install/">Install</a> -->
-</nav>
+      <nav>
+        <a href="">Home</a>
+        <!-- <a href="examples/">Examples</a> -->
+        <a href="api/">API</a>
+        <a href="map/">Map</a>
+        <a href="media/">Media</a>
+        <a href="text/">Text</a>
+        <a href="calculator/">Calculator</a>
+        <a href="flightschedule/">FLightschedule</a>
+        <!-- <a href="install/">Install</a> -->
+      </nav>
     </header>
     <div id="main-wrapper">
       <main>
         <h1>VTB Webcomponents</h1>
-<p>Dit project omvat een aantal tools en webcomponenten om het opbouwen van een output van de Visual Tour Builder (VTB) van TravelSpirit te vergemakkelijken.</p>
-<p>De volgende features zijn beschikbaar:</p>
-<ul>
-<li><a href="/vtb-webcomponents/api/">VTB API</a>, voor het laden en inlezen van de VTB travelplan json uit de VTB</li>
-<li><a href="/vtb-webcomponents/media/">VTB Media</a> webcomponent, voor het weergeven van afbeeldingen uit MediaSpirit</li>
-<li><a href="/vtb-webcomponents/calculator/">VTB Calculator</a>, voor het weergeven en berekenen van de prijzen</li>
-<li><a href="/vtb-webcomponents/flightschedule/">VTB Flightschedule</a>, voor het opbouwen en weergeven van een vluchtschema</li>
-<li><a href="/vtb-webcomponents/map/">VTB Map</a>, voor het weergeven van kaarten op basis van Google Maps</li>
-<li><a href="/vtb-webcomponents/text/">VTB Text</a>, voor het weergeven en het inline bewerken van teksten uit het travelplan</li>
-</ul>
-<h2>Installatie</h2>
-<p>De componenten zijn (nog niet) beschikbaar via npm maar zullen dit binnen
-afzienbare tijd zijn. Tot die tijd kunnen de componenten rechtstreeks van
-GitHub worden geinstalleerd.</p>
-<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> i github:Bureau97/vtb-webcomponents</code></pre>
-<h2>Gebruik</h2>
-<p><strong>Initialisatie en inladen van een travelplan json:</strong></p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> travelplan_data <span class="token keyword">from</span> <span class="token string">'travelplan.json'</span><span class="token punctuation">;</span>
+        <p>
+          Dit project omvat een aantal tools en webcomponenten om het opbouwen
+          van een output van de Visual Tour Builder (VTB) van TravelSpirit te
+          vergemakkelijken.
+        </p>
+        <p>De volgende features zijn beschikbaar:</p>
+        <ul>
+          <li>
+            <a href="/vtb-webcomponents/api/">VTB API</a>, voor het laden en
+            inlezen van de VTB travelplan json uit de VTB
+          </li>
+          <li>
+            <a href="/vtb-webcomponents/media/">VTB Media</a> webcomponent, voor
+            het weergeven van afbeeldingen uit MediaSpirit
+          </li>
+          <li>
+            <a href="/vtb-webcomponents/calculator/">VTB Calculator</a>, voor
+            het weergeven en berekenen van de prijzen
+          </li>
+          <li>
+            <a href="/vtb-webcomponents/flightschedule/">VTB Flightschedule</a>,
+            voor het opbouwen en weergeven van een vluchtschema
+          </li>
+          <li>
+            <a href="/vtb-webcomponents/map/">VTB Map</a>, voor het weergeven
+            van kaarten op basis van Google Maps
+          </li>
+          <li>
+            <a href="/vtb-webcomponents/text/">VTB Text</a>, voor het weergeven
+            en het inline bewerken van teksten uit het travelplan
+          </li>
+        </ul>
+        <h2>Installatie</h2>
+        <p>
+          De componenten zijn (nog niet) beschikbaar via npm maar zullen dit
+          binnen afzienbare tijd zijn. Tot die tijd kunnen de componenten
+          rechtstreeks van GitHub worden geinstalleerd.
+        </p>
+        <pre
+          class="language-bash"
+        ><code class="language-bash"><span class="token function">npm</span> i github:Bureau97/vtb-webcomponents</code></pre>
+        <h2>Gebruik</h2>
+        <p>
+          <strong>Initialisatie en inladen van een travelplan json:</strong>
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> travelplan_data <span class="token keyword">from</span> <span class="token string">'travelplan.json'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
 
@@ -59,8 +93,10 @@ GitHub worden geinstalleerd.</p>
   calculate_flight_duration<span class="token operator">:</span> <span class="token boolean">false</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 vtb<span class="token punctuation">.</span><span class="token function">parse_vtb_data</span><span class="token punctuation">(</span>travelplan_data<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>of</p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
+        <p>of</p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span>Vtb<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vtb-webcomponents'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> travelplan_source_url <span class="token operator">=</span> <span class="token string">'/travelplan.json'</span><span class="token punctuation">;</span>
 
@@ -75,8 +111,15 @@ document<span class="token punctuation">.</span><span class="token function">add
 <span class="token keyword">function</span> <span class="token function">vtbDataLoaded</span><span class="token punctuation">(</span>vtb<span class="token operator">:</span> Vtb<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token comment">// doe iets met de data</span>
 <span class="token punctuation">}</span></code></pre>
-<p><strong>Ophalen en weergeven van accommodatie elementen in een prijsoverzicht:</strong></p>
-<pre class="language-typescript"><code class="language-typescript"><span class="token keyword">enum</span> SegmentTypes <span class="token punctuation">{</span>
+        <p>
+          <strong
+            >Ophalen en weergeven van accommodatie elementen in een
+            prijsoverzicht:</strong
+          >
+        </p>
+        <pre
+          class="language-typescript"
+        ><code class="language-typescript"><span class="token keyword">enum</span> SegmentTypes <span class="token punctuation">{</span>
   <span class="token constant">DEFAULT</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
   <span class="token constant">FLIGHT</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">,</span>
   <span class="token constant">TOESLAGEN</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">,</span>
@@ -113,7 +156,9 @@ document<span class="token punctuation">.</span><span class="token function">add
   <span class="token punctuation">}</span><span class="token punctuation">;</span>
   accoTable<span class="token punctuation">.</span>elements <span class="token operator">=</span> acco_elements<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+        <pre
+          class="language-html"
+        ><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
     ...
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
@@ -124,21 +169,40 @@ document<span class="token punctuation">.</span><span class="token function">add
     <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>vtb-calculator</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<h2>Richtlijnen voor het bijdragen aan het project.</h2>
-<p>Bugs en feature request kunnen worden ingediend via <a href="https://github.com/Bureau97/vtb-webcomponents/issues">Github Issues</a>.</p>
-<p>Bijdragen aan code en documentatie kunnen worden toegevoegd via <a href="https://github.com/Bureau97/vtb-webcomponents/pulls">Pull Requests</a>.</p>
-<h2>Licentie:</h2>
-<p>MIT</p>
-<h2>Credits</h2>
-<p><a href="https://github.com/huub-segers">Huub Segers - Bureau97</a></p>
-<p><a href="https://github.com/bseyb">Barry Nijenhuis - TravelSpirit</a></p>
-<p><a href="https://github.com/ChrisKanger">Chris Kanger - 3rd floor coding</a></p>
-<p><a href="https://github.com/djessenb">Dennis Essenburg - TravelSpirit</a></p>
-
+        <h2>Richtlijnen voor het bijdragen aan het project.</h2>
+        <p>
+          Bugs en feature request kunnen worden ingediend via
+          <a href="https://github.com/Bureau97/vtb-webcomponents/issues"
+            >Github Issues</a
+          >.
+        </p>
+        <p>
+          Bijdragen aan code en documentatie kunnen worden toegevoegd via
+          <a href="https://github.com/Bureau97/vtb-webcomponents/pulls"
+            >Pull Requests</a
+          >.
+        </p>
+        <h2>Licentie:</h2>
+        <p>MIT</p>
+        <h2>Credits</h2>
+        <p>
+          <a href="https://github.com/huub-segers">Huub Segers - Bureau97</a>
+        </p>
+        <p>
+          <a href="https://github.com/bseyb">Barry Nijenhuis - TravelSpirit</a>
+        </p>
+        <p>
+          <a href="https://github.com/ChrisKanger"
+            >Chris Kanger - 3rd floor coding</a
+          >
+        </p>
+        <p>
+          <a href="https://github.com/djessenb"
+            >Dennis Essenburg - TravelSpirit</a
+          >
+        </p>
       </main>
     </div>
-    <footer>
-        &copy; 2023-2024 Bureau97 / B97
-    </footer>
+    <footer>&copy; 2023-2024 Bureau97 / B97</footer>
   </body>
 </html>

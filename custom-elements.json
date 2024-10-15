@@ -3632,6 +3632,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -3739,12 +3745,24 @@
         {
           "kind": "function",
           "name": "strip_tags",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
           "parameters": [
             {
               "name": "html",
               "optional": true,
               "type": {
                 "text": "string"
+              }
+            },
+            {
+              "name": "excludes",
+              "optional": true,
+              "type": {
+                "text": "Array<string>"
               }
             }
           ]
@@ -3900,12 +3918,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

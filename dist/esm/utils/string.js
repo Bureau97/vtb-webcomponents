@@ -1,8 +1,13 @@
-export function strip_tags(html) {
+export function strip_tags(html, excludes) {
     if (!html) {
         return '';
     }
-    html = String(html).replace(/<\/?[^>]+(>|$)/g, '');
+    let excl = '';
+    if (excludes) {
+        excl = '(?:' + excludes.join('|') + ')w*';
+    }
+    const re = new RegExp('</?' + excl + '[^>]*>', 'gi');
+    html = String(html).replace(re, '');
     html = html.replace(/&nbsp;/g, ' ');
     return html;
 }

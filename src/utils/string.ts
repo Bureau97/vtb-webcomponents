@@ -1,16 +1,16 @@
-
 export function strip_tags(html?: string, excludes?: Array<string>): string {
   if (!html) {
     return '';
   }
 
-  let excl = '';
   if (excludes) {
-    excl = '(?:' + excludes.join('|') + ')\w*';
+    const re_string = '<((?!/?(' + excludes.join('|') + '))).*?[^>]+>';
+    const re = new RegExp(re_string, 'gi');
+    html = html.replace(re, '');
+  } else {
+    html = String(html).replace(/<\/*[^>].*?>/gi, '');
   }
 
-  const re = new RegExp('<\/?' + excl + '[^>]*>', 'gi');
-  html = String(html).replace(re, '');
   html = html.replace(/&nbsp;/g, ' ');
   return html;
 }

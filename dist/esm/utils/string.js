@@ -2,12 +2,14 @@ export function strip_tags(html, excludes) {
     if (!html) {
         return '';
     }
-    let excl = '';
     if (excludes) {
-        excl = '(?:' + excludes.join('|') + ')w*';
+        const re_string = '<((?!/?(' + excludes.join('|') + '))).*?[^>]+>';
+        const re = new RegExp(re_string, 'gi');
+        html = html.replace(re, '');
     }
-    const re = new RegExp('</?' + excl + '[^>]*>', 'gi');
-    html = String(html).replace(re, '');
+    else {
+        html = String(html).replace(/<\/*[^>].*?>/gi, '');
+    }
     html = html.replace(/&nbsp;/g, ' ');
     return html;
 }

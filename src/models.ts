@@ -143,6 +143,7 @@ export class VtbElement implements interfaces.VtbElement {
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
   _units: Array<VtbElementUnit> = [];
+  extra_fields: Dictionary<VtbExtraField> = {};
 
   private _grouped: Array<VtbElementUnit> = [];
   get units(): Array<VtbElementUnit> {

@@ -101,15 +101,7 @@ export class VtbDataTransformer {
     // search and setup extra fields on travelplan
     for (const fieldgroup of vtbSrcData.extraFieldValues) {
       for (const field of fieldgroup.fields) {
-        const _field = new VtbExtraField();
-        _field.name = field.name.toLowerCase().replace(/[\s-]+/g, '_');
-        _field.title = field.translated_name;
-        _field.value = field.value;
-        _field.type = field.field_type;
-
-        if (field.options && field.options.length >= 1) {
-          _field.options = field.options;
-        }
+        const _field = this.parse_extra_field(field);
 
         if (fieldgroup.name) {
           _field.group_name = fieldgroup.name;
@@ -155,6 +147,22 @@ export class VtbDataTransformer {
     // console.info(this._data);
 
     return this._data;
+  }
+
+  protected parse_extra_field(field: any): VtbExtraField  {
+
+    const _field = new VtbExtraField();
+    _field.name = field.name.toLowerCase().replace(/[\s-]+/g, '_');
+    _field.title = field.translated_name;
+    _field.value = field.value;
+    _field.type = field.field_type;
+
+    if (field.options && field.options.length >= 1) {
+      _field.options = field.options;
+    }
+
+    return _field;
+
   }
 
   protected parse_carrental_elements(
@@ -483,6 +491,13 @@ export class VtbDataTransformer {
     }
 
     // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
+
+    if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
+      for (const extraField of element_data.TSOrderline.extraFieldValues) {
+        const vtb_extra_field = this.parse_extra_field(extraField);
+        vtb_element.extra_fields[vtb_extra_field.name] = vtb_extra_field;
+      }
+    }
 
     return vtb_element;
   }

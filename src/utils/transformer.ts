@@ -149,8 +149,9 @@ export class VtbDataTransformer {
     return this._data;
   }
 
-  protected parse_extra_field(field: any): VtbExtraField  {
-
+  protected parse_extra_field(
+    field: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): VtbExtraField {
     const _field = new VtbExtraField();
     _field.name = field.name.toLowerCase().replace(/[\s-]+/g, '_');
     _field.title = field.translated_name;
@@ -162,7 +163,6 @@ export class VtbDataTransformer {
     }
 
     return _field;
-
   }
 
   protected parse_carrental_elements(

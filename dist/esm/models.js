@@ -102,6 +102,7 @@ export class VtbElement {
         this.participant_prices = [];
         this.media = [];
         this._units = [];
+        this.extra_fields = {};
         this._grouped = [];
     }
     get units() {

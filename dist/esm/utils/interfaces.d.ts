@@ -94,6 +94,7 @@ export interface VtbElement {
     media: Array<VtbMedia>;
     location?: VtbMapMarker;
     units: Array<VtbElementUnit>;
+    extra_fields: Dictionary<VtbExtraField>;
 }
 export interface VtbElementGroup {
     id: string;

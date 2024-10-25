@@ -845,6 +845,14 @@
             },
             {
               "kind": "field",
+              "name": "extra_fields",
+              "type": {
+                "text": "Dictionary<VtbExtraField>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
               "name": "_grouped",
               "type": {
                 "text": "Array<VtbElementUnit>"
@@ -2094,12 +2102,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3632,6 +3634,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -3802,6 +3810,24 @@
               "parameters": [
                 {
                   "name": "vtbSrcData",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "parse_extra_field",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbExtraField"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "field",
                   "type": {
                     "text": "any"
                   }

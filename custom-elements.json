@@ -650,6 +650,14 @@
             },
             {
               "kind": "field",
+              "name": "optional",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -2102,6 +2110,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3634,7 +3648,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     },
@@ -3938,12 +3952,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

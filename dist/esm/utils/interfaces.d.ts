@@ -71,6 +71,7 @@ export interface VtbParticipantPrice {
 }
 export interface VtbElementUnit {
     title: string;
+    optional?: boolean;
     participant_prices: Array<VtbParticipantPrice>;
 }
 export interface VtbElement {

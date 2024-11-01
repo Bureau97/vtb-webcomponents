@@ -99,6 +99,7 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
   title: string = '';
   participant_prices: Array<VtbParticipantPrice> = [];
   quantity: number = 1;
+  optional: boolean = false;
 
   private _hash: number = 0;
 

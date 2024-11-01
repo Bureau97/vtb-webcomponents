@@ -457,6 +457,7 @@ export class VtbDataTransformer {
 
     const vtb_element_unit = new VtbElementUnit();
     vtb_element_unit.title = element_data.subTitle || element_data.title;
+    vtb_element_unit.optional = element_data.optional;
 
     for (const participant_id of Object.keys(
       element_data.olPrices?.participants

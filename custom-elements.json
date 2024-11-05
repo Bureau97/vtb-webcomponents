@@ -658,6 +658,54 @@
             },
             {
               "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "additional_description",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "media",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "extra_fields",
+              "type": {
+                "text": "Dictionary<VtbExtraField>"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -2110,12 +2158,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3648,7 +3690,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
+      "path": "src/dev/main.ts",
       "declarations": [],
       "exports": []
     },
@@ -3952,6 +3994,12 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

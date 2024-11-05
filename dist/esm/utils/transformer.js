@@ -240,14 +240,6 @@ export class VtbDataTransformer {
                     .add(vtb_element.nights, 'days');
             }
             if (last_element &&
-                last_element.ts_product_id == vtb_element.ts_product_id) {
-                // console.info('adding units to first elements of current product..');
-                last_element._units = last_element._units.concat(vtb_element._units);
-                last_element.participant_prices =
-                    last_element.participant_prices.concat(vtb_element.participant_prices);
-                continue;
-            }
-            if (last_element &&
                 vtb_element.optional &&
                 last_element.unit_id == vtb_element.unit_id) {
                 // console.debug('Optional element: ', {
@@ -259,6 +251,17 @@ export class VtbDataTransformer {
                 // });
                 vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
             }
+            if (last_element &&
+                last_element.ts_product_id == vtb_element.ts_product_id) {
+                if (vtb_element.optional && vtb_element._units.length == 1) {
+                    vtb_element._units[0].price_diff = vtb_element.price_diff;
+                }
+                last_element._units = last_element._units.concat(vtb_element._units);
+                last_element.participant_prices =
+                    last_element.participant_prices.concat(vtb_element.participant_prices);
+                continue;
+            }
+            // console.info('adding new element: ', vtb_element);
             element_group.add_element(vtb_element);
             if (!vtb_element.optional ||
                 (last_element && vtb_element.unit_id != last_element.unit_id)) {
@@ -287,6 +290,7 @@ export class VtbDataTransformer {
         vtb_element.object_id = element_data.vtbObjectId || vtb_element.id;
         vtb_element.ts_product_id = element_data.TSProduct.id;
         vtb_element.title = element_data.title;
+        // console.info('Parse vtb element: ', vtb_element.title);
         vtb_element.subtitle = element_data.subTitle;
         // set element description, get all contents from the <body> and remove all style attributes
         vtb_element.description = element_data.additionalText
@@ -320,9 +324,16 @@ export class VtbDataTransformer {
                 vtb_element.media.push(media);
             }
         }
+        // copy all element data to element unit
         const vtb_element_unit = new VtbElementUnit();
         vtb_element_unit.title = element_data.subTitle || element_data.title;
-        vtb_element_unit.optional = element_data.optional;
+        vtb_element_unit.optional = vtb_element.optional;
+        vtb_element_unit.price = vtb_element.price;
+        vtb_element_unit.description = vtb_element.description;
+        vtb_element_unit.additional_description =
+            vtb_element.additional_description;
+        vtb_element_unit.media = vtb_element.media;
+        vtb_element_unit.extra_fields = vtb_element.extra_fields;
         for (const participant_id of Object.keys(element_data.olPrices?.participants)) {
             const participant_element_price = new VtbParticipantPrice();
             participant_element_price.participant_id = Number(participant_id);

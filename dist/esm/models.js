@@ -65,6 +65,12 @@ export class VtbElementUnit {
         this.participant_prices = [];
         this.quantity = 1;
         this.optional = false;
+        this.price = 0.0;
+        this.price_diff = 0.0;
+        this.description = '';
+        this.additional_description = '';
+        this.media = [];
+        this.extra_fields = {};
         this._hash = 0;
     }
     get id() {

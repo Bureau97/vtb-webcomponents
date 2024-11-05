@@ -73,6 +73,12 @@ export interface VtbElementUnit {
     title: string;
     optional?: boolean;
     participant_prices: Array<VtbParticipantPrice>;
+    price: number;
+    price_diff: number;
+    description?: string;
+    additional_description?: string;
+    media?: Array<VtbMedia>;
+    extra_fields?: Dictionary<VtbExtraField>;
 }
 export interface VtbElement {
     id: string;

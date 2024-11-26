@@ -440,6 +440,20 @@ export class VtbDataTransformer {
     vtb_element.optional = element_data.optional;
     vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
     vtb_element.nights = element_data.flexNights || element_data.nights;
+
+    // VTB global has a bug with new activity elements setting nights to 1
+    // while it should be 0
+    if (
+      vtb_element.nights == 1 &&
+      element_data.newElement == true &&
+      /activity/gi.test(element_data.unitName)
+    ) {
+      console.debug(
+        'VTB Global bug triggered; Setting nights to 0 for new activity element'
+      );
+      vtb_element.nights = 0;
+    }
+
     vtb_element.day = element_data.day;
     vtb_element.unit_id = element_data.unitId;
     vtb_element.grouptitle = grouptitle;

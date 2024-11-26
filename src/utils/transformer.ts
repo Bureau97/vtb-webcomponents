@@ -355,7 +355,7 @@ export class VtbDataTransformer {
           subtitle: vtb_element.subtitle,
           price: vtb_element.price,
           last_price: last_element.price,
-          price_diff: last_element.price - vtb_element.price,
+          price_diff: last_element.price - vtb_element.price
         });
 
         vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
@@ -381,7 +381,8 @@ export class VtbDataTransformer {
           0
         );
 
-        last_element.price_diff = last_element.price_diff * last_element._units.length;
+        last_element.price_diff =
+          last_element.price_diff * last_element._units.length;
 
         continue;
       }

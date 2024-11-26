@@ -350,13 +350,13 @@ export class VtbDataTransformer {
         vtb_element.optional &&
         last_element.unit_id == vtb_element.unit_id
       ) {
-        // console.debug('Optional element: ', {
-        //   title: vtb_element.title,
-        //   subtitle: vtb_element.subtitle,
-        //   price: vtb_element.price,
-        //   last_price: last_element.price,
-        //   price_diff: last_element.price - vtb_element.price,
-        // });
+        console.debug('Optional element: ', {
+          title: vtb_element.title,
+          subtitle: vtb_element.subtitle,
+          price: vtb_element.price,
+          last_price: last_element.price,
+          price_diff: last_element.price - vtb_element.price,
+        });
 
         vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
       }
@@ -369,11 +369,19 @@ export class VtbDataTransformer {
           vtb_element._units[0].price_diff = vtb_element.price_diff;
         }
 
+        // copy all units and prices from vtb_element to last_element
         last_element._units = last_element._units.concat(vtb_element._units);
         last_element.participant_prices =
           last_element.participant_prices.concat(
             vtb_element.participant_prices
           );
+
+        last_element.price = last_element._units.reduce(
+          (total, unit) => total + unit.price,
+          0
+        );
+
+        last_element.price_diff = last_element.price_diff * last_element._units.length;
 
         continue;
       }
@@ -444,7 +452,7 @@ export class VtbDataTransformer {
     // VTB global has a bug with new activity elements setting nights to 1
     // while it should be 0
     if (
-      vtb_element.nights == 1 &&
+      vtb_element.nights >= 1 &&
       element_data.newElement == true &&
       /activity/gi.test(element_data.unitName)
     ) {

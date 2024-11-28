@@ -218,10 +218,13 @@ export class VtbDataTransformer {
   ): void {
     for (const flight of segment_data.flightInfo) {
       const carrier = new VtbFlightCarrier();
-      carrier.name =
-        flight.airlineObject.name || flight.airlineObject.carrier_name;
-      carrier.code =
-        flight.airlineObject.code || flight.airlineObject.carrier_code;
+
+      if (flight.airlineObject) {
+        carrier.name =
+          flight.airlineObject.name || flight.airlineObject.carrier_name;
+        carrier.code =
+          flight.airlineObject.code || flight.airlineObject.carrier_code;
+      }
 
       const departure = new VtbFlight();
       departure.date = dayjs.utc(

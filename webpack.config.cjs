@@ -79,5 +79,9 @@ module.exports = {
       'Access-Control-Allow-Origin': '*'
     },
     allowedHosts: ['localhost']
-  }
+  },
+
+  watchOptions: {
+    ignored: '**/node_modules',
+  },
 };

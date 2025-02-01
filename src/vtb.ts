@@ -150,53 +150,33 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  // public async load_preview(key?:string, token?:string): Promise<Vtb> {
+  public async load_preview(key?:string, token?:string): Promise<Vtb> {
 
-  //   if (!key && !token) {
-  //     const url = new URL(window.location.href);
-  //     const _key = url.searchParams.get('key');
-  //     if (_key) {
-  //       key = _key;
-  //     }
+    if (!key && !token) {
+      const url = new URL(window.location.href);
+      const _key = url.searchParams.get('key');
+      if (_key) {
+        key = _key;
+      }
 
-  //     const _token = url.searchParams.get('token');
-  //     if (_token) {
-  //       token = _token;
-  //     }
-  //   }
+      const _token = url.searchParams.get('token');
+      if (_token) {
+        token = _token;
+      }
+    }
 
-  //   console.info(['Loading preview', key, token]);
+    console.info(['Loading preview', key, token]);
 
-  //   if (!key || !token) {
-  //     throw new Error('Missing key or token');
-  //   }
+    if (!key ) {
+      throw new Error('Missing key..');
+    }
 
-  //   if (!this._dataLoader) {
-  //     this._dataLoader = new PreviewDataLoader(key, token);
-  //     // this._dataLoader.connect().then(() => {
-  //     //   console.info('connected?');
-  //     // });
-  //   }
+    if (!this._dataLoader) {
+      this._dataLoader = new PreviewDataLoader(key, token);
+    }
 
-  //   this._dataLoader.connect();
-  //   this._dataLoader.loadTravelplan()
-  //     .then((data: any) => {
-  //       console.info('Travelplan loaded');
-  //       console.info(data);
-  //     })
-  //     .catch((err: any) => {
-  //       console.error(err);
-  //     });
-
-  //   // const travelplan_data = await this._dataLoader.loadTravelplan();
-
-  //   // console.log(travelplan_data);
-
-  //   // this.parse_vtb_data(travelplan_data);
-
-  //   return this;
-
-  // }
+    return this._dataLoader.requestTravelplan();
+  }
 
   public async load(travelplan_source_url?: string): Promise<Vtb> {
 
@@ -211,16 +191,14 @@ export class Vtb {
 
     if (this.is_live_preview) {
       console.info('Loading preview..');
-      const dl = new PreviewDataLoader();
-      const data = await dl.init(new URL(window.location.href));
-      console.info('data',data);
 
-      // this.load_preview().then((data: any) => {
-      //   console.info('Preview Travelplan loaded');
-      //   console.info(data);
-      // });
 
-      // this.parse_vtb_data(travelplan_data);
+      const travelplan_data = await this.load_preview();
+
+      console.info('VTB::Load (preview)')
+      console.info(travelplan_data);
+
+      this.parse_vtb_data(travelplan_data);
       return this;
     }
 

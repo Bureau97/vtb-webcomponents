@@ -1754,6 +1754,14 @@
             },
             {
               "kind": "field",
+              "name": "_dataLoader",
+              "type": {
+                "text": "PreviewDataLoader | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "is_live_preview",
               "type": {
                 "text": "boolean"
@@ -1937,6 +1945,32 @@
             },
             {
               "kind": "method",
+              "name": "load_preview",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Promise<VtbTravelPlanData>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "key",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "token",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "load",
               "privacy": "public",
               "return": {
@@ -1947,6 +1981,7 @@
               "parameters": [
                 {
                   "name": "travelplan_source_url",
+                  "optional": true,
                   "type": {
                     "text": "string"
                   }
@@ -3795,6 +3830,79 @@
       "path": "src/utils/interfaces.ts",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/preview.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PreviewDataLoader",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_key",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "key"
+            },
+            {
+              "kind": "field",
+              "name": "_token",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "token"
+            },
+            {
+              "kind": "field",
+              "name": "_pubnub",
+              "type": {
+                "text": "PubNub | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_userId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "userId"
+            },
+            {
+              "kind": "method",
+              "name": "initialize_pubnub",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "requestTravelplan",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Promise<VtbTravelPlanData>"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PreviewDataLoader",
+          "declaration": {
+            "name": "PreviewDataLoader",
+            "module": "src/utils/preview.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",

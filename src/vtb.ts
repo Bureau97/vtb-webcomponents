@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {type Dayjs} from 'dayjs';
 
 import {VtbConfig, VtbFilterConfig} from './utils/interfaces.js';
@@ -150,8 +148,10 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  public async load_preview(key?:string, token?:string): Promise<Vtb> {
-
+  public async load_preview(
+    key?: string,
+    token?: string
+  ): Promise<VtbTravelPlanData> {
     if (!key && !token) {
       const url = new URL(window.location.href);
       const _key = url.searchParams.get('key');
@@ -167,7 +167,7 @@ export class Vtb {
 
     console.info(['Loading preview', key, token]);
 
-    if (!key ) {
+    if (!key) {
       throw new Error('Missing key..');
     }
 
@@ -179,7 +179,6 @@ export class Vtb {
   }
 
   public async load(travelplan_source_url?: string): Promise<Vtb> {
-
     if (travelplan_source_url && !this.is_live_preview) {
       console.info('Loading static...', travelplan_source_url);
 
@@ -192,10 +191,9 @@ export class Vtb {
     if (this.is_live_preview) {
       console.info('Loading preview..');
 
-
       const travelplan_data = await this.load_preview();
 
-      console.info('VTB::Load (preview)')
+      console.info('VTB::Load (preview)');
       console.info(travelplan_data);
 
       this.parse_vtb_data(travelplan_data);

@@ -7,7 +7,7 @@ import '../components/text';
 
 import {Vtb} from '../vtb';
 import {VtbElement} from '../models';
-import { VtbConfig, VtbFilterConfig } from '../utils/interfaces';
+import {VtbConfig, VtbFilterConfig} from '../utils/interfaces';
 // import {VtbConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
@@ -76,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (vtb.is_live_preview) {
     console.info('initialize live preview');
     vtb.load().then(vtbDataLoaded);
-  }
-  else {
+  } else {
     console.info('initialize static preview');
     vtb.load(travelplan_source_url).then(vtbDataLoaded);
   }
@@ -92,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
-
 
   // get info
   console.info(vtb.title + ' ' + vtb.subtitle);

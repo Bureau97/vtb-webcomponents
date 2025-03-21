@@ -39,9 +39,7 @@ export class PreviewDataLoader {
         userId = uuidv4();
         sessionStorage.setItem('userId', userId);
       }
-
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       userId = uuidv4(); // fallback when sessionStorage is not available
     }

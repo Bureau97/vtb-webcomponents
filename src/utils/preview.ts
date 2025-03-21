@@ -31,10 +31,19 @@ export class PreviewDataLoader {
     //   throw new Error('Missing token');
     // }
 
-    let userId = sessionStorage.getItem('userId');
-    if (!userId) {
-      userId = uuidv4();
-      sessionStorage.setItem('userId', userId);
+    let userId = null;
+
+    try {
+      userId = sessionStorage.getItem('userId');
+      if (!userId) {
+        userId = uuidv4();
+        sessionStorage.setItem('userId', userId);
+      }
+
+    }
+    catch (e) {
+      console.error(e);
+      userId = uuidv4(); // fallback when sessionStorage is not available
     }
 
     this._userId = userId;

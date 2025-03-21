@@ -61,8 +61,11 @@ export class PreviewDataLoader {
                         // );
                         // const result = await response.json();
                         const file_url = `https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`;
+                        console.info('file url', file_url);
                         const response = await fetch(file_url);
+                        console.info('response', response);
                         const result = await response.json();
+                        console.info('result', result);
                         resolve(result.data);
                         subscription.unsubscribe();
                     }

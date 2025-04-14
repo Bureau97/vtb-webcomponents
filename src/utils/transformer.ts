@@ -356,6 +356,7 @@ export class VtbDataTransformer {
         console.debug('Optional element: ', {
           title: vtb_element.title,
           subtitle: vtb_element.subtitle,
+          ts_product_id: vtb_element.ts_product_id,
           price: vtb_element.price,
           last_price: last_element.price,
           price_diff: vtb_element.price - last_element.price
@@ -407,11 +408,12 @@ export class VtbDataTransformer {
         !vtb_element.optional ||
         (last_element && vtb_element.unit_id != last_element.unit_id)
       ) {
-        // console.debug('set last element: ', {
-        //   title: vtb_element.title,
-        //   subtitle: vtb_element.subtitle,
-        //   price: vtb_element.price,
-        // });
+        console.debug('set last element: ', {
+          title: vtb_element.title,
+          subtitle: vtb_element.subtitle,
+          price: vtb_element.price,
+          ts_product_id: vtb_element.ts_product_id,
+        });
         last_element = vtb_element; // act as default element
       }
     }

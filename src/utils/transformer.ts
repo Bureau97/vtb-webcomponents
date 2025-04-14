@@ -358,7 +358,7 @@ export class VtbDataTransformer {
           subtitle: vtb_element.subtitle,
           price: vtb_element.price,
           last_price: last_element.price,
-          price_diff: last_element.price - vtb_element.price
+          price_diff: vtb_element.price - last_element.price
         });
 
         vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
@@ -368,24 +368,33 @@ export class VtbDataTransformer {
         last_element &&
         last_element.ts_product_id == vtb_element.ts_product_id
       ) {
+        console.debug('adding unit to existing element');
+
         if (vtb_element.optional && vtb_element._units.length == 1) {
+          console.debug('adding optional unit to existing element');
           vtb_element._units[0].price_diff = vtb_element.price_diff;
         }
 
         // copy all units and prices from vtb_element to last_element
         last_element._units = last_element._units.concat(vtb_element._units);
-        last_element.participant_prices =
-          last_element.participant_prices.concat(
-            vtb_element.participant_prices
+
+        if (!vtb_element.optional) {
+          // if current element is not optional, copy all participant prices
+          last_element.participant_prices =
+            last_element.participant_prices.concat(
+              vtb_element.participant_prices
+            );
+
+          // and update price with the unit prices
+          last_element.price = last_element._units.reduce(
+            (total, unit) => total + unit.price,
+            0
           );
 
-        last_element.price = last_element._units.reduce(
-          (total, unit) => total + unit.price,
-          0
-        );
-
-        last_element.price_diff =
-          last_element.price_diff * last_element._units.length;
+          // and update price_diff
+          last_element.price_diff =
+            last_element.price_diff * last_element._units.length;
+        }
 
         continue;
       }

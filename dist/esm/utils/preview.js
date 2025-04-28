@@ -10,22 +10,23 @@ export class PreviewDataLoader {
         }
         if (this._token) {
             console.log('recieved token', this._token);
-            // sessionStorage.setItem('token', this._token);
+            if (window && window.sessionStorage) {
+                sessionStorage.setItem('token', this._token);
+            }
         }
         // if (!this._token) {
         //   throw new Error('Missing token');
         // }
         let userId = null;
-        try {
+        if (window && window.sessionStorage) {
             userId = sessionStorage.getItem('userId');
             if (!userId) {
                 userId = uuidv4();
                 sessionStorage.setItem('userId', userId);
             }
         }
-        catch (e) {
-            console.error(e);
-            userId = uuidv4(); // fallback when sessionStorage is not available
+        else {
+            userId = uuidv4();
         }
         this._userId = userId;
     }
@@ -53,17 +54,13 @@ export class PreviewDataLoader {
                     console.info('received message ', msg);
                     if (msg && msg.message && msg.message.fileName) {
                         console.info(msg.message.fileName);
-                        // const file_url = encodeURIComponent(
-                        //   `https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`
-                        // );
-                        // const response = await fetch(
-                        //   'http://localhost.b97.nl/vtb-preview-proxy/?url=' + file_url
-                        // );
+                        const file_url = encodeURIComponent(`https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`);
+                        const response = await fetch('http://localhost.b97.nl/vtb-preview-proxy/?url=' + file_url);
                         // const result = await response.json();
-                        const file_url = `https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`;
-                        // console.info('file url', file_url);
-                        const response = await fetch(file_url);
-                        // console.info('response', response);
+                        // const file_url = `https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`;
+                        // // console.info('file url', file_url);
+                        // const response = await fetch(file_url);
+                        // // console.info('response', response);
                         const result = await response.json();
                         // console.info('result', result);
                         /**

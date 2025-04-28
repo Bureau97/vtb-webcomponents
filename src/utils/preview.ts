@@ -24,7 +24,10 @@ export class PreviewDataLoader {
 
     if (this._token) {
       console.log('recieved token', this._token);
-      // sessionStorage.setItem('token', this._token);
+
+      if (window && window.sessionStorage) {
+        sessionStorage.setItem('token', this._token);
+      }
     }
 
     // if (!this._token) {
@@ -33,15 +36,15 @@ export class PreviewDataLoader {
 
     let userId = null;
 
-    try {
+    if (window && window.sessionStorage) {
       userId = sessionStorage.getItem('userId');
+
       if (!userId) {
         userId = uuidv4();
         sessionStorage.setItem('userId', userId);
       }
-    } catch (e) {
-      console.error(e);
-      userId = uuidv4(); // fallback when sessionStorage is not available
+    } else {
+      userId = uuidv4();
     }
 
     this._userId = userId;

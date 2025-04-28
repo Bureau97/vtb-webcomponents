@@ -176,6 +176,7 @@ export class VtbDataTransformer {
             flightElement.flightnumber = flight.flightNumber;
             flightElement.duration = flight.duration;
             flightElement.day = segment_data.day;
+            flightElement.nights = segment_data?.nights || 0;
             if (flight?.operatedBy) {
                 flightElement.operated_by = flight.operatedBy;
             }

@@ -58,6 +58,7 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
     duration?: string;
     day?: number;
     operated_by?: string;
+    nights: number;
 }
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;

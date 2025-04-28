@@ -616,6 +616,14 @@
               "type": {
                 "text": "string | undefined"
               }
+            },
+            {
+              "kind": "field",
+              "name": "nights",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
             }
           ]
         },

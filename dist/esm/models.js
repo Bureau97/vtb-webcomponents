@@ -57,6 +57,9 @@ export class VtbFlight {
 export class VtbFlightCarrier {
 }
 export class VtbFlightData {
+    constructor() {
+        this.nights = 0;
+    }
 }
 export class VtbElementUnit {
     constructor() {

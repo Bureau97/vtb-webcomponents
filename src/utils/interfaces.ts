@@ -80,6 +80,7 @@ export interface VtbFlightData {
   duration?: string;
   day?: number;
   operated_by?: string;
+  nights: number;
 }
 
 export interface VtbParticipantPrice {

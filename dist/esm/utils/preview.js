@@ -48,27 +48,29 @@ export class PreviewDataLoader {
         const pubnub = this.initialize_pubnub();
         const channel = pubnub.channel(this._key);
         const subscription = channel.subscription({});
-        return new Promise((resolve) => {
+        return new Promise((resolve, error) => {
             subscription.addListener({
                 message: async (msg) => {
                     console.info('received message ', msg);
                     if (msg && msg.message && msg.message.fileName) {
                         console.info(msg.message.fileName);
                         const file_url = encodeURIComponent(`https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`);
-                        const response = await fetch('http://localhost.b97.nl/vtb-preview-proxy/?url=' + file_url);
-                        // const result = await response.json();
-                        // const file_url = `https://vtb-live-mode.s3.eu-west-1.amazonaws.com/${msg.message.fileName}`;
-                        // // console.info('file url', file_url);
-                        // const response = await fetch(file_url);
-                        // // console.info('response', response);
-                        const result = await response.json();
-                        // console.info('result', result);
+                        const proxy_url = `https://www.bureau97.nl/vtb-preview-proxy?url=${file_url}`;
+                        const response = await fetch(proxy_url);
+                        try {
+                            const result = await response.json();
+                            resolve(result.data);
+                        }
+                        catch (e) {
+                            console.warn(e);
+                            error(e);
+                        }
                         /**
                          * result.body.token
                          * result.body.itinerary
                          * result.data
                          */
-                        resolve(result.data);
+                        // resolve(result.data);
                         subscription.unsubscribe();
                     }
                 }

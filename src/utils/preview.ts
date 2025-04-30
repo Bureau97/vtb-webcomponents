@@ -91,13 +91,10 @@ export class PreviewDataLoader {
             try {
               const result = await response.json();
               resolve(result.data);
-            }
-            catch (e) {
+            } catch (e) {
               console.warn(e);
               error(e);
             }
-
-
 
             /**
              * result.body.token
@@ -105,7 +102,7 @@ export class PreviewDataLoader {
              * result.data
              */
 
-            resolve(result.data);
+            // resolve(result.data);
 
             subscription.unsubscribe();
           }

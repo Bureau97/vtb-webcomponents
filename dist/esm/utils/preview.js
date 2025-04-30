@@ -10,7 +10,7 @@ export class PreviewDataLoader {
         }
         if (this._token) {
             console.log('recieved token', this._token);
-            if (window && window.sessionStorage) {
+            if (window && 'sessonStorage' in window) {
                 sessionStorage.setItem('token', this._token);
             }
         }
@@ -18,7 +18,7 @@ export class PreviewDataLoader {
         //   throw new Error('Missing token');
         // }
         let userId = null;
-        if (window && window.sessionStorage) {
+        if (window && 'sessonStorage' in window) {
             userId = sessionStorage.getItem('userId');
             if (!userId) {
                 userId = uuidv4();

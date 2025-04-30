@@ -8,27 +8,11 @@ export class PreviewDataLoader {
         if (!this._key) {
             throw new Error('Missing key');
         }
+        // just for TS check
         if (this._token) {
-            console.log('recieved token', this._token);
-            if (window && 'sessonStorage' in window) {
-                sessionStorage.setItem('token', this._token);
-            }
+            console.info('We have a token..');
         }
-        // if (!this._token) {
-        //   throw new Error('Missing token');
-        // }
-        let userId = null;
-        if (window && 'sessonStorage' in window) {
-            userId = sessionStorage.getItem('userId');
-            if (!userId) {
-                userId = uuidv4();
-                sessionStorage.setItem('userId', userId);
-            }
-        }
-        else {
-            userId = uuidv4();
-        }
-        this._userId = userId;
+        this._userId = uuidv4();
     }
     initialize_pubnub() {
         if (!this._pubnub) {

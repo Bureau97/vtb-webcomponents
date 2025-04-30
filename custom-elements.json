@@ -3880,8 +3880,7 @@
               "type": {
                 "text": "string"
               },
-              "privacy": "private",
-              "default": "null"
+              "privacy": "private"
             },
             {
               "kind": "method",

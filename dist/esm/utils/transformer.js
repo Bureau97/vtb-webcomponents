@@ -49,7 +49,11 @@ export function parse_media(media // eslint-disable-line @typescript-eslint/no-e
     _media.id = media.sourceId;
     if (media.tags && media.tags.length >= 1) {
         for (const tag of media.tags) {
-            _media.tags.push(tag.name || tag);
+            if ('name' in tag) {
+                _media.tags.push(tag.name);
+                continue;
+            }
+            _media.tags.push(tag);
         }
     }
     return _media;

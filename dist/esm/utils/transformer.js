@@ -4,7 +4,7 @@ import * as duration from 'dayjs/plugin/duration.js'; // import plugin
 dayjs.extend(utc);
 dayjs.extend(duration);
 dayjs.locale('nl');
-import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models';
+import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 // import _ from 'lodash';
 const re_body = /<body[^>]+>(.*)<\/body>/g;
 const re_style = /style="[^"]+"/gi;

@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs';
-import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbMedia, VtbParticipant, VtbMapMarker } from '../models';
-import { VtbConfig } from './interfaces';
+import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbMedia, VtbParticipant, VtbMapMarker } from '../models.js';
+import { VtbConfig } from './interfaces.js';
 /**
  * Parse a participant object from VTB into a VtbParticipant object.
  *

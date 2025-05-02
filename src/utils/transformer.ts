@@ -21,9 +21,9 @@ import {
   VtbParticipantPrice,
   VtbParty,
   VtbMapMarker
-} from '../models';
+} from '../models.js';
 
-import {VtbConfig} from './interfaces';
+import {VtbConfig} from './interfaces.js';
 // import _ from 'lodash';
 
 const re_body = /<body[^>]+>(.*)<\/body>/g;

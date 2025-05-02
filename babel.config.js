@@ -7,4 +7,12 @@ const plugins = [
   ['@babel/plugin-proposal-class-properties']
 ];
 
-module.exports = {assumptions, plugins};
+const presets = ['@babel/preset-env', '@babel/preset-typescript'];
+
+const transform = {
+  '^.+\\.(ts|tsx)?$': 'ts-jest',
+  '^.+\\.(js|jsx)$': 'babel-jest'
+};
+
+module.exports = {presets, assumptions, plugins, transform};
+// module.exports = {assumptions, plugins};

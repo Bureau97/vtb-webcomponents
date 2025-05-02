@@ -27,6 +27,7 @@ export declare class VtbMedia implements interfaces.VtbMedia {
     id?: string;
 }
 export declare class VtbExtraField implements interfaces.VtbExtraField {
+    id: string;
     name: string;
     title?: string;
     value?: string;
@@ -58,6 +59,7 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
     duration?: string;
     day?: number;
     operated_by?: string;
+    nights: number;
 }
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;
@@ -70,9 +72,11 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     additional_description: string;
     media: Array<VtbMedia>;
     extra_fields: Dictionary<VtbExtraField>;
+    day?: number | undefined;
     private _hash;
     get id(): string;
     get participants(): Array<number>;
+    clone(): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
@@ -82,9 +86,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     subtitle: string;
     description: string;
     additional_description: string;
-    price: number;
-    price_diff: number;
-    optional: boolean;
     nights: number;
     hidden: boolean;
     day: number;
@@ -94,14 +95,19 @@ export declare class VtbElement implements interfaces.VtbElement {
     participant_prices: Array<VtbParticipantPrice>;
     grouptitle?: string;
     media: Array<VtbMedia>;
-    location?: VtbMapMarker;
+    locations: Array<VtbMapMarker>;
     _units: Array<VtbElementUnit>;
     extra_fields: Dictionary<VtbExtraField>;
     private _grouped;
     get units(): Array<VtbElementUnit>;
+    get location(): VtbMapMarker | undefined;
     get participants(): Array<number>;
     get last_day(): number;
     get days(): number;
+    get price(): number;
+    get price_diff(): number;
+    get optional(): boolean;
+    reset_units(): void;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {
@@ -117,17 +123,45 @@ export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     type_id?: number;
     unit_id?: number;
     media: Array<VtbMedia>;
-    location?: VtbMapMarker;
+    locations: Array<VtbMapMarker>;
     is_flight: boolean;
     is_carrental: boolean;
-    get last_day(): number;
-    get days(): number;
     private mapped_elements_by_id;
     private elements_order;
     private mapped_elements_by_type;
     private mapped_elements_by_day;
-    add_element(element: VtbElement): void;
+    get last_day(): number;
+    get days(): number;
+    get location(): VtbMapMarker | undefined;
+    /**
+     * Return an array of elements (VtbElement) sorted by their order
+     * @returns {Array<VtbElement>}
+     */
     get elements(): Array<VtbElement>;
+    /**
+     * Adds an element to this element group. The element is added to the mapping
+     * by its id. If the element has a unit_id, it is added to the mapping for that
+     * unit_id. If the element has a day, it is added to the mapping for that day.
+     * @param {VtbElement} element Element to add to the element group.
+     */
+    add_element(element: VtbElement): void;
+    /**
+     * Filters elements in this element group based on the given configuration.
+     *
+     * - If `element_unit_ids` is given, only elements with units that have these
+     *   ids are returned.
+     * - If `participant_ids` is given, only elements with participants that have
+     *   these ids are returned.
+     * - If `optional` is given, only elements with optional units are returned if
+     *   it is set to `true`, or only elements with non-optional units are returned
+     *   if it is set to `false`.
+     *
+     * If participant ids are given, they are checked against the element's participant ids
+     * and prices are being filtered as well.
+     *
+     * @param {VtbFilterConfig} config Configuration for filtering elements.
+     * @returns {Array<VtbElement>} Array of filtered elements.
+     */
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;
     clone(): VtbElementGroup;
 }

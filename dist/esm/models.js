@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
-import duration from 'dayjs/plugin/duration.js';
-import murmurhash from 'murmurhash';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc.js';
+import * as duration from 'dayjs/plugin/duration.js';
+import * as murmurhash from 'murmurhash';
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -39,6 +39,7 @@ export class VtbMedia {
 }
 export class VtbExtraField {
     constructor() {
+        this.id = '';
         this.name = '';
     }
     get content() {
@@ -57,6 +58,9 @@ export class VtbFlight {
 export class VtbFlightCarrier {
 }
 export class VtbFlightData {
+    constructor() {
+        this.nights = 0;
+    }
 }
 export class VtbElementUnit {
     constructor() {
@@ -88,6 +92,18 @@ export class VtbElementUnit {
             return participant_price.participant_id;
         });
     }
+    clone() {
+        const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
+        _clone.media = [];
+        for (const _m of this.media) {
+            _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+        }
+        _clone.extra_fields = {};
+        for (const key of Object.keys(this.extra_fields)) {
+            _clone.extra_fields[key] = Object.assign(new VtbExtraField(), structuredClone(this.extra_fields[key]));
+        }
+        return _clone;
+    }
 }
 export class VtbElement {
     constructor() {
@@ -97,9 +113,9 @@ export class VtbElement {
         this.subtitle = '';
         this.description = '';
         this.additional_description = '';
-        this.price = 0.0;
-        this.price_diff = 0.0;
-        this.optional = false;
+        // price = 0.0;
+        // price_diff = 0.0;
+        // optional = false;
         this.nights = 0;
         this.hidden = false;
         this.day = 0;
@@ -108,6 +124,7 @@ export class VtbElement {
         this.unit_id = 0;
         this.participant_prices = [];
         this.media = [];
+        this.locations = [];
         this._units = [];
         this.extra_fields = {};
         this._grouped = [];
@@ -128,16 +145,50 @@ export class VtbElement {
         }
         return this._grouped.length ? this._grouped : this._units;
     }
+    get location() {
+        if (this.locations) {
+            return this.locations[0];
+        }
+        return undefined;
+    }
     get participants() {
-        return this.participant_prices.map((participant_price) => {
-            return participant_price.participant_id;
-        });
+        let participants = [];
+        for (const _u of this._units) {
+            participants = participants.concat(_u.participants);
+        }
+        return participants;
     }
     get last_day() {
         return this.day + this.nights;
     }
     get days() {
         return this.nights + 1;
+    }
+    get price() {
+        if (this.units.length > 1) {
+            return this.units.reduce((total, unit) => {
+                return total + unit.price;
+            }, 0);
+        }
+        return this.units[0].price;
+    }
+    get price_diff() {
+        if (this.units.length > 1) {
+            return this.units.reduce((total, unit) => {
+                return total + unit.price_diff;
+            }, 0);
+        }
+        return this.units[0].price_diff;
+    }
+    get optional() {
+        if (this.units.length >= 1) {
+            return this.units[0].optional;
+        }
+        return false;
+    }
+    reset_units() {
+        this._units = [];
+        this._grouped = [];
     }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));
@@ -147,9 +198,21 @@ export class VtbElement {
         for (const _m of this.media) {
             _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
         }
-        _clone._units = [];
+        _clone.reset_units();
         for (const _u of this._units) {
             _clone._units.push(Object.assign(new VtbElementUnit(), structuredClone(_u)));
+        }
+        _clone.locations = [];
+        for (const _l of this.locations) {
+            _clone.locations.push(Object.assign(new VtbMapMarker(), structuredClone(_l)));
+        }
+        _clone.participant_prices = [];
+        for (const _p of this.participant_prices) {
+            _clone.participant_prices.push(Object.assign(new VtbParticipantPrice(), structuredClone(_p)));
+        }
+        _clone.extra_fields = {};
+        for (const key of Object.keys(this.extra_fields)) {
+            _clone.extra_fields[key] = Object.assign(new VtbExtraField(), structuredClone(this.extra_fields[key]));
         }
         return _clone;
     }
@@ -163,6 +226,7 @@ export class VtbElementGroup {
         this.startdate = dayjs();
         this.enddate = dayjs();
         this.media = [];
+        this.locations = [];
         this.is_flight = false;
         this.is_carrental = false;
         this.mapped_elements_by_id = {};
@@ -176,6 +240,29 @@ export class VtbElementGroup {
     get days() {
         return this.nights + 1;
     }
+    get location() {
+        if (this.locations) {
+            return this.locations[0];
+        }
+        return undefined;
+    }
+    /**
+     * Return an array of elements (VtbElement) sorted by their order
+     * @returns {Array<VtbElement>}
+     */
+    get elements() {
+        const ret = [];
+        for (const id of this.elements_order) {
+            ret.push(this.mapped_elements_by_id[id]);
+        }
+        return ret;
+    }
+    /**
+     * Adds an element to this element group. The element is added to the mapping
+     * by its id. If the element has a unit_id, it is added to the mapping for that
+     * unit_id. If the element has a day, it is added to the mapping for that day.
+     * @param {VtbElement} element Element to add to the element group.
+     */
     add_element(element) {
         this.mapped_elements_by_id[element.id] = element;
         this.elements_order.push(element.id);
@@ -192,13 +279,23 @@ export class VtbElementGroup {
             this.mapped_elements_by_day[element.day].push(element.id);
         }
     }
-    get elements() {
-        const ret = [];
-        for (const id of this.elements_order) {
-            ret.push(this.mapped_elements_by_id[id]);
-        }
-        return ret;
-    }
+    /**
+     * Filters elements in this element group based on the given configuration.
+     *
+     * - If `element_unit_ids` is given, only elements with units that have these
+     *   ids are returned.
+     * - If `participant_ids` is given, only elements with participants that have
+     *   these ids are returned.
+     * - If `optional` is given, only elements with optional units are returned if
+     *   it is set to `true`, or only elements with non-optional units are returned
+     *   if it is set to `false`.
+     *
+     * If participant ids are given, they are checked against the element's participant ids
+     * and prices are being filtered as well.
+     *
+     * @param {VtbFilterConfig} config Configuration for filtering elements.
+     * @returns {Array<VtbElement>} Array of filtered elements.
+     */
     filter_elements(config) {
         // const _element_ids = config.element_ids || [];
         // const element_ids = _element_ids.flat(Infinity);
@@ -226,6 +323,7 @@ export class VtbElementGroup {
             !check_participant_ids &&
             !skip_optional &&
             !only_optional) {
+            // this is eventually the same as the "elements()" getter
             return this.elements;
         }
         let _elm_ids = [];
@@ -246,27 +344,110 @@ export class VtbElementGroup {
                 continue;
             }
             const _element = this.mapped_elements_by_id[id];
-            if (skip_optional && _element.optional) {
+            if (!_element) {
+                // element cant be found in this element group
+                console.warn('element cant be found in this element group');
                 continue;
             }
-            if (only_optional && !_element.optional) {
-                continue;
-            }
-            if (!check_participant_ids) {
-                _elements.push(_element);
-                continue;
-            }
-            if (check_participant_ids && _element.participants) {
-                // make a shallow copy so we're not messing with the original price element
-                const _element_copy = _element.clone();
-                let participants_unit_price = 0.0;
-                for (const participant_price of _element.participant_prices) {
-                    if (participant_ids.includes(participant_price.participant_id)) {
-                        participants_unit_price += participant_price.price;
+            // we are checking the units if they are optional or not..
+            // instead of the element as we did before
+            const _cloned_element = _element.clone(); // clone the element to prevent tampering with the original
+            if (only_optional || skip_optional) {
+                console.info('only_optional or skip_optional');
+                // if we only want optional elements or if we want to skip optional elements
+                _cloned_element.reset_units();
+                // loop over the units to check if they are optional or not
+                for (const _element_unit of _element.units) {
+                    // console.info(
+                    //   '  Checking unit',
+                    //   _element_unit.title,
+                    //   ' is optional?',
+                    //   _element_unit.optional
+                    // );
+                    // only add the unit if it is optional
+                    if (only_optional && _element_unit.optional === true) {
+                        // console.info(
+                        //   '    only_optional, adding unit ',
+                        //   _element_unit.title
+                        // );
+                        _cloned_element._units.push(_element_unit.clone());
+                        continue;
                     }
+                    // only add the unit if it is not optional
+                    if (skip_optional && _element_unit.optional === false) {
+                        // console.info(
+                        //   '    skip_optional, adding unit ',
+                        //   _element_unit.title
+                        // );
+                        _cloned_element._units.push(_element_unit.clone());
+                        continue;
+                    }
+                    // console.info(
+                    //   '    skipping unit',
+                    //   _element_unit.title,
+                    //   ' is optional?',
+                    //   _element_unit.optional
+                    // );
                 }
-                _element_copy.price = participants_unit_price;
-                _elements.push(_element_copy);
+            }
+            else {
+                console.info('not only_optional or skip_optional, just adding element');
+            }
+            if (_cloned_element.units.length === 0) {
+                console.info('  not adding element:', _cloned_element.title, ', no units left, going to next element');
+                continue;
+            }
+            if (!check_participant_ids && _cloned_element.units.length >= 0) {
+                console.info('  not chekcing participants, adding element', _cloned_element.title, _cloned_element.units.length, 'units');
+                _elements.push(_cloned_element);
+                continue;
+            }
+            // if (_cloned_element.units.length === 0) {
+            //   console.info(
+            //     '  not adding element:',
+            //     _cloned_element.title,
+            //     'going to next element'
+            //   )
+            //   continue;
+            // }
+            if (check_participant_ids && _cloned_element.participants.length >= 1) {
+                // console.info('checking participants for element', _element.title);
+                for (const _element_unit of _cloned_element.units) {
+                    // copy participant prices to local variable
+                    const _original_participant_prices = _element_unit.participant_prices;
+                    // reset participant prices on element unit
+                    _element_unit.participant_prices = [];
+                    // loop over all participant prices and add them to element unit
+                    // if participant id is in participant ids list
+                    for (const _participant_price of _original_participant_prices) {
+                        if (participant_ids.includes(_participant_price.participant_id)) {
+                            _element_unit.participant_prices.push(_participant_price);
+                        }
+                    }
+                    // if element unit has no participant prices
+                    // continue to next element unit
+                    if (_element_unit.participant_prices.length === 0) {
+                        // console.info('  skipping element unit', _element_unit.title, 'no participant prices');
+                        continue;
+                    }
+                    // calculate element unit price
+                    if (_element_unit.price > 0) {
+                        _element_unit.price = _element_unit.participant_prices.reduce((total, participant_price) => total + participant_price.price, 0);
+                    }
+                    // calculate element unit price diff
+                    if (_element_unit.price_diff > 0) {
+                        _element_unit.price_diff = _element_unit.participant_prices.reduce((total, participant_price) => total + participant_price.price, 0);
+                    }
+                    // console.info(_element_unit);
+                }
+                // let participants_unit_price = 0.0;
+                // for (const participant_price of _element.participant_prices) {
+                //   if (participant_ids.includes(participant_price.participant_id)) {
+                //     participants_unit_price += participant_price.price;
+                //   }
+                // }
+                // _cloned_element.price = participants_unit_price;
+                _elements.push(_cloned_element);
             }
         }
         return _elements;

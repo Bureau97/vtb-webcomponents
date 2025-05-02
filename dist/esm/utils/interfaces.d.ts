@@ -35,6 +35,7 @@ export interface VtbMedia {
     id?: string;
 }
 export interface VtbExtraField {
+    id: string;
     name: string;
     title?: string;
     value?: string;
@@ -64,6 +65,7 @@ export interface VtbFlightData {
     duration?: string;
     day?: number;
     operated_by?: string;
+    nights: number;
 }
 export interface VtbParticipantPrice {
     participant_id: number;
@@ -79,6 +81,7 @@ export interface VtbElementUnit {
     additional_description?: string;
     media?: Array<VtbMedia>;
     extra_fields?: Dictionary<VtbExtraField>;
+    day?: number;
 }
 export interface VtbElement {
     id: string;
@@ -99,7 +102,8 @@ export interface VtbElement {
     participant_prices: Array<VtbParticipantPrice>;
     grouptitle?: string;
     media: Array<VtbMedia>;
-    location?: VtbMapMarker;
+    location?: VtbMapMarker | undefined;
+    locations?: Array<VtbMapMarker>;
     units: Array<VtbElementUnit>;
     extra_fields: Dictionary<VtbExtraField>;
 }
@@ -116,7 +120,8 @@ export interface VtbElementGroup {
     type_id?: number;
     unit_id?: number;
     media: Array<VtbMedia>;
-    location?: VtbMapMarker;
+    location?: VtbMapMarker | undefined;
+    locations?: Array<VtbMapMarker>;
     is_flight: boolean;
     is_carrental: boolean;
 }

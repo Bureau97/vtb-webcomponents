@@ -417,6 +417,14 @@
           "members": [
             {
               "kind": "field",
+              "name": "id",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
               "name": "name",
               "type": {
                 "text": "string"
@@ -616,6 +624,14 @@
               "type": {
                 "text": "string | undefined"
               }
+            },
+            {
+              "kind": "field",
+              "name": "nights",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
             }
           ]
         },
@@ -706,6 +722,13 @@
             },
             {
               "kind": "field",
+              "name": "day",
+              "type": {
+                "text": "number | undefined | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -728,6 +751,16 @@
                 "text": "Array<number>"
               },
               "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "clone",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "VtbElementUnit"
+                }
+              }
             }
           ]
         },
@@ -790,30 +823,6 @@
                 "text": "string"
               },
               "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "price_diff",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "optional",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
             },
             {
               "kind": "field",
@@ -886,10 +895,11 @@
             },
             {
               "kind": "field",
-              "name": "location",
+              "name": "locations",
               "type": {
-                "text": "VtbMapMarker | undefined"
-              }
+                "text": "Array<VtbMapMarker>"
+              },
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -926,6 +936,14 @@
             },
             {
               "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "participants",
               "type": {
                 "text": "Array<number>"
@@ -947,6 +965,35 @@
                 "text": "number"
               },
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "optional",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "reset_units",
+              "privacy": "public"
             },
             {
               "kind": "method",
@@ -1056,10 +1103,11 @@
             },
             {
               "kind": "field",
-              "name": "location",
+              "name": "locations",
               "type": {
-                "text": "VtbMapMarker | undefined"
-              }
+                "text": "Array<VtbMapMarker>"
+              },
+              "default": "[]"
             },
             {
               "kind": "field",
@@ -1076,22 +1124,6 @@
                 "text": "boolean"
               },
               "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "last_day",
-              "type": {
-                "text": "number"
-              },
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "days",
-              "type": {
-                "text": "number"
-              },
-              "readonly": true
             },
             {
               "kind": "field",
@@ -1130,6 +1162,44 @@
               "default": "{}"
             },
             {
+              "kind": "field",
+              "name": "last_day",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "days",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "elements",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
+              "description": "Return an array of elements (VtbElement) sorted by their order",
+              "return": {
+                "type": {
+                  "text": "Array<VtbElement>"
+                }
+              },
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "add_element",
               "privacy": "public",
@@ -1138,17 +1208,11 @@
                   "name": "element",
                   "type": {
                     "text": "VtbElement"
-                  }
+                  },
+                  "description": "Element to add to the element group."
                 }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "elements",
-              "type": {
-                "text": "Array<VtbElement>"
-              },
-              "readonly": true
+              ],
+              "description": "Adds an element to this element group. The element is added to the mapping\nby its id. If the element has a unit_id, it is added to the mapping for that\nunit_id. If the element has a day, it is added to the mapping for that day."
             },
             {
               "kind": "method",
@@ -1163,9 +1227,11 @@
                   "name": "config",
                   "type": {
                     "text": "VtbFilterConfig"
-                  }
+                  },
+                  "description": "Configuration for filtering elements."
                 }
-              ]
+              ],
+              "description": "Filters elements in this element group based on the given configuration.\n\n- If `element_unit_ids` is given, only elements with units that have these\n  ids are returned.\n- If `participant_ids` is given, only elements with participants that have\n  these ids are returned.\n- If `optional` is given, only elements with optional units are returned if\n  it is set to `true`, or only elements with non-optional units are returned\n  if it is set to `false`.\n\nIf participant ids are given, they are checked against the element's participant ids\nand prices are being filtered as well."
             },
             {
               "kind": "method",
@@ -3696,6 +3762,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -3814,16 +3886,19 @@
               "optional": true,
               "type": {
                 "text": "string"
-              }
+              },
+              "description": "The string to strip tags from. If not provided, an empty\nstring will be returned."
             },
             {
               "name": "excludes",
               "optional": true,
               "type": {
                 "text": "Array<string>"
-              }
+              },
+              "description": "An array of tag names to exclude from stripping."
             }
-          ]
+          ],
+          "description": "Strip HTML tags from a string. If `excludes` is provided, the excluded tags will\nnot be stripped."
         }
       ],
       "exports": [
@@ -3841,6 +3916,176 @@
       "kind": "javascript-module",
       "path": "src/utils/transformer.ts",
       "declarations": [
+        {
+          "kind": "function",
+          "name": "parse_participant",
+          "return": {
+            "type": {
+              "text": "VtbParticipant"
+            }
+          },
+          "parameters": [
+            {
+              "name": "participant",
+              "type": {
+                "text": "Object"
+              },
+              "description": "participant object from VTB"
+            }
+          ],
+          "description": "Parse a participant object from VTB into a VtbParticipant object."
+        },
+        {
+          "kind": "function",
+          "name": "parse_media",
+          "return": {
+            "type": {
+              "text": "VtbMedia"
+            }
+          },
+          "parameters": [
+            {
+              "name": "media",
+              "type": {
+                "text": "Object"
+              },
+              "description": "media object from VTB"
+            }
+          ],
+          "description": "Parse a media object from VTB into a VtbMedia object."
+        },
+        {
+          "kind": "function",
+          "name": "parse_extra_field",
+          "return": {
+            "type": {
+              "text": "VtbExtraField"
+            }
+          },
+          "parameters": [
+            {
+              "name": "field",
+              "type": {
+                "text": "Object"
+              },
+              "description": "extra field object from VTB"
+            }
+          ],
+          "description": "Parse an extra field object from VTB into a VtbExtraField object."
+        },
+        {
+          "kind": "function",
+          "name": "parse_element_unit",
+          "return": {
+            "type": {
+              "text": "VtbElementUnit"
+            }
+          },
+          "parameters": [
+            {
+              "name": "element_data",
+              "type": {
+                "text": "Object"
+              },
+              "description": "The raw data of the element from VTB."
+            },
+            {
+              "name": "vtb_element",
+              "type": {
+                "text": "VtbElement"
+              },
+              "description": "The VTB element containing parsed data."
+            },
+            {
+              "name": "vtb_element_price",
+              "type": {
+                "text": "number"
+              },
+              "description": "The price associated with the VTB element."
+            }
+          ],
+          "description": "Parses a VTB element unit from the provided element data and VTB element."
+        },
+        {
+          "kind": "function",
+          "name": "parse_element",
+          "return": {
+            "type": {
+              "text": "VtbElement"
+            }
+          },
+          "parameters": [
+            {
+              "name": "element_data",
+              "type": {
+                "text": "Object"
+              },
+              "description": "The element data to parse."
+            },
+            {
+              "name": "grouptitle",
+              "optional": true,
+              "type": {
+                "text": "string"
+              },
+              "description": "The group title of the element."
+            }
+          ],
+          "description": "Parses a VTB element from the given element data."
+        },
+        {
+          "kind": "function",
+          "name": "parse_marker",
+          "return": {
+            "type": {
+              "text": "VtbMapMarker"
+            }
+          },
+          "parameters": [
+            {
+              "name": "marker_data",
+              "type": {
+                "text": "object"
+              },
+              "description": "The vtb marker data to parse."
+            },
+            {
+              "name": "title",
+              "optional": true,
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Parse a vtb marker data into a VtbMapMarker.\n\nThis function takes a vtb marker data as input and returns a VtbMapMarker."
+        },
+        {
+          "kind": "function",
+          "name": "parse_segment",
+          "return": {
+            "type": {
+              "text": "VtbElementGroup"
+            }
+          },
+          "parameters": [
+            {
+              "name": "segment_data",
+              "type": {
+                "text": "object"
+              },
+              "description": "The vtb segment data to parse."
+            },
+            {
+              "name": "vtb_start_date",
+              "optional": true,
+              "type": {
+                "text": "dayjs.Dayjs"
+              },
+              "description": "The start date of the vtb data."
+            }
+          ],
+          "description": "Parse a vtb segment data into a VtbElementGroup.\n\nThis function takes a vtb segment data as input and returns a VtbElementGroup.\nIf the segment data does not have a date, it will use the start date as segment start date.\nIf the segment data does not have an end date, it will calculate the end date from the start date and the number of nights.\nIt will also add all units and prices from the segment data to the VtbElementGroup.\nIf an element is optional and has the same unit id as the previous element, it will add the unit to the previous element.\nIf an element is not optional, it will update the price of the previous element with the unit prices."
+        },
         {
           "kind": "class",
           "description": "",
@@ -3866,24 +4111,6 @@
               "parameters": [
                 {
                   "name": "vtbSrcData",
-                  "type": {
-                    "text": "any"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "parse_extra_field",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "VtbExtraField"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "field",
                   "type": {
                     "text": "any"
                   }
@@ -3931,56 +4158,67 @@
                   }
                 }
               ]
-            },
-            {
-              "kind": "method",
-              "name": "parse_vtb_segment",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "segment_data",
-                  "type": {
-                    "text": "any"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "re_body",
-              "privacy": "private",
-              "default": "/<body[^>]+>(.*)<\\/body>/g"
-            },
-            {
-              "kind": "field",
-              "name": "re_style",
-              "privacy": "private",
-              "default": "/style=\"[^\"]+\"/gi"
-            },
-            {
-              "kind": "method",
-              "name": "parse_vtb_element",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "element_data",
-                  "type": {
-                    "text": "any"
-                  }
-                },
-                {
-                  "name": "grouptitle",
-                  "optional": true,
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
             }
           ]
         }
       ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "parse_participant",
+          "declaration": {
+            "name": "parse_participant",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_media",
+          "declaration": {
+            "name": "parse_media",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_extra_field",
+          "declaration": {
+            "name": "parse_extra_field",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_element_unit",
+          "declaration": {
+            "name": "parse_element_unit",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_element",
+          "declaration": {
+            "name": "parse_element",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_marker",
+          "declaration": {
+            "name": "parse_marker",
+            "module": "src/utils/transformer.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "parse_segment",
+          "declaration": {
+            "name": "parse_segment",
+            "module": "src/utils/transformer.ts"
+          }
+        },
         {
           "kind": "js",
           "name": "VtbDataTransformer",
@@ -3994,12 +4232,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

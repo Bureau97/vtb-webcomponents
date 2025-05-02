@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import duration from 'dayjs/plugin/duration.js';
-import 'dayjs/locale/nl';
+import 'dayjs/locale/nl.js';
 
 dayjs.extend(utc);
 dayjs.extend(duration);

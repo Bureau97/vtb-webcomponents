@@ -47,8 +47,10 @@ export function parse_media(media // eslint-disable-line @typescript-eslint/no-e
     const _media = new VtbMedia();
     _media.src = media.url;
     _media.id = media.sourceId;
-    for (const tag of media.tags) {
-        _media.tags.push(tag.name || tag);
+    if (media.tags && media.tags.length >= 1) {
+        for (const tag of media.tags) {
+            _media.tags.push(tag.name || tag);
+        }
     }
     return _media;
 }

@@ -1,4 +1,5 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/nl';
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbMedia, VtbParticipant, VtbMapMarker } from '../models.js';
 import { VtbConfig } from './interfaces.js';
 /**

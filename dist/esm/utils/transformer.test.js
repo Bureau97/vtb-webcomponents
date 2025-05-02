@@ -1,7 +1,8 @@
-import { parse_participant, parse_media, parse_marker, parse_extra_field, parse_element, parse_segment } from './transformer';
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc.js';
-import * as duration from 'dayjs/plugin/duration.js';
+import { parse_participant, parse_media, parse_marker, parse_extra_field, parse_element, parse_segment } from './transformer.js';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import duration from 'dayjs/plugin/duration.js';
+import 'dayjs/locale/nl';
 dayjs.extend(utc);
 dayjs.extend(duration);
 dayjs.locale('nl');

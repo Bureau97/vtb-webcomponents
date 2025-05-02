@@ -1,11 +1,11 @@
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc.js';
-import * as duration from 'dayjs/plugin/duration.js'; // import plugin
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import duration from 'dayjs/plugin/duration.js';
+import 'dayjs/locale/nl';
 dayjs.extend(utc);
 dayjs.extend(duration);
 dayjs.locale('nl');
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
-// import _ from 'lodash';
 const re_body = /<body[^>]+>(.*)<\/body>/g;
 const re_style = /style="[^"]+"/gi;
 /**

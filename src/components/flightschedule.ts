@@ -4,7 +4,7 @@ import {customElement, property} from 'lit/decorators.js';
 import {TemplateResult} from 'lit-element';
 import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import {type Dayjs} from 'dayjs';
 import 'dayjs/locale/nl.js';
 dayjs.locale('nl');

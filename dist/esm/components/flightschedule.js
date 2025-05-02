@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/nl.js';
 dayjs.locale('nl');
 import * as _ from 'lodash';

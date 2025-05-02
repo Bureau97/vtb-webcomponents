@@ -1,7 +1,7 @@
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc.js';
-import * as duration from 'dayjs/plugin/duration.js';
-import * as murmurhash from 'murmurhash';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import duration from 'dayjs/plugin/duration.js';
+import murmurhash from 'murmurhash';
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);

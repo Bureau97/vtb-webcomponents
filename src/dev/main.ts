@@ -8,6 +8,7 @@ import '../components/text';
 import {Vtb} from '../vtb';
 import {VtbElement} from '../models';
 import {VtbConfig, VtbFilterConfig} from '../utils/interfaces';
+// import {VtbConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
@@ -17,6 +18,7 @@ import {
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
 import {currency} from '../utils/currency';
+import {strip_tags} from '../utils/string';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
@@ -33,13 +35,18 @@ enum SegmentTypes {
 }
 
 enum UnitTypes {
+  DAYS = 1,
   ACCO = 2,
   FLIGHT = 3,
   FLIGHTNIGHT = 4,
   TRANSFER = 5,
+  TRANSFERNIGHT = 12,
   CARRENTAL = 6,
+  CAMPER_RENTAL = 7,
   ACTIVITY = 10,
-  EXTRA = 11
+  ACTIVITYNIGHT = 13,
+  EXTRA = 11,
+  DRIVER = 14
 }
 
 function vtbTextChanged(e?: Event) {
@@ -53,8 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
     calculate_flight_duration: true
   };
 
-  new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
+  const vtb = new Vtb(config);
+
+  if (vtb.is_live_preview) {
+    console.info('initialize live preview');
+    vtb.load().then(vtbDataLoaded);
+  } else {
+    console.info('initialize static preview');
+    vtb.load(travelplan_source_url).then(vtbDataLoaded);
+  }
+
+  // new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
 });
+
+// function vtbDataLoaded(vtb: Vtb) {
+//   console.info('vtbDataLoaded');
+//   console.debug(vtb);
+// }
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
@@ -94,6 +116,27 @@ function vtbDataLoaded(vtb: Vtb) {
         hero.src = vtb.covers[0].src;
       }
     }
+  }
+
+  const strip_tags__test_string =
+    '<strong>Uitgebreide map met reisbescheiden</strong><ul><li><strong><span style="color:#ff0000;">Ophalen in kantoor Haarlem&nbsp;</span></strong></li><li><strong><span style="color:#ff0000;">Per post verstuurd&nbsp;</span></strong></li><li><strong><span style="color:#ff0000;">Per post verstuurd buiten Nederland</span></strong></li><li>incl. kofferlabels</li><li>een geplastificeerde kaart van Suriname</li><li><a href="https://t.sidekickopen45.com/s3t/c/5/f18dQhb0S7kF8bNRfbW5gJqVg2zGCwVW8Jbw_88pTtbdVngXKT1p1Fc4W16gGz047cl5k101?te=W3R5hFj4cm2zwW4mKLS-4fGBq9W4cQhc81JD4TGW3ZSz5q3K72cXW4hLygg3zdxsh0&amp;si=7000000002374076&amp;pi=f1bf3d7a-1ed4-4f24-9c6f-d56416978b17" target="_blank">Te Gast in Suriname</a>&nbsp;boekje</li><li>&euro; 5,00 wordt gedoneerd&nbsp;aan <a href="https://treesforall.nl/">Trees for All</a> voor CO2 compensatie</li></ul>';
+
+  const strip_tags__test1 = document.getElementById('strip_tags__test1');
+  if (strip_tags__test1) {
+    strip_tags__test1.innerHTML =
+      '<h1>Original:</h1>' + strip_tags__test_string;
+  }
+  const strip_tags__test2 = document.getElementById('strip_tags__test2');
+  if (strip_tags__test2) {
+    strip_tags__test2.innerHTML =
+      '<h1>w/o excludes: </h1>' + strip_tags(strip_tags__test_string);
+  }
+
+  const strip_tags__test3 = document.getElementById('strip_tags__test3');
+  if (strip_tags__test3) {
+    strip_tags__test3.innerHTML =
+      '<h1>with excludes:</h1> ' +
+      strip_tags(strip_tags__test_string, ['a', 'strong']);
   }
 
   // add flightschedule
@@ -144,7 +187,7 @@ function vtbDataLoaded(vtb: Vtb) {
     // accommodations
     const acco_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.ACCO],
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAYS],
       optional: false
     });
 
@@ -246,9 +289,11 @@ function vtbDataLoaded(vtb: Vtb) {
     // car rental
     const carrental_elements = vtb.filter_elements({
       group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.CARRENTAL],
-      optional: false
+      element_unit_ids: [UnitTypes.CARRENTAL, UnitTypes.CAMPER_RENTAL]
+      // optional: false
     });
+
+    console.info('carrental_elements', carrental_elements);
 
     const carrentalTable = document.getElementById(
       'calc-dynamic-carrental'

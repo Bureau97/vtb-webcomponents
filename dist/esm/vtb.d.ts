@@ -6,6 +6,7 @@ import { VtbFlightScheduleElement, VtbFlightScheduleOptions } from './components
 export declare class Vtb {
     private _data;
     private _config?;
+    private _dataLoader?;
     /**
      * @constructor
      *
@@ -38,7 +39,8 @@ export declare class Vtb {
     get extra_fields(): any;
     extra_field(name: string): VtbExtraField | null;
     extraField(name: string): VtbExtraField | null;
-    load(travelplan_source_url: string): Promise<Vtb>;
+    load_preview(key?: string, token?: string): Promise<VtbTravelPlanData>;
+    load(travelplan_source_url?: string): Promise<Vtb>;
     parse_vtb_data(vtbSrcData: any): void;
     set data(data: VtbTravelPlanData);
     get element_groups(): Array<VtbElementGroup>;

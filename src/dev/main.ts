@@ -5,20 +5,20 @@ import '../components/map';
 import '../components/calculator';
 import '../components/text';
 
-import { Vtb } from '../vtb';
-import { VtbElement } from '../models';
-import { VtbConfig, VtbFilterConfig } from '../utils/interfaces';
+import {Vtb} from '../vtb';
+import {VtbElement} from '../models';
+import {VtbConfig, VtbFilterConfig} from '../utils/interfaces';
 // import {VtbConfig} from '../utils/interfaces';
-import { VtbFlightScheduleElement } from '../components/flightschedule';
-import { VtbMediaElement } from '../components/media';
-import { VtbMapOptions } from '../components/map';
+import {VtbFlightScheduleElement} from '../components/flightschedule';
+import {VtbMediaElement} from '../components/media';
+import {VtbMapOptions} from '../components/map';
 import {
   VtbCalculatorElement,
   VtbCalculatorPriceElement
 } from '../components/calculator';
-import { VtbTextElement } from '../components/text';
-import { currency } from '../utils/currency';
-import { strip_tags } from '../utils/string';
+import {VtbTextElement} from '../components/text';
+import {currency} from '../utils/currency';
+import {strip_tags} from '../utils/string';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
@@ -220,8 +220,9 @@ function vtbDataLoaded(vtb: Vtb) {
       activityTable.render_element_description = function (
         element: VtbElement
       ) {
-        return `Dag: ${element.day} | ${element.title} ${element.optional ? '[optioneel]' : ''
-          }`;
+        return `Dag: ${element.day} | ${element.title} ${
+          element.optional ? '[optioneel]' : ''
+        }`;
       };
 
       activityTable.elements = activity_elements;
@@ -300,7 +301,8 @@ function vtbDataLoaded(vtb: Vtb) {
 
     if (carrentalTable && carrental_elements.length >= 1) {
       carrentalTable.render_element_description = (element) =>
-        `${element.days} dgn. ${element.subtitle?.replace('Type', '')} ${element.optional ? '[optioneel]' : ''
+        `${element.days} dgn. ${element.subtitle?.replace('Type', '')} ${
+          element.optional ? '[optioneel]' : ''
         } (${element.price})`;
 
       carrentalTable.elements = carrental_elements;
@@ -406,10 +408,10 @@ function vtbDataLoaded(vtb: Vtb) {
       const _h = document.createElement('h2');
       _h.innerHTML =
         'Dag ' +
-        itinerary_group.day +
-        (itinerary_group.nights >= 1 ? '-' + itinerary_group.last_day : '') +
-        ': ' +
-        itinerary_group.title || 'not set';
+          itinerary_group.day +
+          (itinerary_group.nights >= 1 ? '-' + itinerary_group.last_day : '') +
+          ': ' +
+          itinerary_group.title || 'not set';
       itinerary.appendChild(_h);
 
       if (itinerary_group.subtitle) {
@@ -462,8 +464,9 @@ function vtbDataLoaded(vtb: Vtb) {
             content += unit.title;
           }
 
-          content += ` (voor ${unit.participant_prices.length} ${unit.participant_prices.length === 1 ? 'persoon' : 'personen'
-            })`;
+          content += ` (voor ${unit.participant_prices.length} ${
+            unit.participant_prices.length === 1 ? 'persoon' : 'personen'
+          })`;
 
           if (unit.optional) {
             content += ' (optioneel)';
@@ -474,8 +477,9 @@ function vtbDataLoaded(vtb: Vtb) {
           }
 
           if (unit.price_diff != 0) {
-            content += ` (${unit.price_diff > 0 ? 'meerprijs' : 'korting'
-              }: ${currency(unit.price_diff)})`;
+            content += ` (${
+              unit.price_diff > 0 ? 'meerprijs' : 'korting'
+            }: ${currency(unit.price_diff)})`;
           }
 
           _u.innerHTML = content;
@@ -511,9 +515,11 @@ function vtbDataLoaded(vtb: Vtb) {
         }
       }
 
-      non_optional_content += `Totaal: {${currency(vtb.calculate_price({
-        optional: false
-      }))}}\n`;
+      non_optional_content += `Totaal: {${currency(
+        vtb.calculate_price({
+          optional: false
+        })
+      )}}\n`;
 
       debug_non_optional.innerHTML = non_optional_content;
     }

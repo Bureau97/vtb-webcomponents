@@ -165,8 +165,11 @@ export class Vtb {
         // console.info('calculate_price: ', elements);
         let total = 0.0;
         for (const element of elements) {
-            if (element && !element.optional) {
-                total += element.price;
+            for (const unit of element.units) {
+                console.info(unit.title, unit.quantity, unit.price);
+                if (unit && !unit.optional) {
+                    total += unit.quantity * unit.price;
+                }
             }
         }
         // console.info('calculate_price: ', total);

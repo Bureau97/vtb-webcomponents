@@ -463,7 +463,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       const _cloned_element = _element.clone(); // clone the element to prevent tampering with the original
 
       if (only_optional || skip_optional) {
-        console.info('only_optional or skip_optional');
+        console.debug('only_optional or skip_optional');
         // if we only want optional elements or if we want to skip optional elements
         _cloned_element.reset_units();
 
@@ -504,11 +504,13 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
           // );
         }
       } else {
-        console.info('not only_optional or skip_optional, just adding element');
+        console.debug(
+          'not only_optional or skip_optional, just adding element'
+        );
       }
 
       if (_cloned_element.units.length === 0) {
-        console.info(
+        console.debug(
           '  not adding element:',
           _cloned_element.title,
           ', no units left, going to next element'

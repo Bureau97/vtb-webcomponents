@@ -100,6 +100,7 @@ export class VtbFlightData implements interfaces.VtbFlightData {
 export class VtbElementUnit implements interfaces.VtbElementUnit {
   // id: string = '';  // produced by murmurhash
   title: string = '';
+  subtitle: string = '';
   participant_prices: Array<VtbParticipantPrice> = [];
   quantity: number = 1;
   optional: boolean = false;
@@ -155,10 +156,10 @@ export class VtbElement implements interfaces.VtbElement {
   id: string = '';
   object_id?: string;
   ts_product_id: number = 0;
-  title: string = '';
-  subtitle: string = '';
-  description: string = '';
-  additional_description: string = '';
+  // title: string = '';
+  // subtitle: string = '';
+  // description: string = '';
+  // additional_description: string = '';
   // price = 0.0;
   // price_diff = 0.0;
   // optional = false;
@@ -245,6 +246,44 @@ export class VtbElement implements interfaces.VtbElement {
     }
 
     return false;
+  }
+
+  get title(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].title;
+    }
+
+    return '';
+  }
+
+  get subtitle(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].subtitle;
+    }
+
+    return '';
+  }
+
+  get description(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].description;
+    }
+
+    return '';
+  }
+
+  set description($content) {
+    if (this.units.length >= 1) {
+      this.units[0].description = $content;
+    }
+  }
+
+  get additional_description(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].additional_description;
+    }
+
+    return '';
   }
 
   public reset_units() {

@@ -137,15 +137,24 @@ export function parse_element_unit(
   const vtb_element_unit = new VtbElementUnit();
   // console.debug('element_data: ', element_data);
 
-  vtb_element_unit.title = element_data.subTitle || element_data.title;
+  vtb_element_unit.title = element_data.title;
+  vtb_element_unit.subtitle = element_data.subtitle;
 
   // copy all element data to element unit
   vtb_element_unit.optional = element_data.optional;
   vtb_element_unit.price = vtb_element_price;
-  vtb_element_unit.description = vtb_element.description;
-  vtb_element_unit.additional_description = vtb_element.additional_description;
+  // vtb_element_unit.description = element_data.description;
+
+  vtb_element_unit.description = element_data.additionalText
+    ? element_data.additionalText?.replace(re_body, '$1')?.replace(re_style, '')
+    : '';
+  
+  vtb_element_unit.additional_description = element_data.subAdditionalText
+    ? element_data.subAdditionalText?.replace(re_body, '$1')?.replace(re_style, '')
+    : '';
+  
   vtb_element_unit.media = vtb_element.media;
-  vtb_element_unit.extra_fields = vtb_element.extra_fields;
+  vtb_element_unit.extra_fields = element_data.extra_fields;
   vtb_element_unit.day = vtb_element.day;
 
   for (const participant_id of Object.keys(
@@ -188,24 +197,24 @@ export function parse_element(
 
   // set the element title
   // TODO: cleanup "tags" between < and >
-  vtb_element.title = element_data.title;
+  // vtb_element.title = element_data.title;
   // console.info('Parse vtb element: ', vtb_element.title);
 
   // set the element subtitle
   // TODO: cleanup "tags" between < and >
-  vtb_element.subtitle = element_data.subTitle;
+  // vtb_element.subtitle = element_data.subTitle;
 
   // set element description, get all contents from the <body> and remove all style attributes
-  vtb_element.description = element_data.additionalText
-    ? element_data.additionalText?.replace(re_body, '$1')?.replace(re_style, '')
-    : '';
+  // vtb_element.description = element_data.additionalText
+  //   ? element_data.additionalText?.replace(re_body, '$1')?.replace(re_style, '')
+  //   : '';
 
   // set element additional description (get all contents from the <body> and remove all style attributes)
-  vtb_element.additional_description = element_data.subAdditionalText
-    ? element_data.subAdditionalText
-        ?.replace(re_body, '$1')
-        ?.replace(re_style, '')
-    : '';
+  // vtb_element.additional_description = element_data.subAdditionalText
+  //   ? element_data.subAdditionalText
+  //       ?.replace(re_body, '$1')
+  //       ?.replace(re_style, '')
+  //   : '';
 
   // set element optional
   // vtb_element.optional = element_data.optional;

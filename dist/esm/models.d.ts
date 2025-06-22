@@ -76,7 +76,6 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     private _hash;
     get id(): string;
     get participants(): Array<number>;
-    get subtitle(): string;
     clone(): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {

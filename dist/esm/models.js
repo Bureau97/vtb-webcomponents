@@ -66,6 +66,7 @@ export class VtbElementUnit {
     constructor() {
         // id: string = '';  // produced by murmurhash
         this.title = '';
+        // subtitle: string = '';
         this.participant_prices = [];
         this.quantity = 1;
         this.optional = false;
@@ -92,9 +93,6 @@ export class VtbElementUnit {
             return participant_price.participant_id;
         });
     }
-    get subtitle() {
-        return this.title;
-    }
     clone() {
         const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
         _clone.media = [];
@@ -102,7 +100,7 @@ export class VtbElementUnit {
             _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
         }
         _clone.extra_fields = {};
-        for (const key of Object.keys(this.extra_fields)) {
+        for (const key of Object.keys(this.extra_fields || {})) {
             _clone.extra_fields[key] = Object.assign(new VtbExtraField(), structuredClone(this.extra_fields[key]));
         }
         return _clone;

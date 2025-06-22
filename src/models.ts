@@ -104,7 +104,7 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
   participant_prices: Array<VtbParticipantPrice> = [];
   quantity: number = 1;
   optional: boolean = false;
-  price: number = 0.0;
+  _price: number = 0.0;
   price_diff: number = 0.0;
   description: string = '';
   additional_description: string = '';
@@ -130,6 +130,14 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     return this.participant_prices.map((participant_price) => {
       return participant_price.participant_id;
     });
+  }
+
+  get price(): number {
+    return this.optional && this.price_diff ? this.price_diff : this._price;
+  }
+
+  set price(price: number) {
+    this._price = price;
   }
 
   public clone(): VtbElementUnit {

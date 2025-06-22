@@ -100,6 +100,7 @@ export class VtbFlightData implements interfaces.VtbFlightData {
 export class VtbElementUnit implements interfaces.VtbElementUnit {
   // id: string = '';  // produced by murmurhash
   title: string = '';
+  // subtitle: string = '';
   participant_prices: Array<VtbParticipantPrice> = [];
   quantity: number = 1;
   optional: boolean = false;
@@ -131,10 +132,6 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     });
   }
 
-  get subtitle(): string {
-    return this.title;
-  }
-
   public clone(): VtbElementUnit {
     const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
 
@@ -144,7 +141,7 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     }
 
     _clone.extra_fields = {};
-    for (const key of Object.keys(this.extra_fields)) {
+    for (const key of Object.keys(this.extra_fields || {})) {
       _clone.extra_fields[key] = Object.assign(
         new VtbExtraField(),
         structuredClone(this.extra_fields[key])

@@ -70,7 +70,7 @@ export class VtbElementUnit {
         this.participant_prices = [];
         this.quantity = 1;
         this.optional = false;
-        this.price = 0.0;
+        this._price = 0.0;
         this.price_diff = 0.0;
         this.description = '';
         this.additional_description = '';
@@ -92,6 +92,12 @@ export class VtbElementUnit {
         return this.participant_prices.map((participant_price) => {
             return participant_price.participant_id;
         });
+    }
+    get price() {
+        return this.optional && this.price_diff ? this.price_diff : this._price;
+    }
+    set price(price) {
+        this._price = price;
     }
     clone() {
         const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));

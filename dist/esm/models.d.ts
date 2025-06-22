@@ -66,7 +66,7 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     participant_prices: Array<VtbParticipantPrice>;
     quantity: number;
     optional: boolean;
-    price: number;
+    _price: number;
     price_diff: number;
     description: string;
     additional_description: string;
@@ -76,6 +76,8 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     private _hash;
     get id(): string;
     get participants(): Array<number>;
+    get price(): number;
+    set price(price: number);
     clone(): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {

@@ -674,7 +674,7 @@
             },
             {
               "kind": "field",
-              "name": "price",
+              "name": "_price",
               "type": {
                 "text": "number"
               },
@@ -751,6 +751,13 @@
                 "text": "Array<number>"
               },
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              }
             },
             {
               "kind": "method",

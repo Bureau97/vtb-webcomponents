@@ -92,6 +92,9 @@ export class VtbElementUnit {
             return participant_price.participant_id;
         });
     }
+    get subtitle() {
+        return this.title;
+    }
     clone() {
         const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
         _clone.media = [];
@@ -110,9 +113,9 @@ export class VtbElement {
         this.id = '';
         this.ts_product_id = 0;
         this.title = '';
-        this.subtitle = '';
-        this.description = '';
-        this.additional_description = '';
+        // subtitle: string = '';
+        // description: string = '';
+        // additional_description: string = '';
         // price = 0.0;
         // price_diff = 0.0;
         // optional = false;
@@ -185,6 +188,35 @@ export class VtbElement {
             return this.units[0].optional;
         }
         return false;
+    }
+    // get title(): string {
+    //   if (this.units.length >= 1) {
+    //     return this.units[0].title;
+    //   }
+    //   return '';
+    // }
+    get subtitle() {
+        if (this.units.length >= 1) {
+            return this.units[0].title;
+        }
+        return '';
+    }
+    get description() {
+        if (this.units.length >= 1) {
+            return this.units[0].description;
+        }
+        return '';
+    }
+    set description(text) {
+        if (this.units.length >= 1) {
+            this.units[0].description = text;
+        }
+    }
+    get additional_description() {
+        if (this.units.length >= 1) {
+            return this.units[0].additional_description;
+        }
+        return '';
     }
     reset_units() {
         this._units = [];

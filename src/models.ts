@@ -131,6 +131,10 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     });
   }
 
+  get subtitle(): string {
+    return this.title;
+  }
+
   public clone(): VtbElementUnit {
     const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
 
@@ -156,9 +160,9 @@ export class VtbElement implements interfaces.VtbElement {
   object_id?: string;
   ts_product_id: number = 0;
   title: string = '';
-  subtitle: string = '';
-  description: string = '';
-  additional_description: string = '';
+  // subtitle: string = '';
+  // description: string = '';
+  // additional_description: string = '';
   // price = 0.0;
   // price_diff = 0.0;
   // optional = false;
@@ -245,6 +249,45 @@ export class VtbElement implements interfaces.VtbElement {
     }
 
     return false;
+  }
+
+  // get title(): string {
+
+  //   if (this.units.length >= 1) {
+  //     return this.units[0].title;
+  //   }
+
+  //   return '';
+  // }
+
+  get subtitle(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].title;
+    }
+
+    return '';
+  }
+
+  get description(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].description;
+    }
+
+    return '';
+  }
+
+  set description(text: string) {
+    if (this.units.length >= 1) {
+      this.units[0].description = text;
+    }
+  }
+
+  get additional_description(): string {
+    if (this.units.length >= 1) {
+      return this.units[0].additional_description;
+    }
+
+    return '';
   }
 
   public reset_units() {

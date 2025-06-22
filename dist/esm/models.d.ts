@@ -76,6 +76,7 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     private _hash;
     get id(): string;
     get participants(): Array<number>;
+    get subtitle(): string;
     clone(): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {
@@ -83,9 +84,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     object_id?: string;
     ts_product_id: number;
     title: string;
-    subtitle: string;
-    description: string;
-    additional_description: string;
     nights: number;
     hidden: boolean;
     day: number;
@@ -107,6 +105,10 @@ export declare class VtbElement implements interfaces.VtbElement {
     get price(): number;
     get price_diff(): number;
     get optional(): boolean;
+    get subtitle(): string;
+    get description(): string;
+    set description(text: string);
+    get additional_description(): string;
     reset_units(): void;
     clone(): VtbElement;
 }

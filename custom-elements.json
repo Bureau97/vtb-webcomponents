@@ -753,6 +753,14 @@
               "readonly": true
             },
             {
+              "kind": "field",
+              "name": "subtitle",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "clone",
               "privacy": "public",
@@ -795,30 +803,6 @@
             {
               "kind": "field",
               "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "subtitle",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "additional_description",
               "type": {
                 "text": "string"
               },
@@ -987,6 +971,29 @@
               "name": "optional",
               "type": {
                 "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "subtitle",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "additional_description",
+              "type": {
+                "text": "string"
               },
               "readonly": true
             },
@@ -3797,6 +3804,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -4333,12 +4346,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

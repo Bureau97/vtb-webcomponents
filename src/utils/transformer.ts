@@ -26,6 +26,8 @@ import {
 
 import {VtbConfig} from './interfaces.js';
 
+import { strip_tags } from './string.js';
+
 const re_body = /<body[^>]+>(.*)<\/body>/g;
 const re_style = /style="[^"]+"/gi;
 
@@ -137,7 +139,7 @@ export function parse_element_unit(
   const vtb_element_unit = new VtbElementUnit();
   // console.debug('element_data: ', element_data);
 
-  vtb_element_unit.title = element_data.subTitle || element_data.title;
+  vtb_element_unit.title = strip_tags(element_data.subTitle || element_data.title);
 
   // copy all element data to element unit
   vtb_element_unit.optional = element_data.optional;
@@ -188,12 +190,12 @@ export function parse_element(
 
   // set the element title
   // TODO: cleanup "tags" between < and >
-  vtb_element.title = element_data.title;
+  vtb_element.title = strip_tags(element_data.title);
   // console.info('Parse vtb element: ', vtb_element.title);
 
   // set the element subtitle
   // TODO: cleanup "tags" between < and >
-  vtb_element.subtitle = element_data.subTitle;
+  vtb_element.subtitle = strip_tags(element_data.subTitle);
 
   // set element description, get all contents from the <body> and remove all style attributes
   vtb_element.description = element_data.additionalText
@@ -487,8 +489,8 @@ export class VtbDataTransformer {
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
     // search and setup base info
-    this._data.title = vtbSrcData.title;
-    this._data.subtitle = vtbSrcData.subTitle || '';
+    this._data.title = strip_tags(vtbSrcData.title);
+    this._data.subtitle = strip_tags(vtbSrcData.subTitle || '');
     this._data.start_date = dayjs.utc(vtbSrcData.startDate);
     this._data.end_date = dayjs.utc(vtbSrcData.endDate);
     this._data.duration =

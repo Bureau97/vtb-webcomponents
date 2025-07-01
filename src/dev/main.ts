@@ -21,7 +21,8 @@ import {currency} from '../utils/currency';
 import {strip_tags} from '../utils/string';
 
 // const travelplan_source_url = '/optionals.json';
-const travelplan_source_url = '/travelplan.json';
+// const travelplan_source_url = '/travelplan.json';
+const travelplan_source_url = '/travelplan-dev.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
 const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
@@ -417,14 +418,14 @@ function vtbDataLoaded(vtb: Vtb) {
       if (itinerary_group.subtitle) {
         const _h2 = document.createElement('h3');
         _h2.innerHTML = itinerary_group.subtitle;
-        itinerary.appendChild(_h2);
+        // itinerary.appendChild(_h2);
       }
 
       // add VTB Text element to be able to edit the description
       const _t = new VtbTextElement();
       _t.addEventListener('vtbTextChanged', vtbTextChanged);
       _t.editable = TEXT_EDIT_MODE_ENABLED;
-      _t.innerHTML = itinerary_group.description || 'not set';
+      // _t.innerHTML = itinerary_group.description || 'not set';
       _t.id = String(itinerary_group.id);
       itinerary.appendChild(_t);
 
@@ -432,7 +433,7 @@ function vtbDataLoaded(vtb: Vtb) {
       for (const element of itinerary_group.filter_elements({})) {
         const _h3 = document.createElement('h4');
 
-        let title = element.title;
+        let title = 'ELEMENT:' + element.title;
         if (element.subtitle) {
           title += ` [${element.subtitle}]`;
         }
@@ -447,7 +448,7 @@ function vtbDataLoaded(vtb: Vtb) {
         _p.id = String(element.id);
         _p.addEventListener('vtbTextChanged', vtbTextChanged);
         _p.editable = TEXT_EDIT_MODE_ENABLED;
-        _p.innerHTML = element.description ?? 'not set';
+        // _p.innerHTML = element.description ?? 'not set';
         itinerary.appendChild(_p);
 
         // show all units for this acco
@@ -456,7 +457,7 @@ function vtbDataLoaded(vtb: Vtb) {
           const _u = document.createElement('li');
           _u.id = unit.id;
 
-          let content = '';
+          let content = 'UNIT: ';
 
           if (unit.quantity > 1) {
             content += unit.quantity + 'x ' + unit.title;
@@ -482,7 +483,9 @@ function vtbDataLoaded(vtb: Vtb) {
             }: ${currency(unit.price_diff)})`;
           }
 
-          _u.innerHTML = content;
+          if (content.length > 0) {
+            _u.innerHTML = content;
+          }
           units_list.appendChild(_u);
         }
 

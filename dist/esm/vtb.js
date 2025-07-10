@@ -145,6 +145,7 @@ export class Vtb {
         map.width = map_options.width;
         map.zoom = map_options.zoom;
         map.markergroups = [marker_group];
+        map.default_labels = map_options.default_labels || false;
         const container = document.getElementById(container_id);
         container?.appendChild(map);
         return map;

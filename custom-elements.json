@@ -1252,6 +1252,14 @@
             },
             {
               "kind": "field",
+              "name": "default_label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "lat",
               "type": {
                 "text": "number"
@@ -2857,6 +2865,15 @@
                 "text": "string | undefined"
               },
               "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "default_label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "default-label"
             }
           ],
           "attributes": [
@@ -2889,6 +2906,14 @@
                 "text": "string | undefined"
               },
               "fieldName": "label"
+            },
+            {
+              "name": "default-label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "default_label"
             }
           ],
           "superclass": {
@@ -3059,6 +3084,15 @@
               },
               "default": "false",
               "attribute": "connect-markers"
+            },
+            {
+              "kind": "field",
+              "name": "default_labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "default-labels"
             },
             {
               "kind": "field",
@@ -3303,6 +3337,14 @@
               },
               "default": "false",
               "fieldName": "connect_markers"
+            },
+            {
+              "name": "default-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "default_labels"
             },
             {
               "name": "connect-mode",
@@ -3704,6 +3746,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -4002,12 +4050,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

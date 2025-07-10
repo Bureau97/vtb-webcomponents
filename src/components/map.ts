@@ -19,7 +19,7 @@ export interface VtbMapOptions {
   height?: number;
   width?: number;
   zoom?: number;
-  default_labels: boolean
+  default_labels: boolean;
 }
 
 @customElement('vtb-map-marker')
@@ -191,9 +191,8 @@ export class VtbMapElement extends LitElement {
   @property({type: Boolean, attribute: 'connect-markers'})
   connect_markers = false;
 
-  @property({ type: Boolean, attribute: 'default-labels' })
+  @property({type: Boolean, attribute: 'default-labels'})
   default_labels = false;
-
 
   get connectMarkers(): boolean {
     return this.connect_markers;
@@ -522,13 +521,16 @@ export class VtbMapElement extends LitElement {
       'default labels: ': this.default_labels,
       'marker default label': marker.default_label,
       'marker label': marker.label
-    })
+    });
 
     if (marker.label) {
       markerOptions.label = marker.label;
     }
 
-    if ((this.default_labels || marker.default_label) && (!marker.label || marker.label === '')) {
+    if (
+      (this.default_labels || marker.default_label) &&
+      (!marker.label || marker.label === '')
+    ) {
       markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
     }
 

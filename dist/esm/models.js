@@ -296,6 +296,10 @@ export class VtbGeoLocation {
     }
 }
 export class VtbMapMarker extends VtbGeoLocation {
+    constructor() {
+        super(...arguments);
+        this.default_label = false;
+    }
 }
 export class VtbMapMarkerGroup {
     constructor() {

@@ -18,7 +18,7 @@ import {
 import {VtbTextElement} from '../components/text';
 
 // const travelplan_source_url = '/optionals.json';
-const travelplan_source_url = '/travelplan.json';
+const travelplan_source_url = '/travelplan-dev.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
 const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';

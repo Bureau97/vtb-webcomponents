@@ -24,7 +24,7 @@ import {strip_tags} from '../utils/string';
 const travelplan_source_url = '/travelplan.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
-const GOOGLE_MAPS_KEY = 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
+const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
 
 enum SegmentTypes {
   DEFAULT = 1,

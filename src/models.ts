@@ -394,6 +394,7 @@ export class VtbMapMarker
   zoom?: number;
   title?: string;
   content?: string;
+  default_label: boolean = false;
 }
 
 export class VtbMapMarkerGroup implements interfaces.VtbMapMarkerGroup {

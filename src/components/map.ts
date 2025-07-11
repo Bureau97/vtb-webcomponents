@@ -19,6 +19,7 @@ export interface VtbMapOptions {
   height?: number;
   width?: number;
   zoom?: number;
+  default_labels: boolean;
 }
 
 @customElement('vtb-map-marker')
@@ -34,6 +35,9 @@ export class VtbMapMarkerElement extends LitElement {
 
   @property({type: String})
   label?: string;
+
+  @property({type: Boolean, attribute: 'default-label'})
+  default_label: boolean = false;
 
   static override styles = css`
     :host {
@@ -186,6 +190,9 @@ export class VtbMapElement extends LitElement {
 
   @property({type: Boolean, attribute: 'connect-markers'})
   connect_markers = false;
+
+  @property({type: Boolean, attribute: 'default-labels'})
+  default_labels = false;
 
   get connectMarkers(): boolean {
     return this.connect_markers;
@@ -509,7 +516,23 @@ export class VtbMapElement extends LitElement {
     const markerOptions: google.maps.MarkerOptions = {};
     markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
     markerOptions.map = map;
-    markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
+
+    console.info({
+      'default labels: ': this.default_labels,
+      'marker default label': marker.default_label,
+      'marker label': marker.label
+    });
+
+    if (marker.label) {
+      markerOptions.label = marker.label;
+    }
+
+    if (
+      (this.default_labels || marker.default_label) &&
+      (!marker.label || marker.label === '')
+    ) {
+      markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
+    }
 
     const gmarker: google.maps.Marker = new google.maps.Marker(markerOptions);
     if (marker.title) {

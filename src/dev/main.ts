@@ -17,6 +17,7 @@ import {
   VtbCalculatorPriceElement
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
+import {currency} from '../utils/currency';
 import {strip_tags} from '../utils/string';
 
 // const travelplan_source_url = '/optionals.json';
@@ -165,7 +166,8 @@ function vtbDataLoaded(vtb: Vtb) {
     const map_options: VtbMapOptions = {
       connect_markers: true,
       connect_mode: 'flight',
-      api_key: GOOGLE_MAPS_KEY
+      api_key: GOOGLE_MAPS_KEY,
+      default_labels: false
     };
 
     const map_search: VtbFilterConfig = {
@@ -396,28 +398,38 @@ function vtbDataLoaded(vtb: Vtb) {
   }
 
   // itinerary
-  const itinerary_elements = vtb.filter_groups({
-    group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT]
+  const itinerary_groups = vtb.filter_groups({
+    // group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.FLIGHT]
   });
 
   const itinerary = document.getElementById('itinerary');
   if (itinerary) {
     // walk over all element groups
-    for (const itinerary_element of itinerary_elements) {
+
+    const h1 = document.createElement('h1');
+    h1.innerHTML = vtb.title;
+    const h2 = document.createElement('h2');
+    h2.innerHTML = `voor ${vtb.subtitle}`;
+
+    itinerary.appendChild(h1);
+    itinerary.appendChild(h2);
+
+    const _hrtitle = document.createElement('hr');
+    itinerary.appendChild(_hrtitle);
+
+    for (const itinerary_group of itinerary_groups) {
       const _h = document.createElement('h2');
       _h.innerHTML =
         'Dag ' +
-          itinerary_element.day +
-          (itinerary_element.nights >= 1
-            ? '-' + itinerary_element.last_day
-            : '') +
+          itinerary_group.day +
+          (itinerary_group.nights >= 1 ? '-' + itinerary_group.last_day : '') +
           ': ' +
-          itinerary_element.title || 'not set';
+          itinerary_group.title || 'not set';
       itinerary.appendChild(_h);
 
-      if (itinerary_element.subtitle) {
+      if (itinerary_group.subtitle) {
         const _h2 = document.createElement('h3');
-        _h2.innerHTML = itinerary_element.subtitle;
+        _h2.innerHTML = itinerary_group.subtitle;
         itinerary.appendChild(_h2);
       }
 
@@ -425,20 +437,21 @@ function vtbDataLoaded(vtb: Vtb) {
       const _t = new VtbTextElement();
       _t.addEventListener('vtbTextChanged', vtbTextChanged);
       _t.editable = TEXT_EDIT_MODE_ENABLED;
-      _t.innerHTML = itinerary_element.description || 'not set';
-      _t.id = String(itinerary_element.id);
+      _t.innerHTML = itinerary_group.description || 'not set';
+      _t.id = String(itinerary_group.id);
       itinerary.appendChild(_t);
 
       // show accos
-      for (const element of itinerary_element.filter_elements({
-        element_unit_ids: [UnitTypes.ACCO],
-        optional: false
-      })) {
+      for (const element of itinerary_group.filter_elements({})) {
         const _h3 = document.createElement('h4');
 
         let title = element.title;
         if (element.subtitle) {
-          title += element.subtitle;
+          title += ` [${element.subtitle}]`;
+        }
+
+        if (element.optional) {
+          title += ' (optioneel)';
         }
         _h3.innerHTML = title;
         itinerary.appendChild(_h3);
@@ -468,6 +481,20 @@ function vtbDataLoaded(vtb: Vtb) {
             unit.participant_prices.length === 1 ? 'persoon' : 'personen'
           })`;
 
+          if (unit.optional) {
+            content += ' (optioneel)';
+          }
+
+          if (unit.price) {
+            content += ` (${currency(unit.price)})`;
+          }
+
+          if (unit.price_diff != 0) {
+            content += ` (${
+              unit.price_diff > 0 ? 'meerprijs' : 'korting'
+            }: ${currency(unit.price_diff)})`;
+          }
+
           _u.innerHTML = content;
           units_list.appendChild(_u);
         }
@@ -475,127 +502,59 @@ function vtbDataLoaded(vtb: Vtb) {
         itinerary.appendChild(units_list);
       }
 
-      // show non-optional activities
-      for (const element of itinerary_element.filter_elements({
-        element_unit_ids: [UnitTypes.ACTIVITY],
+      const _hr = document.createElement('hr');
+      itinerary.appendChild(_hr);
+    }
+
+    // const _debug = document.getElementById('debug');
+    // if (_debug) {
+    //   _debug.innerHTML = JSON.stringify(vtb, null, 2);
+    // }
+
+    console.warn('--- debug non optional ---');
+
+    const debug_non_optional = document.getElementById('debug-non-optional');
+    if (debug_non_optional) {
+      const non_optional_elements = vtb.filter_elements({
         optional: false
-      })) {
-        const _h3 = document.createElement('h4');
-        let title = element.title;
-        if (element.subtitle) {
-          title += element.subtitle;
+      });
+
+      let non_optional_content = '';
+      for (const element of non_optional_elements) {
+        non_optional_content += `* ${element.title} \n`;
+
+        for (const unit of element.units) {
+          non_optional_content += `   ${unit.quantity}x  ${unit.title} ${unit.optional ? '[optioneel]' : ''} ${currency(unit.price_diff || unit.price)}\n`;
         }
-        _h3.innerHTML = title;
-
-        itinerary.appendChild(_h3);
-
-        const _p = new VtbTextElement();
-        _p.id = String(element.id);
-        _p.addEventListener('vtbTextChanged', vtbTextChanged);
-        _p.editable = TEXT_EDIT_MODE_ENABLED;
-        _p.innerHTML = element.description ?? 'not set';
-        itinerary.appendChild(_p);
       }
 
-      // get all upgrade acco elements
-      const upgrade_acco_elements = itinerary_element.filter_elements({
-        element_unit_ids: [UnitTypes.ACCO],
+      non_optional_content += `Totaal: {${currency(
+        vtb.calculate_price({
+          optional: false
+        })
+      )}}\n`;
+
+      debug_non_optional.innerHTML = non_optional_content;
+    }
+
+    console.warn('--- debug only optional ---');
+
+    const debug_only_optional = document.getElementById('debug-only-optional');
+    if (debug_only_optional) {
+      const non_optional_elements = vtb.filter_elements({
         optional: true
       });
 
-      // get all optional activity elements
-      const optional_activity_elements = itinerary_element.filter_elements({
-        element_unit_ids: [UnitTypes.ACTIVITY],
-        optional: true
-      });
+      let non_optional_content = '';
+      for (const element of non_optional_elements) {
+        non_optional_content += `* ${element.title} \n`;
 
-      // show acco upgrades and optional activities
-      if (
-        upgrade_acco_elements.length >= 1 ||
-        optional_activity_elements.length >= 1
-      ) {
-        const _upgrades = document.createElement('h4');
-        _upgrades.innerHTML = 'Up- en downgrades';
-        itinerary.appendChild(_upgrades);
-
-        // first acco upgrades
-        for (const element of upgrade_acco_elements) {
-          const _h3 = document.createElement('h4');
-          let title = element.title;
-
-          if (element.subtitle) {
-            title += element.subtitle;
-          }
-
-          if (element.optional) {
-            title += ' [optioneel]';
-          }
-
-          _h3.innerHTML = title;
-          itinerary.appendChild(_h3);
-
-          const _p = new VtbTextElement();
-          _p.id = String(element.id);
-          _p.addEventListener('vtbTextChanged', vtbTextChanged);
-          _p.editable = TEXT_EDIT_MODE_ENABLED;
-          _p.innerHTML = element.description ?? 'not set';
-          itinerary.appendChild(_p);
-
-          const units_list = document.createElement('ul');
-          // show all units for this acco
-          for (const unit of element.units) {
-            const _u = document.createElement('li');
-
-            let content = unit.title;
-
-            content += ` (voor ${unit.participant_prices.length} ${
-              unit.participant_prices.length === 1 ? 'persoon' : 'personen'
-            })`;
-
-            _u.innerHTML = content;
-            units_list.appendChild(_u);
-          }
-
-          itinerary.appendChild(units_list);
-
-          const price = document.createElement('p');
-          if (element.price_diff > 0) {
-            price.innerHTML = `Meerprijs: ${currency(element.price_diff)}`;
-          }
-          if (element.price_diff < 0) {
-            price.innerHTML = `Minderprijs: ${currency(element.price_diff)}`;
-          }
-          itinerary.appendChild(price);
-        }
-
-        // show optional activities
-        for (const element of optional_activity_elements) {
-          const _h3 = document.createElement('h4');
-          let title = element.title;
-
-          if (element.subtitle) {
-            title += element.subtitle;
-          }
-          _h3.innerHTML = title;
-          itinerary.appendChild(_h3);
-
-          const _p = new VtbTextElement();
-          _p.id = String(element.id);
-          _p.addEventListener('vtbTextChanged', vtbTextChanged);
-          _p.editable = TEXT_EDIT_MODE_ENABLED;
-          _p.innerHTML = element.description ?? 'not set';
-          itinerary.appendChild(_p);
-
-          const price = document.createElement('p');
-          if (element.price_diff > 0) {
-            price.innerHTML = `Meerprijs: ${currency(element.price_diff)}`;
-          }
-          if (element.price_diff < 0) {
-            price.innerHTML = `Minderprijs: ${currency(element.price_diff)}`;
-          }
-          itinerary.appendChild(price);
+        for (const unit of element.units) {
+          non_optional_content += `   ${unit.quantity}x  ${unit.title} ${unit.optional ? '[optioneel]' : ''} ${currency(unit.price_diff || unit.price)}\n`;
         }
       }
+
+      debug_only_optional.innerHTML = non_optional_content;
     }
   }
 }

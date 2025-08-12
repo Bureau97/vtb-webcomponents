@@ -32,6 +32,7 @@ enum SegmentTypes {
 }
 
 enum UnitTypes {
+  DAY = 1,
   ACCO = 2,
   FLIGHT = 3,
   FLIGHTNIGHT = 4,
@@ -414,7 +415,7 @@ function vtbDataLoaded(vtb: Vtb) {
           let content = '';
 
           if (unit.quantity > 1) {
-            content += unit.quantity + 'x ' + unit.title;
+            content += unit.quantity + 'x ' + unit.title + (unit.optional ? ' [optioneel]' : '');
           } else {
             content += unit.title;
           }
@@ -551,6 +552,82 @@ function vtbDataLoaded(vtb: Vtb) {
           itinerary.appendChild(price);
         }
       }
+    }
+
+    const debug = document.getElementById('debug');
+    if (debug) {
+
+      console.warn('FILTER ELEMENTS TEST@!');
+      console.info('FILTER ELEMENTS TEST@!');
+      console.warn('=====================================');
+
+      console.warn('All elements:');
+      const elements = vtb.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY]
+      });
+
+      let content = 'All elements:' + '\n' + '===================== \n';
+      elements.forEach(element => {
+        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+
+        element.units.forEach(unit => {
+          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        })
+      });
+      // console.debug('elements', elements);
+
+      console.warn('Non-optional elements:');
+      const non_optional_elements = vtb.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+        optional: false
+      });
+
+      content += '===================== \n';
+      content += 'Non-optional elements:' + '\n' + '===================== \n';
+      non_optional_elements.forEach(element => {
+        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+
+        element.units.forEach(unit => {
+          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        })
+      });
+      // console.debug('non_optional_elements', non_optional_elements);
+
+      console.warn('Optional elements')
+      const optional_elements = vtb.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+        optional: true
+      });
+
+      content += '===================== \n';
+      content += 'Optional elements:' + '\n' + '===================== \n';
+      optional_elements.forEach(element => {
+        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+
+        element.units.forEach(unit => {
+          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        })
+      });
+
+      console.warn('Participant elements')
+      const participant = vtb.filter_elements({
+        element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+        participant_ids: [13462]
+      });
+
+      content += '===================== \n';
+      content += 'Participant elements:' + '\n' + '===================== \n';
+      participant.forEach(element => {
+        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+
+        element.units.forEach(unit => {
+          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        })
+      });
+
+      debug.innerHTML = content;
+
+
     }
   }
 }

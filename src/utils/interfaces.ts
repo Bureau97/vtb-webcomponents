@@ -98,6 +98,7 @@ export interface VtbElementUnit {
   additional_description?: string;
   media?: Array<VtbMedia>;
   extra_fields?: Dictionary<VtbExtraField>;
+  location?: VtbMapMarker;
 }
 
 export interface VtbElement {

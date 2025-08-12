@@ -6,6 +6,9 @@ dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
 
+import * as _ from 'lodash';
+const {isEqual, sortBy} = _;
+
 import {
   VtbTravelPlanData,
   VtbElement,
@@ -189,7 +192,7 @@ export class VtbDataTransformer {
         car_element.optional &&
         last_element.unit_id == car_element.unit_id
       ) {
-        car_element.price_diff = car_element.price - last_element.price; // price difference between non-optional and optional elements
+        // car_element.price_diff = car_element.price - last_element.price; // price difference between non-optional and optional elements
       }
 
       if (
@@ -275,7 +278,7 @@ export class VtbDataTransformer {
 
   protected parse_vtb_segment(
     segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) {
+  ) : VtbElementGroup {
     const element_group = new VtbElementGroup();
     element_group.id = segment_data.vtbObjectId || segment_data.TSBlock.id;
     element_group.title = segment_data.title;
@@ -327,6 +330,7 @@ export class VtbDataTransformer {
     }
 
     let last_element: VtbElement | null = null;
+
     for (const element_data of segment_data.elements) {
       const vtb_element: VtbElement = this.parse_vtb_element(
         element_data,
@@ -349,63 +353,159 @@ export class VtbDataTransformer {
           .add(vtb_element.nights, 'days');
       }
 
-      if (
-        last_element &&
-        vtb_element.optional &&
-        last_element.unit_id == vtb_element.unit_id
-      ) {
-        console.debug('Optional element: ', {
-          title: vtb_element.title,
-          subtitle: vtb_element.subtitle,
-          price: vtb_element.price,
-          last_price: last_element.price,
-          price_diff: last_element.price - vtb_element.price
-        });
+      console.info(
+        'current element: ', [vtb_element.title, vtb_element.ts_product_id, vtb_element.startdate.toString(), vtb_element.unit_id])
 
-        vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
-      }
-
-      if (
-        last_element &&
-        last_element.ts_product_id == vtb_element.ts_product_id
-      ) {
-        if (vtb_element.optional && vtb_element._units.length == 1) {
-          vtb_element._units[0].price_diff = vtb_element.price_diff;
-        }
-
-        // copy all units and prices from vtb_element to last_element
-        last_element._units = last_element._units.concat(vtb_element._units);
-        last_element.participant_prices =
-          last_element.participant_prices.concat(
-            vtb_element.participant_prices
-          );
-
-        last_element.price = last_element._units.reduce(
-          (total, unit) => total + unit.price,
-          0
-        );
-
-        last_element.price_diff =
-          last_element.price_diff * last_element._units.length;
-
+      if (!last_element) {
+        console.info('last element not set, adding element to group and set element as last element');
+        element_group.add_element(vtb_element);
+        last_element = vtb_element;
         continue;
       }
 
+      console.info(
+        'last element: ', [last_element.title, last_element.ts_product_id, last_element.startdate.toString(), last_element.unit_id]);
+
+      if (last_element.ts_product_id == vtb_element.ts_product_id
+        && last_element.startdate.toString() == vtb_element.startdate.toString()
+        && last_element.enddate.toString() == vtb_element.enddate.toString()
+        && last_element.unit_id == vtb_element.unit_id
+      ) {
+        // add units to last element
+        console.info('current element id matches last element id, adding units to last element');
+        for (const unit of vtb_element._units) {
+
+          if (!unit.optional) {
+            last_element._units.push(unit);
+            continue;
+          }
+
+          for (const last_unit of last_element._units) {
+            if (last_unit.optional) {
+              continue;
+            }
+
+            if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+              console.info('unit participants match, setting price difference');
+              unit.price_diff = vtb_element.price - last_unit.price;
+              // unit.price = 0;
+
+              last_element._units.push(unit);
+
+              break;
+            }
+          }
+
+        }
+      }
+      else {
+
+        if (last_element.unit_id == vtb_element.unit_id
+            && last_element.startdate.toString() == vtb_element.startdate.toString()
+            && last_element.enddate.toString() == vtb_element.enddate.toString()
+        ) {
+          // we need to calculate the price difference between the last element and the current element
+          console.info('price difference between elements: ', vtb_element.price, last_element.price, vtb_element.price - last_element.price);
+
+          // we have to find the unit that matches the participants from the last element
+
+          console.info('current element: ', vtb_element.title);
+          console.info('last element: ', last_element.title);
+
+          for (const unit of vtb_element._units) {
+            console.info('current unit participants: ', unit.title, unit.participants);
+
+            if (!unit.optional) {
+              console.info('unit is not optional, skipping');
+              continue;
+            }
+            console.info('unit is optional, looking for matching unit in last element');
+
+
+            for (const last_unit of last_element._units) {
+              console.info('last unit participants: ', last_unit.title, last_unit.participants);
+
+              if (last_unit.optional) {
+                console.info('unit is optionsal, skipping');
+                continue;
+              }
+
+
+              if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+                console.info('unit participants match, setting price difference');
+                unit.price_diff = vtb_element.price - last_unit.price;
+                // unit.price = 0;
+              }
+            }
+          }
+        }
+
+        console.info('adding element to group and set current element as last element');
+        element_group.add_element(vtb_element);
+        last_element = vtb_element;
+      }
+
+
+      // if (
+      //   last_element &&
+      //   vtb_element.optional &&
+      //   last_element.unit_id == vtb_element.unit_id
+      // ) {
+      //   console.debug('Optional element: ', {
+      //     title: vtb_element.title,
+      //     subtitle: vtb_element.subtitle,
+      //     price: vtb_element.price,
+      //     last_price: last_element.price,
+      //     price_diff: last_element.price - vtb_element.price
+      //   });
+
+      //   vtb_element.price_diff = vtb_element.price - last_element.price; // price difference between non-optional and optional elements
+      // }
+
+      // if (
+      //   last_element &&
+      //   last_element.ts_product_id == vtb_element.ts_product_id
+      // ) {
+      //   if (vtb_element.optional && vtb_element._units.length == 1) {
+      //     vtb_element._units[0].price_diff = vtb_element.price_diff;
+      //   }
+
+      //   // copy all units and prices from vtb_element to last_element
+      //   last_element._units = last_element._units.concat(vtb_element._units);
+      //   last_element.participant_prices =
+      //     last_element.participant_prices.concat(
+      //       vtb_element.participant_prices
+      //     );
+
+      //   last_element.price = last_element._units.reduce(
+      //     (total, unit) => total + unit.price,
+      //     0
+      //   );
+
+      //   last_element.price_diff =
+      //     last_element.price_diff * last_element._units.length;
+
+      //   continue;
+      // }
+
       // console.info('adding new element: ', vtb_element);
 
-      element_group.add_element(vtb_element);
 
-      if (
-        !vtb_element.optional ||
-        (last_element && vtb_element.unit_id != last_element.unit_id)
-      ) {
-        // console.debug('set last element: ', {
-        //   title: vtb_element.title,
-        //   subtitle: vtb_element.subtitle,
-        //   price: vtb_element.price,
-        // });
-        last_element = vtb_element; // act as default element
-      }
+
+
+      // element_group.add_element(vtb_element);
+
+      // if (
+      //   !vtb_element.optional ||
+      //   (last_element && vtb_element.unit_id != last_element.unit_id)
+      // ) {
+      //   // console.debug('set last element: ', {
+      //   //   title: vtb_element.title,
+      //   //   subtitle: vtb_element.subtitle,
+      //   //   price: vtb_element.price,
+      //   // });
+      //   last_element = vtb_element; // act as default element
+      // }
     }
 
     if (segment_data.maps) {
@@ -422,10 +522,84 @@ export class VtbDataTransformer {
   private re_body = /<body[^>]+>(.*)<\/body>/g;
   private re_style = /style="[^"]+"/gi;
 
+  protected parse_vtb_element_unit(
+    element_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) : VtbElementUnit {
+
+    const vtb_element_unit = new VtbElementUnit();
+    vtb_element_unit.title = element_data.subTitle || element_data.title;
+    vtb_element_unit.optional = element_data.optional;
+
+    vtb_element_unit.price = parseFloat(element_data.olPrices?.salesTotal || 0);
+
+    vtb_element_unit.description = element_data.additionalText
+      ? element_data.additionalText
+        ?.replace(this.re_body, '$1')
+        ?.replace(this.re_style, '')
+      : '';
+
+    vtb_element_unit.additional_description = element_data.subAdditionalText
+      ? element_data.subAdditionalText
+        ?.replace(this.re_body, '$1')
+        ?.replace(this.re_style, '')
+      : '';
+
+    if (element_data.media && element_data.media.length >= 1) {
+      for (const media_data of element_data.media) {
+        const media = new VtbMedia();
+
+        media.src = media_data.url;
+        media.id = media_data.sourceId;
+        media.tags = media_data.tags;
+
+        vtb_element_unit.media.push(media);
+      }
+    }
+
+    for (const participant_id of Object.keys(
+      element_data.olPrices?.participants
+    )) {
+      const participant_element_price = new VtbParticipantPrice();
+
+      participant_element_price.participant_id = Number(participant_id);
+      participant_element_price.price = parseFloat(
+        element_data.olPrices.participants[participant_id]?.salesPrice || 0
+      );
+
+      // vtb_element.participant_prices.push(participant_element_price);
+      vtb_element_unit.participant_prices.push(participant_element_price);
+    }
+
+    if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
+      for (const extraField of element_data.TSOrderline.extraFieldValues) {
+        const vtb_extra_field = this.parse_extra_field(extraField);
+        vtb_element_unit.extra_fields[vtb_extra_field.name] = vtb_extra_field;
+      }
+    }
+
+    if (
+      element_data.maps &&
+      element_data.maps.enabled &&
+      element_data.maps.latitude != 0 &&
+      element_data.maps.longitude != 0
+    ) {
+      // console.debug('element_data.maps', element_data);
+
+      vtb_element_unit.location = new VtbMapMarker();
+      vtb_element_unit.location.lat = element_data.maps.latitude;
+      vtb_element_unit.location.lng = element_data.maps.longitude;
+      vtb_element_unit.location.zoom = element_data.maps.zoom || 16;
+      vtb_element_unit.location.title = element_data.title;
+      vtb_element_unit.location.content = element_data.additionalText;
+    }
+
+    return vtb_element_unit;
+  }
+
   protected parse_vtb_element(
     element_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     grouptitle?: string
-  ) {
+  ) : VtbElement {
     const vtb_element = new VtbElement();
     // console.debug('element_data: ', element_data);
     vtb_element.id = element_data.vtbObjectId || element_data.TSOrderline.id;
@@ -450,8 +624,8 @@ export class VtbDataTransformer {
           ?.replace(this.re_style, '')
       : '';
 
-    vtb_element.optional = element_data.optional;
-    vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
+    // vtb_element.optional = element_data.optional;
+    // vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
     vtb_element.nights = element_data.flexNights || element_data.nights;
     vtb_element.day = element_data.day;
     vtb_element.unit_id = element_data.unitId;
@@ -464,69 +638,62 @@ export class VtbDataTransformer {
       vtb_element.enddate = dayjs(element_data.endDate);
     }
 
-    if (element_data.media && element_data.media.length >= 1) {
-      for (const media_data of element_data.media) {
-        const media = new VtbMedia();
+    // if (element_data.media && element_data.media.length >= 1) {
+    //   for (const media_data of element_data.media) {
+    //     const media = new VtbMedia();
 
-        media.src = media_data.url;
-        media.id = media_data.sourceId;
-        media.tags = media_data.tags;
+    //     media.src = media_data.url;
+    //     media.id = media_data.sourceId;
+    //     media.tags = media_data.tags;
 
-        vtb_element.media.push(media);
-      }
-    }
+    //     vtb_element.media.push(media);
+    //   }
+    // }
 
     // copy all element data to element unit
-    const vtb_element_unit = new VtbElementUnit();
-    vtb_element_unit.title = element_data.subTitle || element_data.title;
-    vtb_element_unit.optional = vtb_element.optional;
-    vtb_element_unit.price = vtb_element.price;
-    vtb_element_unit.description = vtb_element.description;
-    vtb_element_unit.additional_description =
-      vtb_element.additional_description;
-    vtb_element_unit.media = vtb_element.media;
-    vtb_element_unit.extra_fields = vtb_element.extra_fields;
+    const vtb_element_unit = this.parse_vtb_element_unit(element_data);
 
-    for (const participant_id of Object.keys(
-      element_data.olPrices?.participants
-    )) {
-      const participant_element_price = new VtbParticipantPrice();
 
-      participant_element_price.participant_id = Number(participant_id);
-      participant_element_price.price = parseFloat(
-        element_data.olPrices.participants[participant_id]?.salesPrice || 0
-      );
+    // for (const participant_id of Object.keys(
+    //   element_data.olPrices?.participants
+    // )) {
+    //   const participant_element_price = new VtbParticipantPrice();
 
-      vtb_element.participant_prices.push(participant_element_price);
-      vtb_element_unit.participant_prices.push(participant_element_price);
-    }
+    //   participant_element_price.participant_id = Number(participant_id);
+    //   participant_element_price.price = parseFloat(
+    //     element_data.olPrices.participants[participant_id]?.salesPrice || 0
+    //   );
+
+    //   vtb_element.participant_prices.push(participant_element_price);
+    //   vtb_element_unit.participant_prices.push(participant_element_price);
+    // }
 
     vtb_element._units.push(vtb_element_unit);
 
-    if (
-      element_data.maps &&
-      element_data.maps.enabled &&
-      element_data.maps.latitude != 0 &&
-      element_data.maps.longitude != 0
-    ) {
-      // console.debug('element_data.maps', element_data);
+    // if (
+    //   element_data.maps &&
+    //   element_data.maps.enabled &&
+    //   element_data.maps.latitude != 0 &&
+    //   element_data.maps.longitude != 0
+    // ) {
+    //   // console.debug('element_data.maps', element_data);
 
-      vtb_element.location = new VtbMapMarker();
-      vtb_element.location.lat = element_data.maps.latitude;
-      vtb_element.location.lng = element_data.maps.longitude;
-      vtb_element.location.zoom = element_data.maps.zoom || 16;
-      vtb_element.location.title = element_data.title;
-      vtb_element.location.content = element_data.additionalText;
-    }
+    //   vtb_element.location = new VtbMapMarker();
+    //   vtb_element.location.lat = element_data.maps.latitude;
+    //   vtb_element.location.lng = element_data.maps.longitude;
+    //   vtb_element.location.zoom = element_data.maps.zoom || 16;
+    //   vtb_element.location.title = element_data.title;
+    //   vtb_element.location.content = element_data.additionalText;
+    // }
 
     // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
 
-    if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
-      for (const extraField of element_data.TSOrderline.extraFieldValues) {
-        const vtb_extra_field = this.parse_extra_field(extraField);
-        vtb_element.extra_fields[vtb_extra_field.name] = vtb_extra_field;
-      }
-    }
+    // if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
+    //   for (const extraField of element_data.TSOrderline.extraFieldValues) {
+    //     const vtb_extra_field = this.parse_extra_field(extraField);
+    //     vtb_element.extra_fields[vtb_extra_field.name] = vtb_extra_field;
+    //   }
+    // }
 
     return vtb_element;
   }

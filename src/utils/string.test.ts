@@ -1,4 +1,4 @@
-import { strip_tags } from './string';
+import {strip_tags} from './string';
 
 test('strip_tags', () => {
   expect(strip_tags('<p>test</p>')).toBe('test');

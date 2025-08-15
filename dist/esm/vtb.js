@@ -96,7 +96,7 @@ export class Vtb {
     }
     async load(travelplan_source_url) {
         // async load of travelplan json
-        console.info('Loading', travelplan_source_url);
+        console.debug('Loading', travelplan_source_url);
         const response = await fetch(travelplan_source_url);
         const vtbSrcData = await response.json();
         this.parse_vtb_data(vtbSrcData);

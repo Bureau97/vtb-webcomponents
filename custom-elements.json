@@ -714,6 +714,13 @@
             },
             {
               "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              }
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -736,6 +743,16 @@
                 "text": "Array<number>"
               },
               "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "clone",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "VtbElementUnit"
+                }
+              }
             }
           ]
         },
@@ -798,30 +815,6 @@
                 "text": "string"
               },
               "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "price_diff",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "optional",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
             },
             {
               "kind": "field",
@@ -914,6 +907,30 @@
                 "text": "Dictionary<VtbExtraField>"
               },
               "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "optional",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
             },
             {
               "kind": "field",
@@ -1136,6 +1153,15 @@
               },
               "privacy": "private",
               "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_elements",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
+              "privacy": "private",
+              "default": "[]"
             },
             {
               "kind": "method",
@@ -3944,6 +3970,11 @@
               "kind": "method",
               "name": "parse_vtb_segment",
               "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElementGroup"
+                }
+              },
               "parameters": [
                 {
                   "name": "segment_data",
@@ -3967,8 +3998,31 @@
             },
             {
               "kind": "method",
+              "name": "parse_vtb_element_unit",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElementUnit"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element_data",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "parse_vtb_element",
               "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElement"
+                }
+              },
               "parameters": [
                 {
                   "name": "element_data",

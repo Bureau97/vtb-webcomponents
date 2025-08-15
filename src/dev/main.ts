@@ -415,7 +415,11 @@ function vtbDataLoaded(vtb: Vtb) {
           let content = '';
 
           if (unit.quantity > 1) {
-            content += unit.quantity + 'x ' + unit.title + (unit.optional ? ' [optioneel]' : '');
+            content +=
+              unit.quantity +
+              'x ' +
+              unit.title +
+              (unit.optional ? ' [optioneel]' : '');
           } else {
             content += unit.title;
           }
@@ -556,7 +560,6 @@ function vtbDataLoaded(vtb: Vtb) {
 
     const debug = document.getElementById('debug');
     if (debug) {
-
       console.warn('FILTER ELEMENTS TEST@!');
       console.info('FILTER ELEMENTS TEST@!');
       console.warn('=====================================');
@@ -567,16 +570,47 @@ function vtbDataLoaded(vtb: Vtb) {
       });
 
       let content = 'All elements:' + '\n' + '===================== \n';
-      elements.forEach(element => {
-        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+      elements.forEach((element) => {
+        content +=
+          element.title +
+          ' [TS#' +
+          element.ts_product_id +
+          '|' +
+          element.unit_id +
+          ']' +
+          ' [' +
+          element.price +
+          '|' +
+          element.price_diff +
+          ']' +
+          '\n';
 
-        element.units.forEach(unit => {
-          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        element.units.forEach((unit) => {
+          content +=
+            '\t' +
+            unit.quantity +
+            'x ' +
+            unit.title +
+            ' [' +
+            unit.optional +
+            ']' +
+            ' [' +
+            unit.price +
+            '|' +
+            unit.price_diff +
+            ']' +
+            '\n';
 
-          unit.participant_prices.forEach(participant => {
-            content += '\t\t' + participant.participant_id + ' [' + participant.price + ']' + '\n';
-          })
-        })
+          unit.participant_prices.forEach((participant) => {
+            content +=
+              '\t\t' +
+              participant.participant_id +
+              ' [' +
+              participant.price +
+              ']' +
+              '\n';
+          });
+        });
       });
       // console.debug('elements', elements);
 
@@ -588,20 +622,51 @@ function vtbDataLoaded(vtb: Vtb) {
 
       content += '===================== \n';
       content += 'Non-optional elements:' + '\n' + '===================== \n';
-      non_optional_elements.forEach(element => {
-        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+      non_optional_elements.forEach((element) => {
+        content +=
+          element.title +
+          ' [TS#' +
+          element.ts_product_id +
+          '|' +
+          element.unit_id +
+          ']' +
+          ' [' +
+          element.price +
+          '|' +
+          element.price_diff +
+          ']' +
+          '\n';
 
-        element.units.forEach(unit => {
-          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        element.units.forEach((unit) => {
+          content +=
+            '\t' +
+            unit.quantity +
+            'x ' +
+            unit.title +
+            ' [' +
+            unit.optional +
+            ']' +
+            ' [' +
+            unit.price +
+            '|' +
+            unit.price_diff +
+            ']' +
+            '\n';
 
-          unit.participant_prices.forEach(participant => {
-            content += '\t\t' + participant.participant_id + ' [' + participant.price + ']' + '\n';
-          })
-        })
+          unit.participant_prices.forEach((participant) => {
+            content +=
+              '\t\t' +
+              participant.participant_id +
+              ' [' +
+              participant.price +
+              ']' +
+              '\n';
+          });
+        });
       });
       // console.debug('non_optional_elements', non_optional_elements);
 
-      console.warn('Optional elements')
+      console.warn('Optional elements');
       const optional_elements = vtb.filter_elements({
         element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
         optional: true
@@ -609,19 +674,50 @@ function vtbDataLoaded(vtb: Vtb) {
 
       content += '===================== \n';
       content += 'Optional elements:' + '\n' + '===================== \n';
-      optional_elements.forEach(element => {
-        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+      optional_elements.forEach((element) => {
+        content +=
+          element.title +
+          ' [TS#' +
+          element.ts_product_id +
+          '|' +
+          element.unit_id +
+          ']' +
+          ' [' +
+          element.price +
+          '|' +
+          element.price_diff +
+          ']' +
+          '\n';
 
-        element.units.forEach(unit => {
-          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        element.units.forEach((unit) => {
+          content +=
+            '\t' +
+            unit.quantity +
+            'x ' +
+            unit.title +
+            ' [' +
+            unit.optional +
+            ']' +
+            ' [' +
+            unit.price +
+            '|' +
+            unit.price_diff +
+            ']' +
+            '\n';
 
-          unit.participant_prices.forEach(participant => {
-            content += '\t\t' + participant.participant_id + ' [' + participant.price + ']' + '\n';
-          })
-        })
+          unit.participant_prices.forEach((participant) => {
+            content +=
+              '\t\t' +
+              participant.participant_id +
+              ' [' +
+              participant.price +
+              ']' +
+              '\n';
+          });
+        });
       });
 
-      console.warn('Participant elements')
+      console.warn('Participant elements');
       const participant_elements = vtb.filter_elements({
         element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
         participant_ids: [13495]
@@ -629,19 +725,50 @@ function vtbDataLoaded(vtb: Vtb) {
 
       content += '===================== \n';
       content += 'Participant elements:' + '\n' + '===================== \n';
-      participant_elements.forEach(element => {
-        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+      participant_elements.forEach((element) => {
+        content +=
+          element.title +
+          ' [TS#' +
+          element.ts_product_id +
+          '|' +
+          element.unit_id +
+          ']' +
+          ' [' +
+          element.price +
+          '|' +
+          element.price_diff +
+          ']' +
+          '\n';
 
-        element.units.forEach(unit => {
-          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        element.units.forEach((unit) => {
+          content +=
+            '\t' +
+            unit.quantity +
+            'x ' +
+            unit.title +
+            ' [' +
+            unit.optional +
+            ']' +
+            ' [' +
+            unit.price +
+            '|' +
+            unit.price_diff +
+            ']' +
+            '\n';
 
-          unit.participant_prices.forEach(participant => {
-            content += '\t\t' + participant.participant_id + ' [' + participant.price + ']' + '\n';
-          })
-        })
+          unit.participant_prices.forEach((participant) => {
+            content +=
+              '\t\t' +
+              participant.participant_id +
+              ' [' +
+              participant.price +
+              ']' +
+              '\n';
+          });
+        });
       });
 
-      console.warn('Participant elements')
+      console.warn('Participant elements');
       const participant_optional_elements = vtb.filter_elements({
         element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
         participant_ids: [2, 3],
@@ -649,22 +776,52 @@ function vtbDataLoaded(vtb: Vtb) {
       });
 
       content += '===================== \n';
-      content += 'Participant optional elements:' + '\n' + '===================== \n';
-      participant_optional_elements.forEach(element => {
-        content += element.title + ' [TS#' + element.ts_product_id + '|' + element.unit_id + ']' + ' [' + element.price + '|' + element.price_diff + ']' + '\n';
+      content +=
+        'Participant optional elements:' + '\n' + '===================== \n';
+      participant_optional_elements.forEach((element) => {
+        content +=
+          element.title +
+          ' [TS#' +
+          element.ts_product_id +
+          '|' +
+          element.unit_id +
+          ']' +
+          ' [' +
+          element.price +
+          '|' +
+          element.price_diff +
+          ']' +
+          '\n';
 
-        element.units.forEach(unit => {
-          content += '\t' + unit.quantity + 'x ' + unit.title + ' [' + unit.optional + ']' + ' [' + unit.price + '|' + unit.price_diff + ']' + '\n';
+        element.units.forEach((unit) => {
+          content +=
+            '\t' +
+            unit.quantity +
+            'x ' +
+            unit.title +
+            ' [' +
+            unit.optional +
+            ']' +
+            ' [' +
+            unit.price +
+            '|' +
+            unit.price_diff +
+            ']' +
+            '\n';
 
-          unit.participant_prices.forEach(participant => {
-            content += '\t\t' + participant.participant_id + ' [' + participant.price + ']' + '\n';
-          })
-        })
+          unit.participant_prices.forEach((participant) => {
+            content +=
+              '\t\t' +
+              participant.participant_id +
+              ' [' +
+              participant.price +
+              ']' +
+              '\n';
+          });
+        });
       });
 
       debug.innerHTML = content;
-
-
     }
   }
 }

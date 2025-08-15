@@ -278,7 +278,7 @@ export class VtbDataTransformer {
 
   protected parse_vtb_segment(
     segment_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) : VtbElementGroup {
+  ): VtbElementGroup {
     const element_group = new VtbElementGroup();
     element_group.id = segment_data.vtbObjectId || segment_data.TSBlock.id;
     element_group.title = segment_data.title;
@@ -366,15 +366,15 @@ export class VtbDataTransformer {
       // console.info(
       //   'last element: ', [last_element.title, last_element.ts_product_id, last_element.startdate.toString(), last_element.unit_id]);
 
-      if (last_element.ts_product_id == vtb_element.ts_product_id
-        && last_element.startdate.toString() == vtb_element.startdate.toString()
-        && last_element.enddate.toString() == vtb_element.enddate.toString()
-        && last_element.unit_id == vtb_element.unit_id
+      if (
+        last_element.ts_product_id == vtb_element.ts_product_id &&
+        last_element.startdate.toString() == vtb_element.startdate.toString() &&
+        last_element.enddate.toString() == vtb_element.enddate.toString() &&
+        last_element.unit_id == vtb_element.unit_id
       ) {
         // add units to last element
         // console.info('current element id matches last element id, adding units to last element');
         for (const unit of vtb_element._units) {
-
           if (!unit.optional) {
             last_element._units.push(unit);
             continue;
@@ -385,7 +385,9 @@ export class VtbDataTransformer {
               continue;
             }
 
-            if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+            if (
+              isEqual(sortBy(unit.participants), sortBy(last_unit.participants))
+            ) {
               // console.info('unit participants match, setting price difference');
               unit.price_diff = vtb_element.price - last_unit.price;
               // unit.price = 0;
@@ -395,14 +397,13 @@ export class VtbDataTransformer {
               break;
             }
           }
-
         }
-      }
-      else {
-
-        if (last_element.unit_id == vtb_element.unit_id
-            && last_element.startdate.toString() == vtb_element.startdate.toString()
-            && last_element.enddate.toString() == vtb_element.enddate.toString()
+      } else {
+        if (
+          last_element.unit_id == vtb_element.unit_id &&
+          last_element.startdate.toString() ==
+            vtb_element.startdate.toString() &&
+          last_element.enddate.toString() == vtb_element.enddate.toString()
         ) {
           // we need to calculate the price difference between the last element and the current element
           // console.info('price difference between elements: ', vtb_element.price, last_element.price, vtb_element.price - last_element.price);
@@ -421,7 +422,6 @@ export class VtbDataTransformer {
             }
             // console.info('unit is optional, looking for matching unit in last element');
 
-
             for (const last_unit of last_element._units) {
               // console.info('last unit participants: ', last_unit.title, last_unit.participants);
 
@@ -430,8 +430,12 @@ export class VtbDataTransformer {
                 continue;
               }
 
-
-              if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+              if (
+                isEqual(
+                  sortBy(unit.participants),
+                  sortBy(last_unit.participants)
+                )
+              ) {
                 // console.info('unit participants match, setting price difference');
                 unit.price_diff = vtb_element.price - last_unit.price;
                 // unit.price = 0;
@@ -461,9 +465,8 @@ export class VtbDataTransformer {
   private re_style = /style="[^"]+"/gi;
 
   protected parse_vtb_element_unit(
-    element_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) : VtbElementUnit {
-
+    element_data: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): VtbElementUnit {
     const vtb_element_unit = new VtbElementUnit();
     vtb_element_unit.title = element_data.subTitle || element_data.title;
     vtb_element_unit.optional = element_data.optional;
@@ -472,14 +475,14 @@ export class VtbDataTransformer {
 
     vtb_element_unit.description = element_data.additionalText
       ? element_data.additionalText
-        ?.replace(this.re_body, '$1')
-        ?.replace(this.re_style, '')
+          ?.replace(this.re_body, '$1')
+          ?.replace(this.re_style, '')
       : '';
 
     vtb_element_unit.additional_description = element_data.subAdditionalText
       ? element_data.subAdditionalText
-        ?.replace(this.re_body, '$1')
-        ?.replace(this.re_style, '')
+          ?.replace(this.re_body, '$1')
+          ?.replace(this.re_style, '')
       : '';
 
     if (element_data.media && element_data.media.length >= 1) {
@@ -537,7 +540,7 @@ export class VtbDataTransformer {
   protected parse_vtb_element(
     element_data: any, // eslint-disable-line @typescript-eslint/no-explicit-any
     grouptitle?: string
-  ) : VtbElement {
+  ): VtbElement {
     const vtb_element = new VtbElement();
     // console.debug('element_data: ', element_data);
     vtb_element.id = element_data.vtbObjectId || element_data.TSOrderline.id;
@@ -590,7 +593,6 @@ export class VtbDataTransformer {
 
     // copy all element data to element unit
     const vtb_element_unit = this.parse_vtb_element_unit(element_data);
-
 
     // for (const participant_id of Object.keys(
     //   element_data.olPrices?.participants

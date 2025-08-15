@@ -71,9 +71,11 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     additional_description: string;
     media: Array<VtbMedia>;
     extra_fields: Dictionary<VtbExtraField>;
+    location?: VtbMapMarker;
     private _hash;
     get id(): string;
     get participants(): Array<number>;
+    clone(): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
@@ -83,9 +85,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     subtitle: string;
     description: string;
     additional_description: string;
-    price: number;
-    price_diff: number;
-    optional: boolean;
     nights: number;
     hidden: boolean;
     day: number;
@@ -98,6 +97,9 @@ export declare class VtbElement implements interfaces.VtbElement {
     location?: VtbMapMarker;
     _units: Array<VtbElementUnit>;
     extra_fields: Dictionary<VtbExtraField>;
+    get optional(): boolean;
+    get price(): number;
+    get price_diff(): number;
     private _grouped;
     get units(): Array<VtbElementUnit>;
     get participants(): Array<number>;
@@ -127,6 +129,7 @@ export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     private elements_order;
     private mapped_elements_by_type;
     private mapped_elements_by_day;
+    private _elements;
     add_element(element: VtbElement): void;
     get elements(): Array<VtbElement>;
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;

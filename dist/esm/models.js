@@ -91,6 +91,16 @@ export class VtbElementUnit {
             return participant_price.participant_id;
         });
     }
+    clone() {
+        const _clone = Object.assign(new VtbElementUnit(), structuredClone(this));
+        _clone.media = [];
+        for (const _m of this.media) {
+            _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+        }
+        // reset participant_prices
+        _clone.participant_prices = [];
+        return _clone;
+    }
 }
 export class VtbElement {
     constructor() {
@@ -100,9 +110,9 @@ export class VtbElement {
         this.subtitle = '';
         this.description = '';
         this.additional_description = '';
-        this.price = 0.0;
-        this.price_diff = 0.0;
-        this.optional = false;
+        // price = 0.0;
+        // price_diff = 0.0;
+        // optional = false;
         this.nights = 0;
         this.hidden = false;
         this.day = 0;
@@ -114,6 +124,15 @@ export class VtbElement {
         this._units = [];
         this.extra_fields = {};
         this._grouped = [];
+    }
+    get optional() {
+        return this._units.length > 0 ? this._units[0].optional : false;
+    }
+    get price() {
+        return this._units.length > 0 ? this._units[0].price : 0.0;
+    }
+    get price_diff() {
+        return this._units.length > 0 ? this._units[0].price_diff : 0.0;
     }
     get units() {
         if (this._grouped.length <= 0 && this._units.length > 1) {
@@ -150,10 +169,14 @@ export class VtbElement {
         for (const _m of this.media) {
             _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
         }
+        // reset units and grouped
         _clone._units = [];
-        for (const _u of this._units) {
-            _clone._units.push(Object.assign(new VtbElementUnit(), structuredClone(_u)));
-        }
+        _clone._grouped = [];
+        // for (const _u of this._units) {
+        //   _clone._units.push(
+        //     Object.assign(new VtbElementUnit(), structuredClone(_u))
+        //   );
+        // }
         return _clone;
     }
 }
@@ -172,6 +195,7 @@ export class VtbElementGroup {
         this.elements_order = [];
         this.mapped_elements_by_type = {};
         this.mapped_elements_by_day = {};
+        this._elements = [];
     }
     get last_day() {
         return this.day + this.nights;
@@ -182,6 +206,7 @@ export class VtbElementGroup {
     add_element(element) {
         this.mapped_elements_by_id[element.id] = element;
         this.elements_order.push(element.id);
+        this._elements.push(element);
         if (element.unit_id) {
             if (!this.mapped_elements_by_type[element.unit_id]) {
                 this.mapped_elements_by_type[element.unit_id] = [];
@@ -196,81 +221,100 @@ export class VtbElementGroup {
         }
     }
     get elements() {
-        const ret = [];
-        for (const id of this.elements_order) {
-            ret.push(this.mapped_elements_by_id[id]);
-        }
-        return ret;
+        // const ret: Array<VtbElement> = [];
+        // for (const id of this.elements_order) {
+        //   ret.push(this.mapped_elements_by_id[id]);
+        // }
+        // return ret;
+        return this._elements;
     }
     filter_elements(config) {
         // const _element_ids = config.element_ids || [];
         // const element_ids = _element_ids.flat(Infinity);
+        // console.info('filter_elements: ', config);
         const _element_unit_ids = config.element_unit_ids || [];
         const element_unit_ids = _element_unit_ids.flat(Infinity);
         const _participant_ids = config?.participant_ids || [];
         const participant_ids = _participant_ids.flat(Infinity);
         let check_element_unit_ids = false;
         if (element_unit_ids.length >= 1) {
+            // console.info('check_element_unit_ids: ', element_unit_ids);
             check_element_unit_ids = true;
         }
         let check_participant_ids = false;
         if (participant_ids.length >= 1) {
+            // console.info('check_participant_ids: ', participant_ids);
             check_participant_ids = true;
         }
         let skip_optional = false;
         if (config?.optional === false) {
+            // console.info('skip_optional');
             skip_optional = true;
         }
         let only_optional = false;
         if (config?.optional === true) {
+            // console.info('only_optional');
             only_optional = true;
         }
         if (!check_element_unit_ids &&
             !check_participant_ids &&
             !skip_optional &&
             !only_optional) {
-            return this.elements;
-        }
-        let _elm_ids = [];
-        if (check_element_unit_ids) {
-            for (const unit_id of element_unit_ids) {
-                if (!this.mapped_elements_by_type[Number(unit_id)]) {
-                    continue;
-                }
-                _elm_ids = _elm_ids.concat(this.mapped_elements_by_type[Number(unit_id)]);
-            }
-        }
-        else {
-            _elm_ids = this.elements_order;
+            // console.info('no filters, return all elements');
+            return this._elements;
         }
         const _elements = [];
-        for (const id of this.elements_order) {
-            if (!_elm_ids.includes(id)) {
+        for (const _element of this._elements) {
+            if (!element_unit_ids.includes(Number(_element.unit_id))) {
                 continue;
             }
-            const _element = this.mapped_elements_by_id[id];
-            if (skip_optional && _element.optional) {
-                continue;
-            }
-            if (only_optional && !_element.optional) {
-                continue;
-            }
-            if (!check_participant_ids) {
-                _elements.push(_element);
-                continue;
-            }
-            if (check_participant_ids && _element.participants) {
-                // make a shallow copy so we're not messing with the original price element
-                const _element_copy = _element.clone();
-                let participants_unit_price = 0.0;
-                for (const participant_price of _element.participant_prices) {
-                    if (participant_ids.includes(participant_price.participant_id)) {
-                        participants_unit_price += participant_price.price;
-                    }
+            // console.info('[filter elements] working on element: ', _element.title);
+            // if (!_elm_ids.includes(id)) {
+            //   continue;
+            // }
+            // const _element = this.mapped_elements_by_id[id];
+            const _element_copy = _element.clone();
+            // console.info('[filter elements] element: ', _element.title);
+            for (const unit of _element.units) {
+                // console.info('[filter elements] unit: ', unit.title, unit.optional);
+                if (skip_optional && unit.optional) {
+                    // console.info('[filter elements] skip optional');
+                    continue;
                 }
-                _element_copy.price = participants_unit_price;
-                _elements.push(_element_copy);
+                if (only_optional && !unit.optional) {
+                    // console.info('[filter elements] only optional');
+                    continue;
+                }
+                const unit_copy = unit.clone();
+                if (!check_participant_ids) {
+                    // console.info('[filter elements] no participant ids, add unit to clone..');
+                    unit_copy.participant_prices = unit.participant_prices;
+                    _element_copy._units.push(unit_copy);
+                    continue;
+                }
+                if (check_participant_ids && _element.participants) {
+                    // console.info('[filter elements] check participant ids', unit.participant_prices, participant_ids);
+                    let unit_participants_price = 0;
+                    for (const participant_price of unit.participant_prices) {
+                        // console.info('[filter elements] participant_price: ', participant_price);
+                        if (participant_ids.includes(Number(participant_price.participant_id))) {
+                            unit_copy.participant_prices.push(participant_price);
+                            unit_participants_price += participant_price.price;
+                        }
+                    }
+                    unit_copy.price = unit_participants_price;
+                    if (unit_copy.participant_prices.length === 0) {
+                        continue;
+                    }
+                    _element_copy._units.push(unit_copy);
+                }
             }
+            if (_element_copy._units.length === 0) {
+                // console.info('[filter elements] no units left, skip element');
+                continue;
+            }
+            // console.info('[filter elements] add element_copy: ', _element_copy);
+            _elements.push(_element_copy);
         }
         return _elements;
     }
@@ -407,6 +451,7 @@ export class VtbTravelPlanData {
         let ret = [];
         const element_groups = this.filter_element_groups(config);
         for (const group of element_groups) {
+            // console.info('group: ', group.title);
             ret = ret.concat(group.filter_elements(config));
         }
         return ret;

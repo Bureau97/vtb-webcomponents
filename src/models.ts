@@ -349,7 +349,6 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
     const _elements: Array<VtbElement> = [];
 
     for (const _element of this._elements) {
-
       if (!element_unit_ids.includes(Number(_element.unit_id))) {
         continue;
       }
@@ -393,7 +392,9 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
           let unit_participants_price = 0;
           for (const participant_price of unit.participant_prices) {
             // console.info('[filter elements] participant_price: ', participant_price);
-            if (participant_ids.includes(Number(participant_price.participant_id))) {
+            if (
+              participant_ids.includes(Number(participant_price.participant_id))
+            ) {
               unit_copy.participant_prices.push(participant_price);
               unit_participants_price += participant_price.price;
             }

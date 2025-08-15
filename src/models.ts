@@ -314,25 +314,25 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
 
     let check_element_unit_ids = false;
     if (element_unit_ids.length >= 1) {
-      console.info('check_element_unit_ids: ', element_unit_ids);
+      // console.info('check_element_unit_ids: ', element_unit_ids);
       check_element_unit_ids = true;
     }
 
     let check_participant_ids = false;
     if (participant_ids.length >= 1) {
-      console.info('check_participant_ids: ', participant_ids);
+      // console.info('check_participant_ids: ', participant_ids);
       check_participant_ids = true;
     }
 
     let skip_optional = false;
     if (config?.optional === false) {
-      console.info('skip_optional');
+      // console.info('skip_optional');
       skip_optional = true;
     }
 
     let only_optional = false;
     if (config?.optional === true) {
-      console.info('only_optional');
+      // console.info('only_optional');
       only_optional = true;
     }
 
@@ -342,35 +342,19 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       !skip_optional &&
       !only_optional
     ) {
-      console.info('no filters, return all elements');
+      // console.info('no filters, return all elements');
       return this._elements;
     }
 
-    // let _elm_ids: Array<string> = [];
-    // if (check_element_unit_ids) {
-    //   for (const unit_id of element_unit_ids) {
-    //     if (!this.mapped_elements_by_type[Number(unit_id)]) {
-    //       continue;
-    //     }
-
-    //     _elm_ids = _elm_ids.concat(
-    //       this.mapped_elements_by_type[Number(unit_id)]
-    //     );
-    //   }
-    // } else {
-    //   _elm_ids = this.elements_order;
-    // }
-
     const _elements: Array<VtbElement> = [];
 
-    // for (const id of this.elements_order) {
     for (const _element of this._elements) {
 
       if (!element_unit_ids.includes(Number(_element.unit_id))) {
         continue;
       }
 
-      console.info('[filter elements] working on element: ', _element.title);
+      // console.info('[filter elements] working on element: ', _element.title);
 
       // if (!_elm_ids.includes(id)) {
       //   continue;
@@ -379,24 +363,24 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       // const _element = this.mapped_elements_by_id[id];
       const _element_copy = _element.clone();
 
-      console.info('[filter elements] element: ', _element.title);
+      // console.info('[filter elements] element: ', _element.title);
       for (const unit of _element.units) {
-        console.info('[filter elements] unit: ', unit.title, unit.optional);
+        // console.info('[filter elements] unit: ', unit.title, unit.optional);
 
         if (skip_optional && unit.optional) {
-          console.info('[filter elements] skip optional');
+          // console.info('[filter elements] skip optional');
           continue;
         }
 
         if (only_optional && !unit.optional) {
-          console.info('[filter elements] only optional');
+          // console.info('[filter elements] only optional');
           continue;
         }
 
         const unit_copy = unit.clone();
 
         if (!check_participant_ids) {
-          console.info('[filter elements] no participant ids, add unit to clone..');
+          // console.info('[filter elements] no participant ids, add unit to clone..');
           unit_copy.participant_prices = unit.participant_prices;
 
           _element_copy._units.push(unit_copy);
@@ -404,11 +388,11 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
         }
 
         if (check_participant_ids && _element.participants) {
-          console.info('[filter elements] check participant ids', unit.participant_prices, participant_ids);
+          // console.info('[filter elements] check participant ids', unit.participant_prices, participant_ids);
 
           let unit_participants_price = 0;
           for (const participant_price of unit.participant_prices) {
-            console.info('[filter elements] participant_price: ', participant_price);
+            // console.info('[filter elements] participant_price: ', participant_price);
             if (participant_ids.includes(Number(participant_price.participant_id))) {
               unit_copy.participant_prices.push(participant_price);
               unit_participants_price += participant_price.price;
@@ -426,40 +410,12 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       }
 
       if (_element_copy._units.length === 0) {
-        console.info('[filter elements] no units left, skip element');
+        // console.info('[filter elements] no units left, skip element');
         continue;
       }
 
-      console.info('[filter elements] add element_copy: ', _element_copy);
+      // console.info('[filter elements] add element_copy: ', _element_copy);
       _elements.push(_element_copy);
-
-
-      // if (skip_optional && _element.optional) {
-      //   continue;
-      // }
-
-      // if (only_optional && !_element.optional) {
-      //   continue;
-      // }
-
-      // if (!check_participant_ids) {
-      //   _elements.push(_element);
-      //   continue;
-      // }
-
-      // if (check_participant_ids && _element.participants) {
-      //   // make a shallow copy so we're not messing with the original price element
-      //   const _element_copy: VtbElement = _element.clone();
-
-      //   let participants_unit_price = 0.0;
-      //   for (const participant_price of _element.participant_prices) {
-      //     if (participant_ids.includes(participant_price.participant_id)) {
-      //       participants_unit_price += participant_price.price;
-      //     }
-      //   }
-      //   // _element_copy.price = participants_unit_price;
-      //   _elements.push(_element_copy);
-      // }
     }
 
     return _elements;
@@ -641,7 +597,7 @@ export class VtbTravelPlanData implements interfaces.VtbTravelPlanData {
 
     const element_groups = this.filter_element_groups(config);
     for (const group of element_groups) {
-      console.info('group: ', group.title);
+      // console.info('group: ', group.title);
       ret = ret.concat(group.filter_elements(config));
     }
 

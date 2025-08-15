@@ -4,8 +4,9 @@ import duration from 'dayjs/plugin/duration.js'; // import plugin
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
-import * as _ from 'lodash';
-const { isEqual, sortBy } = _;
+// import * as _ from 'lodash';
+// const {isEqual, sortBy} = _;
+import { isEqual, sortBy } from 'lodash';
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 export class VtbDataTransformer {
     constructor(vtb_config) {

@@ -6,8 +6,10 @@ dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
 
-import * as _ from 'lodash';
-const {isEqual, sortBy} = _;
+// import * as _ from 'lodash';
+// const {isEqual, sortBy} = _;
+
+import {isEqual, sortBy} from 'lodash';
 
 import {
   VtbTravelPlanData,

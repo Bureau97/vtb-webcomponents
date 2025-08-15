@@ -6,10 +6,7 @@ dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
 
-// import * as _ from 'lodash';
-// const {isEqual, sortBy} = _;
-
-import {isEqual, sortBy} from 'lodash';
+import * as _ from 'lodash';
 
 import {
   VtbTravelPlanData,
@@ -388,7 +385,10 @@ export class VtbDataTransformer {
             }
 
             if (
-              isEqual(sortBy(unit.participants), sortBy(last_unit.participants))
+              _.isEqual(
+                _.sortBy(unit.participants),
+                _.sortBy(last_unit.participants)
+              )
             ) {
               // console.info('unit participants match, setting price difference');
               unit.price_diff = vtb_element.price - last_unit.price;
@@ -433,9 +433,9 @@ export class VtbDataTransformer {
               }
 
               if (
-                isEqual(
-                  sortBy(unit.participants),
-                  sortBy(last_unit.participants)
+                _.isEqual(
+                  _.sortBy(unit.participants),
+                  _.sortBy(last_unit.participants)
                 )
               ) {
                 // console.info('unit participants match, setting price difference');

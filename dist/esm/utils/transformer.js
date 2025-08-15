@@ -4,9 +4,7 @@ import duration from 'dayjs/plugin/duration.js'; // import plugin
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
-// import * as _ from 'lodash';
-// const {isEqual, sortBy} = _;
-import { isEqual, sortBy } from 'lodash';
+import * as _ from 'lodash';
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 export class VtbDataTransformer {
     constructor(vtb_config) {
@@ -270,7 +268,7 @@ export class VtbDataTransformer {
                         if (last_unit.optional) {
                             continue;
                         }
-                        if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+                        if (_.isEqual(_.sortBy(unit.participants), _.sortBy(last_unit.participants))) {
                             // console.info('unit participants match, setting price difference');
                             unit.price_diff = vtb_element.price - last_unit.price;
                             // unit.price = 0;
@@ -303,7 +301,7 @@ export class VtbDataTransformer {
                                 // console.info('unit is optionsal, skipping');
                                 continue;
                             }
-                            if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
+                            if (_.isEqual(_.sortBy(unit.participants), _.sortBy(last_unit.participants))) {
                                 // console.info('unit participants match, setting price difference');
                                 unit.price_diff = vtb_element.price - last_unit.price;
                                 // unit.price = 0;

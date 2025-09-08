@@ -170,11 +170,12 @@ export class VtbElement {
         return this._units.length > 0 ? this._units[0].extra_fields : {};
     }
     get media() {
-        const _media = [];
-        for (const _u of this._units) {
-            _media.push(..._u.media);
-        }
-        return _media;
+        // const _media = [];
+        // for (const _u of this._units) {
+        //   _media.push(..._u.media);
+        // }
+        // return _media;
+        return this._units.length > 0 ? this._units[0].media : [];
     }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));

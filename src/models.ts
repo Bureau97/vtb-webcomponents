@@ -150,8 +150,8 @@ export class VtbElement implements interfaces.VtbElement {
   ts_product_id: number = 0;
   title: string = '';
   subtitle: string = '';
-  description: string = '';
-  additional_description: string = '';
+  // description: string = '';
+  // additional_description: string = '';
   // price = 0.0;
   // price_diff = 0.0;
   // optional = false;
@@ -213,6 +213,14 @@ export class VtbElement implements interfaces.VtbElement {
 
   get days(): number {
     return this.nights + 1;
+  }
+
+  get description(): string {
+    return this._units.length > 0 ? this._units[0].description : '';
+  }
+
+  get additional_description(): string {
+    return this._units.length > 0 ? this._units[0].additional_description : '';
   }
 
   public clone(): VtbElement {

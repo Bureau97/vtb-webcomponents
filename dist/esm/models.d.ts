@@ -83,8 +83,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     ts_product_id: number;
     title: string;
     subtitle: string;
-    description: string;
-    additional_description: string;
     nights: number;
     hidden: boolean;
     day: number;
@@ -105,6 +103,8 @@ export declare class VtbElement implements interfaces.VtbElement {
     get participants(): Array<number>;
     get last_day(): number;
     get days(): number;
+    get description(): string;
+    get additional_description(): string;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {

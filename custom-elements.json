@@ -802,22 +802,6 @@
             },
             {
               "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "additional_description",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
               "name": "nights",
               "type": {
                 "text": "number"
@@ -970,6 +954,22 @@
               "name": "days",
               "type": {
                 "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "additional_description",
+              "type": {
+                "text": "string"
               },
               "readonly": true
             },
@@ -3730,6 +3730,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -4056,12 +4062,6 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

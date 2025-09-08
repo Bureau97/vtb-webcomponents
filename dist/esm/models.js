@@ -108,8 +108,8 @@ export class VtbElement {
         this.ts_product_id = 0;
         this.title = '';
         this.subtitle = '';
-        this.description = '';
-        this.additional_description = '';
+        // description: string = '';
+        // additional_description: string = '';
         // price = 0.0;
         // price_diff = 0.0;
         // optional = false;
@@ -160,6 +160,12 @@ export class VtbElement {
     }
     get days() {
         return this.nights + 1;
+    }
+    get description() {
+        return this._units.length > 0 ? this._units[0].description : '';
+    }
+    get additional_description() {
+        return this._units.length > 0 ? this._units[0].additional_description : '';
     }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));

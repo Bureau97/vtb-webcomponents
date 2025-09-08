@@ -94,7 +94,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     media: Array<VtbMedia>;
     location?: VtbMapMarker;
     _units: Array<VtbElementUnit>;
-    extra_fields: Dictionary<VtbExtraField>;
     get optional(): boolean;
     get price(): number;
     get price_diff(): number;
@@ -105,6 +104,7 @@ export declare class VtbElement implements interfaces.VtbElement {
     get days(): number;
     get description(): string;
     get additional_description(): string;
+    get extra_fields(): Dictionary<VtbExtraField>;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {

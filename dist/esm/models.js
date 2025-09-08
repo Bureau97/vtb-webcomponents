@@ -122,9 +122,9 @@ export class VtbElement {
         this.participant_prices = [];
         this.media = [];
         this._units = [];
-        this.extra_fields = {};
         this._grouped = [];
     }
+    // extra_fields: Dictionary<VtbExtraField> = {};
     get optional() {
         return this._units.length > 0 ? this._units[0].optional : false;
     }
@@ -166,6 +166,9 @@ export class VtbElement {
     }
     get additional_description() {
         return this._units.length > 0 ? this._units[0].additional_description : '';
+    }
+    get extra_fields() {
+        return this._units.length > 0 ? this._units[0].extra_fields : {};
     }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));

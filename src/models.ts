@@ -166,7 +166,7 @@ export class VtbElement implements interfaces.VtbElement {
   media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
   _units: Array<VtbElementUnit> = [];
-  extra_fields: Dictionary<VtbExtraField> = {};
+  // extra_fields: Dictionary<VtbExtraField> = {};
 
   get optional(): boolean {
     return this._units.length > 0 ? this._units[0].optional : false;
@@ -221,6 +221,10 @@ export class VtbElement implements interfaces.VtbElement {
 
   get additional_description(): string {
     return this._units.length > 0 ? this._units[0].additional_description : '';
+  }
+
+  get extra_fields(): Dictionary<VtbExtraField> {
+    return this._units.length > 0 ? this._units[0].extra_fields : {};
   }
 
   public clone(): VtbElement {

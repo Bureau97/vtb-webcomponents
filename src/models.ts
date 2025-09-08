@@ -163,7 +163,7 @@ export class VtbElement implements interfaces.VtbElement {
   unit_id: number = 0;
   participant_prices: Array<VtbParticipantPrice> = [];
   grouptitle?: string;
-  media: Array<VtbMedia> = [];
+  // media: Array<VtbMedia> = [];
   location?: VtbMapMarker;
   _units: Array<VtbElementUnit> = [];
   // extra_fields: Dictionary<VtbExtraField> = {};
@@ -227,16 +227,24 @@ export class VtbElement implements interfaces.VtbElement {
     return this._units.length > 0 ? this._units[0].extra_fields : {};
   }
 
+  get media(): Array<VtbMedia> {
+    const _media = [];
+    for (const _u of this._units) {
+      _media.push(..._u.media);
+    }
+    return _media;
+  }
+
   public clone(): VtbElement {
     const _clone = Object.assign(new VtbElement(), structuredClone(this));
 
     _clone.startdate = dayjs(this.startdate.format());
     _clone.enddate = dayjs(this.enddate.format());
 
-    _clone.media = [];
-    for (const _m of this.media) {
-      _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
-    }
+    // _clone.media = [];
+    // for (const _m of this.media) {
+    //   _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+    // }
 
     // reset units and grouped
     _clone._units = [];

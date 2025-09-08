@@ -120,7 +120,6 @@ export class VtbElement {
         this.enddate = dayjs();
         this.unit_id = 0;
         this.participant_prices = [];
-        this.media = [];
         this._units = [];
         this._grouped = [];
     }
@@ -170,14 +169,21 @@ export class VtbElement {
     get extra_fields() {
         return this._units.length > 0 ? this._units[0].extra_fields : {};
     }
+    get media() {
+        const _media = [];
+        for (const _u of this._units) {
+            _media.push(..._u.media);
+        }
+        return _media;
+    }
     clone() {
         const _clone = Object.assign(new VtbElement(), structuredClone(this));
         _clone.startdate = dayjs(this.startdate.format());
         _clone.enddate = dayjs(this.enddate.format());
-        _clone.media = [];
-        for (const _m of this.media) {
-            _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
-        }
+        // _clone.media = [];
+        // for (const _m of this.media) {
+        //   _clone.media.push(Object.assign(new VtbMedia(), structuredClone(_m)));
+        // }
         // reset units and grouped
         _clone._units = [];
         _clone._grouped = [];

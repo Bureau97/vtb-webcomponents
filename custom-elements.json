@@ -863,14 +863,6 @@
             },
             {
               "kind": "field",
-              "name": "media",
-              "type": {
-                "text": "Array<VtbMedia>"
-              },
-              "default": "[]"
-            },
-            {
-              "kind": "field",
               "name": "location",
               "type": {
                 "text": "VtbMapMarker | undefined"
@@ -970,6 +962,14 @@
               "name": "extra_fields",
               "type": {
                 "text": "Dictionary<VtbExtraField>"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "media",
+              "type": {
+                "text": "Array<VtbMedia>"
               },
               "readonly": true
             },

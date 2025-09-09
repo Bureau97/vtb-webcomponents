@@ -721,6 +721,22 @@
             },
             {
               "kind": "field",
+              "name": "_element_id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_ts_product_id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -2201,6 +2217,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3730,12 +3752,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",

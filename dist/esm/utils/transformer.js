@@ -268,34 +268,60 @@ export class VtbDataTransformer {
                     .add(vtb_element.nights, 'days');
             }
             // console.info(
-            //   'current element: ', [vtb_element.title, vtb_element.ts_product_id, vtb_element.startdate.toString(), vtb_element.unit_id])
+            //   '[parse_vtb_segment] current element: ', [vtb_element.title, vtb_element.ts_product_id, vtb_element.startdate.toString(), vtb_element.unit_id])
             if (!last_element) {
-                // console.info('last element not set, adding element to group and set element as last element');
+                // console.info('[parse_vtb_segment] last element not set, adding element to group and set element as last element');
                 element_group.add_element(vtb_element);
                 last_element = vtb_element;
                 continue;
             }
             // console.info(
-            //   'last element: ', [last_element.title, last_element.ts_product_id, last_element.startdate.toString(), last_element.unit_id]);
+            //   '[parse_vtb_segment] last element: ', [last_element.title, last_element.ts_product_id, last_element.startdate.toString(), last_element.unit_id]);
             if (last_element.ts_product_id == vtb_element.ts_product_id &&
                 last_element.startdate.toString() == vtb_element.startdate.toString() &&
                 last_element.enddate.toString() == vtb_element.enddate.toString() &&
                 last_element.unit_id == vtb_element.unit_id) {
                 // add units to last element
-                // console.info('current element id matches last element id, adding units to last element');
+                // console.info('[parse_vtb_segment] current product id matches last element id, adding units to last element', vtb_element.ts_product_id);
+                // console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
+                // console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
+                // walk through the current units
                 for (const unit of vtb_element._units) {
+                    // console.info('[parse_vtb_segment] current unit: ', unit);
+                    // if the unit is not optional, add it to the last element
                     if (!unit.optional) {
+                        // console.info('[parse_vtb_segment] unit is not optional, adding unit to last element');
                         last_element._units.push(unit);
                         continue;
                     }
+                    // walk through the units of the last element
+                    // to see if the unit participants match
                     for (const last_unit of last_element._units) {
+                        // console.info('[parse_vtb_segment] last unit: ', unit);
+                        // if the last unit is optional, skip it
+                        // we need to match against a non-optional unit
                         if (last_unit.optional) {
+                            // console.info('[parse_vtb_segment] last unit is optional, skipping');
                             continue;
                         }
+                        // if the unit participants match, set the price difference
+                        // betweem the current unit and the last unit
                         if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
-                            // console.info('unit participants match, setting price difference');
-                            unit.price_diff = vtb_element.price - last_unit.price;
+                            // console.info('[parse_vtb_segment]   unit participants match, setting price difference');
+                            unit.price_diff = unit.price - last_unit.price;
                             // unit.price = 0;
+                            last_element._units.push(unit);
+                            break;
+                        }
+                        // if the unit participants do not match, add the unit to the last element
+                        // it could be a completely different alternative to the (multiple) units of the last element
+                        else {
+                            // console.debug(
+                            //   '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
+                            // );
+                            // set unit price difference by substracting the total element price from the last element from
+                            // the unit price
+                            unit.price_diff = unit.price - last_element.price; // TODO: check if this is correct
                             last_element._units.push(unit);
                             break;
                         }
@@ -310,8 +336,9 @@ export class VtbDataTransformer {
                     // we need to calculate the price difference between the last element and the current element
                     // console.info('price difference between elements: ', vtb_element.price, last_element.price, vtb_element.price - last_element.price);
                     // we have to find the unit that matches the participants from the last element
-                    // console.info('current element: ', vtb_element.title);
-                    // console.info('last element: ', last_element.title);
+                    // console.info('[parse_vtb_segment] current unit id matches last element id, adding units to last element', vtb_element.unit_id);
+                    // console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
+                    // console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
                     for (const unit of vtb_element._units) {
                         // console.info('current unit participants: ', unit.title, unit.participants);
                         if (!unit.optional) {
@@ -326,14 +353,23 @@ export class VtbDataTransformer {
                                 continue;
                             }
                             if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
-                                // console.info('unit participants match, setting price difference');
+                                // console.info('[parse_vtb_segment]   unit participants match, setting price difference');
                                 unit.price_diff = vtb_element.price - last_unit.price;
                                 // unit.price = 0;
+                                break;
+                            }
+                            else {
+                                console.debug('[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit);
+                                last_element._units.push(unit);
+                                break;
                             }
                         }
                     }
                 }
-                // console.info('adding element to group and set current element as last element');
+                // else {
+                //   console.debug('[parse_vtb_segment] current element does not match last element');
+                // }
+                // console.info('[parse_vtb_segment]     adding element to group and set current element as last element');
                 element_group.add_element(vtb_element);
                 last_element = vtb_element;
             }
@@ -352,6 +388,8 @@ export class VtbDataTransformer {
         const vtb_element_unit = new VtbElementUnit();
         vtb_element_unit.title = element_data.subTitle || element_data.title;
         vtb_element_unit.optional = element_data.optional;
+        vtb_element_unit._element_id = element_data.id;
+        vtb_element_unit._ts_product_id = element_data.ts_product_id;
         vtb_element_unit.price = parseFloat(element_data.olPrices?.salesTotal || 0);
         vtb_element_unit.description = element_data.additionalText
             ? element_data.additionalText

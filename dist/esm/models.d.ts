@@ -95,6 +95,8 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     media: Array<VtbMedia>;
     extra_fields: Dictionary<VtbExtraField>;
     location?: VtbMapMarker;
+    _element_id: number;
+    _ts_product_id: number;
     private _hash;
     get id(): string;
     get participants(): Array<number>;

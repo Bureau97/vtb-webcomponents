@@ -132,6 +132,8 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
   media: Array<VtbMedia> = [];
   extra_fields: Dictionary<VtbExtraField> = {};
   location?: VtbMapMarker;
+  _element_id: number = 0;
+  _ts_product_id: number = 0;
 
   private _hash: number = 0;
 
@@ -139,6 +141,7 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     if (!this._hash || this._hash == 0) {
       const to_hash = [
         this.title,
+        this.optional.toString(),
         new String(this.participant_prices.length)
       ].join(':');
       this._hash = murmurhash.v3(to_hash, 0x9747b28c);
@@ -230,20 +233,49 @@ export class VtbElement implements interfaces.VtbElement {
 
   private _grouped: Array<VtbElementUnit> = [];
   get units(): Array<VtbElementUnit> {
+    const log = false;
+
     if (this._grouped.length <= 0 && this._units.length > 1) {
+      // if (this.ts_product_id == 1130) {
+      //   log = true;
+      //   console.info('[vtbElement.units] this.ts_product_id == 1130', this._units);
+      // }
+      if (log) console.log('[vtbElement.units] grouping units');
+
       const grouped: Dictionary<VtbElementUnit> = {};
+
       for (const _u of this._units) {
         const _existing_keys = Object.keys(grouped);
         if (!_existing_keys.includes(_u.id)) {
+          if (log)
+            console.info(
+              '[vtbElement.units] adding unit to new group: ',
+              _u.id,
+              _u
+            );
           grouped[_u.id] = Object.assign(
             new VtbElementUnit(),
             structuredClone(_u)
           );
         } else {
+          if (log)
+            console.info(
+              '[vtbElement.units]adding unit to existing group: ',
+              _u.id,
+              _u
+            );
+          // grouped[_u.id].participant_prices.push(..._u.participant_prices);  // TODO: merge participant_prices??
           grouped[_u.id].quantity++;
         }
       }
+
       this._grouped = Object.values(grouped);
+    }
+
+    if (log) {
+      console.info('[vtbElement.units] return:');
+      console.log('[vtbElement.units] units: ', this._units);
+      console.log('[vtbElement.units] grouped: ', this._grouped);
     }
 
     return this._grouped.length ? this._grouped : this._units;
@@ -391,7 +423,6 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
   }
 
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
-    console.info('filter_elements: ', config);
     // const _element_ids = config.element_ids || [];
     // const element_ids = _element_ids.flat(Infinity);
     // console.info('filter_elements: ', config);
@@ -456,16 +487,16 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       const _element_copy = _element.clone();
 
       // console.info('[filter elements] element: ', _element.title);
-      for (const unit of _element.units) {
-        console.info('[filter elements] unit: ', unit.title, unit.optional);
+      for (const unit of _element._units) {
+        // console.info('[filter elements] unit: ', unit.title, unit.optional);
 
         if (skip_optional && unit.optional) {
-          console.info('[filter elements] skip optional');
+          // console.info('[filter elements] skip optional');
           continue;
         }
 
         if (only_optional && !unit.optional) {
-          console.info('[filter elements] only optional');
+          // console.info('[filter elements] only optional');
           continue;
         }
 

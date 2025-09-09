@@ -198,9 +198,15 @@ export class VtbElement implements interfaces.VtbElement {
 
   get price(): number {
     let _price = Number(0.0);
+
     for (const _u of this._units) {
+      if (_u.optional && _u.price_diff != 0) {
+        continue;
+      }
+
       _price += _u.price;
     }
+
     return _price;
 
     // return this._units.length > 0 ? this._units[0].price : 0.0;
@@ -208,9 +214,15 @@ export class VtbElement implements interfaces.VtbElement {
 
   get price_diff(): number {
     let _price_diff = Number(0.0);
+
     for (const _u of this._units) {
-      _price_diff += _u.price_diff;
+      if (!_u.optional) {
+        continue;
+      }
+
+      _price_diff += _u.price_diff != 0 ? _u.price_diff : _u.price;
     }
+
     return _price_diff;
 
     // return this._units.length > 0 ? this._units[0].price_diff : 0.0;

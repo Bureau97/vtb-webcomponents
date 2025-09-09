@@ -26,6 +26,8 @@ import { InlineEditor } from 'ckeditor5';
 export declare class VtbTextElement extends LitElement {
     static shadowRootOptions: {
         delegatesFocus: boolean;
+        clonable?: boolean;
+        customElementRegistry?: CustomElementRegistry;
         mode: ShadowRootMode;
         serializable?: boolean;
         slotAssignment?: SlotAssignmentMode;

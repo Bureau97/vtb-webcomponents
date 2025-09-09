@@ -863,13 +863,6 @@
             },
             {
               "kind": "field",
-              "name": "location",
-              "type": {
-                "text": "VtbMapMarker | undefined"
-              }
-            },
-            {
-              "kind": "field",
               "name": "_units",
               "type": {
                 "text": "Array<VtbElementUnit>"
@@ -970,6 +963,22 @@
               "name": "media",
               "type": {
                 "text": "Array<VtbMedia>"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "locations",
+              "type": {
+                "text": "Array<VtbMapMarker>"
               },
               "readonly": true
             },

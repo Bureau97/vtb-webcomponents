@@ -114,7 +114,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     unit_id: number;
     participant_prices: Array<VtbParticipantPrice>;
     grouptitle?: string;
-    location?: VtbMapMarker;
     _units: Array<VtbElementUnit>;
     get optional(): boolean;
     get price(): number;
@@ -128,6 +127,8 @@ export declare class VtbElement implements interfaces.VtbElement {
     get additional_description(): string;
     get extra_fields(): Dictionary<VtbExtraField>;
     get media(): Array<VtbMedia>;
+    get location(): VtbMapMarker | undefined;
+    get locations(): Array<VtbMapMarker>;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {

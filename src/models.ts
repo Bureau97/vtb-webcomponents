@@ -188,7 +188,7 @@ export class VtbElement implements interfaces.VtbElement {
   participant_prices: Array<VtbParticipantPrice> = [];
   grouptitle?: string;
   // media: Array<VtbMedia> = [];
-  location?: VtbMapMarker;
+  // location?: VtbMapMarker;
   _units: Array<VtbElementUnit> = [];
   // extra_fields: Dictionary<VtbExtraField> = {};
 
@@ -197,11 +197,23 @@ export class VtbElement implements interfaces.VtbElement {
   }
 
   get price(): number {
-    return this._units.length > 0 ? this._units[0].price : 0.0;
+    let _price = Number(0.0);
+    for (const _u of this._units) {
+      _price += _u.price_diff;
+    }
+    return _price;
+
+    // return this._units.length > 0 ? this._units[0].price : 0.0;
   }
 
   get price_diff(): number {
-    return this._units.length > 0 ? this._units[0].price_diff : 0.0;
+    let _price_diff = Number(0.0);
+    for (const _u of this._units) {
+      _price_diff += _u.price_diff;
+    }
+    return _price_diff;
+
+    // return this._units.length > 0 ? this._units[0].price_diff : 0.0;
   }
 
   private _grouped: Array<VtbElementUnit> = [];
@@ -263,6 +275,21 @@ export class VtbElement implements interfaces.VtbElement {
     // }
     // return _media;
     return this._units.length > 0 ? this._units[0].media : [];
+  }
+
+  get location(): VtbMapMarker | undefined {
+    return this._units.length > 0 ? this._units[0].location : undefined;
+  }
+
+  get locations(): Array<VtbMapMarker> {
+    const _locations = [];
+
+    for (const _u of this._units) {
+      if (!_u.location) continue;
+      _locations.push(_u.location);
+    }
+
+    return _locations;
   }
 
   public clone(): VtbElement {

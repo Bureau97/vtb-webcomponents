@@ -199,7 +199,7 @@ export class VtbElement implements interfaces.VtbElement {
   get price(): number {
     let _price = Number(0.0);
     for (const _u of this._units) {
-      _price += _u.price_diff;
+      _price += _u.price;
     }
     return _price;
 

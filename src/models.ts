@@ -1,3 +1,27 @@
+/**
+ *
+ * Copyright 2024 Huub Segers - B97
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import duration from 'dayjs/plugin/duration.js';
@@ -323,6 +347,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
   }
 
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
+    console.info('filter_elements: ', config);
     // const _element_ids = config.element_ids || [];
     // const element_ids = _element_ids.flat(Infinity);
     // console.info('filter_elements: ', config);
@@ -370,7 +395,10 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
     const _elements: Array<VtbElement> = [];
 
     for (const _element of this._elements) {
-      if (!element_unit_ids.includes(Number(_element.unit_id))) {
+      if (
+        check_element_unit_ids &&
+        !element_unit_ids.includes(Number(_element.unit_id))
+      ) {
         continue;
       }
 
@@ -385,15 +413,15 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
 
       // console.info('[filter elements] element: ', _element.title);
       for (const unit of _element.units) {
-        // console.info('[filter elements] unit: ', unit.title, unit.optional);
+        console.info('[filter elements] unit: ', unit.title, unit.optional);
 
         if (skip_optional && unit.optional) {
-          // console.info('[filter elements] skip optional');
+          console.info('[filter elements] skip optional');
           continue;
         }
 
         if (only_optional && !unit.optional) {
-          // console.info('[filter elements] only optional');
+          console.info('[filter elements] only optional');
           continue;
         }
 
@@ -407,7 +435,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
           continue;
         }
 
-        if (check_participant_ids && _element.participants) {
+        if (check_participant_ids && _element.participants.length > 0) {
           // console.info('[filter elements] check participant ids', unit.participant_prices, participant_ids);
 
           let unit_participants_price = 0;

@@ -1,4 +1,4 @@
-/*
+/**
 
 // vtb-webcomponents/src/utils/currency.ts
 
@@ -20,6 +20,16 @@ PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIG
 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+@description
+Currency formatter for numbers to be displayed as a localized string
+defaults to nl-NL and Euro
+
+@version 1.0.0
+@since 1.0.0
+@license MIT
+@see https://github.com/huubsegers/vtb-webcomponents
 
 */
 

@@ -226,9 +226,14 @@ export class VtbElement implements interfaces.VtbElement {
   }
 
   get participants(): Array<number> {
-    return this.participant_prices.map((participant_price) => {
-      return participant_price.participant_id;
-    });
+    const _participants = [];
+    for (const _u of this._units) {
+      _participants.push(..._u.participants);
+    }
+    return _participants;
+    // return this.participant_prices.map((participant_price) => {
+    //   return participant_price.participant_id;
+    // });
   }
 
   get last_day(): number {

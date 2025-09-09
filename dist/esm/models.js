@@ -173,9 +173,14 @@ export class VtbElement {
         return this._grouped.length ? this._grouped : this._units;
     }
     get participants() {
-        return this.participant_prices.map((participant_price) => {
-            return participant_price.participant_id;
-        });
+        const _participants = [];
+        for (const _u of this._units) {
+            _participants.push(..._u.participants);
+        }
+        return _participants;
+        // return this.participant_prices.map((participant_price) => {
+        //   return participant_price.participant_id;
+        // });
     }
     get last_day() {
         return this.day + this.nights;

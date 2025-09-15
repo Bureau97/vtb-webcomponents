@@ -266,35 +266,46 @@ export class VtbDataTransformer {
                     .clone()
                     .add(vtb_element.nights, 'days');
             }
-            console.info('[parse_vtb_segment] current element: ', [
-                vtb_element.title,
-                vtb_element.ts_product_id,
-                vtb_element.startdate.toString(),
-                vtb_element.unit_id
-            ]);
+            // console.info('[parse_vtb_segment] current element: ', [
+            //   vtb_element.title,
+            //   vtb_element.ts_product_id,
+            //   vtb_element.startdate.toString(),
+            //   vtb_element.unit_id
+            // ]);
             if (!last_element) {
                 // console.info('[parse_vtb_segment] last element not set, adding element to group and set element as last element');
                 element_group.add_element(vtb_element);
                 last_element = vtb_element;
                 continue;
             }
-            console.info('[parse_vtb_segment] last element: ', [
-                last_element.title,
-                last_element.ts_product_id,
-                last_element.startdate.toString(),
-                last_element.unit_id
-            ]);
+            // console.info('[parse_vtb_segment] last element: ', [
+            //   last_element.title,
+            //   last_element.ts_product_id,
+            //   last_element.startdate.toString(),
+            //   last_element.unit_id
+            // ]);
             if (last_element.ts_product_id == vtb_element.ts_product_id &&
                 last_element.startdate.toString() == vtb_element.startdate.toString() &&
                 last_element.enddate.toString() == vtb_element.enddate.toString() &&
                 last_element.unit_id == vtb_element.unit_id) {
                 // add units to last element
-                console.info('[parse_vtb_segment] current product id matches last element id, adding units to last element', vtb_element.ts_product_id);
-                console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
-                console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
+                // console.info(
+                //   '[parse_vtb_segment] current product id matches last element id, adding units to last element',
+                //   vtb_element.ts_product_id
+                // );
+                // console.info(
+                //   '[parse_vtb_segment]  -> last element: ',
+                //   last_element.title,
+                //   last_element.subtitle
+                // );
+                // console.info(
+                //   '[parse_vtb_segment]  -> current element: ',
+                //   vtb_element.title,
+                //   vtb_element.subtitle
+                // );
                 // walk through the current units
                 for (const unit of vtb_element._units) {
-                    console.info('[parse_vtb_segment] current unit: ', unit);
+                    // console.info('[parse_vtb_segment] current unit: ', unit);
                     // if the unit is not optional, add it to the last element
                     if (!unit.optional) {
                         // console.info('[parse_vtb_segment] unit is not optional, adding unit to last element');
@@ -308,23 +319,38 @@ export class VtbDataTransformer {
                         // if the last unit is optional, skip it
                         // we need to match against a non-optional unit
                         if (check_unit.optional) {
-                            console.info('[parse_vtb_segment] last unit is optional, skipping', check_unit.title);
+                            // console.info(
+                            //   '[parse_vtb_segment] last unit is optional, skipping',
+                            //   check_unit.title
+                            // );
                             continue;
                         }
                         const matching_participants = intersection(unit.participants, check_unit.participants);
                         // if no matching participants have been found,
                         // we can go on with the next unit:
                         if (matching_participants.length <= 0) {
-                            console.info('no matching participants found on unit ', check_unit.title);
+                            // console.info(
+                            //   'no matching participants found on unit ',
+                            //   check_unit.title
+                            // );
                             continue;
                         }
                         // loop over the matching participants to calculate the price difference
                         for (const matching_participant_id of matching_participants) {
-                            console.info('matching participant id: ', matching_participant_id);
+                            // console.info(
+                            //   'matching participant id: ',
+                            //   matching_participant_id
+                            // );
                             const non_optional_participant_price = check_unit.participant_prices.get(matching_participant_id);
                             const optional_participant_price = unit.participant_prices.get(matching_participant_id);
-                            console.info('non-optional participant price: ', non_optional_participant_price);
-                            console.info('optional participant price: ', optional_participant_price);
+                            // console.info(
+                            //   'non-optional participant price: ',
+                            //   non_optional_participant_price
+                            // );
+                            // console.info(
+                            //   'optional participant price: ',
+                            //   optional_participant_price
+                            // );
                             if (!non_optional_participant_price ||
                                 !optional_participant_price) {
                                 console.error('participant price not found');
@@ -387,9 +413,20 @@ export class VtbDataTransformer {
                     // we need to calculate the price difference between the last element and the current element
                     // console.info('price difference between elements: ', vtb_element.price, last_element.price, vtb_element.price - last_element.price);
                     // we have to find the unit that matches the participants from the last element
-                    console.info('[parse_vtb_segment] current unit id matches last element id, adding units to last element', vtb_element.unit_id);
-                    console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
-                    console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
+                    // console.info(
+                    //   '[parse_vtb_segment] current unit id matches last element id, adding units to last element',
+                    //   vtb_element.unit_id
+                    // );
+                    // console.info(
+                    //   '[parse_vtb_segment]  -> last element: ',
+                    //   last_element.title,
+                    //   last_element.subtitle
+                    // );
+                    // console.info(
+                    //   '[parse_vtb_segment]  -> current element: ',
+                    //   vtb_element.title,
+                    //   vtb_element.subtitle
+                    // );
                     for (const unit of vtb_element._units) {
                         // console.info('current unit participants: ', unit.title, unit.participants);
                         if (!unit.optional) {
@@ -407,16 +444,28 @@ export class VtbDataTransformer {
                             // if no matching participants have been found,
                             // we can go on with the next unit:
                             if (matching_participants.length <= 0) {
-                                console.info('no matching participants found on unit ', check_unit.title);
+                                // console.info(
+                                //   'no matching participants found on unit ',
+                                //   check_unit.title
+                                // );
                                 continue;
                             }
                             // loop over the matching participants to calculate the price difference
                             for (const matching_participant_id of matching_participants) {
-                                console.info('matching participant id: ', matching_participant_id);
+                                // console.info(
+                                //   'matching participant id: ',
+                                //   matching_participant_id
+                                // );
                                 const non_optional_participant_price = check_unit.participant_prices.get(matching_participant_id);
                                 const optional_participant_price = unit.participant_prices.get(matching_participant_id);
-                                console.info('non-optional participant price: ', non_optional_participant_price);
-                                console.info('optional participant price: ', optional_participant_price);
+                                // console.info(
+                                //   'non-optional participant price: ',
+                                //   non_optional_participant_price
+                                // );
+                                // console.info(
+                                //   'optional participant price: ',
+                                //   optional_participant_price
+                                // );
                                 if (!non_optional_participant_price ||
                                     !optional_participant_price) {
                                     console.error('participant price not found');

@@ -222,9 +222,9 @@ export class VtbElement {
             }
             this._grouped = Object.values(grouped);
         }
-        console.info('[vtbElement.units] return:');
-        console.log('[vtbElement.units] units: ', this._units);
-        console.log('[vtbElement.units] grouped: ', this._grouped);
+        // console.info('[vtbElement.units] return:');
+        // console.log('[vtbElement.units] units: ', this._units);
+        // console.log('[vtbElement.units] grouped: ', this._grouped);
         return this._grouped.length ? this._grouped : this._units;
     }
     get participants() {
@@ -399,9 +399,15 @@ export class VtbElementGroup {
                 }
                 const unit_copy = unit.clone();
                 if (!check_participant_ids) {
-                    console.info('[filter elements] no participant ids requested, add participant prices to clone..');
+                    // console.info(
+                    //   '[filter elements] no participant ids requested, add participant prices to clone..'
+                    // );
                     unit_copy.participant_prices = unit.participant_prices;
-                    console.info('[filter elements] participant prices: ', unit_copy.participant_prices, typeof unit_copy.participant_prices);
+                    // console.info(
+                    //   '[filter elements] participant prices: ',
+                    //   unit_copy.participant_prices,
+                    //   typeof unit_copy.participant_prices
+                    // );
                     _element_copy._units.push(unit_copy);
                     continue;
                 }

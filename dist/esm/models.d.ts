@@ -22,7 +22,7 @@
  *
  */
 import { type Dayjs } from 'dayjs';
-import { Dictionary, VtbFilterConfig } from './utils/interfaces.js';
+import { Dictionary, VtbFilterConfig, SizedMap } from './utils/interfaces.js';
 import * as interfaces from './utils/interfaces.js';
 import * as types from './utils/types.js';
 export declare class VtbParticipant implements interfaces.VtbParticipant {
@@ -39,6 +39,7 @@ export declare class VtbParticipant implements interfaces.VtbParticipant {
 export declare class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
     participant_id: number;
     price: number;
+    price_diff: number;
 }
 export declare class VtbParty implements interfaces.VtbParty {
     id: number | string;
@@ -85,11 +86,9 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
 }
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;
-    participant_prices: Array<VtbParticipantPrice>;
+    participant_prices: SizedMap<number, VtbParticipantPrice>;
     quantity: number;
     optional: boolean;
-    price: number;
-    price_diff: number;
     description: string;
     additional_description: string;
     media: Array<VtbMedia>;
@@ -97,10 +96,14 @@ export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     location?: VtbMapMarker;
     _element_id: number;
     _ts_product_id: number;
+    constructor();
+    private _setup_participant_prices;
     private _hash;
     get id(): string;
     get participants(): Array<number>;
-    clone(): VtbElementUnit;
+    get price(): number;
+    get price_diff(): number;
+    clone(deep?: boolean): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;

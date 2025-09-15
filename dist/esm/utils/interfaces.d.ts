@@ -26,6 +26,9 @@ import * as types from './types.js';
 export interface Dictionary<Type> {
     [key: string | number]: Type;
 }
+export interface SizedMap<K, V> extends Map<K, V> {
+    length: number;
+}
 export interface VtbFilterConfig {
     group_ids?: Array<number | string | null>;
     group_type_ids?: Array<Array<number | string | null>> | Array<number | string | null>;
@@ -92,11 +95,12 @@ export interface VtbFlightData {
 export interface VtbParticipantPrice {
     participant_id: number;
     price: number;
+    price_diff: number;
 }
 export interface VtbElementUnit {
     title: string;
     optional?: boolean;
-    participant_prices: Array<VtbParticipantPrice>;
+    participant_prices: Map<number, VtbParticipantPrice>;
     price: number;
     price_diff: number;
     description?: string;

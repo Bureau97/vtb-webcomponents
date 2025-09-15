@@ -355,6 +355,14 @@
                 "text": "number"
               },
               "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
             }
           ]
         },
@@ -644,9 +652,9 @@
               "kind": "field",
               "name": "participant_prices",
               "type": {
-                "text": "Array<VtbParticipantPrice>"
+                "text": "SizedMap<number, VtbParticipantPrice>"
               },
-              "default": "[]"
+              "default": "new Map( null )"
             },
             {
               "kind": "field",
@@ -663,22 +671,6 @@
                 "text": "boolean"
               },
               "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "price_diff",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
             },
             {
               "kind": "field",
@@ -736,6 +728,11 @@
               "default": "0"
             },
             {
+              "kind": "method",
+              "name": "_setup_participant_prices",
+              "privacy": "private"
+            },
+            {
               "kind": "field",
               "name": "_hash",
               "type": {
@@ -761,6 +758,22 @@
               "readonly": true
             },
             {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "clone",
               "privacy": "public",
@@ -768,7 +781,16 @@
                 "type": {
                   "text": "VtbElementUnit"
                 }
-              }
+              },
+              "parameters": [
+                {
+                  "name": "deep",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             }
           ]
         },

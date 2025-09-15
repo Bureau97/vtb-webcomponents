@@ -27,8 +27,7 @@ import duration from 'dayjs/plugin/duration.js'; // import plugin
 dayjs.locale('nl');
 dayjs.extend(utc);
 dayjs.extend(duration);
-import sortBy from 'lodash/sortBy.js';
-import isEqual from 'lodash/isEqual.js';
+import intersection from 'lodash/intersection.js';
 import { VtbTravelPlanData, VtbElement, VtbElementGroup, VtbElementUnit, VtbExtraField, VtbFlight, VtbFlightCarrier, VtbFlightData, VtbGeoLocation, VtbMedia, VtbParticipant, VtbParticipantPrice, VtbParty, VtbMapMarker } from '../models.js';
 export class VtbDataTransformer {
     constructor(vtb_config) {
@@ -267,27 +266,35 @@ export class VtbDataTransformer {
                     .clone()
                     .add(vtb_element.nights, 'days');
             }
-            // console.info(
-            //   '[parse_vtb_segment] current element: ', [vtb_element.title, vtb_element.ts_product_id, vtb_element.startdate.toString(), vtb_element.unit_id])
+            console.info('[parse_vtb_segment] current element: ', [
+                vtb_element.title,
+                vtb_element.ts_product_id,
+                vtb_element.startdate.toString(),
+                vtb_element.unit_id
+            ]);
             if (!last_element) {
                 // console.info('[parse_vtb_segment] last element not set, adding element to group and set element as last element');
                 element_group.add_element(vtb_element);
                 last_element = vtb_element;
                 continue;
             }
-            // console.info(
-            //   '[parse_vtb_segment] last element: ', [last_element.title, last_element.ts_product_id, last_element.startdate.toString(), last_element.unit_id]);
+            console.info('[parse_vtb_segment] last element: ', [
+                last_element.title,
+                last_element.ts_product_id,
+                last_element.startdate.toString(),
+                last_element.unit_id
+            ]);
             if (last_element.ts_product_id == vtb_element.ts_product_id &&
                 last_element.startdate.toString() == vtb_element.startdate.toString() &&
                 last_element.enddate.toString() == vtb_element.enddate.toString() &&
                 last_element.unit_id == vtb_element.unit_id) {
                 // add units to last element
-                // console.info('[parse_vtb_segment] current product id matches last element id, adding units to last element', vtb_element.ts_product_id);
-                // console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
-                // console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
+                console.info('[parse_vtb_segment] current product id matches last element id, adding units to last element', vtb_element.ts_product_id);
+                console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
+                console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
                 // walk through the current units
                 for (const unit of vtb_element._units) {
-                    // console.info('[parse_vtb_segment] current unit: ', unit);
+                    console.info('[parse_vtb_segment] current unit: ', unit);
                     // if the unit is not optional, add it to the last element
                     if (!unit.optional) {
                         // console.info('[parse_vtb_segment] unit is not optional, adding unit to last element');
@@ -296,36 +303,80 @@ export class VtbDataTransformer {
                     }
                     // walk through the units of the last element
                     // to see if the unit participants match
-                    for (const last_unit of last_element._units) {
+                    for (const check_unit of last_element._units) {
                         // console.info('[parse_vtb_segment] last unit: ', unit);
                         // if the last unit is optional, skip it
                         // we need to match against a non-optional unit
-                        if (last_unit.optional) {
-                            // console.info('[parse_vtb_segment] last unit is optional, skipping');
+                        if (check_unit.optional) {
+                            console.info('[parse_vtb_segment] last unit is optional, skipping', check_unit.title);
                             continue;
                         }
-                        // if the unit participants match, set the price difference
-                        // betweem the current unit and the last unit
-                        if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
-                            // console.info('[parse_vtb_segment]   unit participants match, setting price difference');
-                            unit.price_diff = unit.price - last_unit.price;
-                            // unit.price = 0;
-                            last_element._units.push(unit);
-                            break;
+                        const matching_participants = intersection(unit.participants, check_unit.participants);
+                        // if no matching participants have been found,
+                        // we can go on with the next unit:
+                        if (matching_participants.length <= 0) {
+                            console.info('no matching participants found on unit ', check_unit.title);
+                            continue;
                         }
-                        // if the unit participants do not match, add the unit to the last element
-                        // it could be a completely different alternative to the (multiple) units of the last element
-                        else {
-                            // console.debug(
-                            //   '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
-                            // );
-                            // set unit price difference by substracting the total element price from the last element from
-                            // the unit price
-                            unit.price_diff = unit.price - last_element.price; // TODO: check if this is correct
-                            last_element._units.push(unit);
-                            break;
+                        // loop over the matching participants to calculate the price difference
+                        for (const matching_participant_id of matching_participants) {
+                            console.info('matching participant id: ', matching_participant_id);
+                            const non_optional_participant_price = check_unit.participant_prices.get(matching_participant_id);
+                            const optional_participant_price = unit.participant_prices.get(matching_participant_id);
+                            console.info('non-optional participant price: ', non_optional_participant_price);
+                            console.info('optional participant price: ', optional_participant_price);
+                            if (!non_optional_participant_price ||
+                                !optional_participant_price) {
+                                console.error('participant price not found');
+                                continue;
+                            }
+                            optional_participant_price.price_diff =
+                                optional_participant_price.price -
+                                    non_optional_participant_price.price;
+                            unit.participant_prices.set(matching_participant_id, optional_participant_price);
                         }
+                        last_element._units.push(unit);
+                        // // if the unit participants match, set the price difference
+                        // // betweem the current unit and the last unit
+                        // if (
+                        //   isEqual(sortBy(unit.participants), sortBy(last_unit.participants))
+                        // ) {
+                        //   console.info('[parse_vtb_segment]   unit participants match, setting price difference');
+                        //   unit.price_diff = unit.price - last_unit.price;
+                        //   // unit.price = 0;
+                        //   last_element._units.push(unit);
+                        //   unit_participants_match = true;
+                        //   break;
+                        // }
+                        //   // if the unit participants do not match, add the unit to the last element
+                        //   // it could be a completely different alternative to the (multiple) units of the last element
+                        // else {
+                        //   console.info(
+                        //     '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
+                        //   );
+                        //   // set unit price difference by substracting the total element price from the last element from
+                        //   // the unit price
+                        //   unit.price_diff = unit.price - last_element.price; // TODO: check if this is correct
+                        //   last_element._units.push(unit);
+                        //   break;
+                        // }
                     }
+                    // if the unit participants do not match, add the unit to the last element
+                    // it could be a completely different alternative to the (multiple) units of the last element
+                    // if (!unit_participants_match) {
+                    //   console.info(
+                    //     '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
+                    //   );
+                    //   // TODO: find the current participants on the non-optional units in the last element
+                    //   // get the price for these participants and subtract current unit price from it
+                    //   const current_participants = unit.participants;
+                    //   const non_optional_units = last_element._units.filter(
+                    //     (unit) => !unit.optional
+                    //   );
+                    //   console.info(current_participants, non_optional_units);
+                    //   unit.price_diff = unit.price - last_element.price;
+                    //   last_element._units.push(unit);
+                    // }
                 }
             }
             else {
@@ -336,9 +387,9 @@ export class VtbDataTransformer {
                     // we need to calculate the price difference between the last element and the current element
                     // console.info('price difference between elements: ', vtb_element.price, last_element.price, vtb_element.price - last_element.price);
                     // we have to find the unit that matches the participants from the last element
-                    // console.info('[parse_vtb_segment] current unit id matches last element id, adding units to last element', vtb_element.unit_id);
-                    // console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
-                    // console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
+                    console.info('[parse_vtb_segment] current unit id matches last element id, adding units to last element', vtb_element.unit_id);
+                    console.info('[parse_vtb_segment]  -> last element: ', last_element.title, last_element.subtitle);
+                    console.info('[parse_vtb_segment]  -> current element: ', vtb_element.title, vtb_element.subtitle);
                     for (const unit of vtb_element._units) {
                         // console.info('current unit participants: ', unit.title, unit.participants);
                         if (!unit.optional) {
@@ -346,29 +397,43 @@ export class VtbDataTransformer {
                             continue;
                         }
                         // console.info('unit is optional, looking for matching unit in last element');
-                        for (const last_unit of last_element._units) {
-                            // console.info('last unit participants: ', last_unit.title, last_unit.participants);
-                            if (last_unit.optional) {
+                        for (const check_unit of last_element._units) {
+                            // console.info('last unit participants: ', check_unit.title, check_unit.participants);
+                            if (check_unit.optional) {
                                 // console.info('unit is optionsal, skipping');
                                 continue;
                             }
-                            if (isEqual(sortBy(unit.participants), sortBy(last_unit.participants))) {
-                                // console.info('[parse_vtb_segment]   unit participants match, setting price difference');
-                                unit.price_diff = vtb_element.price - last_unit.price;
-                                // unit.price = 0;
-                                break;
+                            const matching_participants = intersection(unit.participants, check_unit.participants);
+                            // if no matching participants have been found,
+                            // we can go on with the next unit:
+                            if (matching_participants.length <= 0) {
+                                console.info('no matching participants found on unit ', check_unit.title);
+                                continue;
                             }
-                            else {
-                                console.debug('[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit);
-                                last_element._units.push(unit);
-                                break;
+                            // loop over the matching participants to calculate the price difference
+                            for (const matching_participant_id of matching_participants) {
+                                console.info('matching participant id: ', matching_participant_id);
+                                const non_optional_participant_price = check_unit.participant_prices.get(matching_participant_id);
+                                const optional_participant_price = unit.participant_prices.get(matching_participant_id);
+                                console.info('non-optional participant price: ', non_optional_participant_price);
+                                console.info('optional participant price: ', optional_participant_price);
+                                if (!non_optional_participant_price ||
+                                    !optional_participant_price) {
+                                    console.error('participant price not found');
+                                    continue;
+                                }
+                                optional_participant_price.price_diff =
+                                    optional_participant_price.price -
+                                        non_optional_participant_price.price;
+                                unit.participant_prices.set(matching_participant_id, optional_participant_price);
                             }
+                            last_element._units.push(unit);
                         }
                     }
                 }
-                // else {
-                //   console.debug('[parse_vtb_segment] current element does not match last element');
-                // }
+                else {
+                    console.debug('[parse_vtb_segment] current element does not match last element');
+                }
                 // console.info('[parse_vtb_segment]     adding element to group and set current element as last element');
                 element_group.add_element(vtb_element);
                 last_element = vtb_element;
@@ -390,7 +455,7 @@ export class VtbDataTransformer {
         vtb_element_unit.optional = element_data.optional;
         vtb_element_unit._element_id = element_data.id;
         vtb_element_unit._ts_product_id = element_data.ts_product_id;
-        vtb_element_unit.price = parseFloat(element_data.olPrices?.salesTotal || 0);
+        // vtb_element_unit.price = parseFloat(element_data.olPrices?.salesTotal || 0);
         vtb_element_unit.description = element_data.additionalText
             ? element_data.additionalText
                 ?.replace(this.re_body, '$1')
@@ -415,7 +480,7 @@ export class VtbDataTransformer {
             participant_element_price.participant_id = Number(participant_id);
             participant_element_price.price = parseFloat(element_data.olPrices.participants[participant_id]?.salesPrice || 0);
             // vtb_element.participant_prices.push(participant_element_price);
-            vtb_element_unit.participant_prices.push(participant_element_price);
+            vtb_element_unit.participant_prices.set(participant_element_price.participant_id, participant_element_price);
         }
         if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
             for (const extraField of element_data.TSOrderline.extraFieldValues) {

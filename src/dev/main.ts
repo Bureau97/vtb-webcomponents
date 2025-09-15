@@ -593,13 +593,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     let content = 'All elements:' + '\n' + '===================== \n';
     elements.forEach((element) => {
-      content += `${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
+      content += `Dag ${element.day}-${element.last_day}: ${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
 
       element.units.forEach((unit) => {
         content += `\t${unit.quantity}x ${unit.title} [${unit.optional}] [${unit.price}|${unit.price_diff}] \n`;
 
         unit.participant_prices.forEach((participant) => {
-          content += `\t\t ${participant.participant_id} [${participant.price}] \n`;
+          content += `\t\t ${participant.participant_id} [${participant.price}|${participant.price_diff}] \n`;
         });
       });
     });
@@ -614,13 +614,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     content += '===================== \n';
     content += 'Non-optional elements:' + '\n' + '===================== \n';
     non_optional_elements.forEach((element) => {
-      content += `${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
+      content += `Dag ${element.day}-${element.last_day}: ${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
 
       element.units.forEach((unit) => {
         content += `\t${unit.quantity}x ${unit.title} [${unit.optional}] [${unit.price}|${unit.price_diff}] \n`;
 
         unit.participant_prices.forEach((participant) => {
-          content += `\t\t ${participant.participant_id} [${participant.price}] \n`;
+          content += `\t\t ${participant.participant_id} [${participant.price}|${participant.price_diff}] \n`;
         });
       });
     });
@@ -635,13 +635,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     content += '===================== \n';
     content += 'Optional elements:' + '\n' + '===================== \n';
     optional_elements.forEach((element) => {
-      content += `${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
+      content += `Dag ${element.day}-${element.last_day}: ${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
 
       element.units.forEach((unit) => {
         content += `\t${unit.quantity}x ${unit.title} [${unit.optional}] [${unit.price}|${unit.price_diff}] \n`;
 
         unit.participant_prices.forEach((participant) => {
-          content += `\t\t ${participant.participant_id} [${participant.price}] \n`;
+          content += `\t\t ${participant.participant_id} [${participant.price}|${participant.price_diff}] \n`;
         });
       });
     });
@@ -655,13 +655,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     content += '===================== \n';
     content += 'Participant elements:' + '\n' + '===================== \n';
     participant_elements.forEach((element) => {
-      content += `${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
+      content += `Dag ${element.day}-${element.last_day}: ${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
 
       element.units.forEach((unit) => {
         content += `\t${unit.quantity}x ${unit.title} [${unit.optional}] [${unit.price}|${unit.price_diff}] \n`;
 
         unit.participant_prices.forEach((participant) => {
-          content += `\t\t ${participant.participant_id} [${participant.price}] \n`;
+          content += `\t\t ${participant.participant_id} [${participant.price}|${participant.price_diff}] \n`;
         });
       });
     });
@@ -677,13 +677,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     content +=
       'Participant optional elements:' + '\n' + '===================== \n';
     participant_optional_elements.forEach((element) => {
-      content += `${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
+      content += `Dag ${element.day}-${element.last_day}: ${element.title} [TS#${element.ts_product_id}|${element.unit_id}] [${element.price}|${element.price_diff}] \n`;
 
       element.units.forEach((unit) => {
         content += `\t${unit.quantity}x ${unit.title} [${unit.optional}] [${unit.price}|${unit.price_diff}] \n`;
 
         unit.participant_prices.forEach((participant) => {
-          content += `\t\t ${participant.participant_id} [${participant.price}] \n`;
+          content += `\t\t ${participant.participant_id} [${participant.price}|${participant.price_diff}] \n`;
         });
       });
     });

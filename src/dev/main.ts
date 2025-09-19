@@ -70,7 +70,7 @@ enum UnitTypes {
 }
 
 function vtbTextChanged(e?: Event) {
-  console.info('vtbTextChanged: ', e);
+  console.info('[main] vtbTextChanged: ', e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -81,10 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
+
 });
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
+
+  // if (vtb.is_live_preview) {
+    console.info('LIVE PREVIEW');
+    vtb.initializeTextEditors();
+  // }
 
   // get info
   console.info(vtb.title + ' ' + vtb.subtitle);

@@ -161,7 +161,6 @@ export class Vtb {
   }
 
   public extraField(name: string) {
-    console.warn('deprecated call, use extra_fields getter instead');
     return this.extra_field(name);
   }
 
@@ -288,6 +287,26 @@ export class Vtb {
 
     return flightschedule;
   }
+
+
+  public initializeTextEditors() {
+    document.querySelectorAll('vtb-text').forEach((element) => {
+      if (!element.hasAttribute('vtb-objectid')) {
+        // only elements with a vtb-objectid can be set editable
+        return;
+      }
+      element.setAttribute('editable', 'true');
+      element.addEventListener('vtbTextChanged', this._vtbTextChanged.bind(this));
+    });
+  }
+
+  protected _vtbTextChanged(detail: any) {
+    console.info('vtbTextChanged', detail);
+
+  }
+
+
+
 
   // public pricetable(
   //   container_id: string,

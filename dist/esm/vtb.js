@@ -25,6 +25,7 @@ import { VtbMapMarkerGroup } from './models.js';
 import { VtbDataTransformer } from './utils/transformer.js';
 import { VtbMapElement } from './components/map.js';
 import { VtbFlightScheduleElement } from './components/flightschedule.js';
+import { PreviewDataLoader } from './utils/preview.js';
 export class Vtb {
     /**
      * @constructor
@@ -43,9 +44,9 @@ export class Vtb {
      * @returns {boolean}
      */
     get is_live_preview() {
-        if (window.location.search &&
-            window.location.search !== '' &&
-            /(\?|&)key=([^&]*)/.test(window.location.search)) {
+        const current = new URL(window.location.href);
+        if (current.searchParams.get('key') &&
+            current.searchParams.get('key') !== '') {
             return true;
         }
         return false;
@@ -92,6 +93,9 @@ export class Vtb {
         return this.flightinfo;
     }
     get participants() {
+        if (!this._data.participants) {
+            return [];
+        }
         return Object.values(this._data.participants);
     }
     get parties() {
@@ -114,15 +118,48 @@ export class Vtb {
         return this._data.extra_fields[name] || null;
     }
     extraField(name) {
-        console.warn('deprecated call, use extra_fields getter instead');
         return this.extra_field(name);
     }
+    async load_preview(key, token) {
+        if (!key && !token) {
+            const url = new URL(window.location.href);
+            const _key = url.searchParams.get('key');
+            if (_key) {
+                key = _key;
+            }
+            const _token = url.searchParams.get('token');
+            if (_token) {
+                token = _token;
+            }
+        }
+        console.info(['Loading preview', key, token]);
+        if (!key) {
+            throw new Error('Missing key..');
+        }
+        if (!this._dataLoader) {
+            this._dataLoader = new PreviewDataLoader(key, token);
+        }
+        return this._dataLoader.requestTravelplan();
+    }
     async load(travelplan_source_url) {
-        // async load of travelplan json
-        console.debug('Loading', travelplan_source_url);
-        const response = await fetch(travelplan_source_url);
-        const vtbSrcData = await response.json();
-        this.parse_vtb_data(vtbSrcData);
+        if (travelplan_source_url && !this.is_live_preview) {
+            console.info('Loading static...', travelplan_source_url);
+            const response = await fetch(travelplan_source_url);
+            const vtbSrcData = await response.json();
+            this.parse_vtb_data(vtbSrcData);
+            return this;
+        }
+        if (this.is_live_preview) {
+            console.info('Loading preview..');
+            const travelplan_data = await this.load_preview();
+            console.info('VTB::Load (preview)');
+            console.info(travelplan_data);
+            this.parse_vtb_data(travelplan_data);
+            return this;
+        }
+        if (!travelplan_source_url && !this.is_live_preview) {
+            console.error('No travelplan source url provided');
+        }
         return this;
     }
     parse_vtb_data(vtbSrcData // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -168,6 +205,7 @@ export class Vtb {
         map.width = map_options.width;
         map.zoom = map_options.zoom;
         map.markergroups = [marker_group];
+        map.default_labels = map_options.default_labels || false;
         const container = document.getElementById(container_id);
         container?.appendChild(map);
         return map;
@@ -205,6 +243,20 @@ export class Vtb {
         const container = document.getElementById(container_id);
         container?.appendChild(flightschedule);
         return flightschedule;
+    }
+    initializeTextEditors() {
+        document.querySelectorAll('vtb-text').forEach((element) => {
+            if (!element.hasAttribute('vtb-objectid')) {
+                // only elements with a vtb-objectid can be set editable
+                return;
+            }
+            element.setAttribute('editable', 'true');
+            element.addEventListener('vtbTextChanged', this._vtbTextChanged.bind(this));
+        });
+    }
+    _vtbTextChanged(detail // eslint-disable-line @typescript-eslint/no-explicit-any
+    ) {
+        console.info('vtbTextChanged', detail);
     }
     // public pricetable(
     //   container_id: string,

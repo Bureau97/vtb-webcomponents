@@ -1325,6 +1325,14 @@
             },
             {
               "kind": "field",
+              "name": "default_label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "lat",
               "type": {
                 "text": "number"
@@ -1835,6 +1843,14 @@
             },
             {
               "kind": "field",
+              "name": "_dataLoader",
+              "type": {
+                "text": "PreviewDataLoader | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "is_live_preview",
               "type": {
                 "text": "boolean"
@@ -2018,6 +2034,32 @@
             },
             {
               "kind": "method",
+              "name": "load_preview",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Promise<VtbTravelPlanData>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "key",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "token",
+                  "optional": true,
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "load",
               "privacy": "public",
               "return": {
@@ -2028,6 +2070,7 @@
               "parameters": [
                 {
                   "name": "travelplan_source_url",
+                  "optional": true,
                   "type": {
                     "text": "string"
                   }
@@ -2209,6 +2252,24 @@
             },
             {
               "kind": "method",
+              "name": "initializeTextEditors",
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "_vtbTextChanged",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "detail",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "merge_groups_by_day",
               "privacy": "public",
               "return": {
@@ -2239,6 +2300,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -2930,6 +2997,15 @@
                 "text": "string | undefined"
               },
               "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "default_label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "default-label"
             }
           ],
           "attributes": [
@@ -2962,6 +3038,14 @@
                 "text": "string | undefined"
               },
               "fieldName": "label"
+            },
+            {
+              "name": "default-label",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "default_label"
             }
           ],
           "superclass": {
@@ -3132,6 +3216,15 @@
               },
               "default": "false",
               "attribute": "connect-markers"
+            },
+            {
+              "kind": "field",
+              "name": "default_labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "default-labels"
             },
             {
               "kind": "field",
@@ -3376,6 +3469,14 @@
               },
               "default": "false",
               "fieldName": "connect_markers"
+            },
+            {
+              "name": "default-labels",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "default_labels"
             },
             {
               "name": "connect-mode",
@@ -3685,6 +3786,24 @@
             },
             {
               "kind": "field",
+              "name": "LICENSE_KEY",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "protected",
+              "default": "'GPL'"
+            },
+            {
+              "kind": "field",
+              "name": "editorConfig",
+              "type": {
+                "text": "EditorConfig"
+              },
+              "privacy": "protected",
+              "default": "{ toolbar: { items: [ 'undo', 'redo', '|', 'heading', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'removeFormat', '|', 'horizontalLine', 'highlight', '|', 'alignment', '|', 'bulletedList', 'numberedList', 'outdent', 'indent' ], shouldNotGroupWhenFull: false }, plugins: [ Alignment, Autosave, Bold, Essentials, FontBackgroundColor, FontColor, FontFamily, FontSize, Heading, Highlight, HorizontalLine, Indent, IndentBlock, Italic, List, Paragraph, PasteFromOffice, RemoveFormat, Strikethrough, Subscript, Superscript, Underline ], balloonToolbar: [ 'bold', 'italic', '|', 'link', '|', 'bulletedList', 'numberedList' ], fontFamily: { supportAllValues: true }, fontSize: { options: [10, 12, 14, 'default', 18, 20, 22], supportAllValues: true }, heading: { options: [ { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' }, { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' }, { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }, { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }, { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }, { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' }, { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' } ] }, // initialData: // \"<h2>Congratulations on setting up CKEditor 5! 🎉</h2>\\n<p>\\n\\tYou've successfully created a CKEditor 5 project. This powerful text editor\\n\\twill enhance your application, enabling rich text editing capabilities that\\n\\tare customizable and easy to use.\\n</p>\\n<h3>What's next?</h3>\\n<ol>\\n\\t<li>\\n\\t\\t<strong>Integrate into your app</strong>: time to bring the editing into\\n\\t\\tyour application. Take the code you created and add to your application.\\n\\t</li>\\n\\t<li>\\n\\t\\t<strong>Explore features:</strong> Experiment with different plugins and\\n\\t\\ttoolbar options to discover what works best for your needs.\\n\\t</li>\\n\\t<li>\\n\\t\\t<strong>Customize your editor:</strong> Tailor the editor's\\n\\t\\tconfiguration to match your application's style and requirements. Or\\n\\t\\teven write your plugin!\\n\\t</li>\\n</ol>\\n<p>\\n\\tKeep experimenting, and don't hesitate to push the boundaries of what you\\n\\tcan achieve with CKEditor 5. Your feedback is invaluable to us as we strive\\n\\tto improve and evolve. Happy editing!\\n</p>\\n<h3>Helpful resources</h3>\\n<p>\\n\\t<i>An editor without the </i><code>Link</code>\\n\\t<i>plugin? That's brave! We hope the links below will be useful anyway </i>😉\\n</p>\\n<ul>\\n\\t<li>📝 Trial sign up: https://portal.ckeditor.com/checkout?plan=free,</li>\\n\\t<li>📕 Documentation: https://ckeditor.com/docs/ckeditor5/latest/installation/index.html,</li>\\n\\t<li>⭐️ GitHub (star us if you can!): https://github.com/ckeditor/ckeditor5,</li>\\n\\t<li>🏠 CKEditor Homepage: https://ckeditor.com,</li>\\n\\t<li>🧑‍💻 CKEditor 5 Demos: https://ckeditor.com/ckeditor-5/demo/</li>\\n</ul>\\n<h3>Need help?</h3>\\n<p>\\n\\tSee this text, but the editor is not starting up? Check the browser's\\n\\tconsole for clues and guidance. It may be related to an incorrect license\\n\\tkey if you use premium features or another feature-related requirement. If\\n\\tyou cannot make it work, file a GitHub issue, and we will help as soon as\\n\\tpossible!\\n</p>\\n\", licenseKey: this.LICENSE_KEY, link: { addTargetToExternalLinks: true, defaultProtocol: 'https://', decorators: { toggleDownloadable: { mode: 'manual', label: 'Downloadable', attributes: { download: 'file' } } } }, placeholder: 'Type or paste your content here!', updateSourceElementOnDestroy: true }"
+            },
+            {
+              "kind": "field",
               "name": "editable",
               "type": {
                 "text": "boolean"
@@ -3696,7 +3815,7 @@
               "kind": "field",
               "name": "contents",
               "type": {
-                "text": "string | null"
+                "text": "string"
               },
               "default": "''"
             },
@@ -3771,15 +3890,142 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
+      "path": "src/utils/client.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbClientOptions",
+          "members": [
+            {
+              "kind": "field",
+              "name": "apiKey",
+              "type": {
+                "text": "string"
+              },
+              "default": "'TyMmPw.FvRODQ:NDve34aOuSR1uYPP'"
+            },
+            {
+              "kind": "field",
+              "name": "origin",
+              "type": {
+                "text": "string"
+              },
+              "default": "'pubnub.ably.io'"
+            }
+          ]
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "VtbClient",
+          "members": [
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "VtbClientOptions"
+              },
+              "privacy": "public",
+              "default": "options"
+            },
+            {
+              "kind": "field",
+              "name": "pubnub",
+              "type": {
+                "text": "PubNub | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "uuid",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "key",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "method",
+              "name": "initialize",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "key",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "requestTravelplan",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Promise<VtbTravelPlanData>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "saveTextChange",
+              "privacy": "public",
+              "parameters": [
+                {
+                  "name": "objectId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "propertyName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "content",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VtbClientOptions",
+          "declaration": {
+            "name": "VtbClientOptions",
+            "module": "src/utils/client.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "VtbClient",
+          "declaration": {
+            "name": "VtbClient",
+            "module": "src/utils/client.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -3883,6 +4129,78 @@
       "path": "src/utils/interfaces.ts",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils/preview.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PreviewDataLoader",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_key",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "key"
+            },
+            {
+              "kind": "field",
+              "name": "_token",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "token"
+            },
+            {
+              "kind": "field",
+              "name": "_pubnub",
+              "type": {
+                "text": "PubNub | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_userId",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "initialize_pubnub",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "requestTravelplan",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Promise<VtbTravelPlanData>"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PreviewDataLoader",
+          "declaration": {
+            "name": "PreviewDataLoader",
+            "module": "src/utils/preview.ts"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",

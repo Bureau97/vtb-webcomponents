@@ -1,53 +1,55 @@
 import PubNub from 'pubnub';
 import {v4 as uuidv4} from 'uuid';
-
 import {VtbTravelPlanData} from '../models';
 
-export class VtbClientOptions {
-  apiKey = 'TyMmPw.FvRODQ:NDve34aOuSR1uYPP';
-  origin = 'pubnub.ably.io';
-}
+const apiKey = 'TyMmPw.FvRODQ:NDve34aOuSR1uYPP';
 
 interface PubNubMessage {
   message: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export class VtbClient {
-  public options: VtbClientOptions;
-  private pubnub: PubNub | undefined;
-  private uuid;
-  private key = '';
+export class PreviewDataLoader {
+  private _key: string;
+  private _token: string | undefined;
+  private _pubnub?: PubNub;
+  private _userId: string;
 
-  constructor(options: VtbClientOptions) {
-    this.options = options;
-    this.uuid = uuidv4(); // generate uuid for this client
-    // this.initialize(this.options.apiKey);
+  constructor(key: string, token?: string) {
+    this._key = key;
+    this._token = token;
+
+    if (!this._key) {
+      throw new Error('Missing key');
+    }
+
+    // just for TS check
+    if (this._token) {
+      console.info('We have a token..');
+    }
+
+    this._userId = uuidv4();
   }
 
-  public initialize(key: string) {
-    this.key = key;
-
-    if (!this.pubnub) {
-      this.pubnub = new PubNub({
+  private initialize_pubnub() {
+    if (!this._pubnub) {
+      this._pubnub = new PubNub({
         ssl: true,
-        authKey: key,
-        uuid: this.uuid,
-        origin: this.options.origin || 'pubnub.ably.io',
-        subscribeKey: this.options.apiKey,
-        publishKey: this.options.apiKey
+        authKey: this._key,
+        userId: this._userId,
+        origin: 'pubnub.ably.io',
+        subscribeKey: apiKey,
+        publishKey: apiKey,
+        logVerbosity: false
       });
     }
+
+    return this._pubnub;
   }
 
   public async requestTravelplan(): Promise<VtbTravelPlanData> {
-    if (!this.pubnub) {
-      throw new Error('PubNub is not initialized');
-    }
+    const pubnub = this.initialize_pubnub();
 
-    const pubnub = this.pubnub;
-
-    // subsctribe to channel
-    const channel = pubnub.channel(this.key);
+    const channel = pubnub.channel(this._key);
     const subscription = channel.subscription({});
 
     return new Promise((resolve, error) => {
@@ -91,36 +93,8 @@ export class VtbClient {
 
       pubnub.publish({
         message: {livePreviewReady: true},
-        channel: this.key
+        channel: this._key
       });
-    });
-  }
-
-  public async saveTextChange(
-    objectId: string,
-    propertyName: string,
-    content: string
-  ) {
-    console.log({
-      uuid: this.uuid,
-      propertyName: propertyName,
-      newValue: content,
-      vtbObjectId: objectId
-    });
-
-    if (!this.pubnub) {
-      console.error('PubNub is not initialized');
-      return;
-    }
-
-    this.pubnub.publish({
-      message: {
-        uuid: this.uuid,
-        propertyName: propertyName,
-        newValue: content,
-        vtbObjectId: objectId
-      },
-      channel: this.key
     });
   }
 }

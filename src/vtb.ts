@@ -45,9 +45,12 @@ import {
   VtbFlightScheduleOptions
 } from './components/flightschedule.js';
 
+import {PreviewDataLoader} from './utils/preview.js';
+
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
   private _config?: VtbConfig;
+  private _dataLoader?: PreviewDataLoader;
 
   /**
    * @constructor
@@ -66,10 +69,11 @@ export class Vtb {
    * @returns {boolean}
    */
   get is_live_preview(): boolean {
+    const current = new URL(window.location.href);
+
     if (
-      window.location.search &&
-      window.location.search !== '' &&
-      /(\?|&)key=([^&]*)/.test(window.location.search)
+      current.searchParams.get('key') &&
+      current.searchParams.get('key') !== ''
     ) {
       return true;
     }
@@ -132,6 +136,9 @@ export class Vtb {
   }
 
   get participants(): Array<VtbParticipant> {
+    if (!this._data.participants) {
+      return [];
+    }
     return Object.values(this._data.participants);
   }
 
@@ -164,12 +171,62 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  public async load(travelplan_source_url: string): Promise<Vtb> {
-    // async load of travelplan json
-    console.debug('Loading', travelplan_source_url);
-    const response = await fetch(travelplan_source_url);
-    const vtbSrcData = await response.json();
-    this.parse_vtb_data(vtbSrcData);
+  public async load_preview(
+    key?: string,
+    token?: string
+  ): Promise<VtbTravelPlanData> {
+    if (!key && !token) {
+      const url = new URL(window.location.href);
+      const _key = url.searchParams.get('key');
+      if (_key) {
+        key = _key;
+      }
+
+      const _token = url.searchParams.get('token');
+      if (_token) {
+        token = _token;
+      }
+    }
+
+    console.info(['Loading preview', key, token]);
+
+    if (!key) {
+      throw new Error('Missing key..');
+    }
+
+    if (!this._dataLoader) {
+      this._dataLoader = new PreviewDataLoader(key, token);
+    }
+
+    return this._dataLoader.requestTravelplan();
+  }
+
+  public async load(travelplan_source_url?: string): Promise<Vtb> {
+    if (travelplan_source_url && !this.is_live_preview) {
+      console.info('Loading static...', travelplan_source_url);
+
+      const response = await fetch(travelplan_source_url);
+      const vtbSrcData = await response.json();
+      this.parse_vtb_data(vtbSrcData);
+      return this;
+    }
+
+    if (this.is_live_preview) {
+      console.info('Loading preview..');
+
+      const travelplan_data = await this.load_preview();
+
+      console.info('VTB::Load (preview)');
+      console.info(travelplan_data);
+
+      this.parse_vtb_data(travelplan_data);
+      return this;
+    }
+
+    if (!travelplan_source_url && !this.is_live_preview) {
+      console.error('No travelplan source url provided');
+    }
+
     return this;
   }
 
@@ -234,6 +291,7 @@ export class Vtb {
     map.width = map_options.width;
     map.zoom = map_options.zoom;
     map.markergroups = [marker_group];
+    map.default_labels = map_options.default_labels || false;
 
     const container = document.getElementById(container_id);
     container?.appendChild(map);
@@ -288,7 +346,6 @@ export class Vtb {
     return flightschedule;
   }
 
-
   public initializeTextEditors() {
     document.querySelectorAll('vtb-text').forEach((element) => {
       if (!element.hasAttribute('vtb-objectid')) {
@@ -296,17 +353,18 @@ export class Vtb {
         return;
       }
       element.setAttribute('editable', 'true');
-      element.addEventListener('vtbTextChanged', this._vtbTextChanged.bind(this));
+      element.addEventListener(
+        'vtbTextChanged',
+        this._vtbTextChanged.bind(this)
+      );
     });
   }
 
-  protected _vtbTextChanged(detail: any) {
+  protected _vtbTextChanged(
+    detail: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) {
     console.info('vtbTextChanged', detail);
-
   }
-
-
-
 
   // public pricetable(
   //   container_id: string,

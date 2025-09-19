@@ -54,10 +54,9 @@ import {
   Underline
 } from 'ckeditor5';
 
-import type { EditorConfig } from 'ckeditor5';
+import type {EditorConfig} from 'ckeditor5';
 
 import 'ckeditor5/ckeditor5.css';
-
 
 // class VtbTextSaveCommand extends Command {
 //   override execute() {
@@ -179,7 +178,15 @@ export class VtbTextElement extends LitElement {
       Superscript,
       Underline
     ],
-    balloonToolbar: ['bold', 'italic', '|', 'link', '|', 'bulletedList', 'numberedList'],
+    balloonToolbar: [
+      'bold',
+      'italic',
+      '|',
+      'link',
+      '|',
+      'bulletedList',
+      'numberedList'
+    ],
     fontFamily: {
       supportAllValues: true
     },
@@ -265,7 +272,10 @@ export class VtbTextElement extends LitElement {
   contents: string = '';
 
   private get _editor(): HTMLElement | null {
-    console.debug('editor: ', this.renderRoot.querySelector('div#editor-' + this.id));
+    console.debug(
+      'editor: ',
+      this.renderRoot.querySelector('div#editor-' + this.id)
+    );
     return this.renderRoot.querySelector('div#editor-' + this.id);
   }
 
@@ -363,7 +373,7 @@ export class VtbTextElement extends LitElement {
     console.debug('check innerHTML and content: ', {
       innerHTML: this.innerHTML,
       contents: this.contents,
-      'same?': (this.innerHTML == this.contents),
+      'same?': this.innerHTML == this.contents
     });
 
     if (this.isEditorInitialized && this._destroy_timer) {
@@ -386,8 +396,7 @@ export class VtbTextElement extends LitElement {
       const currentConfig = {...this.editorConfig};
       currentConfig.initialData = this.innerHTML || '';
 
-      InlineEditor
-        .create(this._editor, currentConfig)
+      InlineEditor.create(this._editor, currentConfig)
         .then((editorInstance) => {
           console.debug('promise:then');
           this.editor = editorInstance;
@@ -445,7 +454,6 @@ export class VtbTextElement extends LitElement {
     const destroy = this._destroyEditor.bind(this);
     this._destroy_timer = setTimeout(destroy, 3000);
 
-
     // }
   }
 
@@ -464,7 +472,6 @@ export class VtbTextElement extends LitElement {
       //   console.debug('set innerHTML: ', changed_content);
       //   this._editor.innerHTML = changed_content;
       // }
-
     }
   }
 }

@@ -56,10 +56,10 @@ export interface VtbConfig {
   client?: {
     apiKey?: string;
     origin?: string;
-  }
+  };
   maps?: {
     apiKey?: string;
-  }
+  };
 }
 
 export interface VtbParticipant {

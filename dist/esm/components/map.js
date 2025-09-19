@@ -35,6 +35,7 @@ let VtbMapMarkerElement = class VtbMapMarkerElement extends LitElement {
         super(...arguments);
         this.lat = 0.0;
         this.lng = 0.0;
+        this.default_label = false;
     }
     connectedCallback() {
         // console.debug('VTB-MAP-MARKER::connectedCallback');
@@ -58,6 +59,9 @@ __decorate([
 __decorate([
     property({ type: String })
 ], VtbMapMarkerElement.prototype, "label", void 0);
+__decorate([
+    property({ type: Boolean, attribute: 'default-label' })
+], VtbMapMarkerElement.prototype, "default_label", void 0);
 VtbMapMarkerElement = __decorate([
     customElement('vtb-map-marker')
 ], VtbMapMarkerElement);
@@ -199,6 +203,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         this.width = Number.NaN;
         this.zoom = Number.NaN;
         this.connect_markers = false;
+        this.default_labels = false;
         this.connect_mode = 'flight';
         this.use_info_window = false;
         this.mapstyles = [];
@@ -398,7 +403,18 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         const markerOptions = {};
         markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
         markerOptions.map = map;
-        markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
+        console.info({
+            'default labels: ': this.default_labels,
+            'marker default label': marker.default_label,
+            'marker label': marker.label
+        });
+        if (marker.label) {
+            markerOptions.label = marker.label;
+        }
+        if ((this.default_labels || marker.default_label) &&
+            (!marker.label || marker.label === '')) {
+            markerOptions.label = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[this.marker_counter];
+        }
         const gmarker = new google.maps.Marker(markerOptions);
         if (marker.title) {
             // console.debug('create rich marker markup');
@@ -492,6 +508,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, attribute: 'connect-markers' })
 ], VtbMapElement.prototype, "connect_markers", void 0);
+__decorate([
+    property({ type: Boolean, attribute: 'default-labels' })
+], VtbMapElement.prototype, "default_labels", void 0);
 __decorate([
     property({ type: String, attribute: 'connect-mode' })
 ], VtbMapElement.prototype, "connect_mode", void 0);

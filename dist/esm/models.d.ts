@@ -174,6 +174,7 @@ export declare class VtbMapMarker extends VtbGeoLocation implements interfaces.V
     zoom?: number;
     title?: string;
     content?: string;
+    default_label: boolean;
 }
 export declare class VtbMapMarkerGroup implements interfaces.VtbMapMarkerGroup {
     connect_markers: boolean;

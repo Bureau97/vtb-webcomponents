@@ -32,6 +32,7 @@ import '../components/text';
 import {Vtb} from '../vtb';
 import {VtbElement} from '../models';
 import {VtbConfig, VtbFilterConfig} from '../utils/interfaces';
+// import {VtbConfig} from '../utils/interfaces';
 import {VtbFlightScheduleElement} from '../components/flightschedule';
 import {VtbMediaElement} from '../components/media';
 import {VtbMapOptions} from '../components/map';
@@ -40,7 +41,6 @@ import {
   VtbCalculatorPriceElement
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
-
 import {currency} from '../utils/currency';
 import {strip_tags} from '../utils/string';
 
@@ -64,9 +64,13 @@ enum UnitTypes {
   FLIGHT = 3,
   FLIGHTNIGHT = 4,
   TRANSFER = 5,
+  TRANSFERNIGHT = 12,
   CARRENTAL = 6,
+  CAMPER_RENTAL = 7,
   ACTIVITY = 10,
-  EXTRA = 11
+  ACTIVITYNIGHT = 13,
+  EXTRA = 11,
+  DRIVER = 14
 }
 
 function vtbTextChanged(e?: Event) {
@@ -80,16 +84,31 @@ document.addEventListener('DOMContentLoaded', () => {
     calculate_flight_duration: true
   };
 
-  new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
+  const vtb = new Vtb(config);
 
+  if (vtb.is_live_preview) {
+    console.info('initialize live preview');
+    vtb.load().then(vtbDataLoaded);
+  } else {
+    console.info('initialize static preview');
+    vtb.load(travelplan_source_url).then(vtbDataLoaded);
+    vtb.initializeTextEditors();
+  }
+
+  // new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
 });
+
+// function vtbDataLoaded(vtb: Vtb) {
+//   console.info('vtbDataLoaded');
+//   console.debug(vtb);
+// }
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
 
   // if (vtb.is_live_preview) {
-    console.info('LIVE PREVIEW');
-    vtb.initializeTextEditors();
+  console.info('LIVE PREVIEW');
+  vtb.initializeTextEditors();
   // }
 
   // get info
@@ -129,6 +148,27 @@ function vtbDataLoaded(vtb: Vtb) {
     }
   }
 
+  const strip_tags__test_string =
+    '<strong>Uitgebreide map met reisbescheiden</strong><ul><li><strong><span style="color:#ff0000;">Ophalen in kantoor Haarlem&nbsp;</span></strong></li><li><strong><span style="color:#ff0000;">Per post verstuurd&nbsp;</span></strong></li><li><strong><span style="color:#ff0000;">Per post verstuurd buiten Nederland</span></strong></li><li>incl. kofferlabels</li><li>een geplastificeerde kaart van Suriname</li><li><a href="https://t.sidekickopen45.com/s3t/c/5/f18dQhb0S7kF8bNRfbW5gJqVg2zGCwVW8Jbw_88pTtbdVngXKT1p1Fc4W16gGz047cl5k101?te=W3R5hFj4cm2zwW4mKLS-4fGBq9W4cQhc81JD4TGW3ZSz5q3K72cXW4hLygg3zdxsh0&amp;si=7000000002374076&amp;pi=f1bf3d7a-1ed4-4f24-9c6f-d56416978b17" target="_blank">Te Gast in Suriname</a>&nbsp;boekje</li><li>&euro; 5,00 wordt gedoneerd&nbsp;aan <a href="https://treesforall.nl/">Trees for All</a> voor CO2 compensatie</li></ul>';
+
+  const strip_tags__test1 = document.getElementById('strip_tags__test1');
+  if (strip_tags__test1) {
+    strip_tags__test1.innerHTML =
+      '<h1>Original:</h1>' + strip_tags__test_string;
+  }
+  const strip_tags__test2 = document.getElementById('strip_tags__test2');
+  if (strip_tags__test2) {
+    strip_tags__test2.innerHTML =
+      '<h1>w/o excludes: </h1>' + strip_tags(strip_tags__test_string);
+  }
+
+  const strip_tags__test3 = document.getElementById('strip_tags__test3');
+  if (strip_tags__test3) {
+    strip_tags__test3.innerHTML =
+      '<h1>with excludes:</h1> ' +
+      strip_tags(strip_tags__test_string, ['a', 'strong']);
+  }
+
   // add flightschedule
   const flightschedule = document.getElementById(
     'flightschedule'
@@ -144,7 +184,8 @@ function vtbDataLoaded(vtb: Vtb) {
     const map_options: VtbMapOptions = {
       connect_markers: true,
       connect_mode: 'flight',
-      api_key: GOOGLE_MAPS_KEY
+      api_key: GOOGLE_MAPS_KEY,
+      default_labels: false
     };
 
     const map_search: VtbFilterConfig = {
@@ -411,6 +452,8 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     _t.editable = TEXT_EDIT_MODE_ENABLED;
     _t.innerHTML = itinerary_element.description || 'not set';
     _t.id = String(itinerary_element.id);
+    // _t.setAttribute('data-vtbobjectid', itinerary_element.object_id);
+    // _t.setAttribute('data-propertyName', 'description');
     itinerary.appendChild(_t);
 
     // show accos
@@ -432,6 +475,9 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       _p.addEventListener('vtbTextChanged', vtbTextChanged);
       _p.editable = TEXT_EDIT_MODE_ENABLED;
       _p.innerHTML = element.description ?? 'not set';
+      _p.setAttribute('data-objectid', String(element.object_id));
+      _p.setAttribute('data-propertyName', 'description');
+
       itinerary.appendChild(_p);
 
       // show all units for this acco
@@ -482,6 +528,9 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       _p.addEventListener('vtbTextChanged', vtbTextChanged);
       _p.editable = TEXT_EDIT_MODE_ENABLED;
       _p.innerHTML = element.description ?? 'not set';
+      _p.setAttribute('data-objectid', String(element.object_id));
+      _p.setAttribute('data-propertyName', 'description');
+
       itinerary.appendChild(_p);
     }
 
@@ -512,7 +561,11 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         let title = element.title;
 
         if (element.subtitle) {
-          title += element.subtitle;
+          title += ` [${element.subtitle}]`;
+        }
+
+        if (element.optional) {
+          title += ' (optioneel)';
         }
 
         if (element.optional) {
@@ -527,6 +580,10 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         _p.addEventListener('vtbTextChanged', vtbTextChanged);
         _p.editable = TEXT_EDIT_MODE_ENABLED;
         _p.innerHTML = element.description ?? 'not set';
+
+        _p.setAttribute('data-objectid', String(element.object_id));
+        _p.setAttribute('data-propertyName', 'description');
+
         itinerary.appendChild(_p);
 
         const units_list = document.createElement('ul');
@@ -539,6 +596,20 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
           content += ` (voor ${unit.participant_prices.length} ${
             unit.participant_prices.length === 1 ? 'persoon' : 'personen'
           })`;
+
+          if (unit.optional) {
+            content += ' (optioneel)';
+          }
+
+          if (unit.price) {
+            content += ` (${currency(unit.price)})`;
+          }
+
+          if (unit.price_diff != 0) {
+            content += ` (${
+              unit.price_diff > 0 ? 'meerprijs' : 'korting'
+            }: ${currency(unit.price_diff)})`;
+          }
 
           _u.innerHTML = content;
           units_list.appendChild(_u);
@@ -569,9 +640,11 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
         const _p = new VtbTextElement();
         _p.id = String(element.id);
-        _p.addEventListener('vtbTextChanged', vtbTextChanged);
-        _p.editable = TEXT_EDIT_MODE_ENABLED;
+        // _p.addEventListener('vtbTextChanged', vtbTextChanged);
+        // _p.editable = TEXT_EDIT_MODE_ENABLED;
         _p.innerHTML = element.description ?? 'not set';
+        _p.setAttribute('data-propertyName', 'description');
+        _p.setAttribute('data-objectId', String(element.object_id));
         itinerary.appendChild(_p);
 
         const price = document.createElement('p');
@@ -583,6 +656,8 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         }
         itinerary.appendChild(price);
       }
+
+      // debug_only_optional.innerHTML = non_optional_content;
     }
   }
 

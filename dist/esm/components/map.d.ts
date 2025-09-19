@@ -30,12 +30,14 @@ export interface VtbMapOptions {
     height?: number;
     width?: number;
     zoom?: number;
+    default_labels: boolean;
 }
 export declare class VtbMapMarkerElement extends LitElement {
     lat: number;
     lng: number;
     icon?: string;
     label?: string;
+    default_label: boolean;
     static styles: import("lit").CSSResult;
     connectedCallback(): void;
 }
@@ -61,6 +63,7 @@ export declare class VtbMapElement extends LitElement {
     width?: number;
     zoom?: number;
     connect_markers: boolean;
+    default_labels: boolean;
     get connectMarkers(): boolean;
     set connectMarkers(value: boolean);
     connect_mode?: string;

@@ -293,6 +293,9 @@ export class VtbElement implements interfaces.VtbElement {
         } else {
           // grouped[_u.id].participant_prices.push(..._u.participant_prices);  // TODO: merge participant_prices??
           grouped[_u.id].quantity++;
+          _u.participant_prices.forEach((value: VtbParticipantPrice, key: number) => {
+            grouped[_u.id].participant_prices.set(key, value)
+          })
         }
       }
 

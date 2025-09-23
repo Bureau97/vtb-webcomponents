@@ -45,7 +45,7 @@ import {currency} from '../utils/currency';
 import {strip_tags} from '../utils/string';
 
 // const travelplan_source_url = '/optionals.json';
-const travelplan_source_url = '/travelplan-dev.json';
+const travelplan_source_url = '/travelplan.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
 const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
@@ -587,9 +587,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     console.warn('=====================================');
 
     console.warn('All elements:');
-    const elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY]
-    });
+    const elements = vtb.filter_elements({});
 
     let content = 'All elements:' + '\n' + '===================== \n';
     elements.forEach((element) => {

@@ -312,6 +312,8 @@ export class VtbDataTransformer {
     element_group.type_id = segment_data.typeId;
     element_group.unit_id = segment_data.unitId;
 
+    console.info(`[parse_vtb_segment] Group ${element_group.title}`)
+
     if (segment_data.date) {
       element_group.startdate = dayjs(segment_data.date);
     }
@@ -331,6 +333,8 @@ export class VtbDataTransformer {
         `Date set to ${element_group.startdate.format('dddd D MMM')}`
       );
     }
+
+    if (element_group.day == 7) console.warn('THIS ELEMENT GROUP')
 
     if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
       element_group.is_flight = true;
@@ -360,6 +364,8 @@ export class VtbDataTransformer {
         segment_data.title
       );
 
+      console.info('[parse_vtb_segment]  Parsed element: ', `${vtb_element.title} [${vtb_element.ts_product_id}]`)
+
       if (!vtb_element.day) {
         vtb_element.day = segment_data.day + element_data.offset;
       }
@@ -384,7 +390,7 @@ export class VtbDataTransformer {
       // ]);
 
       if (!last_element) {
-        // console.info('[parse_vtb_segment] last element not set, adding element to group and set element as last element');
+        console.info('[parse_vtb_segment]   last element not set, adding element to group and set element as last element', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
         element_group.add_element(vtb_element);
         last_element = vtb_element;
         continue;
@@ -404,10 +410,10 @@ export class VtbDataTransformer {
         last_element.unit_id == vtb_element.unit_id
       ) {
         // add units to last element
-        // console.info(
-        //   '[parse_vtb_segment] current product id matches last element id, adding units to last element',
-        //   vtb_element.ts_product_id
-        // );
+        console.info(
+          '[parse_vtb_segment]   current product id matches last element id',
+          `${vtb_element.title} [${vtb_element.ts_product_id}] <> ${last_element.title} [${last_element.ts_product_id}]`
+        );
         // console.info(
         //   '[parse_vtb_segment]  -> last element: ',
         //   last_element.title,
@@ -500,62 +506,15 @@ export class VtbDataTransformer {
               );
             }
 
+            console.info('[parse_vtb_segment]   Adding unit to last element: ', 
+              `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
+            );
             last_element._units.push(unit);
-
-            // // if the unit participants match, set the price difference
-            // // betweem the current unit and the last unit
-            // if (
-            //   isEqual(sortBy(unit.participants), sortBy(last_unit.participants))
-            // ) {
-            //   console.info('[parse_vtb_segment]   unit participants match, setting price difference');
-            //   unit.price_diff = unit.price - last_unit.price;
-            //   // unit.price = 0;
-
-            //   last_element._units.push(unit);
-
-            //   unit_participants_match = true;
-
-            //   break;
-            // }
-            //   // if the unit participants do not match, add the unit to the last element
-            //   // it could be a completely different alternative to the (multiple) units of the last element
-            // else {
-            //   console.info(
-            //     '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
-            //   );
-
-            //   // set unit price difference by substracting the total element price from the last element from
-            //   // the unit price
-            //   unit.price_diff = unit.price - last_element.price; // TODO: check if this is correct
-
-            //   last_element._units.push(unit);
-
-            //   break;
-            // }
+            // continue
           }
-
-          // if the unit participants do not match, add the unit to the last element
-          // it could be a completely different alternative to the (multiple) units of the last element
-          // if (!unit_participants_match) {
-          //   console.info(
-          //     '[parse_vtb_segment]   unit participants do not match, adding unit to last element', unit
-          //   );
-
-          //   // TODO: find the current participants on the non-optional units in the last element
-          //   // get the price for these participants and subtract current unit price from it
-          //   const current_participants = unit.participants;
-          //   const non_optional_units = last_element._units.filter(
-          //     (unit) => !unit.optional
-          //   );
-
-          //   console.info(current_participants, non_optional_units);
-
-          //   unit.price_diff = unit.price - last_element.price;
-
-          //   last_element._units.push(unit);
-          // }
         }
-      } else {
+      } 
+      else {
         if (
           last_element.unit_id == vtb_element.unit_id &&
           last_element.startdate.toString() ==
@@ -567,10 +526,10 @@ export class VtbDataTransformer {
 
           // we have to find the unit that matches the participants from the last element
 
-          // console.info(
-          //   '[parse_vtb_segment] current unit id matches last element id, adding units to last element',
-          //   vtb_element.unit_id
-          // );
+          console.info(
+            '[parse_vtb_segment]   current unit id matches last element id',
+            `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
+          );
           // console.info(
           //   '[parse_vtb_segment]  -> last element: ',
           //   last_element.title,
@@ -644,6 +603,8 @@ export class VtbDataTransformer {
                   continue;
                 }
 
+                console.info('[parse_vtb_segment]   calculating price differences')
+
                 optional_participant_price.price_diff =
                   optional_participant_price.price -
                   non_optional_participant_price.price;
@@ -654,18 +615,33 @@ export class VtbDataTransformer {
                 );
               }
 
-              last_element._units.push(unit);
+              // console.info('[parse_vtb_segment]   Adding unit to last element: ', 
+              //   `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
+              // );
+              // last_element._units.push(unit);
+              // continue
             }
           }
         } else {
           console.debug(
-            '[parse_vtb_segment] current element does not match last element'
+            '[parse_vtb_segment]   Current element does not match last element'
           );
+
+          
         }
 
-        // console.info('[parse_vtb_segment]     adding element to group and set current element as last element');
+        // console.info('[parse_vtb_segment] NOT ading element: ', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
+        console.info('[parse_vtb_segment]   Adding element to group', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
         element_group.add_element(vtb_element);
-        last_element = vtb_element;
+
+        if (!vtb_element.optional){
+          console.info('[parse_vtb_segment]   Setting element as last element')
+          last_element = vtb_element;
+        }
+        
+        // // console.info('[parse_vtb_segment]     adding element to group and set current element as last element');
+        // element_group.add_element(vtb_element);
+        // last_element = vtb_element;
       }
     }
 
@@ -676,6 +652,9 @@ export class VtbDataTransformer {
       element_group.location.lng = segment_data.maps.longitude;
       element_group.location.zoom = segment_data.maps.zoom;
     }
+
+    if (element_group.day == 7)
+      console.info('element group: ', element_group)
 
     return element_group;
   }
@@ -773,7 +752,7 @@ export class VtbDataTransformer {
 
     vtb_element.title = element_data.title;
 
-    // console.info('Parse vtb element: ', vtb_element.title);
+    // console.info('[parse_vtb_element] Parse vtb element: ', vtb_element.title);
 
     vtb_element.subtitle = element_data.subTitle;
     // set element description, get all contents from the <body> and remove all style attributes

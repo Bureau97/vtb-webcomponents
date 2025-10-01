@@ -647,7 +647,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     console.warn('Participant elements');
     const participant_elements = vtb.filter_elements({
       element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
-      participant_ids: [2, 4]
+      participant_ids: [13461, 14114]
     });
 
     content += '===================== \n';
@@ -667,7 +667,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     console.warn('Participant elements');
     const participant_optional_elements = vtb.filter_elements({
       element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
-      participant_ids: [4],
+      participant_ids: [14116],
       optional: true
     });
 

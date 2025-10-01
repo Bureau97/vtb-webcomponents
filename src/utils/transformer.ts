@@ -312,7 +312,7 @@ export class VtbDataTransformer {
     element_group.type_id = segment_data.typeId;
     element_group.unit_id = segment_data.unitId;
 
-    console.info(`[parse_vtb_segment] Group ${element_group.title}`)
+    // console.info(`[parse_vtb_segment] Group ${element_group.title}`)
 
     if (segment_data.date) {
       element_group.startdate = dayjs(segment_data.date);
@@ -333,8 +333,6 @@ export class VtbDataTransformer {
         `Date set to ${element_group.startdate.format('dddd D MMM')}`
       );
     }
-
-    if (element_group.day == 7) console.warn('THIS ELEMENT GROUP')
 
     if (segment_data.flightInfo && segment_data.flightInfo.length >= 1) {
       element_group.is_flight = true;
@@ -364,7 +362,7 @@ export class VtbDataTransformer {
         segment_data.title
       );
 
-      console.info('[parse_vtb_segment]  Parsed element: ', `${vtb_element.title} [${vtb_element.ts_product_id}]`)
+      // console.info('[parse_vtb_segment]  Parsed element: ', `${vtb_element.title} [${vtb_element.ts_product_id}]`)
 
       if (!vtb_element.day) {
         vtb_element.day = segment_data.day + element_data.offset;
@@ -390,7 +388,7 @@ export class VtbDataTransformer {
       // ]);
 
       if (!last_element) {
-        console.info('[parse_vtb_segment]   last element not set, adding element to group and set element as last element', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
+        // console.info('[parse_vtb_segment]   last element not set, adding element to group and set element as last element', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
         element_group.add_element(vtb_element);
         last_element = vtb_element;
         continue;
@@ -410,10 +408,10 @@ export class VtbDataTransformer {
         last_element.unit_id == vtb_element.unit_id
       ) {
         // add units to last element
-        console.info(
-          '[parse_vtb_segment]   current product id matches last element id',
-          `${vtb_element.title} [${vtb_element.ts_product_id}] <> ${last_element.title} [${last_element.ts_product_id}]`
-        );
+        // console.info(
+        //   '[parse_vtb_segment]   current product id matches last element id',
+        //   `${vtb_element.title} [${vtb_element.ts_product_id}] <> ${last_element.title} [${last_element.ts_product_id}]`
+        // );
         // console.info(
         //   '[parse_vtb_segment]  -> last element: ',
         //   last_element.title,
@@ -506,15 +504,14 @@ export class VtbDataTransformer {
               );
             }
 
-            console.info('[parse_vtb_segment]   Adding unit to last element: ', 
-              `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
-            );
+            // console.info('[parse_vtb_segment]   Adding unit to last element: ',
+            //   `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
+            // );
             last_element._units.push(unit);
             // continue
           }
         }
-      } 
-      else {
+      } else {
         if (
           last_element.unit_id == vtb_element.unit_id &&
           last_element.startdate.toString() ==
@@ -526,10 +523,10 @@ export class VtbDataTransformer {
 
           // we have to find the unit that matches the participants from the last element
 
-          console.info(
-            '[parse_vtb_segment]   current unit id matches last element id',
-            `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
-          );
+          // console.info(
+          //   '[parse_vtb_segment]   current unit id matches last element id',
+          //   `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
+          // );
           // console.info(
           //   '[parse_vtb_segment]  -> last element: ',
           //   last_element.title,
@@ -603,8 +600,7 @@ export class VtbDataTransformer {
                   continue;
                 }
 
-                console.info('[parse_vtb_segment]   calculating price differences')
-
+                // console.info('[parse_vtb_segment]   calculating price differences for participant: ', matching_participant_id);
                 optional_participant_price.price_diff =
                   optional_participant_price.price -
                   non_optional_participant_price.price;
@@ -615,7 +611,7 @@ export class VtbDataTransformer {
                 );
               }
 
-              // console.info('[parse_vtb_segment]   Adding unit to last element: ', 
+              // console.info('[parse_vtb_segment]   Adding unit to last element: ',
               //   `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
               // );
               // last_element._units.push(unit);
@@ -623,22 +619,20 @@ export class VtbDataTransformer {
             }
           }
         } else {
-          console.debug(
-            '[parse_vtb_segment]   Current element does not match last element'
-          );
-
-          
+          // console.debug(
+          //   '[parse_vtb_segment]   Current element does not match last element'
+          // );
         }
 
         // console.info('[parse_vtb_segment] NOT ading element: ', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
-        console.info('[parse_vtb_segment]   Adding element to group', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
+        // console.info('[parse_vtb_segment]   Adding element to group', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
         element_group.add_element(vtb_element);
 
-        if (!vtb_element.optional){
-          console.info('[parse_vtb_segment]   Setting element as last element')
+        if (!vtb_element.optional) {
+          // console.info('[parse_vtb_segment]   Setting element as last element')
           last_element = vtb_element;
         }
-        
+
         // // console.info('[parse_vtb_segment]     adding element to group and set current element as last element');
         // element_group.add_element(vtb_element);
         // last_element = vtb_element;
@@ -653,8 +647,40 @@ export class VtbDataTransformer {
       element_group.location.zoom = segment_data.maps.zoom;
     }
 
-    if (element_group.day == 7)
-      console.info('element group: ', element_group)
+    // check all optional elements in this group if the same element exists more than once
+    const check_elements = element_group.elements;
+
+    const merged_elements: Array<VtbElement> = [];
+
+    if (check_elements.length > 1) {
+      let idx = 0;
+      for (const check_element of check_elements) {
+        if (!check_element.optional) {
+          merged_elements.push(check_element);
+          continue;
+        }
+
+        for (const other_element of check_elements) {
+          if (other_element == check_element) {
+            continue;
+          }
+
+          if (
+            other_element.ts_product_id == check_element.ts_product_id &&
+            other_element.day == check_element.day &&
+            other_element.nights == check_element.nights
+          ) {
+            check_element._units.push(...other_element._units);
+            merged_elements.push(check_element);
+            check_elements.splice(idx, 1);
+          }
+        }
+
+        idx++;
+      }
+
+      element_group.elements = merged_elements;
+    }
 
     return element_group;
   }

@@ -507,29 +507,16 @@ export class VtbDataTransformer {
                     merged_elements.push(check_element);
                 }
             }
-            // sort on day
+            // sort on day and optional
             merged_elements.sort((a, b) => {
-                if (a.day > b.day) {
-                    return 1;
+                // return elements sorted by day at first
+                const dayDiff = Number(a.day) - Number(b.day);
+                if (dayDiff != 0) {
+                    return dayDiff;
                 }
-                else if (a.day < b.day) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
-            });
-            // sort on optional
-            merged_elements.sort((a, b) => {
-                if (a.optional && !b.optional) {
-                    return 1;
-                }
-                else if (!a.optional && b.optional) {
-                    return -1;
-                }
-                else {
-                    return 0;
-                }
+                // sort by non-optional first
+                const optionalDiff = Number(a.optional) - Number(b.optional);
+                return optionalDiff;
             });
             element_group.elements = merged_elements;
         }

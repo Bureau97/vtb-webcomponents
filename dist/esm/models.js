@@ -223,7 +223,16 @@ export class VtbElement {
                     });
                 }
             }
-            this._grouped = Object.values(grouped);
+            // sort non-optional first
+            const _list = Object.values(grouped);
+            _list.sort((a, b) => {
+                const optionalDiff = Number(a.optional) - Number(b.optional);
+                if (optionalDiff != 0) {
+                    return optionalDiff;
+                }
+                return a.price - b.price;
+            });
+            this._grouped = _list;
         }
         // console.info('[vtbElement.units] return:');
         // console.log('[vtbElement.units] units: ', this._units);

@@ -225,7 +225,10 @@ export class Vtb {
     map_options: VtbMapOptions
   ): VtbMapElement {
     const marker_group = this.filter_mapmarkers(filter_config);
-    marker_group.connectMarkers = map_options.connect_markers;
+    // marker_group.markers.sort((x: VtbElement, y: VtbElement) => {
+    //   return x.day - y.day
+    // });
+    // marker_group.connectMarkers = map_options.connect_markers;
     marker_group.connectMode =
       map_options.connect_mode as VtbMapMarkerConnectMode;
 

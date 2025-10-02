@@ -605,7 +605,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Non-optional elements:');
     const non_optional_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+      // element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
       optional: false
     });
 
@@ -626,7 +626,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Optional elements');
     const optional_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+      // element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
       optional: true
     });
 

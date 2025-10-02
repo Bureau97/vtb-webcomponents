@@ -485,6 +485,7 @@ export class VtbDataTransformer {
                     merged_elements.push(check_element);
                     continue;
                 }
+                let found = false;
                 for (const other_element of check_elements) {
                     if (other_element == check_element) {
                         continue;
@@ -495,9 +496,14 @@ export class VtbDataTransformer {
                         check_element._units.push(...other_element._units);
                         merged_elements.push(check_element);
                         check_elements.splice(idx, 1);
+                        found = true;
+                        break;
                     }
                 }
                 idx++;
+                if (!found) {
+                    merged_elements.push(check_element);
+                }
             }
             element_group.elements = merged_elements;
         }

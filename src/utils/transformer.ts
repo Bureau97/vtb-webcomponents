@@ -384,7 +384,8 @@ export class VtbDataTransformer {
       //   vtb_element.title,
       //   vtb_element.ts_product_id,
       //   vtb_element.startdate.toString(),
-      //   vtb_element.unit_id
+      //   vtb_element.unit_id,
+      //   vtb_element.day
       // ]);
 
       if (!last_element) {
@@ -398,7 +399,8 @@ export class VtbDataTransformer {
       //   last_element.title,
       //   last_element.ts_product_id,
       //   last_element.startdate.toString(),
-      //   last_element.unit_id
+      //   last_element.unit_id,
+      //   last_element.day
       // ]);
 
       if (
@@ -620,7 +622,7 @@ export class VtbDataTransformer {
           }
         } else {
           // console.debug(
-          //   '[parse_vtb_segment]   Current element does not match last element'
+          //   '[parse_vtb_segment]   Current element does not match last element', `${vtb_element.title} [${vtb_element.ts_product_id} / ${vtb_element.unit_id}] <> ${last_element.title} [${last_element.ts_product_id} / ${last_element.unit_id}]`
           // );
         }
 
@@ -685,6 +687,28 @@ export class VtbDataTransformer {
           merged_elements.push(check_element);
         }
       }
+
+      // sort on day
+      merged_elements.sort((a, b) => {
+        if (a.day > b.day) {
+          return 1;
+        } else if (a.day < b.day) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+
+      // sort on optional
+      merged_elements.sort((a, b) => {
+        if (a.optional && !b.optional) {
+          return 1;
+        } else if (!a.optional && b.optional) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
 
       element_group.elements = merged_elements;
     }

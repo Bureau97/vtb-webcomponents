@@ -218,9 +218,21 @@ export class VtbElement {
                 else {
                     // grouped[_u.id].participant_prices.push(..._u.participant_prices);  // TODO: merge participant_prices??
                     grouped[_u.id].quantity++;
+                    _u.participant_prices.forEach((value, key) => {
+                        grouped[_u.id].participant_prices.set(key, value);
+                    });
                 }
             }
-            this._grouped = Object.values(grouped);
+            // sort non-optional first
+            const _list = Object.values(grouped);
+            _list.sort((a, b) => {
+                const optionalDiff = Number(a.optional) - Number(b.optional);
+                if (optionalDiff != 0) {
+                    return optionalDiff;
+                }
+                return a.price - b.price;
+            });
+            this._grouped = _list;
         }
         // console.info('[vtbElement.units] return:');
         // console.log('[vtbElement.units] units: ', this._units);
@@ -338,6 +350,9 @@ export class VtbElementGroup {
         // }
         // return ret;
         return this._elements;
+    }
+    set elements(elements) {
+        this._elements = elements;
     }
     filter_elements(config) {
         // const _element_ids = config.element_ids || [];

@@ -41,36 +41,152 @@ import {
   VtbCalculatorPriceElement
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
-import {currency} from '../utils/currency';
+
 import {strip_tags} from '../utils/string';
+import {currency} from '../utils/currency';
 
 // const travelplan_source_url = '/optionals.json';
-const travelplan_source_url = '/travelplan-dev.json';
+const travelplan_source_url = '/travelplan.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
 const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
 
-enum SegmentTypes {
+/**
+
+[
+    {
+        "id": 1,
+        "name": "Default"
+    },
+    {
+        "id": 4,
+        "name": "Flight"
+    },
+    {
+        "id": 7,
+        "name": "Flight_prices"
+    },
+    {
+        "id": 8,
+        "name": "Show_prices"
+    },
+    {
+        "id": 9,
+        "name": "Additions"
+    },
+    {
+        "id": 10,
+        "name": "Verzekeringen en extra's"
+    },
+    {
+        "id": 11,
+        "name": "Hide"
+    }
+]
+
+ */
+
+export enum SegmentTypes {
   DEFAULT = 1,
-  FLIGHT = 2,
+  FLIGHT = 4,
+  FLIGHTPRICES = 7,
+  SHOW = 8,
   TOESLAGEN = 9,
-  REISSOM = 4,
-  HIDDEN = 5
+  INSURANCE = 10,
+  HIDE = 11
 }
 
-enum UnitTypes {
-  DAY = 1,
+/**
+
+{
+    "id": 1,
+    "name": "dagen"
+},
+{
+    "id": 2,
+    "name": "nachten"
+},
+{
+    "id": 3,
+    "name": "maal"
+},
+{
+    "id": 4,
+    "name": "stuks"
+},
+{
+    "id": 5,
+    "name": "x"
+},
+{
+    "id": 6,
+    "name": "etmalen"
+},
+{
+    "id": 7,
+    "name": "personen"
+},
+{
+    "id": 8,
+    "name": "vlucht"
+},
+{
+    "id": 9,
+    "name": "nachtvlucht"
+},
+{
+    "id": 10,
+    "name": "transfer"
+},
+{
+    "id": 11,
+    "name": "excursion_day"
+},
+{
+    "id": 12,
+    "name": "autodag"
+},
+{
+    "id": 13,
+    "name": "free_days"
+},
+{
+    "id": 14,
+    "name": "free_nights"
+},
+{
+    "id": 15,
+    "name": "fietsdag"
+},
+{
+    "id": 16,
+    "name": "dummy_night"
+},
+{
+    "id": 17,
+    "name": "tekst"
+}
+
+ */
+
+export enum UnitTypes {
+  DAYS = 1,
   ACCO = 2,
-  FLIGHT = 3,
-  FLIGHTNIGHT = 4,
-  TRANSFER = 5,
-  TRANSFERNIGHT = 12,
-  CARRENTAL = 6,
-  CAMPER_RENTAL = 7,
-  ACTIVITY = 10,
-  ACTIVITYNIGHT = 13,
-  EXTRA = 11,
-  DRIVER = 14
+  MAAL = 3,
+  PCS = 4,
+  X = 5,
+  ETMAL = 6,
+  PPL = 7,
+  FLIGHT = 8,
+  FLIGHTNIGHT = 9,
+  TRANSFER = 10,
+  ACTIVITY = 11,
+  CARRENTAL = 12,
+  FREE_DAYS = 13,
+  FREE_NIGHTS = 14,
+  BIKERENTAL = 15,
+  DUMMY = 16,
+  TEXT = 17
 }
 
 function vtbTextChanged(e?: Event) {
@@ -189,8 +305,7 @@ function vtbDataLoaded(vtb: Vtb) {
     };
 
     const map_search: VtbFilterConfig = {
-      group_type_ids: [SegmentTypes.DEFAULT],
-      element_unit_ids: [UnitTypes.ACCO],
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DUMMY],
       optional: false
     };
 
@@ -277,7 +392,7 @@ function renderCalculator(vtb: Vtb) {
 
   if (package_total_price_element) {
     package_total_price_element.price = vtb.calculate_price({
-      group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.HIDDEN],
+      group_type_ids: [SegmentTypes.DEFAULT, SegmentTypes.HIDE],
       optional: false
     });
   }
@@ -561,11 +676,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         let title = element.title;
 
         if (element.subtitle) {
-          title += ` [${element.subtitle}]`;
-        }
-
-        if (element.optional) {
-          title += ' (optioneel)';
+          title += element.subtitle;
         }
 
         if (element.optional) {
@@ -596,20 +707,6 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
           content += ` (voor ${unit.participant_prices.length} ${
             unit.participant_prices.length === 1 ? 'persoon' : 'personen'
           })`;
-
-          if (unit.optional) {
-            content += ' (optioneel)';
-          }
-
-          if (unit.price) {
-            content += ` (${currency(unit.price)})`;
-          }
-
-          if (unit.price_diff != 0) {
-            content += ` (${
-              unit.price_diff > 0 ? 'meerprijs' : 'korting'
-            }: ${currency(unit.price_diff)})`;
-          }
 
           _u.innerHTML = content;
           units_list.appendChild(_u);
@@ -656,8 +753,6 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         }
         itinerary.appendChild(price);
       }
-
-      // debug_only_optional.innerHTML = non_optional_content;
     }
   }
 
@@ -668,9 +763,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     console.warn('=====================================');
 
     console.warn('All elements:');
-    const elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY]
-    });
+    const elements = vtb.filter_elements({});
 
     let content = 'All elements:' + '\n' + '===================== \n';
     elements.forEach((element) => {
@@ -688,7 +781,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Non-optional elements:');
     const non_optional_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+      // element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
       optional: false
     });
 
@@ -709,7 +802,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Optional elements');
     const optional_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
+      // element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
       optional: true
     });
 
@@ -729,8 +822,8 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Participant elements');
     const participant_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
-      participant_ids: [2, 4]
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAYS],
+      participant_ids: [13461, 14114]
     });
 
     content += '===================== \n';
@@ -749,8 +842,8 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     console.warn('Participant elements');
     const participant_optional_elements = vtb.filter_elements({
-      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAY],
-      participant_ids: [4],
+      element_unit_ids: [UnitTypes.ACCO, UnitTypes.DAYS],
+      participant_ids: [14116],
       optional: true
     });
 

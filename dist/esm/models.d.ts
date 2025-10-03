@@ -161,6 +161,7 @@ export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     private _elements;
     add_element(element: VtbElement): void;
     get elements(): Array<VtbElement>;
+    set elements(elements: Array<VtbElement>);
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;
     clone(): VtbElementGroup;
 }

@@ -196,7 +196,10 @@ export class Vtb {
     }
     map(container_id, filter_config, map_options) {
         const marker_group = this.filter_mapmarkers(filter_config);
-        marker_group.connectMarkers = map_options.connect_markers;
+        // marker_group.markers.sort((x: VtbElement, y: VtbElement) => {
+        //   return x.day - y.day
+        // });
+        // marker_group.connectMarkers = map_options.connect_markers;
         marker_group.connectMode =
             map_options.connect_mode;
         const map = new VtbMapElement();

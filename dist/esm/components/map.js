@@ -403,11 +403,11 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         const markerOptions = {};
         markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
         markerOptions.map = map;
-        console.info({
-            'default labels: ': this.default_labels,
-            'marker default label': marker.default_label,
-            'marker label': marker.label
-        });
+        // console.info({
+        //   'default labels: ': this.default_labels,
+        //   'marker default label': marker.default_label,
+        //   'marker label': marker.label
+        // });
         if (marker.label) {
             markerOptions.label = marker.label;
         }

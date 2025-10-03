@@ -1,5 +1,28 @@
+/**
+ *
+ * Copyright 2024 Huub Segers - B97
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 import { type Dayjs } from 'dayjs';
-import { Dictionary, VtbFilterConfig } from './utils/interfaces.js';
+import { Dictionary, VtbFilterConfig, SizedMap } from './utils/interfaces.js';
 import * as interfaces from './utils/interfaces.js';
 import * as types from './utils/types.js';
 export declare class VtbParticipant implements interfaces.VtbParticipant {
@@ -16,6 +39,7 @@ export declare class VtbParticipant implements interfaces.VtbParticipant {
 export declare class VtbParticipantPrice implements interfaces.VtbParticipantPrice {
     participant_id: number;
     price: number;
+    price_diff: number;
 }
 export declare class VtbParty implements interfaces.VtbParty {
     id: number | string;
@@ -62,18 +86,24 @@ export declare class VtbFlightData implements interfaces.VtbFlightData {
 }
 export declare class VtbElementUnit implements interfaces.VtbElementUnit {
     title: string;
-    participant_prices: Array<VtbParticipantPrice>;
+    participant_prices: SizedMap<number, VtbParticipantPrice>;
     quantity: number;
     optional: boolean;
-    price: number;
-    price_diff: number;
     description: string;
     additional_description: string;
     media: Array<VtbMedia>;
     extra_fields: Dictionary<VtbExtraField>;
+    location?: VtbMapMarker;
+    _element_id: number;
+    _ts_product_id: number;
+    constructor();
+    private _setup_participant_prices;
     private _hash;
     get id(): string;
     get participants(): Array<number>;
+    get price(): number;
+    get price_diff(): number;
+    clone(deep?: boolean): VtbElementUnit;
 }
 export declare class VtbElement implements interfaces.VtbElement {
     id: string;
@@ -81,11 +111,6 @@ export declare class VtbElement implements interfaces.VtbElement {
     ts_product_id: number;
     title: string;
     subtitle: string;
-    description: string;
-    additional_description: string;
-    price: number;
-    price_diff: number;
-    optional: boolean;
     nights: number;
     hidden: boolean;
     day: number;
@@ -94,15 +119,21 @@ export declare class VtbElement implements interfaces.VtbElement {
     unit_id: number;
     participant_prices: Array<VtbParticipantPrice>;
     grouptitle?: string;
-    media: Array<VtbMedia>;
-    location?: VtbMapMarker;
     _units: Array<VtbElementUnit>;
-    extra_fields: Dictionary<VtbExtraField>;
+    get optional(): boolean;
+    get price(): number;
+    get price_diff(): number;
     private _grouped;
     get units(): Array<VtbElementUnit>;
     get participants(): Array<number>;
     get last_day(): number;
     get days(): number;
+    get description(): string;
+    get additional_description(): string;
+    get extra_fields(): Dictionary<VtbExtraField>;
+    get media(): Array<VtbMedia>;
+    get location(): VtbMapMarker | undefined;
+    get locations(): Array<VtbMapMarker>;
     clone(): VtbElement;
 }
 export declare class VtbElementGroup implements interfaces.VtbElementGroup {
@@ -127,8 +158,10 @@ export declare class VtbElementGroup implements interfaces.VtbElementGroup {
     private elements_order;
     private mapped_elements_by_type;
     private mapped_elements_by_day;
+    private _elements;
     add_element(element: VtbElement): void;
     get elements(): Array<VtbElement>;
+    set elements(elements: Array<VtbElement>);
     filter_elements(config: VtbFilterConfig): Array<VtbElement>;
     clone(): VtbElementGroup;
 }

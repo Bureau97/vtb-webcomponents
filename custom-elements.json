@@ -355,6 +355,14 @@
                 "text": "number"
               },
               "default": "0.0"
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.0"
             }
           ]
         },
@@ -644,9 +652,9 @@
               "kind": "field",
               "name": "participant_prices",
               "type": {
-                "text": "Array<VtbParticipantPrice>"
+                "text": "SizedMap<number, VtbParticipantPrice>"
               },
-              "default": "[]"
+              "default": "new Map( null )"
             },
             {
               "kind": "field",
@@ -663,22 +671,6 @@
                 "text": "boolean"
               },
               "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "price_diff",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
             },
             {
               "kind": "field",
@@ -714,6 +706,34 @@
             },
             {
               "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_element_id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_ts_product_id",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "method",
+              "name": "_setup_participant_prices",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "_hash",
               "type": {
                 "text": "number"
@@ -736,6 +756,41 @@
                 "text": "Array<number>"
               },
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "clone",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "VtbElementUnit"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "deep",
+                  "default": "false",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -782,46 +837,6 @@
                 "text": "string"
               },
               "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "description",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "additional_description",
-              "type": {
-                "text": "string"
-              },
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "price",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "price_diff",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.0"
-            },
-            {
-              "kind": "field",
-              "name": "optional",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
             },
             {
               "kind": "field",
@@ -886,21 +901,6 @@
             },
             {
               "kind": "field",
-              "name": "media",
-              "type": {
-                "text": "Array<VtbMedia>"
-              },
-              "default": "[]"
-            },
-            {
-              "kind": "field",
-              "name": "location",
-              "type": {
-                "text": "VtbMapMarker | undefined"
-              }
-            },
-            {
-              "kind": "field",
               "name": "_units",
               "type": {
                 "text": "Array<VtbElementUnit>"
@@ -909,11 +909,27 @@
             },
             {
               "kind": "field",
-              "name": "extra_fields",
+              "name": "optional",
               "type": {
-                "text": "Dictionary<VtbExtraField>"
+                "text": "boolean"
               },
-              "default": "{}"
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "price_diff",
+              "type": {
+                "text": "number"
+              },
+              "readonly": true
             },
             {
               "kind": "field",
@@ -953,6 +969,54 @@
               "name": "days",
               "type": {
                 "text": "number"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "additional_description",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "extra_fields",
+              "type": {
+                "text": "Dictionary<VtbExtraField>"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "media",
+              "type": {
+                "text": "Array<VtbMedia>"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "location",
+              "type": {
+                "text": "VtbMapMarker | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "locations",
+              "type": {
+                "text": "Array<VtbMapMarker>"
               },
               "readonly": true
             },
@@ -1138,6 +1202,15 @@
               "default": "{}"
             },
             {
+              "kind": "field",
+              "name": "_elements",
+              "type": {
+                "text": "Array<VtbElement>"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
               "kind": "method",
               "name": "add_element",
               "privacy": "public",
@@ -1155,8 +1228,7 @@
               "name": "elements",
               "type": {
                 "text": "Array<VtbElement>"
-              },
-              "readonly": true
+              }
             },
             {
               "kind": "method",
@@ -2209,12 +2281,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
     },
     {
       "kind": "javascript-module",
@@ -3781,7 +3847,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
+      "path": "src/dev/main.ts",
       "declarations": [],
       "exports": []
     },
@@ -3820,7 +3886,8 @@
               },
               "optional": true
             }
-          ]
+          ],
+          "description": "\n// vtb-webcomponents/src/utils/currency.ts\n\nCopyright 2024 Huub Segers - B97\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the “Software”), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\nof the Software, and to permit persons to whom the Software is furnished to do\nso, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,\nINCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A\nPARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT\nHOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
         }
       ],
       "exports": [
@@ -3986,7 +4053,8 @@
                 "text": "Array<string>"
               }
             }
-          ]
+          ],
+          "description": "\n// vtb-webcomponents/src/utils/string.ts\n\nCopyright 2024 Huub Segers - B97\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
         }
       ],
       "exports": [
@@ -4099,6 +4167,11 @@
               "kind": "method",
               "name": "parse_vtb_segment",
               "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElementGroup"
+                }
+              },
               "parameters": [
                 {
                   "name": "segment_data",
@@ -4122,8 +4195,31 @@
             },
             {
               "kind": "method",
+              "name": "parse_vtb_element_unit",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElementUnit"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "element_data",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "parse_vtb_element",
               "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "VtbElement"
+                }
+              },
               "parameters": [
                 {
                   "name": "element_data",
@@ -4157,6 +4253,12 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

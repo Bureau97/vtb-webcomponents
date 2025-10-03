@@ -1,7 +1,33 @@
+/**
+ *
+ * Copyright 2024 Huub Segers - B97
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 import { type Dayjs } from 'dayjs';
 import * as types from './types.js';
 export interface Dictionary<Type> {
     [key: string | number]: Type;
+}
+export interface SizedMap<K, V> extends Map<K, V> {
+    length: number;
 }
 export interface VtbFilterConfig {
     group_ids?: Array<number | string | null>;
@@ -69,17 +95,19 @@ export interface VtbFlightData {
 export interface VtbParticipantPrice {
     participant_id: number;
     price: number;
+    price_diff: number;
 }
 export interface VtbElementUnit {
     title: string;
     optional?: boolean;
-    participant_prices: Array<VtbParticipantPrice>;
+    participant_prices: Map<number, VtbParticipantPrice>;
     price: number;
     price_diff: number;
     description?: string;
     additional_description?: string;
     media?: Array<VtbMedia>;
     extra_fields?: Dictionary<VtbExtraField>;
+    location?: VtbMapMarker;
 }
 export interface VtbElement {
     id: string;

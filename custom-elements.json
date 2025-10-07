@@ -3853,12 +3853,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/currency.ts",
       "declarations": [
         {
@@ -4259,6 +4253,12 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

@@ -140,6 +140,7 @@ export class VtbDataTransformer {
     parse_carrental_elements(segment_data, // eslint-disable-line @typescript-eslint/no-explicit-any,
     segment_parent_data // eslint-disable-line @typescript-eslint/no-explicit-any,
     ) {
+        // console.info('parse_carrental_elements');
         // console.info(segment_data, typeof segment_data);
         let last_element = null;
         for (const carElementData of segment_data) {
@@ -584,75 +585,29 @@ export class VtbDataTransformer {
         vtb_element.object_id = element_data.vtbObjectId || vtb_element.id;
         vtb_element.ts_product_id = element_data.TSProduct.id;
         vtb_element.title = element_data.title;
-        // console.info('[parse_vtb_element] Parse vtb element: ', vtb_element.title);
         vtb_element.subtitle = element_data.subTitle;
-        // set element description, get all contents from the <body> and remove all style attributes
-        // vtb_element.description = element_data.additionalText
-        //   ? element_data.additionalText
-        //       ?.replace(this.re_body, '$1')
-        //       ?.replace(this.re_style, '')
-        //   : '';
-        // vtb_element.additional_description = element_data.subAdditionalText
-        //   ? element_data.subAdditionalText
-        //       ?.replace(this.re_body, '$1')
-        //       ?.replace(this.re_style, '')
-        //   : '';
-        // vtb_element.optional = element_data.optional;
-        // vtb_element.price = parseFloat(element_data.olPrices?.salesTotal || 0);
         vtb_element.nights = element_data.flexNights || element_data.nights;
         vtb_element.day = element_data.day;
         vtb_element.unit_id = element_data.unitId;
         vtb_element.grouptitle = grouptitle;
+        // since october 2025 we can have an end offset for the nights
+        if (element_data.endOffset) {
+            // the nights should be reduced by the end offset
+            vtb_element.nights -= element_data.endOffset;
+        }
         if (element_data.date) {
             vtb_element.startdate = dayjs(element_data.date);
         }
         if (element_data.endDate) {
             vtb_element.enddate = dayjs(element_data.endDate);
         }
-        // if (element_data.media && element_data.media.length >= 1) {
-        //   for (const media_data of element_data.media) {
-        //     const media = new VtbMedia();
-        //     media.src = media_data.url;
-        //     media.id = media_data.sourceId;
-        //     media.tags = media_data.tags;
-        //     vtb_element.media.push(media);
-        //   }
-        // }
-        // copy all element data to element unit
+        else {
+            vtb_element.enddate = vtb_element.startdate.add(vtb_element.nights, 'days'); // keep the offset in mind!
+        }
+        // parse element as unit
         const vtb_element_unit = this.parse_vtb_element_unit(element_data);
-        // for (const participant_id of Object.keys(
-        //   element_data.olPrices?.participants
-        // )) {
-        //   const participant_element_price = new VtbParticipantPrice();
-        //   participant_element_price.participant_id = Number(participant_id);
-        //   participant_element_price.price = parseFloat(
-        //     element_data.olPrices.participants[participant_id]?.salesPrice || 0
-        //   );
-        //   vtb_element.participant_prices.push(participant_element_price);
-        //   vtb_element_unit.participant_prices.push(participant_element_price);
-        // }
+        // and add it to the element
         vtb_element._units.push(vtb_element_unit);
-        // if (
-        //   element_data.maps &&
-        //   element_data.maps.enabled &&
-        //   element_data.maps.latitude != 0 &&
-        //   element_data.maps.longitude != 0
-        // ) {
-        //   // console.debug('element_data.maps', element_data);
-        //   vtb_element.location = new VtbMapMarker();
-        //   vtb_element.location.lat = element_data.maps.latitude;
-        //   vtb_element.location.lng = element_data.maps.longitude;
-        //   vtb_element.location.zoom = element_data.maps.zoom || 16;
-        //   vtb_element.location.title = element_data.title;
-        //   vtb_element.location.content = element_data.additionalText;
-        // }
-        // console.info('parse_vtb_segment::vtb_element: ', vtb_element);
-        // if (element_data.TSOrderline && element_data.TSOrderline.extraFieldValues) {
-        //   for (const extraField of element_data.TSOrderline.extraFieldValues) {
-        //     const vtb_extra_field = this.parse_extra_field(extraField);
-        //     vtb_element.extra_fields[vtb_extra_field.name] = vtb_extra_field;
-        //   }
-        // }
         return vtb_element;
     }
 }

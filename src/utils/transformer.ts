@@ -827,6 +827,15 @@ export class VtbDataTransformer {
       ); // keep the offset in mind!
     }
 
+    const calculated_diff = vtb_element.startdate.diff(vtb_element.enddate, 'days');
+
+    if (calculated_diff != vtb_element.nights) {
+      console.warn(
+        `calculated diff days (${calculated_diff}) does not match nights (${vtb_element.nights})`
+      );
+      vtb_element.nights = calculated_diff;
+    }
+
     // parse element as unit
     const vtb_element_unit = this.parse_vtb_element_unit(element_data);
     // and add it to the element

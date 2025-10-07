@@ -316,11 +316,19 @@ export class VtbDataTransformer {
         vtb_element.day = element_data.day;
         vtb_element.unit_id = element_data.unitId;
         vtb_element.grouptitle = grouptitle;
+        // since october 2025 we can have an end offset for the nights
+        if (element_data.endOffset) {
+            // the nights should be reduced by the end offset
+            vtb_element.nights -= element_data.endOffset;
+        }
         if (element_data.date) {
             vtb_element.startdate = dayjs(element_data.date);
         }
         if (element_data.endDate) {
             vtb_element.enddate = dayjs(element_data.endDate);
+        }
+        else {
+            vtb_element.enddate = vtb_element.startdate.add(vtb_element.nights, 'days'); // keep the offset in mind!
         }
         if (element_data.media && element_data.media.length >= 1) {
             for (const media_data of element_data.media) {

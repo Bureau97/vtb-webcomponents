@@ -2302,6 +2302,12 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/calculator.ts",
       "declarations": [
         {
@@ -3883,18 +3889,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/utils/client.ts",
       "declarations": [
         {
@@ -4428,6 +4422,12 @@
     {
       "kind": "javascript-module",
       "path": "src/utils/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/test/vtb-webcomponents_test.ts",
       "declarations": [],
       "exports": []
     }

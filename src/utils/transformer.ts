@@ -820,9 +820,11 @@ export class VtbDataTransformer {
 
     if (element_data.endDate) {
       vtb_element.enddate = dayjs(element_data.endDate);
-    }
-    else {
-      vtb_element.enddate = vtb_element.startdate.add(vtb_element.nights, 'days');  // keep the offset in mind!
+    } else {
+      vtb_element.enddate = vtb_element.startdate.add(
+        vtb_element.nights,
+        'days'
+      ); // keep the offset in mind!
     }
 
     // parse element as unit

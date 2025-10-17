@@ -48,10 +48,10 @@ export interface VtbMapOptions {
 
 @customElement('vtb-map-marker')
 export class VtbMapMarkerElement extends LitElement {
-  @property({type: Number, reflect: true})
+  @property({type: Number})
   lat: number = 0.0;
 
-  @property({type: Number, reflect: true})
+  @property({type: Number})
   lng: number = 0.0;
 
   @property({type: String})

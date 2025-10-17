@@ -2284,12 +2284,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/calculator.ts",
       "declarations": [
         {
@@ -2950,8 +2944,7 @@
                 "text": "number"
               },
               "default": "0.0",
-              "attribute": "lat",
-              "reflects": true
+              "attribute": "lat"
             },
             {
               "kind": "field",
@@ -2960,8 +2953,7 @@
                 "text": "number"
               },
               "default": "0.0",
-              "attribute": "lng",
-              "reflects": true
+              "attribute": "lng"
             },
             {
               "kind": "field",
@@ -3850,6 +3842,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/dev/main.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",

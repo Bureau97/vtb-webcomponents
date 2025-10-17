@@ -48,10 +48,10 @@ VtbMapMarkerElement.styles = css `
     }
   `;
 __decorate([
-    property({ type: Number, reflect: true })
+    property({ type: Number })
 ], VtbMapMarkerElement.prototype, "lat", void 0);
 __decorate([
-    property({ type: Number, reflect: true })
+    property({ type: Number })
 ], VtbMapMarkerElement.prototype, "lng", void 0);
 __decorate([
     property({ type: String })

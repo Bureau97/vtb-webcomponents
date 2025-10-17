@@ -283,7 +283,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         return false;
     }
     render() {
-        // console.debug('VTB-MAP::render');
+        console.debug('VTB-MAP::render');
         const containerStyles = {};
         if (this.height && this.height > 0) {
             containerStyles.height = this.height.toString() + 'px';
@@ -298,7 +298,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
     `;
     }
     firstUpdated() {
-        // console.debug('VTB-MAP::firstUpdated');
+        console.debug('VTB-MAP::firstUpdated');
         this._loader
             ?.load()
             .then((google // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -312,7 +312,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         });
     }
     initializeMap() {
-        // console.debug('VTB-MAP::initializeMap');
+        console.debug('VTB-MAP::initializeMap');
         const mapoptions = {
             zoom: 1, // default zoom level, without it stops rendering
             mapTypeControl: false, // disable map control
@@ -350,7 +350,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         }
     }
     addMarkers() {
-        // console.debug('VTB-MAP::addMarkers');
+        console.debug('VTB-MAP::addMarkers');
         if (!this._google || !this._map) {
             // console.debug('not adding markers (yet): ', [this._google, this._map]);
             return;
@@ -398,11 +398,12 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         }
     }
     addMarker(marker) {
-        // console.debug('VTB-MAP::addMarker => ', marker);
+        console.debug('VTB-MAP::addMarker => ', marker);
         const map = this._map;
         const markerOptions = {};
         markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
         markerOptions.map = map;
+        console.info(markerOptions, markerOptions.position.lat(), markerOptions.position.lng());
         // console.info({
         //   'default labels: ': this.default_labels,
         //   'marker default label': marker.default_label,

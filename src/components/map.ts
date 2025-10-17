@@ -387,7 +387,7 @@ export class VtbMapElement extends LitElement {
   }
 
   override render() {
-    // console.debug('VTB-MAP::render');
+    console.debug('VTB-MAP::render');
 
     const containerStyles: StyleInfo = {};
     if (this.height && this.height > 0) {
@@ -406,7 +406,7 @@ export class VtbMapElement extends LitElement {
   }
 
   override firstUpdated() {
-    // console.debug('VTB-MAP::firstUpdated');
+    console.debug('VTB-MAP::firstUpdated');
     this._loader
       ?.load()
       .then(
@@ -424,7 +424,8 @@ export class VtbMapElement extends LitElement {
   }
 
   protected initializeMap() {
-    // console.debug('VTB-MAP::initializeMap');
+    console.debug('VTB-MAP::initializeMap');
+
     const mapoptions = {
       zoom: 1, // default zoom level, without it stops rendering
       mapTypeControl: false, // disable map control
@@ -474,7 +475,7 @@ export class VtbMapElement extends LitElement {
   }
 
   protected addMarkers() {
-    // console.debug('VTB-MAP::addMarkers');
+    console.debug('VTB-MAP::addMarkers');
 
     if (!this._google || !this._map) {
       // console.debug('not adding markers (yet): ', [this._google, this._map]);
@@ -534,12 +535,18 @@ export class VtbMapElement extends LitElement {
   }
 
   protected addMarker(marker: VtbMapMarker) {
-    // console.debug('VTB-MAP::addMarker => ', marker);
+    console.debug('VTB-MAP::addMarker => ', marker);
     const map: google.maps.Map | null | undefined = this._map;
 
     const markerOptions: google.maps.MarkerOptions = {};
     markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
     markerOptions.map = map;
+
+    console.info(
+      markerOptions,
+      markerOptions.position.lat(),
+      markerOptions.position.lng()
+    );
 
     // console.info({
     //   'default labels: ': this.default_labels,

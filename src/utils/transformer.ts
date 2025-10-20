@@ -642,6 +642,10 @@ export class VtbDataTransformer {
       }
     }
 
+    // TODO: check all elements against each other for price differences
+    // instead of checking the current element against the last element
+    // also regrouping elements with the same ts product id could be useful
+
     if (segment_data.maps) {
       // console.debug('segment_data.maps', segment_data);
       element_group.location = new VtbMapMarker();

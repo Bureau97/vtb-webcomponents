@@ -436,6 +436,7 @@ export class VtbDataTransformer {
             continue;
           }
 
+          // unit is optional
           // walk through the units of the last element
           // to see if the unit participants match
           for (const check_unit of last_element._units) {
@@ -457,7 +458,7 @@ export class VtbDataTransformer {
             );
 
             // if no matching participants have been found,
-            // we can go on with the next unit:
+            // we can go on with the next unit to check:
             if (matching_participants.length <= 0) {
               // console.info(
               //   'no matching participants found on unit ',
@@ -513,7 +514,11 @@ export class VtbDataTransformer {
             // continue
           }
         }
-      } else {
+      } 
+      else {
+
+        let match_found = false;
+
         if (
           last_element.unit_id == vtb_element.unit_id &&
           last_element.startdate.toString() ==
@@ -611,6 +616,8 @@ export class VtbDataTransformer {
                   matching_participant_id,
                   optional_participant_price
                 );
+
+                match_found = true;
               }
 
               // console.info('[parse_vtb_segment]   Adding unit to last element: ',
@@ -630,8 +637,8 @@ export class VtbDataTransformer {
         // console.info('[parse_vtb_segment]   Adding element to group', `${vtb_element.title} [${vtb_element.ts_product_id}]`);
         element_group.add_element(vtb_element);
 
-        if (!vtb_element.optional) {
-          // console.info('[parse_vtb_segment]   Setting element as last element')
+        if (!match_found){
+          console.info('[parse_vtb_segment]   Setting element as last element')
           last_element = vtb_element;
         }
 

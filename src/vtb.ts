@@ -387,9 +387,9 @@ export class Vtb {
       const value = element[propertyName];
 
       const textElement = new VtbTextElement();
-      textElement.objectId = element.id;
-      textElement.propertyName = propertyName;
-      textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
+      textElement.object_id = element.id;
+      textElement.property_name = propertyName;
+      textElement.editor_type = isRichText ? EditorType.HTML : EditorType.SIMPLE;
       textElement.editable = true;
       textElement.innerHTML = value;
 

@@ -48,6 +48,7 @@
     "lodash": "^4.17.21",
     "murmurhash": "^2.0.1",
     "pubnub": "^9.3.0",
+    "quill": "^2.0.3",
     "uuid": "^11.0.5"
   },
   "devDependencies": {

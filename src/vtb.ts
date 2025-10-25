@@ -46,6 +46,7 @@ import {
 } from './components/flightschedule.js';
 
 import {PreviewDataLoader} from './utils/preview.js';
+import { VtbTextElement, EditorType } from './components/text.js';
 
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -367,6 +368,43 @@ export class Vtb {
     detail: any // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
     console.info('vtbTextChanged', detail);
+  }
+
+
+  public text(element: VtbElement | VtbElementGroup, propertyName: string, isRichText: boolean = false): VtbTextElement | undefined {
+    if (propertyName in element) {
+
+      // if (!this.is_live_preview) {  // editor only works with live preview
+      //   const t = document.createElement('div');
+      //   // @ts-ignore
+      //   t.innerHTML = element[propertyName];
+      //   container.appendChild(t);
+
+      //   return;
+      // }
+
+      // @ts-ignore
+      const value = element[propertyName];
+
+      const textElement = new VtbTextElement();
+      textElement.objectId = element.id;
+      textElement.propertyName = propertyName;
+      textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
+      textElement.editable = true;
+      textElement.innerHTML = value;
+
+      textElement.addEventListener(
+        'vtbTextChanged',
+        this._vtbTextChanged.bind(this)
+      );
+
+      return textElement
+    }
+    else {
+      console.error(`property ${propertyName} not found on element ${element.id}: `);
+    }
+
+    return;
   }
 
   // public pricetable(

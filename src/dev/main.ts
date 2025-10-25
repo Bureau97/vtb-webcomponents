@@ -557,19 +557,25 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
     if (itinerary_element.subtitle) {
       const _h2 = document.createElement('h3');
-      _h2.innerHTML = itinerary_element.subtitle;
+      // _h2.innerHTML = itinerary_element.subtitle;
+      const _h2Content = vtb.text(itinerary_element, 'subtitle', false);
+      if (_h2Content) {
+        _h2.appendChild(_h2Content);
+      }
       itinerary.appendChild(_h2);
     }
 
     // add VTB Text element to be able to edit the description
-    const _t = new VtbTextElement();
-    _t.addEventListener('vtbTextChanged', vtbTextChanged);
-    _t.editable = TEXT_EDIT_MODE_ENABLED;
-    _t.innerHTML = itinerary_element.description || 'not set';
-    _t.id = String(itinerary_element.id);
-    // _t.setAttribute('data-vtbobjectid', itinerary_element.object_id);
-    // _t.setAttribute('data-propertyName', 'description');
-    itinerary.appendChild(_t);
+    // const _t = new VtbTextElement();
+    // _t.addEventListener('vtbTextChanged', vtbTextChanged);
+    // _t.editable = TEXT_EDIT_MODE_ENABLED;
+    // _t.innerHTML = itinerary_element.description || 'not set';
+    // _t.id = String(itinerary_element.id);
+    // // _t.setAttribute('data-vtbobjectid', itinerary_element.object_id);
+    // // _t.setAttribute('data-propertyName', 'description');
+    const _t = vtb.text(itinerary_element, 'description', true);
+    if (_t)
+      itinerary.appendChild(_t);
 
     // show accos
     for (const element of itinerary_element.filter_elements({
@@ -582,18 +588,29 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       if (element.subtitle) {
         title += element.subtitle;
       }
-      _h3.innerHTML = title;
-      itinerary.appendChild(_h3);
+      // _h3.innerHTML = title;
+      const _h3Content = vtb.text(element, 'title', false);
+      if (_h3Content) {
+        _h3.appendChild(_h3Content);
+        itinerary.appendChild(_h3);
+      }
 
-      const _p = new VtbTextElement();
-      _p.id = String(element.id);
-      _p.addEventListener('vtbTextChanged', vtbTextChanged);
-      _p.editable = TEXT_EDIT_MODE_ENABLED;
-      _p.innerHTML = element.description ?? 'not set';
-      _p.setAttribute('data-objectid', String(element.object_id));
-      _p.setAttribute('data-propertyName', 'description');
+      // const _p = new VtbTextElement();
+      // _p.id = String(element.id);
+      // _p.addEventListener('vtbTextChanged', vtbTextChanged);
+      // _p.editable = TEXT_EDIT_MODE_ENABLED;
+      // _p.innerHTML = element.description ?? 'not set';
+      // _p.setAttribute('data-objectid', String(element.object_id));
+      // _p.setAttribute('data-propertyName', 'description');
 
-      itinerary.appendChild(_p);
+      const _p = vtb.text(element, 'description', true);
+
+      if (_p)
+        itinerary.appendChild(_p);
+
+
+
+
 
       // show all units for this acco
       const units_list = document.createElement('ul');
@@ -635,6 +652,7 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         title += element.subtitle;
       }
       _h3.innerHTML = title;
+      // vtb.text(_h3, element, 'title', false);
 
       itinerary.appendChild(_h3);
 
@@ -645,8 +663,9 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       _p.innerHTML = element.description ?? 'not set';
       _p.setAttribute('data-objectid', String(element.object_id));
       _p.setAttribute('data-propertyName', 'description');
-
       itinerary.appendChild(_p);
+
+      // vtb.text(itinerary, element, 'description', true);
     }
 
     // get all upgrade acco elements
@@ -684,7 +703,10 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         }
 
         _h3.innerHTML = title;
+        // vtb.text(_h3, element, 'title', false);
         itinerary.appendChild(_h3);
+
+        // vtb.text(itinerary, element, 'description', true);
 
         const _p = new VtbTextElement();
         _p.id = String(element.id);

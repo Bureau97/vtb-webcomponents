@@ -108,6 +108,13 @@ import 'ckeditor5/ckeditor5.css';
 //   });
 // }
 
+
+export enum EditorType {
+  SIMPLE = 'simple',
+  HTML = 'html'
+}
+
+
 @customElement('vtb-text')
 export class VtbTextElement extends LitElement {
   static override shadowRootOptions = {
@@ -270,6 +277,15 @@ export class VtbTextElement extends LitElement {
     }
   })
   contents: string = '';
+
+  @property({type: String})
+  objectId: string = '';
+
+  @property({ type: String })
+  propertyName: string = '';
+
+  @property({ type: String })
+  editorType : string = EditorType.SIMPLE;
 
   private get _editor(): HTMLElement | null {
     console.debug(

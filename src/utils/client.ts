@@ -12,6 +12,15 @@ interface PubNubMessage {
   message: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
+
+// a map that translates this property names
+// to the property names used in the backend
+const property_mapping = {
+  description: 'description',
+  additional_description: 'additionalDescription',
+}
+
+
 export class VtbClient {
   public options: VtbClientOptions;
   private pubnub: PubNub | undefined;
@@ -101,9 +110,14 @@ export class VtbClient {
     propertyName: string,
     content: string
   ) {
+
+    // @ts-ignore
+    const backendPropertyName = property_mapping[propertyName] || propertyName;
+
     console.log({
       uuid: this.uuid,
       propertyName: propertyName,
+      backendPropertyName: backendPropertyName,
       newValue: content,
       vtbObjectId: objectId
     });
@@ -116,7 +130,7 @@ export class VtbClient {
     this.pubnub.publish({
       message: {
         uuid: this.uuid,
-        propertyName: propertyName,
+        propertyName: backendPropertyName,
         newValue: content,
         vtbObjectId: objectId
       },

@@ -1,5 +1,6 @@
 const path = require('path');
 // const {styles} = require('@ckeditor/ckeditor5-dev-utils');
+// const quill_styles = require("quill/dist/quill.core.css");
 
 module.exports = {
   mode: 'development',

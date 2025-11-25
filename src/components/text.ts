@@ -24,89 +24,35 @@
 
 import {LitElement, css, html} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import {unsafeHTML} from 'lit/directives/unsafe-html.js';
-// import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
+// import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
-import {
-  InlineEditor,
-  Alignment,
-  Autosave,
-  Bold,
-  Essentials,
-  FontBackgroundColor,
-  FontColor,
-  FontFamily,
-  FontSize,
-  Heading,
-  Highlight,
-  HorizontalLine,
-  Indent,
-  IndentBlock,
-  Italic,
-  // Link,
-  List,
-  Paragraph,
-  PasteFromOffice,
-  RemoveFormat,
-  Strikethrough,
-  Subscript,
-  Superscript,
-  Underline
-} from 'ckeditor5';
+import tinymce, { Editor } from 'tinymce';
+import 'tinymce/icons/default/icons.min.js';
 
-import type {EditorConfig} from 'ckeditor5';
+/* Required TinyMCE components */
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
 
-import 'ckeditor5/ckeditor5.css';
+/* Import a skin (can be a custom skin instead of the default) */
+// import 'tinymce/skins/ui/oxide/skin.js';
 
-// class VtbTextSaveCommand extends Command {
-//   override execute() {
-//     console.info('VtbTextSaveCommand:execute');
-//     // console.info(this.editor);
-//   }
-// }
+/* Import plugins */
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/emoticons';
+import 'tinymce/plugins/emoticons/js/emojis';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/table';
 
-// class VtbTextCommandsPlugin extends Plugin {
-//   init() {
-//     const editor = this.editor;
-//     editor.commands.add('save', new VtbTextSaveCommand(editor));
-//   }
-// }
 
-// class VtbTextCommandUI extends Plugin {
-//   init () {
-//     const editor = this.editor;
-//     editor.ui.componentFactory.add('save', locale => {
-//       return {
+/* content UI CSS is required */
+// import contentUiSkinCss from 'tinymce/skins/ui/oxide/content.js';
 
-//       })
-//   }
-// }
+/* The default content CSS can be changed or replaced with appropriate CSS for the editor content. */
+// import contentCss from 'tinymce/skins/content/default/content.js';
 
-// function VtbTextSave(editor: Editor) {
-//   // console.info('VtbTextSave registerd');
-//   // editor.commands.add('save', new VtbTextSaveCommand(editor));
-//   editor.ui.componentFactory.add('save', (locale) => {
-//     const button = new ButtonView(locale);
-//     // const command = editor.commands.get('save');
-//     const t = editor.t;
-
-//     button.set({
-//       label: t('Save'),
-//       withText: true,
-//       tooltip: true,
-//       isToggleable: true
-//     });
-
-//     button.on('execute', () => {
-//       editor.execute('save');
-//       editor.editing.view.focus();
-//     });
-
-//     // button.bind('isOn', 'isEnabled').to(command, 'value', 'isEnabled');
-
-//     return button;
-//   });
-// }
+// import { Editor } from '@tinymce/tinymce-webcomponent';
 
 
 export enum EditorType {
@@ -115,155 +61,13 @@ export enum EditorType {
 }
 
 
+
 @customElement('vtb-text')
 export class VtbTextElement extends LitElement {
+
   static override shadowRootOptions = {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true
-  };
-
-  protected isEditorInitialized: boolean = false;
-  protected dataIsChanged: boolean = false;
-  protected editor?: InlineEditor = undefined;
-  protected _destroy_timer?: ReturnType<typeof setTimeout>;
-
-  protected LICENSE_KEY = 'GPL';
-  protected editorConfig: EditorConfig = {
-    toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'fontSize',
-        'fontFamily',
-        'fontColor',
-        'fontBackgroundColor',
-        '|',
-        'bold',
-        'italic',
-        'underline',
-        'strikethrough',
-        'subscript',
-        'superscript',
-        'removeFormat',
-        '|',
-        'horizontalLine',
-        'highlight',
-        '|',
-        'alignment',
-        '|',
-        'bulletedList',
-        'numberedList',
-        'outdent',
-        'indent'
-      ],
-      shouldNotGroupWhenFull: false
-    },
-    plugins: [
-      Alignment,
-      Autosave,
-      Bold,
-      Essentials,
-      FontBackgroundColor,
-      FontColor,
-      FontFamily,
-      FontSize,
-      Heading,
-      Highlight,
-      HorizontalLine,
-      Indent,
-      IndentBlock,
-      Italic,
-      List,
-      Paragraph,
-      PasteFromOffice,
-      RemoveFormat,
-      Strikethrough,
-      Subscript,
-      Superscript,
-      Underline
-    ],
-    balloonToolbar: [
-      'bold',
-      'italic',
-      '|',
-      'link',
-      '|',
-      'bulletedList',
-      'numberedList'
-    ],
-    fontFamily: {
-      supportAllValues: true
-    },
-    fontSize: {
-      options: [10, 12, 14, 'default', 18, 20, 22],
-      supportAllValues: true
-    },
-    heading: {
-      options: [
-        {
-          model: 'paragraph',
-          title: 'Paragraph',
-          class: 'ck-heading_paragraph'
-        },
-        {
-          model: 'heading1',
-          view: 'h1',
-          title: 'Heading 1',
-          class: 'ck-heading_heading1'
-        },
-        {
-          model: 'heading2',
-          view: 'h2',
-          title: 'Heading 2',
-          class: 'ck-heading_heading2'
-        },
-        {
-          model: 'heading3',
-          view: 'h3',
-          title: 'Heading 3',
-          class: 'ck-heading_heading3'
-        },
-        {
-          model: 'heading4',
-          view: 'h4',
-          title: 'Heading 4',
-          class: 'ck-heading_heading4'
-        },
-        {
-          model: 'heading5',
-          view: 'h5',
-          title: 'Heading 5',
-          class: 'ck-heading_heading5'
-        },
-        {
-          model: 'heading6',
-          view: 'h6',
-          title: 'Heading 6',
-          class: 'ck-heading_heading6'
-        }
-      ]
-    },
-    // initialData:
-    //   "<h2>Congratulations on setting up CKEditor 5! 🎉</h2>\n<p>\n\tYou've successfully created a CKEditor 5 project. This powerful text editor\n\twill enhance your application, enabling rich text editing capabilities that\n\tare customizable and easy to use.\n</p>\n<h3>What's next?</h3>\n<ol>\n\t<li>\n\t\t<strong>Integrate into your app</strong>: time to bring the editing into\n\t\tyour application. Take the code you created and add to your application.\n\t</li>\n\t<li>\n\t\t<strong>Explore features:</strong> Experiment with different plugins and\n\t\ttoolbar options to discover what works best for your needs.\n\t</li>\n\t<li>\n\t\t<strong>Customize your editor:</strong> Tailor the editor's\n\t\tconfiguration to match your application's style and requirements. Or\n\t\teven write your plugin!\n\t</li>\n</ol>\n<p>\n\tKeep experimenting, and don't hesitate to push the boundaries of what you\n\tcan achieve with CKEditor 5. Your feedback is invaluable to us as we strive\n\tto improve and evolve. Happy editing!\n</p>\n<h3>Helpful resources</h3>\n<p>\n\t<i>An editor without the </i><code>Link</code>\n\t<i>plugin? That's brave! We hope the links below will be useful anyway </i>😉\n</p>\n<ul>\n\t<li>📝 Trial sign up: https://portal.ckeditor.com/checkout?plan=free,</li>\n\t<li>📕 Documentation: https://ckeditor.com/docs/ckeditor5/latest/installation/index.html,</li>\n\t<li>⭐️ GitHub (star us if you can!): https://github.com/ckeditor/ckeditor5,</li>\n\t<li>🏠 CKEditor Homepage: https://ckeditor.com,</li>\n\t<li>🧑‍💻 CKEditor 5 Demos: https://ckeditor.com/ckeditor-5/demo/</li>\n</ul>\n<h3>Need help?</h3>\n<p>\n\tSee this text, but the editor is not starting up? Check the browser's\n\tconsole for clues and guidance. It may be related to an incorrect license\n\tkey if you use premium features or another feature-related requirement. If\n\tyou cannot make it work, file a GitHub issue, and we will help as soon as\n\tpossible!\n</p>\n",
-    licenseKey: this.LICENSE_KEY,
-    link: {
-      addTargetToExternalLinks: true,
-      defaultProtocol: 'https://',
-      decorators: {
-        toggleDownloadable: {
-          mode: 'manual',
-          label: 'Downloadable',
-          attributes: {
-            download: 'file'
-          }
-        }
-      }
-    },
-    placeholder: 'Type or paste your content here!',
-    updateSourceElementOnDestroy: true
   };
 
   @property({type: Boolean})
@@ -284,40 +88,15 @@ export class VtbTextElement extends LitElement {
   @property({ type: String })
   propertyName: string = '';
 
-  @property({ type: String })
+  @property({ type: String, attribute: 'editor-type' })
   editorType : string = EditorType.SIMPLE;
 
-  private get _editor(): HTMLElement | null {
-    console.debug(
-      'editor: ',
-      this.renderRoot.querySelector('div#editor-' + this.id)
-    );
-    return this.renderRoot.querySelector('div#editor-' + this.id);
-  }
 
   static override styles = css`
     :host {
-      display: block;
+      display: inline-block;
       margin: 0;
       padding: 0;
-    }
-
-    @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-    :root {
-      --ck-content-font-family: 'Lato';
-    }
-
-    .main-container {
-      font-family: var(--ck-content-font-family);
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .editor-container_inline-editor .editor-container__editor {
-      min-width: 795px;
-      max-width: 795px;
     }
   `;
 
@@ -334,29 +113,36 @@ export class VtbTextElement extends LitElement {
     }
   }
 
-  override createRenderRoot() {
-    // ckEditor does not work in the shadow dom
-    // it'll throw an error as soon as you try to
-    // type anything in the editor.
-    // the main error is coming from @ckeditor/ckeditor5-utils/src/dom/getborderwidths
-    console.debug('vtbtext:createRenderRoot');
-    return this;
-  }
+  // override createRenderRoot() {
+  //   // ckEditor does not work in the shadow dom
+  //   // it'll throw an error as soon as you try to
+  //   // type anything in the editor.
+  //   // the main error is coming from @ckeditor/ckeditor5-utils/src/dom/getborderwidths
+  //   console.debug('vtbtext:createRenderRoot');
+  //   return this;
+  // }
 
   override connectedCallback() {
     console.debug('vtbtext:connectedCallback');
     super.connectedCallback();
 
-    // copy innerHTML to the contents property
-    this.contents = this.innerHTML.trim();
+  //   // copy innerHTML to the contents property
+  //   // this.contents = this.innerHTML.trim();
 
-    // remove all childNodes and add them
-    // to the editor container
-    let childToDelete = this.lastChild;
-    while (childToDelete) {
-      this.removeChild(childToDelete);
-      childToDelete = this.lastChild;
+  //   // remove all childNodes and add them
+  //   // to the editor container
+  //   let childToDelete = this.lastChild;
+  //   while (childToDelete) {
+  //     this.removeChild(childToDelete);
+  //     childToDelete = this.lastChild;
+  //   }
+  }
+
+  private _loadRichEditorCss() {
+    if (this.editorType == EditorType.HTML) {
+      // return html`<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">`
     }
+    return html``
   }
 
   override render() {
@@ -377,119 +163,142 @@ export class VtbTextElement extends LitElement {
 
     // nothing fancy to render..
     return html`
+      ${this._loadRichEditorCss()}
+
       <div id="editor-container-${this.id}" @click=${this.clickHandler}>
-        <div id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
+        <div id="editor-${this.id}"></div>
+        <slot></slot>
       </div>
     `;
   }
 
-  clickHandler(_e: Event) {
-    // console.debug('vtbtext:clickHandler: ', _e);
+  // private get _editor(): HTMLElement | null {
+  //   console.debug(
+  //     'editor: ',
+  //     this.renderRoot.querySelector('div#editor-' + this.id)
+  //   );
+  //   return this.renderRoot.querySelector('div#editor-' + this.id);
+  // }
 
-    console.debug('check innerHTML and content: ', {
-      innerHTML: this.innerHTML,
-      contents: this.contents,
-      'same?': this.innerHTML == this.contents
+  private get _editorContainer(): HTMLElement | null {
+    console.debug(
+      'editorContainer: ',
+      this.renderRoot.querySelector('div#editor-' + this.id)
+    );
+
+    return this.renderRoot.querySelector('div#editor-' + this.id);
+  }
+
+
+  private get _slottedInnerHTML(): string {
+    const slottedContents = this.renderRoot.querySelector('slot')?.assignedElements({
+      flatten: true
     });
 
-    if (this.isEditorInitialized && this._destroy_timer) {
-      // console.debug('clear editor destruction timer');
-      clearTimeout(this._destroy_timer);
-      this._destroy_timer = undefined;
+    let slottedHtmlContents = '';
+    for (const slottedElement of slottedContents || []) {
+      slottedHtmlContents += slottedElement.outerHTML;
     }
 
-    if (this.editable && !this.isEditorInitialized) {
-      console.debug('initializing editor');
+    return slottedHtmlContents;
+  }
 
-      if (!this._editor) {
-        console.warn('not initializing the editor, editor is null');
+
+  private _editor: Editor | null = null;  // @ts-ignore
+
+  clickHandler(_e: Event) {
+    console.debug('vtbtext:clickHandler: ', _e);
+
+    if (!this._editor && this.editorType == EditorType.HTML) {
+      console.log(`initialize editor on ${this.id}`)
+
+      const editorContainer = this._editorContainer;
+
+      if (!editorContainer) {
+        console.error('no editor container found');
         return;
       }
 
-      // set the inialized bit..
-      this.isEditorInitialized = true;
+      tinymce.init({
+        target: editorContainer,
+        toolbar: "undo redo | styles | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        license_key: 'gpl',
+        skin_url: 'default',
+        content_css: 'default',
+      }).then((editor) => {
+        this._editor = editor[0]; // should be only one editor
+      })
 
-      const currentConfig = {...this.editorConfig};
-      currentConfig.initialData = this.innerHTML || '';
+      // this._editor = new Quill(editorContainer as HTMLElement, {
+      //   'theme': 'snow',
+      // }) as Quill;
 
-      InlineEditor.create(this._editor, currentConfig)
-        .then((editorInstance) => {
-          console.debug('promise:then');
-          this.editor = editorInstance;
+      // const delta = this._editor.clipboard.convert({html: this._slottedInnerHTML});
+      // this._editor.setContents(delta, 'api');
 
-          if (!this.editor) {
-            console.debug('no editor (yet)');
-            return;
-          }
+      // this._editor.clipboard.dangerouslyPasteHTML(this._slottedInnerHTML);
+      // this._editor.setText(this._slottedInnerHTML, 'api');
+      console.info(this._slottedInnerHTML);
 
-          // keep track on focus.
-          // if lostFocus and changed, trigger changed event
-          this.editor.ui.focusTracker.on(
-            'change:isFocused',
-            (_evt, _name, isFocused) => {
-              console.debug('focus changed');
-              if (!isFocused) {
-                this.lostFocus();
-              }
-            }
-          );
 
-          // since we are initializing dynamically, we need to explicitly focus
-          this.editor.focus();
-        })
-        .catch((error) => {
-          console.debug('received error');
-          console.error(error.stack);
-        });
+    }
+
+    if (!this._editor && this.editorType == EditorType.SIMPLE) {
+      console.info('setup simple editor');
     }
   }
 
-  protected lostFocus() {
-    console.debug('vtbtext:lostFocus');
+  // protected override update(changedProperties: PropertyValues): void {
+  //   console.debug('vtbtext:update');
+  //   super.update(changedProperties);
+  // }
 
-    if (!this.editor) {
-      console.debug('no editor (yet)');
-      return;
-    }
+  // protected lostFocus() {
+  //   console.debug('vtbtext:lostFocus');
 
-    console.debug('changed data: ', this.editor.getData());
+  //   if (!this.editor) {
+  //     console.debug('no editor (yet)');
+  //     return;
+  //   }
 
-    // dispatch custom event
-    const changed_content = this.editor.getData();
-    const event = new CustomEvent('vtbTextChanged', {
-      detail: {
-        content: changed_content
-      },
-      bubbles: true
-    });
-    console.debug('dispatching change event: ');
-    this.dispatchEvent(event);
+  //   console.debug('changed data: ', this.editor.getData());
 
-    // schedule destroying the editor after losing focus
-    // console.debug('schedule destroy');
-    const destroy = this._destroyEditor.bind(this);
-    this._destroy_timer = setTimeout(destroy, 3000);
+  //   // dispatch custom event
+  //   const changed_content = this.editor.getData();
+  //   const event = new CustomEvent('vtbTextChanged', {
+  //     detail: {
+  //       content: changed_content
+  //     },
+  //     bubbles: true
+  //   });
+  //   console.debug('dispatching change event: ');
+  //   this.dispatchEvent(event);
 
-    // }
-  }
+  //   // schedule destroying the editor after losing focus
+  //   // console.debug('schedule destroy');
+  //   const destroy = this._destroyEditor.bind(this);
+  //   this._destroy_timer = setTimeout(destroy, 3000);
 
-  protected _destroyEditor() {
-    console.debug('destroying editor..');
-    if (this.editor) {
-      // const changed_content = this.editor.getData();
+  //   // }
+  // }
 
-      // this._editor.style.display = 'none';
+  // protected _destroyEditor() {
+  //   console.debug('destroying editor..');
+  //   if (this.editor) {
+  //     // const changed_content = this.editor.getData();
 
-      this.editor.destroy();
-      this.isEditorInitialized = false;
-      delete this.editor;
+  //     // this._editor.style.display = 'none';
 
-      // if (this._editor){
-      //   console.debug('set innerHTML: ', changed_content);
-      //   this._editor.innerHTML = changed_content;
-      // }
-    }
-  }
+  //     this.editor.destroy();
+  //     this.isEditorInitialized = false;
+  //     delete this.editor;
+
+  //     // if (this._editor){
+  //     //   console.debug('set innerHTML: ', changed_content);
+  //     //   this._editor.innerHTML = changed_content;
+  //     // }
+  //   }
+  // }
 }
 
 declare global {

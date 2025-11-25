@@ -15,6 +15,10 @@
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       rel="stylesheet"
     />
+
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+
+
     <script type="module" src="/dist/main.js"></script>
     <style>
       body {
@@ -42,8 +46,8 @@
     </ul>
 
     <section class="travelplan-info">
-      <h2>Travelplan</h2>
-      <vtb-text>
+      <h2><vtb-text editable editor-type="simple">Travelplan</vtb-text></h2>
+      <vtb-text editable editor-type="html">
         <p>
           When could weathermen predict the weather, let alone the future. Yeah,
           alright, bye-bye. What? Perfect, just perfect. Can I go now, Mr.
@@ -75,5 +79,16 @@
         </p>
       </vtb-text>
     </section>
+
+    <div id="direct-quill">
+      <p>
+        Pretty Mediocre photographic fakery, they cut off your brother's hair.
+        Save the clock tower, save the clock tower. Mayor Wilson is sponsoring
+        an initiative to replace that clock. Thirty years ago, lightning
+        struck that clock tower and the clock hasn't run since. We at the Hill
+        Valley Preservation Society think it should be preserved exactly the
+        way it is as part of our history and heritage. Biff. I will. Oh.
+      </p>
+    </div>
   </body>
 </html>

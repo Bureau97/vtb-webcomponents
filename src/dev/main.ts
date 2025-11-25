@@ -222,10 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
 
-  // if (vtb.is_live_preview) {
-  console.info('LIVE PREVIEW');
-  vtb.initializeTextEditors();
-  // }
+  // // if (vtb.is_live_preview) {
+  // console.info('LIVE PREVIEW');
+  // vtb.initializeTextEditors();
+  // // }
 
   // get info
   console.info(vtb.title + ' ' + vtb.subtitle);
@@ -339,6 +339,16 @@ function vtbDataLoaded(vtb: Vtb) {
   if (itinerary) {
     renderItinerary(itinerary, vtb);
   }
+
+  // const quillContainer = document.getElementById('direct-quill');
+  // if (quillContainer) {
+  //   const editor = new Quill(quillContainer, {
+  //     theme: 'snow',
+  //   });
+  //   console.info(editor);
+
+
+  // }
 }
 
 function renderCalculator(vtb: Vtb) {

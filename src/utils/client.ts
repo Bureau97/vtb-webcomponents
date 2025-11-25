@@ -1,11 +1,26 @@
 import PubNub from 'pubnub';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
-import {VtbTravelPlanData} from '../models';
+import { VtbTravelPlanData } from '../models';
 
 export class VtbClientOptions {
-  apiKey = 'TyMmPw.FvRODQ:NDve34aOuSR1uYPP';
-  origin = 'pubnub.ably.io';
+  apiKey: string = 'TyMmPw.FvRODQ:NDve34aOuSR1uYPP';
+  origin: string = 'pubnub.ably.io';
+
+  key: string = '';
+  token: string | null = '';
+
+  parseUrl(_url: string) {
+    const url = new URL(_url);
+    const key = url.searchParams.get('key');
+
+    if (!key) {
+      throw new Error('Missing key!');
+    }
+
+    this.key = key;
+    this.token = url.searchParams.get('token');
+  }
 }
 
 interface PubNubMessage {
@@ -16,16 +31,16 @@ interface PubNubMessage {
 // a map that translates this property names
 // to the property names used in the backend
 const property_mapping = {
-  description: 'description',
-  additional_description: 'additionalDescription',
+  description: 'additionalText',
+  additional_description: 'subAdditionalText',
+  subtitle: 'subTitle',
 }
 
 
-export class VtbClient {
+export class VtbBackendClient {
   public options: VtbClientOptions;
   private pubnub: PubNub | undefined;
   private uuid;
-  private key = '';
 
   constructor(options: VtbClientOptions) {
     this.options = options;
@@ -33,8 +48,8 @@ export class VtbClient {
     // this.initialize(this.options.apiKey);
   }
 
-  public initialize(key: string) {
-    this.key = key;
+  public initialize() {
+    const key = this.options.key;
 
     if (!this.pubnub) {
       this.pubnub = new PubNub({
@@ -56,7 +71,7 @@ export class VtbClient {
     const pubnub = this.pubnub;
 
     // subsctribe to channel
-    const channel = pubnub.channel(this.key);
+    const channel = pubnub.channel(this.options.key);
     const subscription = channel.subscription({});
 
     return new Promise((resolve, error) => {
@@ -99,8 +114,8 @@ export class VtbClient {
       subscription.subscribe();
 
       pubnub.publish({
-        message: {livePreviewReady: true},
-        channel: this.key
+        message: { livePreviewReady: true },
+        channel: this.options.key
       });
     });
   }
@@ -114,12 +129,17 @@ export class VtbClient {
     // @ts-ignore
     const backendPropertyName = property_mapping[propertyName] || propertyName;
 
-    console.log({
+    const message = {
       uuid: this.uuid,
-      propertyName: propertyName,
-      backendPropertyName: backendPropertyName,
+      propertyName: backendPropertyName,
       newValue: content,
       vtbObjectId: objectId
+    };
+
+    console.log('[vtbBackendClient] saveTextChange', {
+      propertyName: propertyName,
+      backendPropertyName: backendPropertyName,
+      message: message
     });
 
     if (!this.pubnub) {
@@ -128,13 +148,8 @@ export class VtbClient {
     }
 
     this.pubnub.publish({
-      message: {
-        uuid: this.uuid,
-        propertyName: backendPropertyName,
-        newValue: content,
-        vtbObjectId: objectId
-      },
-      channel: this.key
+      message: message,
+      channel: this.options.key
     });
   }
 }

@@ -45,13 +45,16 @@ import {
   VtbFlightScheduleOptions
 } from './components/flightschedule.js';
 
-import {PreviewDataLoader} from './utils/preview.js';
+// import {PreviewDataLoader} from './utils/preview.js';
+import { VtbBackendClient, VtbClientOptions } from './utils/client.js';
 import { VtbTextElement, EditorType } from './components/text.js';
 
 export class Vtb {
   private _data: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
   private _config?: VtbConfig;
-  private _dataLoader?: PreviewDataLoader;
+  // private _dataLoader?: PreviewDataLoader;
+  private _client?: VtbBackendClient;
+  private vtbTextChanged?: (evnt: CustomEvent) => void;
 
   /**
    * @constructor
@@ -172,35 +175,35 @@ export class Vtb {
     return this.extra_field(name);
   }
 
-  public async load_preview(
-    key?: string,
-    token?: string
-  ): Promise<VtbTravelPlanData> {
-    if (!key && !token) {
-      const url = new URL(window.location.href);
-      const _key = url.searchParams.get('key');
-      if (_key) {
-        key = _key;
-      }
+  // public async load_preview(
+  //   key?: string,
+  //   token?: string
+  // ): Promise<VtbTravelPlanData> {
+  //   if (!key && !token) {
+  //     const url = new URL(window.location.href);
+  //     const _key = url.searchParams.get('key');
+  //     if (_key) {
+  //       key = _key;
+  //     }
 
-      const _token = url.searchParams.get('token');
-      if (_token) {
-        token = _token;
-      }
-    }
+  //     const _token = url.searchParams.get('token');
+  //     if (_token) {
+  //       token = _token;
+  //     }
+  //   }
 
-    console.info(['Loading preview', key, token]);
+  //   console.info(['Loading preview', key, token]);
 
-    if (!key) {
-      throw new Error('Missing key..');
-    }
+  //   if (!key) {
+  //     throw new Error('Missing key..');
+  //   }
 
-    if (!this._dataLoader) {
-      this._dataLoader = new PreviewDataLoader(key, token);
-    }
+  //   if (!this._dataLoader) {
+  //     this._dataLoader = new PreviewDataLoader(key, token);
+  //   }
 
-    return this._dataLoader.requestTravelplan();
-  }
+  //   return this._dataLoader.requestTravelplan();
+  // }
 
   public async load(travelplan_source_url?: string): Promise<Vtb> {
     if (travelplan_source_url && !this.is_live_preview) {
@@ -215,7 +218,16 @@ export class Vtb {
     if (this.is_live_preview) {
       console.info('Loading preview..');
 
-      const travelplan_data = await this.load_preview();
+      if (!this._client) {
+        const options = new VtbClientOptions();
+        options.parseUrl(window.location.href);
+        this._client = new VtbBackendClient(options);
+        this._client.initialize();
+
+        this.vtbTextChanged = this._vtbTextChanged.bind(this);
+      }
+
+      const travelplan_data = await this._client.requestTravelplan();
 
       console.info('VTB::Load (preview)');
       console.info(travelplan_data);
@@ -350,27 +362,6 @@ export class Vtb {
     return flightschedule;
   }
 
-  public initializeTextEditors() {
-    document.querySelectorAll('vtb-text').forEach((element) => {
-      if (!element.hasAttribute('vtb-objectid')) {
-        // only elements with a vtb-objectid can be set editable
-        return;
-      }
-      element.setAttribute('editable', 'true');
-      element.addEventListener(
-        'vtbTextChanged',
-        this._vtbTextChanged.bind(this)
-      );
-    });
-  }
-
-  protected _vtbTextChanged(
-    detail: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) {
-    console.info('vtbTextChanged', detail);
-  }
-
-
   public text(element: VtbElement | VtbElementGroup, propertyName: string, isRichText: boolean = false): VtbTextElement | undefined {
     if (propertyName in element) {
 
@@ -387,15 +378,15 @@ export class Vtb {
       const value = element[propertyName];
 
       const textElement = new VtbTextElement();
-      textElement.object_id = element.id;
-      textElement.property_name = propertyName;
-      textElement.editor_type = isRichText ? EditorType.HTML : EditorType.SIMPLE;
+      textElement.objectId = element.id;
+      textElement.propertyName = propertyName;
+      textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
       textElement.editable = true;
       textElement.innerHTML = value;
 
+      // @ts-ignore
       textElement.addEventListener(
-        'vtbTextChanged',
-        this._vtbTextChanged.bind(this)
+        'vtbTextChanged', this.vtbTextChanged
       );
 
       return textElement
@@ -406,6 +397,40 @@ export class Vtb {
 
     return;
   }
+
+  public initializeTextEditors() {
+    if (!this.is_live_preview) {
+      console.warn('Not in live preview mode!');
+      return;
+    }
+
+    document.querySelectorAll('vtb-text').forEach((element: VtbTextElement) => {
+
+      if (!element.hasAttribute('vtb-objectid')) {
+        console.info('vtb-text element has no vtb-objectid', element);
+        // only elements with a vtb-objectid can be set editable
+        return;
+      }
+
+      // allow editing
+      element.setAttribute('editable', 'true');
+
+      // @ts-ignore
+      element.addEventListener('vtbTextChanged', this.vtbTextChanged);
+    });
+  }
+
+  protected _vtbTextChanged(evnt: CustomEvent) {
+    console.info('vtbTextChanged', evnt, this);
+
+    this._client?.saveTextChange(
+      evnt.detail.objectId,
+      evnt.detail.propertyName,
+      evnt.detail.content
+    );
+
+  }
+
 
   // public pricetable(
   //   container_id: string,

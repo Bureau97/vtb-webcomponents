@@ -37,7 +37,7 @@ export class VtbDataTransformer {
 
   parse_vtb_data(
     vtbSrcData: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ) {
+  ): VtbTravelPlanData {
     // search and setup base info
     this._data.title = vtbSrcData.title;
     this._data.subtitle = vtbSrcData.subTitle || '';

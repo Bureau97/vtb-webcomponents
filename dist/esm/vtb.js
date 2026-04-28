@@ -216,6 +216,7 @@ export class Vtb {
         map.zoom = map_options.zoom;
         map.markergroups = [marker_group];
         map.default_labels = map_options.default_labels || false;
+        map.staticMap = map_options.static_map || false;
         const container = document.getElementById(container_id);
         container?.appendChild(map);
         return map;

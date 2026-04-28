@@ -31,6 +31,7 @@ export interface VtbMapOptions {
     width?: number;
     zoom?: number;
     default_labels: boolean;
+    static_map?: boolean;
 }
 export declare class VtbMapMarkerElement extends LitElement {
     lat: number;
@@ -64,11 +65,14 @@ export declare class VtbMapElement extends LitElement {
     zoom?: number;
     connect_markers: boolean;
     default_labels: boolean;
+    static_map: boolean;
     get connectMarkers(): boolean;
     set connectMarkers(value: boolean);
     connect_mode?: string;
     get connectMode(): string | undefined;
     set connectMode(value: string);
+    get staticMap(): boolean;
+    set staticMap(value: boolean);
     use_info_window: boolean;
     get useInfoWindow(): boolean;
     set useInfoWindow(value: boolean);
@@ -90,6 +94,10 @@ export declare class VtbMapElement extends LitElement {
     connectedCallback(): void;
     private parseChildNode;
     render(): import("lit-html").TemplateResult<1>;
+    renderMap(): import("lit-html").TemplateResult<1>;
+    private _deduplicateMarkers;
+    getStaticMapUrl(): string;
+    private _getStaticMarkers;
     firstUpdated(): void;
     protected initializeMap(): void;
     protected setMapStyle(): void;

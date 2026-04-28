@@ -22,19 +22,19 @@
  *
  */
 
-import { LitElement, css, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { styleMap, StyleInfo } from 'lit/directives/style-map.js';
+import {LitElement, css, html} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
+import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
 
 import * as _ from 'lodash';
-const { isEqual } = _;
+const {isEqual} = _;
 
 import * as GMaps from '@googlemaps/js-api-loader';
-const { Loader } = GMaps;
+const {Loader} = GMaps;
 
-import { VtbMapMarkerGroup, VtbMapMarker } from '../models.js';
+import {VtbMapMarkerGroup, VtbMapMarker} from '../models.js';
 
-import { VtbMapMarkerConnectMode } from '../utils/types.js';
+import {VtbMapMarkerConnectMode} from '../utils/types.js';
 
 export interface VtbMapOptions {
   connect_mode?: string;
@@ -49,19 +49,19 @@ export interface VtbMapOptions {
 
 @customElement('vtb-map-marker')
 export class VtbMapMarkerElement extends LitElement {
-  @property({ type: Number, reflect: true })
+  @property({type: Number, reflect: true})
   lat: number = 0.0;
 
-  @property({ type: Number, reflect: true })
+  @property({type: Number, reflect: true})
   lng: number = 0.0;
 
-  @property({ type: String })
+  @property({type: String})
   icon?: string;
 
-  @property({ type: String })
+  @property({type: String})
   label?: string;
 
-  @property({ type: Boolean, attribute: 'default-label' })
+  @property({type: Boolean, attribute: 'default-label'})
   default_label: boolean = false;
 
   static override styles = css`
@@ -78,7 +78,7 @@ export class VtbMapMarkerElement extends LitElement {
 
 @customElement('vtb-map-marker-group')
 export class VtbMapMarkerGroupElement extends LitElement {
-  @property({ type: Boolean, attribute: 'connect-markers' })
+  @property({type: Boolean, attribute: 'connect-markers'})
   connect_markers: boolean = false;
 
   get connectMarkers(): boolean {
@@ -89,7 +89,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
     this.connect_markers = value;
   }
 
-  @property({ type: String, attribute: 'connect-mode' })
+  @property({type: String, attribute: 'connect-mode'})
   connect_mode?: string = 'flight';
 
   get connectMode(): string | undefined {
@@ -181,7 +181,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
 
 @customElement('vtb-map')
 export class VtbMapElement extends LitElement {
-  @property({ type: String, attribute: 'api-key' })
+  @property({type: String, attribute: 'api-key'})
   api_key = '';
 
   set apiKey(value: string) {
@@ -204,24 +204,23 @@ export class VtbMapElement extends LitElement {
   })
   markergroups: Array<VtbMapMarkerGroup>;
 
-  @property({ type: Number })
+  @property({type: Number})
   height?: number = 400;
 
-  @property({ type: Number })
+  @property({type: Number})
   width?: number = Number.NaN;
 
-  @property({ type: Number })
+  @property({type: Number})
   zoom?: number = Number.NaN;
 
-  @property({ type: Boolean, attribute: 'connect-markers' })
+  @property({type: Boolean, attribute: 'connect-markers'})
   connect_markers = false;
 
-  @property({ type: Boolean, attribute: 'default-labels' })
+  @property({type: Boolean, attribute: 'default-labels'})
   default_labels = false;
 
-  @property({ type: Boolean, attribute: 'static-map' })
+  @property({type: Boolean, attribute: 'static-map'})
   static_map = false;
-
 
   get connectMarkers(): boolean {
     return this.connect_markers;
@@ -231,7 +230,7 @@ export class VtbMapElement extends LitElement {
     this.connect_markers = value;
   }
 
-  @property({ type: String, attribute: 'connect-mode' })
+  @property({type: String, attribute: 'connect-mode'})
   connect_mode?: string = 'flight';
 
   get connectMode(): string | undefined {
@@ -250,7 +249,7 @@ export class VtbMapElement extends LitElement {
     this.static_map = value;
   }
 
-  @property({ type: Boolean, attribute: 'infowindow-enabled' })
+  @property({type: Boolean, attribute: 'infowindow-enabled'})
   use_info_window = false;
 
   get useInfoWindow(): boolean {
@@ -425,16 +424,18 @@ export class VtbMapElement extends LitElement {
 
     if (this.staticMap) {
       return html`<img src="${this.getStaticMapUrl()}" />`;
-    }
-    else {
+    } else {
       return html`Initializing map...`;
     }
   }
 
-  private _deduplicateMarkers(markers: VtbMapMarker[], precision: number = 5): VtbMapMarker[] {
+  private _deduplicateMarkers(
+    markers: VtbMapMarker[],
+    precision: number = 5
+  ): VtbMapMarker[] {
     const seen = new Set<string>();
 
-    return markers.filter(marker => {
+    return markers.filter((marker) => {
       // Rond af om kleine verschillen te negeren
       const lat = marker.lat.toFixed(precision);
       const lng = marker.lng.toFixed(precision);
@@ -446,7 +447,6 @@ export class VtbMapElement extends LitElement {
     });
   }
 
-
   getStaticMapUrl() {
     // console.debug('VTB-MAP::getStaticMapUrl');
 
@@ -454,7 +454,7 @@ export class VtbMapElement extends LitElement {
       return '#';
     }
 
-    let width = this.width;
+    const width = this.width;
     if (!width) {
       console.error('No width provided');
       return '#no-width-provided';
@@ -470,11 +470,11 @@ export class VtbMapElement extends LitElement {
 
     // Optioneel: Voeg een marker toe op de huidige centrumpositie
     // url += `&markers=color:red%7C${center.lat()},${center.lng()}`;
-    let _tmp: VtbMapMarker[] = []
+    let _tmp: VtbMapMarker[] = [];
     for (const group of this.markergroups) {
       console.debug('adding markers from group: ', group);
       const markers = group.markers;
-      _tmp = _tmp.concat(markers)
+      _tmp = _tmp.concat(markers);
     }
 
     _tmp = this._deduplicateMarkers(_tmp);
@@ -487,17 +487,19 @@ export class VtbMapElement extends LitElement {
     return url;
   }
 
-
   private _getStaticMarkers(markers: VtbMapMarker[]) {
-    const locations = markers.map(marker => {
-      return `${marker.lat},${marker.lng}`;
-    }).join('|');
+    const locations = markers
+      .map((marker) => {
+        return `${marker.lat},${marker.lng}`;
+      })
+      .join('|');
 
-    const markers_url_value = encodeURIComponent(`color:red|size:mid|${locations}`)
+    const markers_url_value = encodeURIComponent(
+      `color:red|size:mid|${locations}`
+    );
 
     return `&markers=${markers_url_value}`;
   }
-
 
   override firstUpdated() {
     // console.debug('VTB-MAP::firstUpdated');

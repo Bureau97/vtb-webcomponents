@@ -723,7 +723,8 @@ export class VtbDataTransformer {
     const vtb_element_unit = new VtbElementUnit();
     vtb_element_unit.title = element_data.subTitle || element_data.title;
     vtb_element_unit.optional = element_data.optional;
-    vtb_element_unit._element_id = element_data.id;
+    vtb_element_unit.id = element_data.vtbObjectId || element_data.TSOrderline.id;
+    vtb_element_unit.element_id = element_data.elementId;
     vtb_element_unit._ts_product_id = element_data.ts_product_id;
 
     // vtb_element_unit.price = parseFloat(element_data.olPrices?.salesTotal || 0);

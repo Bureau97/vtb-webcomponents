@@ -25,7 +25,7 @@
 import dayjs, {type Dayjs} from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import duration from 'dayjs/plugin/duration.js';
-import murmurhash from 'murmurhash';
+// import murmurhash from 'murmurhash';
 
 dayjs.locale('nl');
 dayjs.extend(utc);
@@ -77,6 +77,8 @@ export class VtbMedia implements interfaces.VtbMedia {
 }
 
 export class VtbExtraField implements interfaces.VtbExtraField {
+  id: string = '';
+  element_id: string = '';
   name: string = '';
   title?: string;
   value?: string;
@@ -121,7 +123,8 @@ export class VtbFlightData implements interfaces.VtbFlightData {
 }
 
 export class VtbElementUnit implements interfaces.VtbElementUnit {
-  // id: string = '';  // produced by murmurhash
+  id: string = '';
+  element_id: string = '';
   title: string = '';
   participant_prices: SizedMap<number, VtbParticipantPrice> = new Map(
     null
@@ -135,8 +138,7 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
   media: Array<VtbMedia> = [];
   extra_fields: Dictionary<VtbExtraField> = {};
   location?: VtbMapMarker;
-  _element_id: number = 0;
-  _ts_product_id: number = 0;
+  _ts_product_id: string | number = 0;
 
   constructor() {
     this._setup_participant_prices();
@@ -154,20 +156,20 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     });
   }
 
-  private _hash: number = 0;
+  // private _hash: number = 0;
 
-  get id(): string {
-    if (!this._hash || this._hash == 0) {
-      const to_hash = [
-        this.title,
-        this.optional.toString(),
-        new String(this.participant_prices.size)
-      ].join(':');
-      this._hash = murmurhash.v3(to_hash, 0x9747b28c);
-    }
+  // get id(): string {
+  //   if (!this._hash || this._hash == 0) {
+  //     const to_hash = [
+  //       this.title,
+  //       this.optional.toString(),
+  //       new String(this.participant_prices.size)
+  //     ].join(':');
+  //     this._hash = murmurhash.v3(to_hash, 0x9747b28c);
+  //   }
 
-    return this._hash.toString(16); // cast to string
-  }
+  //   return this._hash.toString(16); // cast to string
+  // }
 
   get participants(): Array<number> {
     return [...this.participant_prices.keys()];
@@ -217,6 +219,24 @@ export class VtbElementUnit implements interfaces.VtbElementUnit {
     }
 
     return _clone;
+  }
+
+  private mapped_properties: Dictionary<string> = {
+    'title': 'title',
+    'subtitle': 'subTitle',
+    'description': 'description',
+    'additional_description': 'additionalText',
+  }
+
+  public mappedProperty(name: string): string {
+    if (this.mapped_properties[name]) {
+      // return this[this.mapped_properties[name]];
+      return name
+    }
+
+    return name;
+
+    // return this.extra_fields[name];
   }
 }
 
@@ -401,6 +421,24 @@ export class VtbElement implements interfaces.VtbElement {
 
     return _clone;
   }
+
+  private mapped_properties: Dictionary<string> = {
+    'title': 'title',
+    'subtitle': 'subTitle',
+    'description': 'description',
+    'additional_description': 'additionalText',
+  }
+
+  public mappedProperty(name: string): string {
+    if (this.mapped_properties[name]) {
+      // return this[this.mapped_properties[name]];
+      return name
+    }
+
+    return name;
+
+    // return this.extra_fields[name];
+  }
 }
 
 export class VtbElementGroup implements interfaces.VtbElementGroup {
@@ -469,8 +507,8 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
   }
 
   filter_elements(config: VtbFilterConfig): Array<VtbElement> {
-    // const _element_ids = config.element_ids || [];
-    // const element_ids = _element_ids.flat(Infinity);
+    const _element_ids = config.element_ids || [];
+    const element_ids = _element_ids.flat(Infinity);
     // console.info('filter_elements: ', config);
 
     const _element_unit_ids = config.element_unit_ids || [];
@@ -491,6 +529,12 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
       check_participant_ids = true;
     }
 
+    let check_element_ids = false;
+    if (element_ids.length >= 1) {
+      // console.info('check_element_ids: ', element_ids);
+      check_element_ids = true;
+    }
+
     let skip_optional = false;
     if (config?.optional === false) {
       // console.info('skip_optional');
@@ -506,6 +550,7 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
     if (
       !check_element_unit_ids &&
       !check_participant_ids &&
+      !check_element_ids &&
       !skip_optional &&
       !only_optional
     ) {
@@ -547,6 +592,11 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
         }
 
         const unit_copy = unit.clone();
+
+        if (check_element_ids && !element_ids.includes(unit.id)) {  // element ids are strings
+          // console.info('[filter elements] skip element id: ', unit._element_id);
+          continue;
+        }
 
         if (!check_participant_ids) {
           // console.info(
@@ -641,6 +691,24 @@ export class VtbElementGroup implements interfaces.VtbElementGroup {
     }
 
     return _clone;
+  }
+
+  private mapped_properties: Dictionary<string> = {
+    'title': 'title',
+    'subtitle': 'subTitle',
+    'description': 'description',
+    'additional_description': 'additionalText',
+  }
+
+  public mappedProperty(name: string): string {
+    if (this.mapped_properties[name]) {
+      // return this[this.mapped_properties[name]];
+      return name
+    }
+
+    return name;
+
+    // return this.extra_fields[name];
   }
 }
 

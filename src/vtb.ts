@@ -35,7 +35,8 @@ import {
   VtbParticipant,
   VtbParty,
   VtbMedia,
-  VtbFlightData
+  VtbFlightData,
+  VtbElementUnit
 } from './models.js';
 import {VtbMapMarkerConnectMode} from './utils/types.js';
 import {VtbDataTransformer} from './utils/transformer.js';
@@ -54,7 +55,8 @@ export class Vtb {
   private _config?: VtbConfig;
   // private _dataLoader?: PreviewDataLoader;
   private _client?: VtbBackendClient;
-  private vtbTextChanged?: (evnt: CustomEvent) => void;
+
+  // private vtbTextChanged?: (evnt: CustomEvent) => void;
 
   /**
    * @constructor
@@ -224,7 +226,7 @@ export class Vtb {
         this._client = new VtbBackendClient(options);
         this._client.initialize();
 
-        this.vtbTextChanged = this._vtbTextChanged.bind(this);
+        // this.vtbTextChanged = this._vtbTextChanged.bind(this);
       }
 
       const travelplan_data = await this._client.requestTravelplan();
@@ -362,7 +364,7 @@ export class Vtb {
     return flightschedule;
   }
 
-  public text(element: VtbElement | VtbElementGroup, propertyName: string, isRichText: boolean = false): VtbTextElement | undefined {
+  public text(element: VtbElement | VtbElementGroup | VtbElementUnit, propertyName: string, isRichText: boolean = false): VtbTextElement | undefined {
     if (propertyName in element) {
 
       // if (!this.is_live_preview) {  // editor only works with live preview
@@ -378,15 +380,27 @@ export class Vtb {
       const value = element[propertyName];
 
       const textElement = new VtbTextElement();
-      textElement.objectId = element.id;
-      textElement.propertyName = propertyName;
-      textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
-      textElement.editable = true;
-      textElement.innerHTML = value;
+
+      if (element instanceof VtbElementUnit) {
+        textElement.objectId = element.id;
+        textElement.propertyName = propertyName;
+        textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
+        textElement.editable = true;
+        textElement.innerHTML = value;
+      }
+
+      else {
+        textElement.objectId = element.id;
+        textElement.propertyName = propertyName;
+        textElement.editorType = isRichText ? EditorType.HTML : EditorType.SIMPLE;
+        textElement.editable = true;
+        textElement.innerHTML = value;
+      }
+
 
       // @ts-ignore
       textElement.addEventListener(
-        'vtbTextChanged', this.vtbTextChanged
+        'vtbTextChanged', this._vtbTextChanged.bind(this)
       );
 
       return textElement
@@ -399,33 +413,49 @@ export class Vtb {
   }
 
   public initializeTextEditors() {
-    if (!this.is_live_preview) {
-      console.warn('Not in live preview mode!');
-      return;
-    }
+    // if (!this.is_live_preview) {
+    //   console.warn('Not in live preview mode!');
+    //   return;
+    // }
 
     document.querySelectorAll('vtb-text').forEach((element: VtbTextElement) => {
 
-      if (!element.hasAttribute('vtb-objectid')) {
-        console.info('vtb-text element has no vtb-objectid', element);
-        // only elements with a vtb-objectid can be set editable
-        return;
-      }
+      // if (!element.hasAttribute('vtb-objectid')) {
+      //   console.warn('vtb-text element has no vtb-objectid', element);
+      //   // only elements with a vtb-objectid can be set editable
+      //   return;
+      // }
+
+      console.info('initializeTextEditor', element);
 
       // allow editing
       element.setAttribute('editable', 'true');
 
       // @ts-ignore
-      element.addEventListener('vtbTextChanged', this.vtbTextChanged);
+      element.addEventListener('vtbTextChanged', this._vtbTextChanged.bind(this));
     });
   }
 
   protected _vtbTextChanged(evnt: CustomEvent) {
-    console.info('vtbTextChanged', evnt, this);
+    console.info('VTB TEXT CHANGED!!!', evnt, this);
+
+    const source_elements = this.filter_elements({
+      element_ids: [evnt.detail.objectId],
+    })
+
+    console.info(source_elements)
+
+    if (source_elements.length === 0) {
+      // don't bother trying to save
+      // if the element is not found
+      return
+    }
+
+    const vtbProperty = source_elements[0].mappedProperty(evnt.detail.propertyName);
 
     this._client?.saveTextChange(
       evnt.detail.objectId,
-      evnt.detail.propertyName,
+      vtbProperty,
       evnt.detail.content
     );
 

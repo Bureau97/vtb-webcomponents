@@ -609,9 +609,6 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         itinerary.appendChild(_p);
 
 
-
-
-
       // show all units for this acco
       const units_list = document.createElement('ul');
       for (const unit of element.units) {
@@ -621,13 +618,15 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         let content = '';
 
         if (unit.quantity > 1) {
-          content +=
-            unit.quantity +
-            'x ' +
-            unit.title +
-            (unit.optional ? ' [optioneel]' : '');
-        } else {
-          content += unit.title;
+          content += unit.quantity + 'x';
+
+        }
+
+        // add placeholder for editor
+        content += ' <span class="_placeholder"></span>';
+
+        if (unit.optional) {
+          content += ' [optioneel]';
         }
 
         content += ` (voor ${unit.participant_prices.length} ${
@@ -636,6 +635,13 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
         _u.innerHTML = content;
         units_list.appendChild(_u);
+
+        const _t = vtb.text(unit, 'title', false);
+        if (_t) {
+          _u.querySelector('._placeholder')?.appendChild(_t); // _u.querySelector('._placeholder').innerHTML = unit.placeholder;
+
+        }
+
       }
 
       itinerary.appendChild(units_list);

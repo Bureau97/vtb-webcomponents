@@ -361,16 +361,27 @@ export class VtbTextElement extends LitElement {
 
   static override styles = css`
     :host {
-      display: block;
+      display: inline-block;
       margin: 0;
       padding: 0;
+
+      border: 1px solid #ff0000;
     }
 
-    @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    :root > div,
+    :root > div > div {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
 
-    :root {
+      /* border: 1px solid #ff0000; */
+    }
+
+    /* @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap'); */
+
+    /* :root {
       --ck-content-font-family: 'Lato';
-    }
+    } */
 
     .main-container {
       font-family: var(--ck-content-font-family);
@@ -382,6 +393,11 @@ export class VtbTextElement extends LitElement {
     .editor-container_inline-editor .editor-container__editor {
       min-width: 795px;
       max-width: 795px;
+      min-height: 400px;
+    }
+
+    .vtb-main-editor-container {
+      border: 1px solid #ff0000 !important;
     }
   `;
 
@@ -428,8 +444,8 @@ export class VtbTextElement extends LitElement {
 
     // nothing fancy to render..
     return html`
-      <div id="editor-container-${this.id}" @click=${this.clickHandler}>
-        <div id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
+      <div class="vtb-main-editor-container" id="editor-container-${this.id}" @click=${this.clickHandler}>
+        <div class="vtb-editor" id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
       </div>
     `;
   }

@@ -436,7 +436,6 @@ export class VtbMapElement extends LitElement {
     }
   }
 
-
   private _deduplicateMarkers(
     markers: VtbMapMarker[],
     precision: number = 5
@@ -462,7 +461,7 @@ export class VtbMapElement extends LitElement {
       return '#';
     }
 
-    let width = this.width;
+    const width = this.width;
     if (!width) {
       console.error('No width provided');
       return '#no-width-provided';

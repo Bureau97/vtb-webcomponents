@@ -309,7 +309,7 @@ let VtbMapElement = class VtbMapElement extends LitElement {
     renderMap() {
         // console.debug('VTB-MAP::renderMap');
         if (this.staticMap) {
-            return html `<img src="${this.getStaticMapUrl()}" />`;
+            return html `<img class="static-map" src="${this.getStaticMapUrl()}" />`;
         }
         else {
             return html `Initializing map...`;
@@ -338,10 +338,17 @@ let VtbMapElement = class VtbMapElement extends LitElement {
             console.error('No width provided');
             return '#no-width-provided';
         }
-        const size = `${width}x${this.height}`; // De gewenste afmeting in de PDF
+        let height = this.height;
+        if (!height) {
+            console.error('No height provided');
+            return '#no-height-provided';
+        }
+        height = Math.round((height / width) * 640);
+        const size = `${width}x${height}`; // De gewenste afmeting in de PDF
+        // const size = `640x240`; // De gewenste afmeting in de PDF
         const apiKey = this.apiKey;
         // Basis URL
-        let url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&key=${apiKey}`;
+        let url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&scale=2&key=${apiKey}`;
         console.info('getStaticMapUrl: ', url);
         // Optioneel: Voeg een marker toe op de huidige centrumpositie
         // url += `&markers=color:red%7C${center.lat()},${center.lng()}`;
@@ -559,6 +566,13 @@ VtbMapElement.styles = css `
 
     button.gm-ui-hover-effect span svg {
       fill: #000;
+    }
+
+    #map img.static-map {
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+      object-position: center;
     }
   `;
 __decorate([

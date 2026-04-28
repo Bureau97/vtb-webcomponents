@@ -197,7 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
   console.info('DOMContentLoaded');
 
   const config: VtbConfig = {
-    calculate_flight_duration: true
+    calculate_flight_duration: true,
+    google_maps_api_key: GOOGLE_MAPS_KEY,
   };
 
   const vtb = new Vtb(config);
@@ -304,6 +305,8 @@ function vtbDataLoaded(vtb: Vtb) {
     };
 
     vtb.map('complete-map', map_search, map_options);
+
+    vtb.map('complete-map-static', map_search, {...map_options, static_map: true, width: 793, height: 300});
   }
 
   // // // flight on map

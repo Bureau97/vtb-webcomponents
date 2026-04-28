@@ -53,6 +53,8 @@ export interface VtbFilterConfig {
 
 export interface VtbConfig {
   calculate_flight_duration: boolean;
+  google_maps_api_key?: string;
+  google_static_maps?: boolean;
 }
 
 export interface VtbParticipant {

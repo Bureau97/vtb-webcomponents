@@ -642,6 +642,10 @@ export class VtbDataTransformer {
       }
     }
 
+    // TODO: check all elements against each other for price differences
+    // instead of checking the current element against the last element
+    // also regrouping elements with the same ts product id could be useful
+
     if (segment_data.maps) {
       // console.debug('segment_data.maps', segment_data);
       element_group.location = new VtbMapMarker();
@@ -825,6 +829,18 @@ export class VtbDataTransformer {
         vtb_element.nights,
         'days'
       ); // keep the offset in mind!
+    }
+
+    const calculated_diff = vtb_element.enddate.diff(
+      vtb_element.startdate,
+      'days'
+    );
+
+    if (calculated_diff != vtb_element.nights) {
+      console.warn(
+        `calculated diff days (${calculated_diff}) on element "${vtb_element.title}" [#${vtb_element.ts_product_id} / ${vtb_element.unit_id} ] does not match nights (${vtb_element.nights})`
+      );
+      vtb_element.nights = calculated_diff;
     }
 
     // parse element as unit

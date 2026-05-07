@@ -168,7 +168,6 @@ export class Vtb {
   }
 
   public extraField(name: string) {
-    console.warn('deprecated call, use extra_fields getter instead');
     return this.extra_field(name);
   }
 
@@ -228,12 +227,6 @@ export class Vtb {
       console.error('No travelplan source url provided');
     }
 
-    // public async load(travelplan_source_url: string): Promise<Vtb> {
-    //   // async load of travelplan json
-    //   console.debug('Loading', travelplan_source_url);
-    //   const response = await fetch(travelplan_source_url);
-    //   const vtbSrcData = await response.json();
-    //   this.parse_vtb_data(vtbSrcData);
     return this;
   }
 
@@ -355,6 +348,26 @@ export class Vtb {
     container?.appendChild(flightschedule);
 
     return flightschedule;
+  }
+
+  public initializeTextEditors() {
+    document.querySelectorAll('vtb-text').forEach((element) => {
+      if (!element.hasAttribute('vtb-objectid')) {
+        // only elements with a vtb-objectid can be set editable
+        return;
+      }
+      element.setAttribute('editable', 'true');
+      element.addEventListener(
+        'vtbTextChanged',
+        this._vtbTextChanged.bind(this)
+      );
+    });
+  }
+
+  protected _vtbTextChanged(
+    detail: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) {
+    console.info('vtbTextChanged', detail);
   }
 
   // public pricetable(

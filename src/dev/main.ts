@@ -42,14 +42,14 @@ import {
 } from '../components/calculator';
 import {VtbTextElement} from '../components/text';
 
-import {currency} from '../utils/currency';
 import {strip_tags} from '../utils/string';
+import {currency} from '../utils/currency';
 
 // const travelplan_source_url = '/optionals.json';
 const travelplan_source_url = '/travelplan.json';
 
 const TEXT_EDIT_MODE_ENABLED = false;
-const GOOGLE_MAPS_KEY = '***SyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
+const GOOGLE_MAPS_KEY = 'AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ';
 
 /**
 
@@ -190,7 +190,7 @@ export enum UnitTypes {
 }
 
 function vtbTextChanged(e?: Event) {
-  console.info('vtbTextChanged: ', e);
+  console.info('[main] vtbTextChanged: ', e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     console.info('initialize static preview');
     vtb.load(travelplan_source_url).then(vtbDataLoaded);
+    vtb.initializeTextEditors();
   }
 
   // new Vtb(config).load(travelplan_source_url).then(vtbDataLoaded);
@@ -221,6 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function vtbDataLoaded(vtb: Vtb) {
   console.info('vtbDataLoaded');
+
+  // if (vtb.is_live_preview) {
+  console.info('LIVE PREVIEW');
+  vtb.initializeTextEditors();
+  // }
 
   // get info
   console.info(vtb.title + ' ' + vtb.subtitle);
@@ -569,6 +575,8 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
     _t.editable = TEXT_EDIT_MODE_ENABLED;
     _t.innerHTML = itinerary_element.description || 'not set';
     _t.id = String(itinerary_element.id);
+    // _t.setAttribute('data-vtbobjectid', itinerary_element.object_id);
+    // _t.setAttribute('data-propertyName', 'description');
     itinerary.appendChild(_t);
 
     // show accos
@@ -590,6 +598,9 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       _p.addEventListener('vtbTextChanged', vtbTextChanged);
       _p.editable = TEXT_EDIT_MODE_ENABLED;
       _p.innerHTML = element.description ?? 'not set';
+      _p.setAttribute('data-objectid', String(element.object_id));
+      _p.setAttribute('data-propertyName', 'description');
+
       itinerary.appendChild(_p);
 
       // show all units for this acco
@@ -640,6 +651,9 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
       _p.addEventListener('vtbTextChanged', vtbTextChanged);
       _p.editable = TEXT_EDIT_MODE_ENABLED;
       _p.innerHTML = element.description ?? 'not set';
+      _p.setAttribute('data-objectid', String(element.object_id));
+      _p.setAttribute('data-propertyName', 'description');
+
       itinerary.appendChild(_p);
     }
 
@@ -685,6 +699,10 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
         _p.addEventListener('vtbTextChanged', vtbTextChanged);
         _p.editable = TEXT_EDIT_MODE_ENABLED;
         _p.innerHTML = element.description ?? 'not set';
+
+        _p.setAttribute('data-objectid', String(element.object_id));
+        _p.setAttribute('data-propertyName', 'description');
+
         itinerary.appendChild(_p);
 
         const units_list = document.createElement('ul');
@@ -727,9 +745,11 @@ function renderItinerary(itinerary: HTMLElement, vtb: Vtb) {
 
         const _p = new VtbTextElement();
         _p.id = String(element.id);
-        _p.addEventListener('vtbTextChanged', vtbTextChanged);
-        _p.editable = TEXT_EDIT_MODE_ENABLED;
+        // _p.addEventListener('vtbTextChanged', vtbTextChanged);
+        // _p.editable = TEXT_EDIT_MODE_ENABLED;
         _p.innerHTML = element.description ?? 'not set';
+        _p.setAttribute('data-propertyName', 'description');
+        _p.setAttribute('data-objectId', String(element.object_id));
         itinerary.appendChild(_p);
 
         const price = document.createElement('p');

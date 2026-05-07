@@ -39,7 +39,50 @@
     <section class="maps">
       <h1>VTB Map (Dynamic)</h1>
       <h2>Accommodaties</h2>
-      <div id="complete-map"></div>
+      <div id="__complete-map"></div>
+    </section>
+
+    <section class="maps">
+      <h1>VTB Map (static)</h1>
+      <vtb-map
+        id="map-overview-map"
+        api-key="AIzaSyDQGyQupI1curGPjvcZTGvWYlvCUpFajOQ"
+        infowindow-enabled="true"
+      >
+        <vtb-map-marker-group>
+          <vtb-map-marker
+            title="Somewhere Nice"
+            lat="5.5774285"
+            lng="-0.2058788"
+          >
+            Somewhere Nice
+          </vtb-map-marker>
+
+          <vtb-map-marker
+            title="Coconut Grove Bridge House"
+            lat="5.0835294"
+            lng="-1.3491735"
+          >
+            Coconut Grove Bridge House
+          </vtb-map-marker>
+
+          <vtb-map-marker
+            title="Ahanta Ecolodge"
+            lat="4.802982699999999"
+            lng="-1.940363799999999"
+          >
+            Ahanta Ecolodge
+          </vtb-map-marker>
+
+          <vtb-map-marker
+            title="Ahanta Ecolodge"
+            lat="4.802982699999999"
+            lng="-1.940363799999999"
+          >
+            Ahanta Ecolodge
+          </vtb-map-marker>
+        </vtb-map-marker-group>
+      </vtb-map>
     </section>
 
     <section class="maps">

@@ -73,6 +73,8 @@ export declare class Vtb {
     map(container_id: string, filter_config: VtbFilterConfig, map_options: VtbMapOptions): VtbMapElement;
     filter_mapmarkers(config: VtbFilterConfig): VtbMapMarkerGroup;
     flightschedule(container_id: string, filter_config?: VtbFilterConfig, flightschedule_options?: VtbFlightScheduleOptions): VtbFlightScheduleElement;
+    initializeTextEditors(): void;
+    protected _vtbTextChanged(detail: any): void;
     /**
      * merge element groups of possibly different types
      * into one with all elements, media en concatted description

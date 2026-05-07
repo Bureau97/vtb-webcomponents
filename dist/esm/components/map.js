@@ -48,10 +48,10 @@ VtbMapMarkerElement.styles = css `
     }
   `;
 __decorate([
-    property({ type: Number, reflect: true })
+    property({ type: Number })
 ], VtbMapMarkerElement.prototype, "lat", void 0);
 __decorate([
-    property({ type: Number, reflect: true })
+    property({ type: Number })
 ], VtbMapMarkerElement.prototype, "lng", void 0);
 __decorate([
     property({ type: String })
@@ -129,6 +129,12 @@ let VtbMapMarkerGroupElement = class VtbMapMarkerGroupElement extends LitElement
                 parseFloat(_marker_element.getAttribute('lat')) || 0.0;
             marker.lng =
                 parseFloat(_marker_element.getAttribute('lng')) || 0.0;
+            // console.info(
+            //   '[VtbMapMarkerGroupElement] parsed marker element: ',
+            //   marker,
+            //   marker.lat,
+            //   marker.lng
+            // );
             return marker;
         }
         return null;
@@ -481,11 +487,18 @@ let VtbMapElement = class VtbMapElement extends LitElement {
         }
     }
     addMarker(marker) {
-        // console.debug('VTB-MAP::addMarker => ', marker);
+        // console.debug('[VTB-MAP] addMarker => ', marker);
         const map = this._map;
         const markerOptions = {};
         markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
         markerOptions.map = map;
+        // console.info(
+        //   '[VTB-MAP] marker position: ',
+        //   marker,
+        //   markerOptions,
+        //   markerOptions.position.lat(),
+        //   markerOptions.position.lng()
+        // );
         // console.info({
         //   'default labels: ': this.default_labels,
         //   'marker default label': marker.default_label,

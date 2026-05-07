@@ -23,6 +23,8 @@
  */
 import { LitElement } from 'lit';
 import { InlineEditor } from 'ckeditor5';
+import type { EditorConfig } from 'ckeditor5';
+import 'ckeditor5/ckeditor5.css';
 export declare class VtbTextElement extends LitElement {
     static shadowRootOptions: {
         delegatesFocus: boolean;
@@ -36,8 +38,10 @@ export declare class VtbTextElement extends LitElement {
     protected dataIsChanged: boolean;
     protected editor?: InlineEditor;
     protected _destroy_timer?: ReturnType<typeof setTimeout>;
+    protected LICENSE_KEY: string;
+    protected editorConfig: EditorConfig;
     editable: boolean;
-    contents: string | null;
+    contents: string;
     private get _editor();
     static styles: import("lit").CSSResult;
     constructor();

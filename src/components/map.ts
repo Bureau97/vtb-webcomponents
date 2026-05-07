@@ -49,10 +49,10 @@ export interface VtbMapOptions {
 
 @customElement('vtb-map-marker')
 export class VtbMapMarkerElement extends LitElement {
-  @property({type: Number, reflect: true})
+  @property({type: Number})
   lat: number = 0.0;
 
-  @property({type: Number, reflect: true})
+  @property({type: Number})
   lng: number = 0.0;
 
   @property({type: String})
@@ -171,6 +171,13 @@ export class VtbMapMarkerGroupElement extends LitElement {
         parseFloat(_marker_element.getAttribute('lat') as string) || 0.0;
       marker.lng =
         parseFloat(_marker_element.getAttribute('lng') as string) || 0.0;
+
+      // console.info(
+      //   '[VtbMapMarkerGroupElement] parsed marker element: ',
+      //   marker,
+      //   marker.lat,
+      //   marker.lng
+      // );
 
       return marker;
     }
@@ -657,12 +664,20 @@ export class VtbMapElement extends LitElement {
   }
 
   protected addMarker(marker: VtbMapMarker) {
-    // console.debug('VTB-MAP::addMarker => ', marker);
+    // console.debug('[VTB-MAP] addMarker => ', marker);
     const map: google.maps.Map | null | undefined = this._map;
 
     const markerOptions: google.maps.MarkerOptions = {};
     markerOptions.position = new google.maps.LatLng(marker.lat, marker.lng);
     markerOptions.map = map;
+
+    // console.info(
+    //   '[VTB-MAP] marker position: ',
+    //   marker,
+    //   markerOptions,
+    //   markerOptions.position.lat(),
+    //   markerOptions.position.lng()
+    // );
 
     // console.info({
     //   'default labels: ': this.default_labels,

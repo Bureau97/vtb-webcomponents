@@ -53,6 +53,13 @@ export interface VtbFilterConfig {
 
 export interface VtbConfig {
   calculate_flight_duration: boolean;
+  client?: {
+    apiKey?: string;
+    origin?: string;
+  };
+  maps?: {
+    apiKey?: string;
+  };
 }
 
 export interface VtbParticipant {

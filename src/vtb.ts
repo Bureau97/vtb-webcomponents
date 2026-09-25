@@ -65,7 +65,17 @@ export class Vtb {
    */
   constructor(vtb_config_options?: VtbConfig) {
     if (vtb_config_options) {
-      this._config = vtb_config_options;
+
+      let copy = {...vtb_config_options}
+
+      if (copy.google_maps_api_key) {
+        if (!copy.maps) {
+          copy.maps = {}
+        }
+        copy.maps.apiKey = copy.google_maps_api_key
+      }
+
+      this._config = copy;
     }
   }
 

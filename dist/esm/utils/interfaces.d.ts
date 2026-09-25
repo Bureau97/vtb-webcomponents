@@ -48,6 +48,7 @@ export interface VtbConfig {
     };
     maps?: {
         apiKey?: string;
+        useStatic?: boolean;
     };
 }
 export interface VtbParticipant {

@@ -2302,12 +2302,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/dev/main.ts",
-      "declarations": [],
-      "exports": []
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/calculator.ts",
       "declarations": [
         {
@@ -3225,6 +3219,15 @@
             },
             {
               "kind": "field",
+              "name": "static_map",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "static-map"
+            },
+            {
+              "kind": "field",
               "name": "connectMarkers",
               "type": {
                 "text": "boolean"
@@ -3244,6 +3247,13 @@
               "name": "connectMode",
               "type": {
                 "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "staticMap",
+              "type": {
+                "text": "boolean"
               }
             },
             {
@@ -3373,6 +3383,52 @@
             },
             {
               "kind": "method",
+              "name": "renderMap"
+            },
+            {
+              "kind": "method",
+              "name": "_deduplicateMarkers",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "VtbMapMarker[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "markers",
+                  "type": {
+                    "text": "VtbMapMarker[]"
+                  }
+                },
+                {
+                  "name": "precision",
+                  "default": "5",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getStaticMapUrl"
+            },
+            {
+              "kind": "method",
+              "name": "_getStaticMarkers",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "markers",
+                  "type": {
+                    "text": "VtbMapMarker[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "initializeMap",
               "privacy": "protected"
             },
@@ -3474,6 +3530,14 @@
               },
               "default": "false",
               "fieldName": "default_labels"
+            },
+            {
+              "name": "static-map",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "static_map"
             },
             {
               "name": "connect-mode",
@@ -3887,7 +3951,7 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/test/vtb-webcomponents_test.ts",
+      "path": "src/dev/main.ts",
       "declarations": [],
       "exports": []
     },

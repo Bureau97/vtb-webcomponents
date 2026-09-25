@@ -44,6 +44,7 @@ export interface VtbMapOptions {
   width?: number;
   zoom?: number;
   default_labels: boolean;
+  static_map?: boolean;
 }
 
 @customElement('vtb-map-marker')
@@ -70,7 +71,7 @@ export class VtbMapMarkerElement extends LitElement {
   `;
 
   override connectedCallback() {
-    // console.debug('VTB-MAP-MARKER::connectedCallback');
+    console.debug('VTB-MAP-MARKER::connectedCallback');
     super.connectedCallback();
   }
 }
@@ -102,7 +103,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
   @property({
     type: Array,
     hasChanged(newVal: Array<VtbMapMarker>, oldVal: Array<VtbMapMarker>) {
-      // console.debug('VtbMapElement::markers::hasChanged');
+      console.debug('VtbMapElement::markers::hasChanged');
       return !isEqual(newVal, oldVal);
     }
   })
@@ -120,7 +121,7 @@ export class VtbMapMarkerGroupElement extends LitElement {
   }
 
   override connectedCallback() {
-    // console.debug('VTB-MAP-MARKER-GROUP::connectedCallback');
+    console.debug('VTB-MAP-MARKER-GROUP::connectedCallback');
     super.connectedCallback();
 
     if (this.children.length >= 1) {
@@ -204,7 +205,7 @@ export class VtbMapElement extends LitElement {
       newVal: Array<VtbMapMarkerGroup>,
       oldVal: Array<VtbMapMarkerGroup>
     ) {
-      // console.debug('VtbMapElement::markergroups::hasChanged');
+      console.debug('VtbMapElement::markergroups::hasChanged');
       return !isEqual(newVal, oldVal);
     }
   })
@@ -225,6 +226,9 @@ export class VtbMapElement extends LitElement {
   @property({type: Boolean, attribute: 'default-labels'})
   default_labels = false;
 
+  @property({type: Boolean, attribute: 'static-map'})
+  static_map = false;
+
   get connectMarkers(): boolean {
     return this.connect_markers;
   }
@@ -242,6 +246,14 @@ export class VtbMapElement extends LitElement {
 
   set connectMode(value: string) {
     this.connect_mode = value;
+  }
+
+  get staticMap(): boolean {
+    return this.static_map;
+  }
+
+  set staticMap(value: boolean) {
+    this.static_map = value;
   }
 
   @property({type: Boolean, attribute: 'infowindow-enabled'})
@@ -299,6 +311,13 @@ export class VtbMapElement extends LitElement {
     button.gm-ui-hover-effect span svg {
       fill: #000;
     }
+
+    #map img.static-map {
+      width: 100%;
+      height: 100%;
+      object-fit: scale-down;
+      object-position: center;
+    }
   `;
 
   constructor() {
@@ -318,11 +337,13 @@ export class VtbMapElement extends LitElement {
       }
     }
 
-    // setup google maps loader
-    this._loader = new Loader({
-      apiKey: this.apiKey,
-      version: 'weekly'
-    });
+    if (!this.staticMap) {
+      // setup google maps loader
+      this._loader = new Loader({
+        apiKey: this.apiKey,
+        version: 'weekly'
+      });
+    }
 
     // setup mutation observer for changes to dom
     const observer = new MutationObserver((mutations) => {
@@ -407,13 +428,109 @@ export class VtbMapElement extends LitElement {
 
     return html`
       <div id="map" style="${styleMap(containerStyles)}">
-        Initializing map...
+        ${this.renderMap()}
       </div>
     `;
   }
 
+  renderMap() {
+    // console.debug('VTB-MAP::renderMap');
+
+    if (this.staticMap) {
+      return html`<img class="static-map" src="${this.getStaticMapUrl()}" />`;
+    } else {
+      return html`Initializing map...`;
+    }
+  }
+
+  private _deduplicateMarkers(
+    markers: VtbMapMarker[],
+    precision: number = 5
+  ): VtbMapMarker[] {
+    const seen = new Set<string>();
+
+    return markers.filter((marker) => {
+      // Rond af om kleine verschillen te negeren
+      const lat = marker.lat.toFixed(precision);
+      const lng = marker.lng.toFixed(precision);
+      const key = `${lat}|${lng}`;
+
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  getStaticMapUrl() {
+    // console.debug('VTB-MAP::getStaticMapUrl');
+
+    if (!this.staticMap) {
+      return '#';
+    }
+
+    const width = this.width;
+    if (!width) {
+      console.error('No width provided');
+      return '#no-width-provided';
+    }
+
+    let height = this.height;
+    if (!height) {
+      console.error('No height provided');
+      return '#no-height-provided';
+    }
+
+    height = Math.round((height / width) * 640);
+
+    const size = `${width}x${height}`; // De gewenste afmeting in de PDF
+    // const size = `640x240`; // De gewenste afmeting in de PDF
+    const apiKey = this.apiKey;
+
+    // Basis URL
+    let url = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&scale=2&key=${apiKey}`;
+
+    console.info('getStaticMapUrl: ', url);
+
+    // Optioneel: Voeg een marker toe op de huidige centrumpositie
+    // url += `&markers=color:red%7C${center.lat()},${center.lng()}`;
+    let _tmp: VtbMapMarker[] = [];
+    for (const group of this.markergroups) {
+      console.debug('adding markers from group: ', group);
+      const markers = group.markers;
+      _tmp = _tmp.concat(markers);
+    }
+
+    _tmp = this._deduplicateMarkers(_tmp);
+
+    url += this._getStaticMarkers(_tmp);
+
+    console.info(_tmp);
+    console.info('getStaticMapUrl: ', url);
+
+    return url;
+  }
+
+  private _getStaticMarkers(markers: VtbMapMarker[]) {
+    const locations = markers
+      .map((marker) => {
+        return `${marker.lat},${marker.lng}`;
+      })
+      .join('|');
+
+    const markers_url_value = encodeURIComponent(
+      `color:red|size:mid|${locations}`
+    );
+
+    return `&markers=${markers_url_value}`;
+  }
+
   override firstUpdated() {
     // console.debug('VTB-MAP::firstUpdated');
+
+    if (this.staticMap) {
+      return;
+    }
+
     this._loader
       ?.load()
       .then(
@@ -433,6 +550,10 @@ export class VtbMapElement extends LitElement {
   protected initializeMap() {
     // console.debug('VTB-MAP::initializeMap');
 
+    if (this.staticMap) {
+      return;
+    }
+
     const mapoptions = {
       zoom: 1, // default zoom level, without it stops rendering
       mapTypeControl: false, // disable map control
@@ -447,7 +568,7 @@ export class VtbMapElement extends LitElement {
 
     // this._map?.addListener('mapcapabilities_changed', () => {
     //   // const mapCapabilities = this._map?.getMapCapabilities();
-    //   // console.debug('mapCapabilities: ', mapCapabilities);
+    // console.debug('mapCapabilities: ', mapCapabilities);
 
     //   // if (!mapCapabilities?.isAdvancedMarkersAvailable) {
     //   //   // Advanced markers are *not* available, add a fallback.
@@ -459,9 +580,9 @@ export class VtbMapElement extends LitElement {
     this.addMarkers();
 
     if (this._bounds) {
-      // console.debug('fitting bounds: ', this._bounds);
+      console.debug('fitting bounds: ', this._bounds);
       this._map?.fitBounds(this._bounds);
-      // console.debug('setting center: ', this._bounds.getCenter());
+      console.debug('setting center: ', this._bounds.getCenter());
       this._map?.setCenter(this._bounds.getCenter());
     }
   }
@@ -490,7 +611,7 @@ export class VtbMapElement extends LitElement {
     }
 
     for (const group of this.markergroups) {
-      // console.debug('adding markers from group: ', group);
+      console.debug('adding markers from group: ', group);
       const tripCoordinates: Array<google.maps.LatLng> = [];
       const markers = group.markers;
 
@@ -534,7 +655,8 @@ export class VtbMapElement extends LitElement {
       if (
         group.connectMarkers &&
         group.connectMode &&
-        connectModeOptionsByRoad.includes(group.connectMode)
+        connectModeOptionsByRoad.includes(group.connectMode) &&
+        !this.staticMap
       ) {
         this.renderDirections(tripCoordinates, google.maps.TravelMode.DRIVING);
       }
@@ -576,14 +698,14 @@ export class VtbMapElement extends LitElement {
 
     const gmarker: google.maps.Marker = new google.maps.Marker(markerOptions);
     if (marker.title) {
-      // console.debug('create rich marker markup');
+      console.debug('create rich marker markup');
       const infowindow = new google.maps.InfoWindow({
         content: `<div class="vtb-map-marker-title">${marker.title}</div>`,
         ariaLabel: marker.title ? marker.title : ''
       });
 
       gmarker.addListener('click', () => {
-        // console.debug('click');
+        console.debug('click');
         infowindow.open({
           anchor: gmarker,
           map
@@ -600,7 +722,8 @@ export class VtbMapElement extends LitElement {
     tripCoordinates: Array<google.maps.LatLng>,
     travel_mode: google.maps.TravelMode = google.maps.TravelMode.DRIVING
   ) {
-    if (!this._google && !this._map) {
+    // console.debug('VTB-MAP::renderDirections');
+    if ((!this._google && !this._map) || this.staticMap) {
       return;
     }
 

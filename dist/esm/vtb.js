@@ -35,7 +35,14 @@ export class Vtb {
     constructor(vtb_config_options) {
         this._data = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
         if (vtb_config_options) {
-            this._config = vtb_config_options;
+            const copy = { ...vtb_config_options };
+            if (copy.google_maps_api_key) {
+                if (!copy.maps) {
+                    copy.maps = {};
+                }
+                copy.maps.apiKey = copy.google_maps_api_key;
+            }
+            this._config = copy;
         }
     }
     /**

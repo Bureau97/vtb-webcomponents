@@ -67,7 +67,7 @@ export class VtbMediaElement extends LitElement {
 
     // copy element styles set on element.style
     const elementStyle: CSSStyleDeclaration = this.style || '';
-    for (let i = elementStyle.length; i--; ) {
+    for (let i = elementStyle.length; i--;) {
       const nameString = elementStyle[i];
       imgStyle[nameString] = elementStyle.getPropertyValue(nameString);
     }

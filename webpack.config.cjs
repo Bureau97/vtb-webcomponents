@@ -1,5 +1,5 @@
 const path = require('path');
-const {styles} = require('@ckeditor/ckeditor5-dev-utils');
+// const {styles} = require('@ckeditor/ckeditor5-dev-utils');
 
 module.exports = {
   mode: 'development',
@@ -24,10 +24,10 @@ module.exports = {
           test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
           use: ['raw-loader']
         },
-    //   {
-    //     test: /\.css$/,
-    //     use: ['style-loader', 'css-loader']
-    //   },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
         {
           test: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/, /\.css$/],
           use: [
@@ -41,17 +41,17 @@ module.exports = {
               }
             },
             'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                postcssOptions: styles.getPostCssConfig({
-                  themeImporter: {
-                    themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
-                  },
-                  minify: true
-                })
-              }
-            }
+            // {
+            //   loader: 'postcss-loader',
+            //   options: {
+            //     postcssOptions: styles.getPostCssConfig({
+            //       themeImporter: {
+            //         themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
+            //       },
+            //       minify: true
+            //     })
+            //   }
+            // }
           ]
         }
     ]

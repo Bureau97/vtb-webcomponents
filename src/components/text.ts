@@ -25,33 +25,35 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+
+
 // import {styleMap, StyleInfo} from 'lit/directives/style-map.js';
 
 import {
   InlineEditor,
-  Alignment,
+  // Alignment,
   Autosave,
   Bold,
   Essentials,
-  FontBackgroundColor,
-  FontColor,
-  FontFamily,
-  FontSize,
-  Heading,
-  Highlight,
-  HorizontalLine,
-  Indent,
-  IndentBlock,
+  // FontBackgroundColor,
+  // FontColor,
+  // FontFamily,
+  // FontSize,
+  // Heading,
+  // Highlight,
+  // HorizontalLine,
+  // Indent,
+  // IndentBlock,
   Italic,
   // Link,
   List,
   Paragraph,
-  PasteFromOffice,
-  RemoveFormat,
-  Strikethrough,
-  Subscript,
-  Superscript,
-  Underline
+  // PasteFromOffice,
+  // RemoveFormat,
+  // Strikethrough,
+  // Subscript,
+  // Superscript,
+  // Underline
 } from 'ckeditor5';
 
 import type { EditorConfig } from 'ckeditor5';
@@ -192,138 +194,20 @@ export class VtbTextElement extends LitElement {
 
   protected LICENSE_KEY = 'GPL';
   protected editorConfig: EditorConfig = {
+    root: {
+      placeholder: 'Type or paste your content here!',
+      initialData: 'initial data'
+    },
     toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'fontSize',
-        'fontFamily',
-        'fontColor',
-        'fontBackgroundColor',
-        '|',
-        'bold',
-        'italic',
-        'underline',
-        'strikethrough',
-        'subscript',
-        'superscript',
-        'removeFormat',
-        '|',
-        'horizontalLine',
-        'highlight',
-        '|',
-        'alignment',
-        '|',
-        'bulletedList',
-        'numberedList',
-        'outdent',
-        'indent'
-      ],
+      items: ['undo', 'redo', '|', 'bold', 'italic', '|', 'list'],
       shouldNotGroupWhenFull: false
     },
-    plugins: [
-      Alignment,
-      Autosave,
-      Bold,
-      Essentials,
-      FontBackgroundColor,
-      FontColor,
-      FontFamily,
-      FontSize,
-      Heading,
-      Highlight,
-      HorizontalLine,
-      Indent,
-      IndentBlock,
-      Italic,
-      List,
-      Paragraph,
-      PasteFromOffice,
-      RemoveFormat,
-      Strikethrough,
-      Subscript,
-      Superscript,
-      Underline
-    ],
-    balloonToolbar: [
-      'bold',
-      'italic',
-      '|',
-      'link',
-      '|',
-      'bulletedList',
-      'numberedList'
-    ],
-    fontFamily: {
-      supportAllValues: true
-    },
-    fontSize: {
-      options: [10, 12, 14, 'default', 18, 20, 22],
-      supportAllValues: true
-    },
-    heading: {
-      options: [
-        {
-          model: 'paragraph',
-          title: 'Paragraph',
-          class: 'ck-heading_paragraph'
-        },
-        {
-          model: 'heading1',
-          view: 'h1',
-          title: 'Heading 1',
-          class: 'ck-heading_heading1'
-        },
-        {
-          model: 'heading2',
-          view: 'h2',
-          title: 'Heading 2',
-          class: 'ck-heading_heading2'
-        },
-        {
-          model: 'heading3',
-          view: 'h3',
-          title: 'Heading 3',
-          class: 'ck-heading_heading3'
-        },
-        {
-          model: 'heading4',
-          view: 'h4',
-          title: 'Heading 4',
-          class: 'ck-heading_heading4'
-        },
-        {
-          model: 'heading5',
-          view: 'h5',
-          title: 'Heading 5',
-          class: 'ck-heading_heading5'
-        },
-        {
-          model: 'heading6',
-          view: 'h6',
-          title: 'Heading 6',
-          class: 'ck-heading_heading6'
-        }
-      ]
-    },
+    plugins: [Autosave, Bold, Essentials, Italic, Paragraph, List],
     licenseKey: this.LICENSE_KEY,
     link: {
       addTargetToExternalLinks: true,
       defaultProtocol: 'https://',
-      decorators: {
-        toggleDownloadable: {
-          mode: 'manual',
-          label: 'Downloadable',
-          attributes: {
-            download: 'file'
-          }
-        }
-      }
     },
-    placeholder: 'Type or paste your content here!',
     updateSourceElementOnDestroy: true
   };
 
@@ -339,13 +223,13 @@ export class VtbTextElement extends LitElement {
   })
   contents: string = '';
 
-  @property({ type: String, attribute: 'object_id' })
+  @property({ type: String, attribute: 'object-id' })
   objectId: string = '';
 
-  @property({ type: String, attribute:'property_name' })
+  @property({ type: String, attribute:'property-name' })
   propertyName: string = '';
 
-  @property({ type: String, attribute: 'editor_type' })
+  @property({ type: String, attribute: 'editor-type' })
   editorType: string = EditorType.SIMPLE;
 
   @property({ attribute: false })
@@ -394,6 +278,12 @@ export class VtbTextElement extends LitElement {
       min-width: 795px;
       max-width: 795px;
       min-height: 400px;
+    }
+
+
+    .editor-container__sidebar_ckeditor-ai:has(.ck-tabs.ck-hidden) {
+      max-width: 0;
+      min-width: 0;
     }
 
     .vtb-main-editor-container {
@@ -445,7 +335,11 @@ export class VtbTextElement extends LitElement {
     // nothing fancy to render..
     return html`
       <div class="vtb-main-editor-container" id="editor-container-${this.id}" @click=${this.clickHandler}>
-        <div class="vtb-editor" id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
+        <div class="editor-container editor-container_inline-editor">
+          <div class="editor-container__editor">
+            <div class="vtb-editor" id="editor-${this.id}">${unsafeHTML(this.contents)}</div>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -466,7 +360,7 @@ export class VtbTextElement extends LitElement {
     }
 
     if (this.editable && !this.isEditorInitialized) {
-      console.debug('initializing editor');
+      console.debug('initializing editor: ', this.editorType);
 
       if (!this._editor) {
         console.warn('not initializing the editor, editor is null');
@@ -486,7 +380,13 @@ export class VtbTextElement extends LitElement {
         console.info('[VtbText]:initialize rich editor');
 
         const currentConfig = { ...this.editorConfig };
-        currentConfig.initialData = this.innerHTML || '';
+        if ( currentConfig.root) {
+          currentConfig.root.initialData = this.innerHTML || '';
+        }
+        else {
+          currentConfig.initialData = this.innerHTML || '';
+        }
+
 
         InlineEditor.create(this._editor, currentConfig)
           .then((editorInstance) => {

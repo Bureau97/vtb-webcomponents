@@ -271,7 +271,7 @@ Geeft alle groepen elementen terug, meestal zijn deze per dag gedefinieerd.
 ### `.filter_groups(config: VtbFilterConfig): Array<VtbElementGroup>`
 
 Geeft groepen terug welke voldoen aan het meegegeven filter:
-[VtbFilterConfig]()
+[VtbFilterConfig](<>)
 
 ```typescript
 const f: VtbFilterConfig = {

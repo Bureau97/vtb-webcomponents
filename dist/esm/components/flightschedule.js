@@ -90,8 +90,8 @@ let VtbFlightScheduleElement = class VtbFlightScheduleElement extends LitElement
         const flightinfo = this.flightinfo;
         const scheduleTemplates = [];
         for (const flight of flightinfo) {
-            let departure_date = null;
-            let arrival_date = null;
+            let departure_date = null; // eslint-disable-line no-useless-assignment
+            let arrival_date = null; // eslint-disable-line no-useless-assignment
             if (flight.departure?.date && typeof flight.departure?.date == 'string') {
                 departure_date = dayjs(flight.departure?.date);
             }

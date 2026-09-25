@@ -36,15 +36,12 @@ export interface SizedMap<K, V> extends Map<K, V> {
 export interface VtbFilterConfig {
   group_ids?: Array<number | string | null>;
   group_type_ids?:
-    | Array<Array<number | string | null>>
-    | Array<number | string | null>;
+    Array<Array<number | string | null>> | Array<number | string | null>;
   element_ids?: Array<number | string | null>;
   element_unit_ids?:
-    | Array<Array<number | string | null>>
-    | Array<number | string | null>;
+    Array<Array<number | string | null>> | Array<number | string | null>;
   participant_ids?:
-    | Array<number | string | null>
-    | Array<number | string | null>;
+    Array<number | string | null> | Array<number | string | null>;
   days?: Array<number | string>;
   optional?: boolean;
   carrental?: boolean;
@@ -61,7 +58,7 @@ export interface VtbConfig {
     apiKey?: string;
     useStatic?: boolean;
   };
-  google_maps_api_key?: string
+  google_maps_api_key?: string;
 }
 
 export interface VtbParticipant {

@@ -50,6 +50,7 @@ export interface VtbConfig {
         apiKey?: string;
         useStatic?: boolean;
     };
+    google_maps_api_key?: string;
 }
 export interface VtbParticipant {
     title?: string;

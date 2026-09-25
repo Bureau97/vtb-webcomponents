@@ -24,10 +24,10 @@ module.exports = {
           test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
           use: ['raw-loader']
         },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
+    //   {
+    //     test: /\.css$/,
+    //     use: ['style-loader', 'css-loader']
+    //   },
         {
           test: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/, /\.css$/],
           use: [
